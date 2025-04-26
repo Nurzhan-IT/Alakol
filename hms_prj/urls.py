@@ -40,7 +40,7 @@ urlpatterns += i18n_patterns(
     path("booking/", include("booking.urls")),
     path("user/", include("userauths.urls")),
     path("dashboard/", include("user_dashboard.urls")),
-
+    path("search/", include("search.urls")),
 )
 
 if settings.DEBUG:

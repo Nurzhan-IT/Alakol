@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'addon',
     'userauths',
     'user_dashboard',
+    'search',
 
     # Third Party Apps
     'import_export',
