@@ -1,4 +1,3 @@
-
 {% extends 'partials/base.html' %}
 {% load static %}
 {% load i18n %}
@@ -12,23 +11,27 @@
                             <h2>{% trans "Alakol vacation bases" %}</h2>
                             <h4>{% trans "Discover top rated hotels of Alakol" %}</h4>
                             <div class="main_input_search_part">
-                                <div class="main_input_search_part_item">
-                                    <input type="text" placeholder="{% trans 'Hotel...' %}" value="" />
-                                </div>
-                                <div class="main_input_search_part_item main-search-input-item search-input-icon">
-                                    <input type="text" placeholder="Select Booking Date" id="booking-date-search">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <div class="main_input_search_part_item intro-search-field">
-                                    <select data-placeholder="All Categories" class="selectpicker default" title="All Categories" data-live-search="true" data-selected-text-format="count" data-size="5">
-							  <option>Food & Restaurants </option>
-							  <option>Shop & Education</option>
-							  <option>Education</option>
-							  <option>Business</option>
-							  <option>Events</option>
-							</select>
-                                </div>
-                                <button class="button" >{% trans "Search" %}</button>
+                                <form action="{% url 'search:search_results' %}" method="get">
+                                    <div class="main_input_search_part_item">
+                                        <input type="text" placeholder="{% trans 'Hotel...' %}" name="name" value="" />
+                                    </div>
+                                    <div class="main_input_search_part_item main-search-input-item search-input-icon">
+                                        <input type="text" placeholder="Select Booking Date" id="booking-date-search">
+                                        <i class="fa fa-calendar"></i>
+                                        <input type="hidden" name="check_in_date" id="check_in_date">
+                                        <input type="hidden" name="check_out_date" id="check_out_date">
+                                    </div>
+                                    <div class="main_input_search_part_item intro-search-field">
+                                        <select name="guests" data-placeholder="Number of Guests" class="selectpicker default" title="Guests" data-live-search="true" data-selected-text-format="count" data-size="5">
+                                            <option value="1">1 Guest</option>
+                                            <option value="2">2 Guests</option>
+                                            <option value="3">3 Guests</option>
+                                            <option value="4">4 Guests</option>
+                                            <option value="5">5+ Guests</option>
+                                        </select>
+                                    </div>
+                                    <button class="button" type="submit">{% trans "Search" %}</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -397,4 +400,42 @@
         </section> {% endcomment %}
 
 {% endblock content %}
+
+{% block script %}
+<script>
+    // Обработка выбора дат на главной странице
+    $(document).ready(function() {
+        // Инициализация datepicker
+        $('#booking-date-search').daterangepicker({
+            autoUpdateInput: false,
+            minDate: moment(),
+            opens: 'left',
+            locale: {
+                format: 'YYYY-MM-DD',
+                separator: ' - ',
+                applyLabel: 'Apply',
+                cancelLabel: 'Cancel',
+                fromLabel: 'From',
+                toLabel: 'To',
+                daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                firstDay: 1
+            }
+        });
+        
+        // Обработка выбора дат
+        $('#booking-date-search').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            $('#check_in_date').val(picker.startDate.format('YYYY-MM-DD'));
+            $('#check_out_date').val(picker.endDate.format('YYYY-MM-DD'));
+        });
+        
+        $('#booking-date-search').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+            $('#check_in_date').val('');
+            $('#check_out_date').val('');
+        });
+    });
+</script>
+{% endblock %}
     
