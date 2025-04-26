@@ -1,0 +1,18 @@
+
+{% load static %}
+{% load i18n %}
+<div class="utf_dashboard_navigation js-scrollbar">
+    <div class="utf_dashboard_navigation_inner_block">
+        <ul>
+            <li class="{% if request.path == '/dashboard/' %}  active {% endif %}"><a href="{% url 'dashboard:dashboard' %}"><i class="bi bi-grid"></i> {% trans "Dashboard" %}</a></li>
+            <li class="{% if request.path == '/dashboard/bookings/'  %}  active {% endif %}"><a href="{% url 'dashboard:bookings' %}"><i class="bi bi-check"></i>{% trans "All Bookings" %}</a></li>
+            <li class="{% if request.path == '/dashboard/notifications/'  %}  active {% endif %}"><a href="{% url 'dashboard:notifications' %}"><i class="bi bi-bell-fill"></i> {% trans "Notifications" %}</a></li>
+            <li class="{% if request.path == '/dashboard/wallet/'  %}  active {% endif %}"><a href="{% url 'dashboard:wallet' %}"><i class="bi bi-wallet-fill"></i> {% trans "Wallet" %}</a></li>
+            <li class="{% if request.path == '/dashboard/bookmark/'  %}  active {% endif %}"><a href="{% url 'dashboard:bookmark' %}"><i class="bi bi-heart-fill"></i> {% trans "Bookmark" %}</a></li>
+            <li class="{% if request.path == '/dashboard/profile/'  %}  active {% endif %}"><a href="{% url 'dashboard:profile' %}"><i class="bi bi-person-fill"></i> {% trans "My Profile" %}</a></li>
+            <li class="{% if request.path == '/dashboard/change-password/'  %}  active {% endif %}"><a href="{% url 'dashboard:change_password' %}"><i class="bi bi-lock-fill"></i> {% trans "Change Password" %}</a></li>
+            <li><a href="{% url 'userauths:sign-out' %}"><i class="bi bi-arrow-left"></i> {% trans "Logout" %}</a></li>
+
+        </ul>
+    </div>
+</div>

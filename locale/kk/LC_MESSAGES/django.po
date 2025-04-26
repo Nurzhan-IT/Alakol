@@ -1,0 +1,1045 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-28 15:55+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+#: .\templates\booking\booking_data.html:10
+msgid "Select Booking Data"
+msgstr ""
+
+#: .\templates\booking\booking_data.html:23
+#: .\templates\hotel\hotel_detail.html:309
+#: .\templates\hotel\room_type_detail.html:65
+#: .\templates\user_dashboard\dashboard.html:48
+msgid "Booking"
+msgstr ""
+
+#: .\templates\booking\booking_data.html:28
+#: .\templates\hotel\async\selected_rooms.html:54
+#: .\templates\hotel\hotel_detail.html:314
+#: .\templates\hotel\room_type_detail.html:70
+#: .\templates\hotel\selected_rooms.html:55
+msgid "Check-in Date"
+msgstr ""
+
+#: .\templates\booking\booking_data.html:32
+#: .\templates\hotel\async\selected_rooms.html:58
+#: .\templates\hotel\hotel_detail.html:318
+#: .\templates\hotel\room_type_detail.html:74
+#: .\templates\hotel\selected_rooms.html:59
+msgid "Check-out Date"
+msgstr ""
+
+#: .\templates\booking\booking_data.html:37
+#: .\templates\hotel\async\selected_rooms.html:63
+#: .\templates\hotel\hotel_detail.html:323
+#: .\templates\hotel\room_type_detail.html:79
+#: .\templates\hotel\selected_rooms.html:64
+msgid "Guests"
+msgstr ""
+
+#: .\templates\booking\booking_data.html:40
+#: .\templates\email\booking_completed.html:519
+#: .\templates\hotel\async\selected_rooms.html:66
+#: .\templates\hotel\async\selected_rooms.html:138
+#: .\templates\hotel\checkout.html:94 .\templates\hotel\hotel_detail.html:326
+#: .\templates\hotel\room_type_detail.html:82
+#: .\templates\hotel\selected_rooms.html:67
+#: .\templates\user_dashboard\booking_detail.html:68
+#: .\templates\user_dashboard\booking_detail.html:70
+#: .\templates\user_dashboard\booking_detail.html:76
+#: .\templates\user_dashboard\bookings.html:61
+#: .\templates\user_dashboard\bookings.html:63
+#: .\templates\user_dashboard\bookings.html:69
+msgid "Adults"
+msgstr ""
+
+#: .\templates\booking\booking_data.html:44
+#: .\templates\hotel\async\selected_rooms.html:70
+#: .\templates\hotel\hotel_detail.html:330
+#: .\templates\hotel\room_type_detail.html:86
+#: .\templates\hotel\selected_rooms.html:71
+msgid "Childrens"
+msgstr ""
+
+#: .\templates\booking\booking_data.html:53
+#: .\templates\hotel\hotel_detail.html:339
+#: .\templates\hotel\room_type_detail.html:95
+msgid "Select Room Type"
+msgstr ""
+
+#: .\templates\booking\booking_data.html:55
+#: .\templates\hotel\async\selected_rooms.html:79
+#: .\templates\hotel\hotel_detail.html:341
+#: .\templates\hotel\selected_rooms.html:80
+msgid "Select Room"
+msgstr ""
+
+#: .\templates\booking\booking_data.html:63
+#: .\templates\hotel\hotel_detail.html:349
+#: .\templates\hotel\room_type_detail.html:107
+msgid "Check Availability"
+msgstr ""
+
+#: .\templates\booking\booking_data.html:65
+#: .\templates\hotel\hotel_detail.html:351
+#: .\templates\hotel\room_type_detail.html:109
+msgid "Add to Wishlist"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:144
+msgid "Hey"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:197
+msgid "Your booked order"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:197
+msgid "has been successfully confirmed."
+msgstr ""
+
+#: .\templates\email\booking_completed.html:273
+#: .\templates\hotel\async\selected_rooms.html:133
+#: .\templates\hotel\checkout.html:90
+msgid "Booking Summary"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:483
+#: .\templates\user_dashboard\booking_detail.html:50
+#: .\templates\user_dashboard\bookings.html:43
+msgid "Checkin Date"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:495
+#: .\templates\user_dashboard\booking_detail.html:56
+#: .\templates\user_dashboard\bookings.html:49
+msgid "Checkout Date"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:507
+#: .\templates\hotel\async\selected_rooms.html:137
+#: .\templates\user_dashboard\booking_detail.html:62
+#: .\templates\user_dashboard\bookings.html:55
+msgid "Total Days"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:531
+#: .\templates\hotel\async\selected_rooms.html:139
+#: .\templates\hotel\checkout.html:95
+#: .\templates\user_dashboard\booking_detail.html:74
+#: .\templates\user_dashboard\bookings.html:67
+msgid "Children"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:543
+msgid "Vat"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:555
+#: .\templates\hotel\checkout.html:99
+msgid "Discount"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:567
+msgid "Total"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:666
+msgid "Hotel Details"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:668
+msgid "Name"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:670
+#: .\templates\user_dashboard\profile.html:63
+msgid "Address"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:672
+#: .\templates\user_dashboard\profile.html:39
+msgid "Email"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:674
+#: .\templates\user_dashboard\profile.html:43
+msgid "Mobile"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:768
+msgid "Feel free to contact us if you have any questions!"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:770
+msgid "Sincerely"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:775
+msgid "HMS Team"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:840
+msgid "Terms"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:857
+msgid "Privacy"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:874
+msgid "Preferences"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:891
+msgid "Help center"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:10
+#: .\templates\hotel\checkout.html:12 .\templates\hotel\selected_rooms.html:13
+msgid "All Room Selections"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:13
+#: .\templates\hotel\checkout.html:15 .\templates\hotel\selected_rooms.html:16
+#: .\templates\partials\base.html:74 .\templates\partials\base.html:236
+msgid "Home"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:14
+#: .\templates\hotel\checkout.html:16 .\templates\hotel\selected_rooms.html:17
+msgid "Hotel"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:15
+#: .\templates\hotel\checkout.html:17 .\templates\hotel\hotel_detail.html:134
+#: .\templates\hotel\selected_rooms.html:18
+msgid "Rooms"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:16
+#: .\templates\hotel\checkout.html:18 .\templates\hotel\selected_rooms.html:19
+msgid "My selected rooms"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:30
+#: .\templates\hotel\checkout.html:34 .\templates\hotel\selected_rooms.html:32
+msgid "Selected Rooms"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:36
+#: .\templates\hotel\checkout.html:40
+#: .\templates\hotel\room_type_detail.html:11
+#: .\templates\hotel\selected_rooms.html:38
+#: .\templates\user_dashboard\booking_detail.html:134
+msgid "Room"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:37
+#: .\templates\hotel\checkout.html:41 .\templates\hotel\hotel_detail.html:134
+#: .\templates\hotel\room_type_detail.html:41
+#: .\templates\hotel\selected_rooms.html:39
+msgid "Beds"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:47
+#: .\templates\hotel\async\selected_rooms.html:86
+#: .\templates\hotel\selected_rooms.html:48
+#: .\templates\hotel\selected_rooms.html:87
+msgid "Update Selection"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:77
+#: .\templates\hotel\selected_rooms.html:78
+msgid "Select Room Type (*required)"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:93
+#: .\templates\hotel\checkout.html:51 .\templates\hotel\selected_rooms.html:95
+msgid "Billing Information"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:96
+#: .\templates\hotel\checkout.html:54 .\templates\hotel\selected_rooms.html:98
+msgid "First Name"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:101
+#: .\templates\hotel\checkout.html:59 .\templates\hotel\selected_rooms.html:103
+msgid "E-Mail"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:107
+#: .\templates\hotel\checkout.html:65 .\templates\hotel\selected_rooms.html:109
+msgid "Phone"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:112
+#: .\templates\hotel\selected_rooms.html:114
+msgid "Continue to checkout"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:135
+msgid "Check-i"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:136
+#: .\templates\hotel\checkout.html:93
+msgid "Check-out"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:137
+#: .\templates\user_dashboard\booking_detail.html:64
+#: .\templates\user_dashboard\bookings.html:57
+msgid "Days"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:138
+msgid "Adult"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:140
+#: .\templates\hotel\checkout.html:96
+msgid "V.A.T"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:141
+#: .\templates\hotel\checkout.html:114
+msgid "Total Cost"
+msgstr ""
+
+#: .\templates\hotel\checkout.html:30
+msgid "NOTE!"
+msgstr ""
+
+#: .\templates\hotel\checkout.html:30
+msgid "Review your order before payment."
+msgstr ""
+
+#: .\templates\hotel\checkout.html:92
+msgid "Check-in"
+msgstr ""
+
+#: .\templates\hotel\checkout.html:126
+msgid "Pay with Flutterwave"
+msgstr ""
+
+#: .\templates\hotel\checkout.html:128
+msgid "Pay with Stripe"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:42
+#: .\templates\hotel\hotel_detail.html:295
+#: .\templates\hotel\hotel_detail.html:383
+msgid "No Reviews Yet"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:44
+#: .\templates\hotel\hotel_detail.html:259
+#: .\templates\hotel\hotel_detail.html:388
+msgid "Reviews"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:59
+msgid "Add Review"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:62
+msgid "Write a review"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:73
+msgid "Reply Message"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:78
+msgid "Login to Write Review"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:80
+msgid "Share"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:97
+msgid "Description"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:105 .\templates\partials\base.html:176
+msgid "Facebook"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:106
+msgid "Twitter"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:107
+msgid "Instagram"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:108
+msgid "Linkedin"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:109
+msgid "Youtube"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:114
+msgid "Tags"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:124 .\templates\partials\base.html:267
+msgid "Pricing"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:127
+msgid "Room Types"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:139
+msgid "Photo"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:197
+msgid "No description available."
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:207
+msgid "Close"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:224
+msgid "Amenities"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:241
+msgid "FAQ's"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:267
+msgid "Not Rated Yet"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:355
+msgid "Contact Info"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:360
+msgid "Posted on"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:375
+msgid "Bookmark Listing"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:376
+msgid "People Bookmarked This Hotel"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:379
+msgid "Rating Average"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:395
+msgid "Quality"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:399
+msgid "Location"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:403
+msgid "Space"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:407
+msgid "Service"
+msgstr ""
+
+#: .\templates\hotel\hotel_detail.html:411
+#: .\templates\user_dashboard\booking_detail.html:100
+#: .\templates\user_dashboard\bookings.html:74
+msgid "Price"
+msgstr ""
+
+#: .\templates\hotel\index.html:12
+msgid "Alakol vacation bases"
+msgstr ""
+
+#: .\templates\hotel\index.html:13
+msgid "Discover top rated hotels of Alakol"
+msgstr ""
+
+#: .\templates\hotel\index.html:31 .\templates\hotel\index_translated.html:31
+msgid "Search"
+msgstr ""
+
+#: .\templates\hotel\index.html:43
+msgid "Our Popular Bases"
+msgstr ""
+
+#: .\templates\hotel\index.html:43
+msgid "Explore the greates places in the Alakol"
+msgstr ""
+
+#: .\templates\hotel\index.html:54 .\templates\hotel\index_translated.html:54
+msgid "Open Now"
+msgstr ""
+
+#: .\templates\hotel\index.html:68 .\templates\hotel\index_translated.html:68
+msgid "No Rating Yet"
+msgstr ""
+
+#: .\templates\hotel\index.html:70 .\templates\hotel\index_translated.html:70
+msgid "reviews"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:12
+msgid "Book Unique Experiences"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:13
+msgid "Discover top rated hotels, shops and restaurants around the world"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:24
+msgid "Food & Restaurants"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:25
+msgid "Shop & Education"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:26
+msgid "Education"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:27 .\templates\partials\base.html:78
+msgid "Business"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:28
+msgid "Events"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:43
+msgid "Our Popular Tours"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:43
+msgid "Explore the greatest places in the city"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:96
+msgid "How It Works?"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:96
+msgid "Discover & connect with great local businesses"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:128
+msgid "What Say Our Customers"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:128
+msgid ""
+"Lorem Ipsum is simply dummy text of the printing and type setting industry. "
+"Lorem Ipsum has been the industry's standard dummy text ever since..."
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:178
+msgid "Latest Tips & Blog"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:178
+msgid "Discover & connect with top-rated local businesses"
+msgstr ""
+
+#: .\templates\hotel\index_translated.html:281
+msgid "Subscribe to Newsletter!"
+msgstr ""
+
+#: .\templates\hotel\room_type_detail.html:14
+msgid "Available Rooms"
+msgstr ""
+
+#: .\templates\hotel\room_type_detail.html:27
+msgid "All Available Rooms"
+msgstr ""
+
+#: .\templates\hotel\room_type_detail.html:27
+#, python-format
+msgid "The %(room_type)s room has %(rooms_count)s available room(s)"
+msgstr ""
+
+#: .\templates\hotel\room_type_detail.html:36
+msgid "Room No."
+msgstr ""
+
+#: .\templates\hotel\room_type_detail.html:37
+msgid "/Per Night"
+msgstr ""
+
+#: .\templates\hotel\room_type_detail.html:42
+msgid "Room Capacity"
+msgstr ""
+
+#: .\templates\hotel\room_type_detail.html:46
+msgid "Add To Selection"
+msgstr ""
+
+#: .\templates\partials\base.html:11
+msgid "Alakol hotel booking"
+msgstr ""
+
+#: .\templates\partials\base.html:75
+msgid "Hotels"
+msgstr ""
+
+#: .\templates\partials\base.html:77
+msgid "Luxury"
+msgstr ""
+
+#: .\templates\partials\base.html:79
+msgid "Classic"
+msgstr ""
+
+#: .\templates\partials\base.html:80
+msgid "Economy"
+msgstr ""
+
+#: .\templates\partials\base.html:84
+msgid "Account"
+msgstr ""
+
+#: .\templates\partials\base.html:86 .\templates\partials\base.html:130
+#: .\templates\partials\base.html:246
+#: .\templates\partials\dashboard_base.html:103
+#: .\templates\partials\dashboard_sidebar.html:7
+msgid "Dashboard"
+msgstr ""
+
+#: .\templates\partials\base.html:89 .\templates\partials\base.html:238
+#: .\templates\partials\base.html:255
+msgid "Blog"
+msgstr ""
+
+#: .\templates\partials\base.html:90 .\templates\partials\base.html:253
+msgid "Pages"
+msgstr ""
+
+#: .\templates\partials\base.html:92 .\templates\partials\base.html:229
+msgid "About Us"
+msgstr ""
+
+#: .\templates\partials\base.html:93 .\templates\partials\base.html:240
+msgid "Contact"
+msgstr ""
+
+#: .\templates\partials\base.html:131
+msgid "Sign Out"
+msgstr ""
+
+#: .\templates\partials\base.html:134 .\templates\partials\base.html:142
+#: .\templates\partials\base.html:264 .\templates\userauths\sign-in.html:10
+msgid "Sign In"
+msgstr ""
+
+#: .\templates\partials\base.html:135 .\templates\userauths\sign-up.html:10
+msgid "Sign Up"
+msgstr ""
+
+#: .\templates\partials\base.html:146
+msgid "Log In"
+msgstr ""
+
+#: .\templates\partials\base.html:147 .\templates\partials\base.html:265
+msgid "Register"
+msgstr ""
+
+#: .\templates\partials\base.html:162
+msgid "Forgot Password?"
+msgstr ""
+
+#: .\templates\partials\base.html:165
+msgid "Remember Me"
+msgstr ""
+
+#: .\templates\partials\base.html:172
+msgid "Or Login in With"
+msgstr ""
+
+#: .\templates\partials\base.html:179
+msgid "Google"
+msgstr ""
+
+#: .\templates\partials\base.html:234
+msgid "Useful Links"
+msgstr ""
+
+#: .\templates\partials\base.html:237
+msgid "Listing"
+msgstr ""
+
+#: .\templates\partials\base.html:239 .\templates\partials\base.html:258
+msgid "Privacy Policy"
+msgstr ""
+
+#: .\templates\partials\base.html:244
+msgid "My Account"
+msgstr ""
+
+#: .\templates\partials\base.html:247
+msgid "Profile"
+msgstr ""
+
+#: .\templates\partials\base.html:248
+msgid "My Listing"
+msgstr ""
+
+#: .\templates\partials\base.html:249
+msgid "Favorites"
+msgstr ""
+
+#: .\templates\partials\base.html:256
+msgid "Our Partners"
+msgstr ""
+
+#: .\templates\partials\base.html:257
+msgid "How It Work"
+msgstr ""
+
+#: .\templates\partials\base.html:262
+msgid "Help"
+msgstr ""
+
+#: .\templates\partials\base.html:266
+msgid "Add Listing"
+msgstr ""
+
+#: .\templates\partials\base.html:268
+msgid "Contact Us"
+msgstr ""
+
+#: .\templates\partials\dashboard_base.html:75
+#, python-format
+msgid "You have %(count)s notification(s)"
+msgstr ""
+
+#: .\templates\partials\dashboard_base.html:86
+#: .\templates\user_dashboard\async\notifications.html:20
+#: .\templates\user_dashboard\async\notifications.html:24
+#: .\templates\user_dashboard\notifications.html:34
+#: .\templates\user_dashboard\notifications.html:38
+msgid "Your booking"
+msgstr ""
+
+#: .\templates\partials\dashboard_base.html:86
+#: .\templates\user_dashboard\async\notifications.html:20
+#: .\templates\user_dashboard\notifications.html:34
+msgid "has been placed successfully."
+msgstr ""
+
+#: .\templates\partials\dashboard_base.html:88
+msgid "ago"
+msgstr ""
+
+#: .\templates\partials\dashboard_base.html:95
+msgid "View All Notifications"
+msgstr ""
+
+#: .\templates\partials\dashboard_base.html:101
+msgid "Hi"
+msgstr ""
+
+#: .\templates\partials\dashboard_base.html:104
+#: .\templates\partials\dashboard_sidebar.html:12
+msgid "My Profile"
+msgstr ""
+
+#: .\templates\partials\dashboard_base.html:105
+msgid "Boking"
+msgstr ""
+
+#: .\templates\partials\dashboard_base.html:106
+#: .\templates\partials\dashboard_sidebar.html:10
+msgid "Wallet"
+msgstr ""
+
+#: .\templates\partials\dashboard_base.html:107
+msgid "Bookmarks"
+msgstr ""
+
+#: .\templates\partials\dashboard_base.html:108
+#: .\templates\partials\dashboard_sidebar.html:9
+#: .\templates\user_dashboard\async\notifications.html:13
+#: .\templates\user_dashboard\notifications.html:27
+msgid "Notifications"
+msgstr ""
+
+#: .\templates\partials\dashboard_base.html:109
+#: .\templates\partials\dashboard_sidebar.html:14
+msgid "Logout"
+msgstr ""
+
+#: .\templates\partials\dashboard_sidebar.html:8
+#: .\templates\user_dashboard\bookings.html:27
+msgid "All Bookings"
+msgstr ""
+
+#: .\templates\partials\dashboard_sidebar.html:11
+msgid "Bookmark"
+msgstr ""
+
+#: .\templates\partials\dashboard_sidebar.html:13
+#: .\templates\user_dashboard\password-reset\change-password.html:14
+#: .\templates\user_dashboard\password-reset\change-password.html:28
+msgid "Change Password"
+msgstr ""
+
+#: .\templates\user_dashboard\async\notifications.html:6
+#: .\templates\user_dashboard\notifications.html:20
+msgid "All Notifications"
+msgstr ""
+
+#: .\templates\user_dashboard\async\notifications.html:7
+#: .\templates\user_dashboard\notifications.html:21
+msgid "Read Notifications"
+msgstr ""
+
+#: .\templates\user_dashboard\async\notifications.html:8
+#: .\templates\user_dashboard\notifications.html:22
+msgid "Unread Notifications"
+msgstr ""
+
+#: .\templates\user_dashboard\async\notifications.html:24
+#: .\templates\user_dashboard\notifications.html:38
+msgid "has been cancelled."
+msgstr ""
+
+#: .\templates\user_dashboard\async\notifications.html:29
+#: .\templates\user_dashboard\notifications.html:43
+msgid "No Notifications Yet"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:9
+#: .\templates\user_dashboard\bookings.html:9
+#: .\templates\user_dashboard\bookmark.html:7
+#: .\templates\user_dashboard\dashboard.html:9
+#: .\templates\user_dashboard\notifications.html:10
+#: .\templates\user_dashboard\password-reset\change-password.html:8
+#: .\templates\user_dashboard\password_changed.html:8
+#: .\templates\user_dashboard\profile.html:8
+#: .\templates\user_dashboard\wallet.html:9
+msgid "Dashboard Sidebar Menu"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:17
+msgid "Booking ID"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:25
+#: .\templates\user_dashboard\dashboard.html:54
+msgid "Hotel Name"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:31
+msgid "Hotel Address"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:37
+msgid "Hotel Email"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:43
+msgid "Hotel Phone"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:81
+#: .\templates\user_dashboard\profile.html:34
+msgid "Full Name"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:87
+msgid "Email Address"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:93
+msgid "Phone Number"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:107
+msgid "Date Booked"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:115
+msgid "View Invoice"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:116
+msgid "Cancel Booking"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:124
+msgid "Booked Rooms"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:136
+msgid "Room Number"
+msgstr ""
+
+#: .\templates\user_dashboard\booking_detail.html:143
+msgid "Room Price"
+msgstr ""
+
+#: .\templates\user_dashboard\bookings.html:20
+msgid "All Orders"
+msgstr ""
+
+#: .\templates\user_dashboard\bookings.html:21
+msgid "Paid Orders"
+msgstr ""
+
+#: .\templates\user_dashboard\bookings.html:22
+msgid "UPaid Orders"
+msgstr ""
+
+#: .\templates\user_dashboard\bookings.html:37
+msgid "Booking Item"
+msgstr ""
+
+#: .\templates\user_dashboard\bookings.html:82
+msgid "View Booking Detail"
+msgstr ""
+
+#: .\templates\user_dashboard\bookmark.html:15
+msgid "All Bookmarked Hotels"
+msgstr ""
+
+#: .\templates\user_dashboard\bookmark.html:40
+msgid "Delete"
+msgstr ""
+
+#: .\templates\user_dashboard\bookmark.html:45
+msgid "No Bookmarks Yet"
+msgstr ""
+
+#: .\templates\user_dashboard\dashboard.html:18
+msgid "Total Paid Bookings"
+msgstr ""
+
+#: .\templates\user_dashboard\dashboard.html:28
+#: .\templates\user_dashboard\wallet.html:20
+msgid "Total Spent"
+msgstr ""
+
+#: .\templates\user_dashboard\dashboard.html:38
+#: .\templates\user_dashboard\wallet.html:30
+msgid "Wallet Balance"
+msgstr ""
+
+#: .\templates\user_dashboard\dashboard.html:53
+msgid "S/N"
+msgstr ""
+
+#: .\templates\user_dashboard\dashboard.html:55
+msgid "Total Rooms"
+msgstr ""
+
+#: .\templates\user_dashboard\dashboard.html:56
+msgid "Booking Date"
+msgstr ""
+
+#: .\templates\user_dashboard\dashboard.html:57
+msgid "Payment Status"
+msgstr ""
+
+#: .\templates\user_dashboard\dashboard.html:58
+msgid "View Booking"
+msgstr ""
+
+#: .\templates\user_dashboard\dashboard.html:70
+msgid "View"
+msgstr ""
+
+#: .\templates\user_dashboard\dashboard.html:81
+msgid "All Booking Invoices"
+msgstr ""
+
+#: .\templates\user_dashboard\dashboard.html:87
+#: .\templates\user_dashboard\wallet.html:46
+msgid "Order Number"
+msgstr ""
+
+#: .\templates\user_dashboard\dashboard.html:88
+#: .\templates\user_dashboard\wallet.html:47
+msgid "Date"
+msgstr ""
+
+#: .\templates\user_dashboard\dashboard.html:90
+msgid "Invoice"
+msgstr ""
+
+#: .\templates\user_dashboard\password_changed.html:14
+msgid "Password Changed Successfully"
+msgstr ""
+
+#: .\templates\user_dashboard\profile.html:14
+msgid "Profile Details"
+msgstr ""
+
+#: .\templates\user_dashboard\profile.html:27
+msgid "Upload Photo"
+msgstr ""
+
+#: .\templates\user_dashboard\profile.html:47
+msgid "Gender"
+msgstr ""
+
+#: .\templates\user_dashboard\profile.html:51
+msgid "Country"
+msgstr ""
+
+#: .\templates\user_dashboard\profile.html:55
+msgid "State"
+msgstr ""
+
+#: .\templates\user_dashboard\profile.html:59
+msgid "City"
+msgstr ""
+
+#: .\templates\user_dashboard\profile.html:68
+msgid "Save Changes"
+msgstr ""
+
+#: .\templates\user_dashboard\wallet.html:40
+msgid "Spending History"
+msgstr ""
+
+#: .\templates\user_dashboard\wallet.html:48
+msgid "Spent"
+msgstr ""
+
+#: .\templates\userauths\sign-in.html:10
+msgid "Hi there! Welcome Back"
+msgstr ""
+
+#: .\templates\userauths\sign-up.html:10
+msgid "Hi there! Create a free account today."
+msgstr ""

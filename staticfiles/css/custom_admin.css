@@ -1,0 +1,11 @@
+.cke_editor {
+    max-width: 100% !important;  /* Увеличиваем максимальную ширину CKEditor */
+}
+
+.cke_contents {
+    min-width: 800px !important;  /* Устанавливаем минимальную ширину для контентной области */
+}
+
+textarea {
+    width: 100% !important;  /* Увеличиваем ширину для текстовых полей */
+}

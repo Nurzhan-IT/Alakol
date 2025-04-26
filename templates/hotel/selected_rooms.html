@@ -1,0 +1,256 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+  
+<div id="main_wrapper" class="selection-list">
+  
+  <div id="titlebar" class="gradient">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>{% trans "All Room Selections" %}</h2>
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a>{% trans "Home" %}</a></li>
+              <li><a>{% trans "Hotel" %}</a></li>
+              <li><a>{% trans "Rooms" %}</a></li>
+              <li>{% trans "My selected rooms" %}</li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container margin-bottom-75">
+    <div class="row">
+      <div class="col-lg-8 col-md-8 utf_listing_payment_section">
+	    
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+            <h3><i class="fas fa-bed"></i> {% trans "Selected Rooms" %}</h3>
+            <div class="utf_listing_section">
+                    <div class="utf_pricing_list_section">
+                        <ul>
+                            {% for id, item in data.items %}
+                                <li>
+                                    <h5>{% trans "Room" %}: {{item.room_name}}  №{{item.room_number}} <small><a style="cursor: pointer;" class="delete-item" data-item="{{ id }}"><i class="fas fa-trash" style="color: red;"></i></a></small> </h5>
+                                    <p><strong>{% trans "Beds" %} :</strong> {{item.number_of_beds}}  </p>
+                                    {% comment %} <p class="booking-dates">
+                                      <i class="fas fa-calendar-check"></i> 
+                                      <span class="check-in-date">{{checkin}}</span> - 
+                                      <span class="check-out-date">{{checkout}}</span>
+                                    </p> {% endcomment %}
+                                  <span>${{item.room_price}} </span>
+                                    
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+            </div>
+        </div>
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+            <h3><i class="fas fa-check-circle"></i> {% trans "Update Selection" %}</h3>
+            <div class="utf_listing_section">
+                    <div class="utf_pricing_list_section">
+                      <form class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{hotel.id}}" name="hotel-id" id="">
+                        <div class="col-lg-12 col-md-12 select_date_box">
+                            <label for="">{% trans "Check-in Date" %}</label>
+                            <input type="date" id="date-picker" value="{{checkin}}" name="checkin" placeholder="Select Date">
+                        </div>
+                        <div class="col-lg-12 col-md-12 select_date_box">
+                            <label for="">{% trans "Check-out Date" %}</label>
+                            <input type="date" name="checkout" value="{{checkout}}" id="date-picker" placeholder="Select Date">
+                        </div>
+                        <div class="with-forms">
+                            <div class="col-lg-12 col-md-12">
+                                <a href="#">{% trans "Guests" %} <span class="qtyTotal" style="visibility: hidden;" name="qtyTotal"></span></a>
+                                <div class="panel-dropdown-content">
+                                    <div class="qtyButtons">
+                                        <div class="qtyTitle">{% trans "Adults" %}</div>
+                                        <input type="text" name="adult" {% if adult == None %}value="1"{% else %}value="{{adult}}"{% endif %}>
+                                    </div>
+                                    <div class="qtyButtons">
+                                        <div class="qtyTitle">{% trans "Childrens" %}</div>
+                                        <input type="text" name="children" {% if children == None %}value="1"{% else %}value="{{children}}"{% endif %}>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a style="margin-top: 50px;">{% trans "Select Room Type (*required)" %} </a>
+                        <select name="room-type">
+                            {% comment %} <option value="">{% trans "Select Room" %}</option> {% endcomment %}
+                            
+                            {% for r in hotel.hotel_room_types %}
+                                <option value="{{r.slug}}">{{r.type}}</option>
+                            {% endfor %}
+                        </select>
+                      
+                        <button type="submit" class="utf_progress_button button fullwidth_block margin-top-5"> <i class="fas fa-check-circle"></i> {% trans "Update Selection" %} </button>
+                    </form>
+                    </div>
+            </div>
+        </div>
+            
+      <div class="utf_booking_listing_section_form margin-bottom-40">
+        <h3><i class="fas fa-user"></i> {% trans "Billing Information" %}</h3>
+        <form method="POST" id="billingForm">
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-md-12">
+              <label>{% trans "First Name" %}</label>
+              <input name="full_name" type="text" value="{{request.user.profile.full_name|title}}" placeholder="First Name" required>
+              <div class="error-message" id="fullNameError"></div>
+            </div>
+            <div class="col-md-6">
+              <div class="medium-icons">
+                <label>{% trans "E-Mail" %}</label>
+                <input name="email" type="email" value="{{request.user.email}}" placeholder="Email" required>
+                <div class="error-message" id="emailError"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="medium-icons">
+                <label>{% trans "Phone" %}</label>
+                <input name="phone" type="tel" value="{{request.user.phone}}" placeholder="Phone" required pattern="[0-9+\s()-]{10,}">
+                <div class="error-message" id="phoneError"></div>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <button type="submit" class="button utf_booking_confirmation_button margin-top-20 margin-bottom-10">{% trans "Continue to checkout" %} <i class="fas fa-right-arrow"></i></button> 		
+            </div>
+          </div>
+        </form>
+      </div>
+
+		
+	  </div>
+      <div class="col-lg-4 col-md-4 margin-top-0 utf_listing_payment_section">
+        <div class="utf_booking_listing_item_container compact utf_order_summary_widget_section">
+          <div class="listing-item"> <img src="{{hotel.image.url}}" alt="">
+            <div class="utf_listing_item_content">              
+              <h3>{{hotel.name}}</h3>
+              <span><i class="fa fa-map-marker"></i> The Ritz-Carlton, Hong Kong</span>
+						<span><i class="fa fa-phone"></i> (+15) 124-796-3633</span>											
+			  <div class="utf_star_rating_section" data-rating="4.5">
+				<div class="utf_counter_star_rating">(18) Reviews</div>
+			  </div>
+			</div>
+          </div>
+        </div>
+        <div class="boxed-widget opening-hours summary margin-top-0">
+          <h3><i class="fa fa-calendar-check-o"></i> Booking Summary</h3>
+          <ul>
+            <li>Check-in <span>{{checkin}}</span></li>
+			<li>Check-out <span>{{checkout}}</span></li>            
+			<li>Total Days <span>{{total_days}} Days</span></li>            
+            <li>Adults <span>{{ adult }} Adult</span></li>
+            <li>Children <span>{{ children }} Children</span></li>
+			      <li>V.A.T <span>$0.00</span></li>
+            <li class="total-costs">Total Cost <span>${{total}}</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+  
+{% endblock content %}
+
+{% block script_links %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkinInput = document.querySelector('input[name="checkin"]');
+    const checkoutInput = document.querySelector('input[name="checkout"]');
+    
+    // Устанавливаем минимальную дату для check-in как сегодня
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const minDate = `${year}-${month}-${day}`;
+    
+    checkinInput.min = minDate;
+    checkinInput.value = minDate;
+    
+    // Устанавливаем минимальную дату для check-out как завтра
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowYear = tomorrow.getFullYear();
+    const tomorrowMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
+    const tomorrowDay = String(tomorrow.getDate()).padStart(2, '0');
+    const minCheckoutDate = `${tomorrowYear}-${tomorrowMonth}-${tomorrowDay}`;
+    
+    checkoutInput.min = minCheckoutDate;
+    checkoutInput.value = minCheckoutDate;
+    
+    // Обработчик изменения даты check-in
+    checkinInput.addEventListener('change', function() {
+        const checkinDate = new Date(this.value);
+        const nextDay = new Date(checkinDate);
+        nextDay.setDate(nextDay.getDate() + 1);
+        
+        const nextDayYear = nextDay.getFullYear();
+        const nextDayMonth = String(nextDay.getMonth() + 1).padStart(2, '0');
+        const nextDayDay = String(nextDay.getDate()).padStart(2, '0');
+        const nextDayFormatted = `${nextDayYear}-${nextDayMonth}-${nextDayDay}`;
+        
+        checkoutInput.min = nextDayFormatted;
+        
+        // Если текущая дата check-out раньше новой минимальной даты
+        if (new Date(checkoutInput.value) < nextDay) {
+            checkoutInput.value = nextDayFormatted;
+        }
+    });
+
+    // Billing Information Form Validation
+    const billingForm = document.getElementById('billingForm');
+    if (billingForm) {
+        billingForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+            
+            // Full Name Validation
+            const fullName = billingForm.querySelector('input[name="full_name"]');
+            if (!fullName.value.trim()) {
+                document.getElementById('fullNameError').textContent = '{% trans "Please enter your full name" %}';
+                isValid = false;
+            } else {
+                document.getElementById('fullNameError').textContent = '';
+            }
+
+            // Email Validation
+            const email = billingForm.querySelector('input[name="email"]');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                document.getElementById('emailError').textContent = '{% trans "Please enter a valid email address" %}';
+                isValid = false;
+            } else {
+                document.getElementById('emailError').textContent = '';
+            }
+
+            // Phone Validation
+            const phone = billingForm.querySelector('input[name="phone"]');
+            const phoneRegex = /^[0-9+\s()-]{10,}$/;
+            if (!phoneRegex.test(phone.value)) {
+                document.getElementById('phoneError').textContent = '{% trans "Please enter a valid phone number" %}';
+                isValid = false;
+            } else {
+                document.getElementById('phoneError').textContent = '';
+            }
+
+            if (isValid) {
+                billingForm.submit();
+            }
+        });
+    }
+});
+</script>
+{% endblock script_links %}
+
+
