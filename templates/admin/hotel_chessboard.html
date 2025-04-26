@@ -1,0 +1,69 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block content %}
+<div id="content-main">
+    <h1>Шахматка бронирований для {{ hotel.name }}</h1>
+    <div class="module">
+        <div class="table-responsive">
+            <table class="table table-bordered chessboard-table">
+                <thead>
+                    <tr>
+                        <th>Номер</th>
+                        {% for date in date_range %}
+                            <th>{{ date|date:"d.m" }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for room_data in chessboard_data %}
+                        <tr>
+                            <td>{{ room_data.room.room_number }} ({{ room_data.room.room_type.type }})</td>
+                            {% for date in date_range %}
+                                {% with cell=room_data.dates.date %}
+                                    <td class="{% if cell.booking %}booking-{{ cell.status }}{% else %}free{% endif %}"
+                                        data-booking-id="{% if cell.booking %}{{ cell.booking.booking_id }}{% endif %}"
+                                        data-room-id="{{ room_data.room.id }}"
+                                        data-date="{{ date|date:'Y-m-d' }}">
+                                        {% if cell.booking %}
+                                            <a href="{% url 'admin:hotel_booking_change' cell.booking.id %}" 
+                                               title="{{ cell.booking.full_name }} ({{ cell.booking.payment_status }})">
+                                                {{ cell.booking.full_name|truncatechars:10 }}
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                {% endwith %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <p><a href="{% url 'admin:hotel_hotel_changelist' %}" class="btn btn-primary">Вернуться к списку отелей</a></p>
+</div>
+
+<style>
+    .chessboard-table { font-size: 12px; }
+    .free { background-color: #e0e0e0; }
+    .booking-paid { background-color: #28a745; color: white; }
+    .booking-pending { background-color: #ffc107; }
+    .booking-cancelled { background-color: #dc3545; color: white; }
+    td:hover { cursor: pointer; opacity: 0.8; }
+    td a { color: inherit; text-decoration: none; }
+</style>
+
+<script src="{% static 'admin/js/jquery.min.js' %}"></script>
+<script>
+$(document).ready(function() {
+    $('td').click(function() {
+        let bookingId = $(this).data('booking-id');
+        let roomId = $(this).data('room-id');
+        let date = $(this).data('date');
+        if (!bookingId) {
+            alert(`Создать бронь для номера ${roomId} на ${date}`);
+        }
+    });
+});
+</script>
+{% endblock %}

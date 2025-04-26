@@ -1,0 +1,816 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block special_header_links %}
+<link rel="stylesheet" href="{% static 'css/bootstrap_part_for_modal.css' %}"> 
+<link rel="stylesheet" href="{% static 'css/hotel_detail.css' %}"> 
+<style>
+    /* Стили для кнопки Photo */
+.hrm-photo-btn {
+    /* Основные стили */
+    background-color: #8400ff; /* Основной цвет */
+    color: #ffffff; /* Белый текст для контраста */
+    border: none; /* Убираем стандартную рамку */
+    border-radius: 8px; /* Скругленные углы */
+    padding: 10px 20px; /* Внутренние отступы */
+    font-size: 14px; /* Размер шрифта */
+    font-weight: 600; /* Полужирный шрифт */
+    text-transform: uppercase; /* Текст в верхнем регистре */
+    cursor: pointer; /* Курсор указателя */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    transition: all 0.3s ease; /* Плавные переходы для эффектов */
+}
+
+/* Эффект при наведении */
+.hrm-photo-btn:hover {
+    background-color: #6b00cc; /* Темнее на 20% для ховера */
+    transform: translateY(-2px); /* Легкий подъем */
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2); /* Усиленная тень */
+}
+
+/* Эффект при нажатии */
+.hrm-photo-btn:active {
+    background-color: #5c00b3; /* Еще темнее для активного состояния */
+    transform: translateY(0); /* Возвращаем на место */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Уменьшенная тень */
+}
+
+/* Адаптивность для маленьких экранов */
+@media (max-width: 768px) {
+    .hrm-photo-btn {
+        padding: 8px 16px; /* Меньше отступы */
+        font-size: 12px; /* Меньше шрифт */
+    }
+}
+
+
+    /* Стили для секции списка */
+    .utf_listing_section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .utf_listing_headline_part {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        color: #2c3e50;
+        font-weight: 700;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+    }
+
+    .utf_pricing_list_section ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .utf_pricing_list_section li {
+        background: #fff;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .utf_pricing_list_section li:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-primary {
+        background-color: #3498db;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+    }
+
+    /* Стили для кастомного модального окна */
+    .custom-modal {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+        overflow: auto;
+        background: transparent;
+        padding: 0; /* Убираем padding, так как центрирование выполняется через flex */
+    }
+
+    .custom-modal.show {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .custom-modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1001;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .custom-modal.show .custom-modal-backdrop {
+        opacity: 1;
+    }
+
+    .custom-modal-content {
+        position: relative;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 1200px;
+        z-index: 1002;
+        transform: scale(0.9);
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        opacity: 0;
+        margin: auto; /* Добавляем margin: auto для центрирования */
+    }
+
+    .custom-modal.show .custom-modal-content {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    .custom-modal-header {
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .custom-modal-title {
+        color: #fff;
+        font-size: clamp(1.3rem, 3vw, 1.6rem);
+        font-weight: 600;
+        text-align: center;
+        flex-grow: 1;
+        margin: 0;
+    }
+
+    .custom-modal-close {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 1.4rem;
+        cursor: pointer;
+        padding: 4px 8px;
+        transition: color 0.2s ease;
+    }
+
+    .custom-modal-close:hover {
+        color: #e0e0e0;
+    }
+
+    .custom-modal-body {
+        display: flex;
+        flex-direction: row;
+        background: #fff;
+        padding: 16px;
+    }
+
+    .custom-room-gallery {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .custom-main-image img {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 8px;
+        display: block;
+    }
+
+    .custom-thumbnail-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: flex-start;
+    }
+
+    .custom-thumbnail {
+        width: 80px;
+        height: 60px;
+        object-fit: cover;
+        border: 2px solid transparent;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .custom-thumbnail:hover {
+        transform: scale(1.05);
+    }
+
+    .custom-thumbnail.active {
+        border-color: #3498db;
+        transform: scale(1.05);
+    }
+
+    .custom-room-description {
+        flex: 1;
+        padding: 16px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        overflow-y: auto;
+        max-height: 400px;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        line-height: 1.5;
+    }
+
+    .custom-room-description p {
+        margin: 0 0 12px;
+    }
+
+    .custom-modal-footer {
+        padding: 12px;
+        background: #ecf0f1;
+        display: flex;
+        justify-content: center;
+        border-radius: 0 0 12px 12px;
+    }
+
+    .custom-btn-close {
+        background-color: #7f8c8d;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .custom-btn-close:hover {
+        background-color: #95a5a6;
+    }
+
+    /* Адаптивность */
+    @media (max-width: 991px) {
+        .custom-modal-content {
+            max-width: 85%;
+            margin: auto;
+        }
+
+        .custom-main-image img {
+            height: 350px;
+        }
+
+        .custom-thumbnail {
+            width: 70px;
+            height: 50px;
+        }
+
+        .custom-room-description {
+            max-height: 350px;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .custom-modal {
+            padding: 10px;
+        }
+
+        .custom-modal-content {
+            max-width: 95%;
+            margin: auto;
+        }
+
+        .custom-modal-body {
+            flex-direction: column;
+            padding: 12px;
+        }
+
+        .custom-main-image img {
+            height: 300px;
+        }
+
+        .custom-room-gallery {
+            gap: 10px;
+        }
+
+        .custom-room-description {
+            max-height: 250px;
+            padding: 12px;
+        }
+
+        .custom-modal-header {
+            padding: 10px 14px;
+        }
+
+        .custom-modal-title {
+            font-size: clamp(1.2rem, 2.8vw, 1.4rem);
+        }
+
+        .custom-modal-footer {
+            padding: 10px;
+        }
+    }
+
+    @media (max-width: 575px) {
+        .custom-modal-content {
+            max-width: 98%;
+            margin: auto;
+        }
+
+        .custom-main-image img {
+            height: 250px;
+        }
+
+        .custom-thumbnail {
+            width: 60px;
+            height: 40px;
+        }
+
+        .custom-room-description {
+            max-height: 200px;
+            font-size: 0.9rem;
+        }
+
+        .custom-btn-close {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+{% endblock special_header_links %}
+
+{% block content %}
+<div class="clearfix"></div>
+<div id="utf_listing_gallery_part" class="utf_listing_section">
+    <div class="utf_listing_slider utf_gallery_container margin-bottom-0">
+        {% for h in hotel.hotel_gallery %}
+        <a href="{{h.image.url}}" data-background-image="{{h.image.url}}" class="item utf_gallery"></a>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="container">
+    <div class="row utf_sticky_main_wrapper">
+        <div class="col-lg-8 col-md-8">
+            <div id="titlebar" class="utf_listing_titlebar">
+                <div class="utf_listing_titlebar_title">
+                    <h2>
+                        {{hotel.name}}
+                    </h2>
+                    <span><a href="#utf_listing_location" class="listing-address"><i class="fas fa-location-arrow"></i> {{hotel.address}}</a></span>
+                    <span class="call_now"><i class="fas fa-phone"></i> {{hotel.mobile}}</span>
+                    <div class="utf_star_rating_section" data-rating="{{hotel.average_rating}}">
+                        {% if hotel.average_rating == None %}
+                        <div class="utf_counter_star_rating">{% trans "No Reviews Yet" %}</div>
+                        {% else %}
+                        <div class="utf_counter_star_rating">({{hotel.average_rating}}) / ({{hotel.rating_count}} {% trans "Reviews" %})</div>
+                        {% endif %}
+                    </div>
+                    <ul class="listing_item_social">
+                        {% if bookmark %}
+                        <li><a style="cursor: pointer;" data-hotel="{{hotel.id}}" class="add-to-bookmark-{{hotel.id}}" id="add-to-bookmark"><i class="fa fa-heart" style="color: red;"></i></a></li>
+                        {% else %}
+                        <li><a style="cursor: pointer;" data-hotel="{{hotel.id}}" class="add-to-bookmark-{{hotel.id}}" id="add-to-bookmark"><i class="fa fa-heart" style="color: gray;"></i></a></li>
+                        {% endif %}
+
+                        {% if request.user.is_authenticated %}
+                        {% if not reviews %}
+                        <a href="#small-dialog" class="popup-with-zoom-anim" id="add-review-button"><i class="fa fa-star"></i>{% trans "Add Review" %}</a></li>
+                        <div id="small-dialog" class="zoom-anim-dialog mfp-hide">
+                            <div class="small_dialog_header">
+                                <h3 class="review_text">{% trans "Write a review" %}</h3>
+                            </div>
+                            <div class="utf_message_reply_block margin-top-0" id="review_div">
+                                <textarea cols="40" rows="3" id="review-input" placeholder="Your Message..."></textarea>
+                                <select name="" id="rating-input">
+                                    <option value="1">★☆☆☆☆</option>
+                                    <option value="2">★★☆☆☆</option>
+                                    <option value="3">★★★☆☆</option>
+                                    <option value="4">★★★★☆</option>
+                                    <option value="5">★★★★★</option>
+                                </select>
+                                <button data-hotel="{{hotel.id}}" class="button" id="review-btn">{% trans "Reply Message" %}</button>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% else %}
+                        <li><a href="{% url 'userauths:sign-in' %}?next={{request.path}}"><i class="fa fa-sign-in"></i> {% trans "Login to Write Review" %}</a></li>
+                        {% endif %}
+                        <li><a style="cursor: pointer;" id="clipboard"><i class="fa fa-share"></i> {% trans "Share" %}</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="utf_listing_overview" class="utf_listing_section">
+                <h3 class="utf_listing_headline_part margin-top-30 margin-bottom-30">{% trans "Description" %}</h3>
+                <p>{{hotel.description|safe}}</p>
+                <div id="utf_listing_tags" class="utf_listing_section listing_tags_section margin-bottom-10 margin-top-0">
+                    <a href="#"><i class="fas fa-phone" aria-hidden="true"></i> {{hotel.mobile}}</a>
+                    <a href="#"><i class="fa fa-envelope-o" aria-hidden="true"></i> {{hotel.email}}</a>
+                </div>
+                <div class="social-contact">
+                    <a href="#" class="facebook-link"><i class="fab fa-facebook"></i> {% trans "Facebook" %}</a>
+                    <a href="#" class="twitter-link"><i class="fab fa-twitter"></i> {% trans "Twitter" %}</a>
+                    <a href="#" class="instagram-link"><i class="fab fa-instagram"></i> {% trans "Instagram" %}</a>
+                    <a href="#" class="linkedin-link"><i class="fab fa-linkedin"></i> {% trans "Linkedin" %}</a>
+                    <a href="#" class="youtube-link"><i class="fab fa-youtube-play"></i> {% trans "Youtube" %}</a>
+                </div>
+            </div>
+
+            <div id="utf_listing_tags" class="utf_listing_section listing_tags_section">
+                <h3 class="utf_listing_headline_part margin-top-40 margin-bottom-40">{% trans "Tags" %}</h3>
+                {% for h in hotel.tags.all %}
+                <a href="#"><i class="fa fa-tag" aria-hidden="true"></i>{{h}}</a>
+                {% endfor %}
+            </div>
+
+            <div class="utf_listing_section">
+                <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">{% trans "Pricing" %}</h3>
+                <div class="show-more">
+                    <div class="utf_pricing_list_section">
+                        <h4>{% trans "Room Types" %}</h4>
+                        <ul>
+                            {% for r in hotel.hotel_room_types %}
+                            <li class="hrm-room-item">
+                                <div class="hrm-room-info">
+                                    <h5>{{ r.type }}</h5>
+                                    <p><strong>{% trans "Beds" %}:</strong> {{ r.number_of_beds }} - <strong>{% trans "Rooms" %}:</strong> {{ r.rooms_count }}</p>
+                                </div>
+                                <div class="hrm-room-actions">
+                                    <button type="button" class="hrm-photo-btn" data-room-id="{{ r.id }}">{% trans "Photo" %}</button>
+                                    <span>${{ r.price }}</span>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <a href="#" class="show-more-button" data-more-title="Show More" data-less-title="Show Less"><i class="fas fa-down-arrow"></i></a>
+            </div>
+
+            <div id="utf_listing_amenities" class="utf_listing_section">
+                <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">{% trans "Amenities" %}</h3>
+                <ul class="utf_listing_features checfkboxes margin-top-0">
+                    {% for h in hotel.hotel_features %}
+                    <li>
+                        <img src="{% static 'icons/' %}{{ h.icon }}" alt="icon img" width="35" height="35">
+                        {{h.name}}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div id="utf_listing_faq" class="utf_listing_section">
+                <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">{% trans "FAQ's" %}</h3>
+                <div class="style-2">
+                    <div class="accordion">
+                        {% for h in hotel.hotel_faqs %}
+                        <h3><span class="ui-accordion-header-icon ui-icon ui-accordion-icon"></span><i class="sl sl-icon-plus"></i> ({{forloop.counter}}) {{h.question}}</h3>
+                        <div>
+                            <p>{{h.answer}}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div id="utf_listing_reviews" class="utf_listing_section">
+                <h3 class="utf_listing_headline_part margin-top-75 margin-bottom-20">{% trans "Reviews" %} <span>({{all_reviews.count}})</span></h3>
+                <div class="clearfix"></div>
+                <div class="reviews-container">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div id="review_summary">
+                                {% if hotel.average_rating == None %}
+                                <strong>{% trans "Not Rated Yet" %}</strong>
+                                {% else %}
+                                <strong>{{hotel.average_rating}}/5</strong>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="comments utf_listing_reviews">
+                    <ul>
+                        {% for a in all_reviews %}
+                        <li>
+                            <div class="avatar"><img src="{{ a.user.profile.image.url }}" alt="" /></div>
+                            <div class="utf_comment_content">
+                                <div class="utf_arrow_comment"></div>
+                                <div class="utf_by_comment"><p>{{ a.user.profile.full_name }} - {{ a.rating }} <i class="fas fa-star text-warning"></i></p> <span class="date"><i class="fa fa-clock-o"></i> {{ a.date }}</span></div>
+                                <p>{{ a.review }}</p>
+                            </div>
+                        </li>
+                        {% empty %}
+                        <li>
+                            <div class="utf_comment_content">
+                                <div class="utf_arrow_comment"></div>
+                                <div class="utf_by_comment">{% trans "No Reviews Yet" %}</div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4 col-md-4 margin-top-75 sidebar-search">
+            <div class="utf_box_widget booking_widget_box">
+                <h3><i class="fa fa-calendar"></i> {% trans "Booking" %}</h3>
+                <form class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{hotel.id}}" name="hotel-id" id="">
+                    <div class="col-lg-12 col-md-12 select_date_box">
+                        <label for="">{% trans "Check-in Date" %}</label>
+                        <input type="date" id="date-picker" name="checkin" placeholder="Select Date">
+                    </div>
+                    <div class="col-lg-12 col-md-12 select_date_box">
+                        <label for="">{% trans "Check-out Date" %}</label>
+                        <input type="date" name="checkout" id="date-picker" placeholder="Select Date">
+                    </div>
+                    <div class="with-forms">
+                        <div class="col-lg-12 col-md-12">
+                            <a href="#">{% trans "Guests" %} <span class="qtyTotal" name="qtyTotal">1</span></a>
+                            <div class="panel-dropdown-content">
+                                <div class="qtyButtons">
+                                    <div class="qtyTitle">{% trans "Adults" %}</div>
+                                    <input type="text" name="adult" value="1">
+                                </div>
+                                <div class="qtyButtons">
+                                    <div class="qtyTitle">{% trans "Childrens" %}</div>
+                                    <input type="text" name="children" value="1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="with-forms margin-top-30">
+                        <div class="col-lg-12 col-md-12">
+                            <a href="#">{% trans "Select Room Type" %}</a>
+                            <select name="room-type" class="utf_chosen_select_single" required>
+                                <option value="">{% trans "Select Room" %}</option>
+                                {% for r in hotel.hotel_room_types %}
+                                <option value="{{r.slug}}">{{r.type}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="utf_progress_button button fullwidth_block margin-top-5">{% trans "Check Availability" %}</button>
+                </form>
+                <button class="like-button add_to_wishlist"><span class="like-icon"></span> {% trans "Add to Wishlist" %}</button>
+                <div class="clearfix"></div>
+            </div>
+            <div class="utf_box_widget margin-top-35">
+                <h3><i class="fas fa-user"></i> {% trans "Contact Info" %}</h3>
+                <div class="utf_hosted_by_user_title">
+                    <a href="#" class="utf_hosted_by_avatar_listing"><img src="{{hotel.user.profile.image.url}}" style="object-fit: cover;" alt=""></a>
+                    <h4>
+                        <a href="#">{{hotel.user.profile.full_name}}</a>
+                        <span>@{{hotel.user.username}}</span>
+                        <span>{% trans "Posted on" %}: {{hotel.date|date:"d M, Y"}}</span>
+                    </h4>
+                </div>
+                <ul class="utf_social_icon rounded margin-top-10">
+                    <li><a class="facebook" href="{{hotel.user.profile.facebook}}"><i class="fab fa-facebook"></i></a></li>
+                    <li><a class="twitter" href="{{hotel.user.profile.twitter}}"><i class="fab fa-twitter"></i></a></li>
+                </ul>
+                <ul class="utf_listing_detail_sidebar">
+                    <li><i class="fas fa-location-arrow"></i> {{hotel.user.profile.address}} {{hotel.user.profile.state}} {{hotel.user.profile.city}} {{hotel.user.profile.country}}</li>
+                    <li><i class="fas fa-phone"></i> {{hotel.user.profile.phone}}</li>
+                    <li><i class="fas fa-envelope-o"></i> <a href="mailto:{{hotel.user.email}}">{{hotel.user.email}}</a></li>
+                </ul>
+            </div>
+            <div class="utf_box_widget listing-share margin-top-35 margin-bottom-40 no-border">
+                <h3><i class="fas fa-tag"></i> {% trans "Bookmark Listing" %}</h3>
+                <span>{{all_reviews.count}} {% trans "People Bookmarked This Hotel" %}</span>
+            </div>
+            <div class="utf_box_widget opening-hours review-avg-wrapper margin-top-35">
+                <h3><i class="fas fa-star"></i> {% trans "Rating Average" %}</h3>
+                <div class="box-inner">
+                    <div class="rating-avg-wrapper text-theme clearfix">
+                        {% if hotel.average_rating == None %}
+                        <div class="utf_counter_star_rating">{% trans "No Reviews Yet" %}</div>
+                        {% else %}
+                        <div class="rating-avg">{{hotel.average_rating}}</div>
+                        <div class="rating-after">
+                            <div class="rating-mode">/5 ({{hotel.rating_count}} {% trans "Reviews" %})</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="ratings-avg-wrapper">
+                        <div class="ratings-avg-item">
+                            <div class="rating-label">{% trans "Quality" %}</div>
+                            <div class="rating-value text-theme">5.0</div>
+                        </div>
+                        <div class="ratings-avg-item">
+                            <div class="rating-label">{% trans "Location" %}</div>
+                            <div class="rating-value text-theme">4.5</div>
+                        </div>
+                        <div class="ratings-avg-item">
+                            <div class="rating-label">{% trans "Space" %}</div>
+                            <div class="rating-value text-theme">3.5</div>
+                        </div>
+                        <div class="ratings-avg-item">
+                            <div class="rating-label">{% trans "Service" %}</div>
+                            <div class="rating-value text-theme">4.0</div>
+                        </div>
+                        <div class="ratings-avg-item">
+                            <div class="rating-label">{% trans "Price" %}</div>
+                            <div class="rating-value text-theme">5.0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Кастомные модальные окна -->
+{% for r in hotel.hotel_room_types %}
+<div class="custom-modal" id="customModal{{ r.id }}">
+    <div class="custom-modal-backdrop"></div>
+    <div class="custom-modal-content">
+        <div class="custom-modal-header">
+            <h5 class="custom-modal-title">{{ r.type }}</h5>
+            <button type="button" class="custom-modal-close">×</button>
+        </div>
+        <div class="custom-modal-body">
+            <div class="custom-room-gallery">
+                <div class="custom-main-image">
+                    {% with r.roomtype_gallery.all|first as first_image %}
+                    <img src="{{ first_image.image.url|default:'/static/images/placeholder.jpg' }}" alt="Room photo">
+                    {% endwith %}
+                </div>
+                <div class="custom-thumbnail-container">
+                    {% for photo in r.roomtype_gallery.all %}
+                    <img src="{{ photo.image.url }}" alt="Thumbnail" class="custom-thumbnail" data-full="{{ photo.image.url }}">
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="custom-room-description">
+                {% for description in r.roomtype_description.all %}
+                <p>{{ description.description | safe }}</p>
+                {% empty %}
+                <p>{% trans "No description available." %}</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="custom-modal-footer">
+            <button type="button" class="custom-btn-close">{% trans "Close" %}</button>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock content %}
+
+{% block script_links %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Функция для инициализации галереи в модальном окне
+    function initGallery(modal) {
+        const mainImage = modal.querySelector('.custom-main-image img');
+        const thumbnails = modal.querySelectorAll('.custom-thumbnail');
+        
+        if (!mainImage || thumbnails.length === 0) return;
+
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', function(e) {
+                e.preventDefault();
+                const fullImageUrl = this.getAttribute('data-full');
+                if (fullImageUrl) {
+                    mainImage.src = fullImageUrl;
+                    thumbnails.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        thumbnails[0]?.classList.add('active');
+    }
+
+    // Открытие/закрытие модального окна
+    document.querySelectorAll('.hrm-photo-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const roomId = this.getAttribute('data-room-id');
+            const modal = document.getElementById('customModal' + roomId);
+            if (modal) {
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Блокируем прокрутку
+                initGallery(modal);
+            }
+        });
+    });
+
+    // Закрытие модального окна
+    function closeModal(modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = ''; // Восстанавливаем прокрутку
+    }
+
+    // Закрытие по клику на кнопку закрытия
+    document.querySelectorAll('.custom-modal-close, .custom-btn-close').forEach(button => {
+        button.addEventListener('click', function() {
+            const modal = this.closest('.custom-modal');
+            closeModal(modal);
+        });
+    });
+
+    // Закрытие по клику на фон
+    document.querySelectorAll('.custom-modal-backdrop').forEach(backdrop => {
+        backdrop.addEventListener('click', function() {
+            const modal = this.closest('.custom-modal');
+            closeModal(modal);
+        });
+    });
+
+    // Закрытие по клавише Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const openModal = document.querySelector('.custom-modal.show');
+            if (openModal) {
+                closeModal(openModal);
+            }
+        }
+    });
+
+    // Скрипт для копирования URL
+    var $temp = $("<input>");
+    var $url = $(location).attr('href');
+    $('#clipboard').on('click', function() {
+        $("body").append($temp);
+        $temp.val($url).select();
+        document.execCommand("copy");
+        $temp.remove();
+        $("#clipboard").html("URL copied <i class='fas fa-check-circle'></i>");
+    });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkinInput = document.querySelector('input[name="checkin"]');
+    const checkoutInput = document.querySelector('input[name="checkout"]');
+    
+    // Устанавливаем минимальную дату для check-in как сегодня
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const minDate = `${year}-${month}-${day}`;
+    
+    checkinInput.min = minDate;
+    checkinInput.value = minDate;
+    
+    // Устанавливаем минимальную дату для check-out как завтра
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowYear = tomorrow.getFullYear();
+    const tomorrowMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
+    const tomorrowDay = String(tomorrow.getDate()).padStart(2, '0');
+    const minCheckoutDate = `${tomorrowYear}-${tomorrowMonth}-${tomorrowDay}`;
+    
+    checkoutInput.min = minCheckoutDate;
+    checkoutInput.value = minCheckoutDate;
+    
+    // Обработчик изменения даты check-in
+    checkinInput.addEventListener('change', function() {
+        const checkinDate = new Date(this.value);
+        const nextDay = new Date(checkinDate);
+        nextDay.setDate(nextDay.getDate() + 1);
+        
+        const nextDayYear = nextDay.getFullYear();
+        const nextDayMonth = String(nextDay.getMonth() + 1).padStart(2, '0');
+        const nextDayDay = String(nextDay.getDate()).padStart(2, '0');
+        const nextDayFormatted = `${nextDayYear}-${nextDayMonth}-${nextDayDay}`;
+        
+        checkoutInput.min = nextDayFormatted;
+        
+        // Если текущая дата check-out раньше новой минимальной даты
+        if (new Date(checkoutInput.value) < nextDay) {
+            checkoutInput.value = nextDayFormatted;
+        }
+    });
+});
+</script>
+{% endblock script_links %}
