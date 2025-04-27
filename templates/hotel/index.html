@@ -73,7 +73,7 @@
                                                 <div class="utf_counter_star_rating">{{h.average_rating}}/5 ({{h.rating_count}} {% trans "reviews" %}) </div>
                                                 {% endif %}
                                                     
-                                                <span class="utf_view_count"> {{h.views}}</span>
+                                                {% comment %} <span class="utf_view_count"> {{h.views}}</span> {% endcomment %}
                                                 <span class="like-icon add-to-bookmark-{{h.id}}" data-hotel="{{h.id}}" id="add-to-bookmark"></span>
                                             </div>
                                         </a>

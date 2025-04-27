@@ -90,6 +90,13 @@ RATING = (
     ( 5,  "★★★★★"),
 )
 
+ROOM_TYPE_FEATURES_DETAILED = [
+    ('private_bathroom', 'In the private bathroom'),
+    ('view', 'View'),
+    ('services_amenities', 'Services and amenities'),
+]
+
+
 class Hotel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100,blank=True)
@@ -289,6 +296,30 @@ class RoomTypeFeatures(models.Model):
     
     class Meta:
         verbose_name_plural = "Room Type Features"
+
+class RoomTypeFeaturesDetailed(models.Model):
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
+    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_features_detailed')
+    type_of_amenity = models.CharField(max_length=100, null=True, choices=ROOM_TYPE_FEATURES_DETAILED)
+    text = models.CharField(max_length=100)
+    hfid = models.CharField(max_length=20,blank=True)
+
+    def save(self, *args, **kwargs):
+        # Генерация уникального hfid, если оно отсутствует
+        if not self.hfid:
+            self.hfid = shortuuid.uuid()[:10]
+
+        while RoomTypeFeaturesDetailed.objects.filter(hfid=self.hfid).exists():
+            self.hfid = shortuuid.uuid()[:10]  # Regenerate if it already exists
+    
+        super().save(*args, **kwargs)
+
+
+    def __str__(self):
+        return str(self.hotel)
+    
+    class Meta:
+        verbose_name_plural = "Room Type Features Detailed"
 
 class Room(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
