@@ -246,6 +246,69 @@
         margin: 0 0 12px;
     }
 
+    /* Стили для особенностей номера */
+    .room-features-section {
+        margin-top: 20px;
+    }
+
+    .room-feature-category {
+        font-weight: bold;
+        color: #2c3e50;
+        margin: 15px 0 10px;
+        {% comment %} font-size: 1.1em; {% endcomment %}
+    }
+
+    .room-feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .room-feature-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        padding: 5px 0;
+    }
+
+    .room-feature-item i {
+        color: #27ae60;
+        margin-right: 10px;
+        font-size: 1.1em;
+    }
+
+    /* Стили для иконок характеристик */
+    .room-features-icons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin: 15px 0;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .feature-icon-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .feature-icon-item img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+    }
+
+    /* Стили для размера комнаты */
+    .room-size-info {
+        margin: 15px 0;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        font-weight: 500;
+    }
+
     .custom-modal-footer {
         padding: 12px;
         background: #ecf0f1;
@@ -672,6 +735,31 @@
                 {% empty %}
                 <p>{% trans "No description available." %}</p>
                 {% endfor %}
+
+                <div class="room-size-info">
+                    {% trans "Room size" %}: {{ r.room_size }} m²
+                </div>
+
+                <div class="room-features-icons">
+                    {% for feature in r.roomtype_features.all %}
+                    <div class="feature-icon-item">
+                        <img src="{% static 'icons/' %}{{ feature.icon }}" alt="{{ feature.name }}">
+                        <span>{{ feature.name }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="room-features-section">
+                    {% for feature in r.roomtype_features_detailed.all %}
+                        {% ifchanged feature.type_of_amenity %}
+                            <div class="room-feature-category">{{ feature.type_of_amenity }}:</div>
+                        {% endifchanged %}
+                        <div class="room-feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>{{ feature.text }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
         <div class="custom-modal-footer">

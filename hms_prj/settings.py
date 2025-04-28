@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'addon',
     'userauths',
     'user_dashboard',
+    'search',
 
     # Third Party Apps
     'import_export',
@@ -230,7 +231,7 @@ JAZZMIN_SETTINGS = {
     'site_header': "Alakol",
     'site_brand': "Your #1 marketplace for collectibles.",
     'site_logo': "/images/logo.png",
-    'copyright':  "All Right Reserved 2023",
+    'copyright':  "All Right Reserved 2024",
     "welcome_sign": "Welcome to Alakol HMS, Login Now.",
     "topmenu_links": [
 
