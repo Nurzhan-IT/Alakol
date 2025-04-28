@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from hotel.models import  ICON_CHOICES,Hotel, Room, Booking, RoomServices, HotelGallery, RoomTypeGallery,RoomTypeFeatures, HotelFeatures, HotelFAQs, RoomType, RoomTypeDescription,ActivityLog, StaffOnDuty, Coupon, CouponUsers, Notification, Bookmark, Review
+from hotel.models import  ICON_CHOICES,Hotel, Room, Booking, RoomServices, HotelGallery, RoomTypeGallery,RoomTypeFeatures, HotelFeatures, HotelFAQs, RoomType, RoomTypeDescription,ActivityLog, StaffOnDuty, Coupon, CouponUsers, Notification, Bookmark, Review, RoomTypeFeaturesDetailed
 from import_export.admin import ImportExportModelAdmin
 from django.utils.html import mark_safe
 
@@ -45,6 +45,15 @@ class RoomTypeFeaturesForm(forms.ModelForm):
         widgets = {
             'icon': IconSelectWidget(choices=ICON_CHOICES)  # Используем кастомный виджет для поля icon
         }
+
+class RoomTypeFeaturesDetailedForm(forms.ModelForm):
+    text_ru = forms.CharField(max_length=100)
+    text_kk = forms.CharField(max_length=100)
+    text_en = forms.CharField(max_length=100)
+    
+    class Meta:
+        model = RoomTypeFeaturesDetailed
+        fields = '__all__'
 
 class RoomTypeForm(forms.ModelForm):
     class Meta:
@@ -206,11 +215,34 @@ class RoomTypeFeatures_Tab(admin.TabularInline):
 
         return formset
 
+class RoomTypeFeaturesDetailed_Tab(admin.TabularInline):
+    model = RoomTypeFeaturesDetailed
+    form = RoomTypeFeaturesDetailedForm
+    extra = 0
+    exclude = ['text']
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "room_type":
+            parent_id = request.resolver_match.kwargs.get('object_id')  # Получаем ID текущего отеля
+            if parent_id:
+                kwargs["queryset"] = RoomType.objects.filter(hotel_id=parent_id)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj, **kwargs)
+
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            for form in formset.form.base_fields.values():
+                if 'hfid' in formset.form.base_fields:
+                    formset.form.base_fields['hfid'].widget = forms.HiddenInput()
+
+        return formset
+
 class HotelAdmin(ImportExportModelAdmin):
     form = HotelAdminForm
     inlines = [
         HotelGallery_Tab, HotelFeatures_Tab, RoomType_Tab, RoomTypeDescription_Tab, 
-        RoomTypeGallery_Tab, RoomTypeFeatures_Tab, Room_Tab, HotelFAQs_Tab
+        RoomTypeGallery_Tab, RoomTypeFeatures_Tab, RoomTypeFeaturesDetailed_Tab, Room_Tab, HotelFAQs_Tab
     ]
     search_fields = ['user__username', 'name']
     list_filter = ['featured', 'status']

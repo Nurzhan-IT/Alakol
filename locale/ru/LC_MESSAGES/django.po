@@ -540,7 +540,7 @@ msgstr "Исследуйте самые замечательные места н
 
 #: .\templates\hotel\index.html:54 .\templates\hotel\index_translated.html:54
 msgid "Open Now"
-msgstr "Открой сейчас"
+msgstr "Открыто сейчас"
 
 #: .\templates\hotel\index.html:68 .\templates\hotel\index_translated.html:68
 msgid "No Rating Yet"
