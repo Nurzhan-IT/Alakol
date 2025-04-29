@@ -2,6 +2,7 @@ from django import forms
 from django.contrib import admin
 from hotel.models import  ICON_CHOICES,Hotel, Room, Booking, RoomServices, HotelGallery, RoomTypeGallery,RoomTypeFeatures, HotelFeatures, HotelFAQs, RoomType, RoomTypeDescription,ActivityLog, StaffOnDuty, Coupon, CouponUsers, Notification, Bookmark, Review, RoomTypeFeaturesDetailed
 from import_export.admin import ImportExportModelAdmin
+from import_export.formats import base_formats
 from django.utils.html import mark_safe
 
 from modeltranslation.admin import TranslationAdmin
@@ -19,6 +20,9 @@ from django.contrib.auth.decorators import user_passes_test
 # Проверка принадлежности пользователя к группе Manager
 def is_manager(user):
     return user.groups.filter(name='Manager').exists() and not user.is_superuser
+
+class BaseImportExportAdmin(ImportExportModelAdmin):
+    formats = [base_formats.CSV, base_formats.XLS, base_formats.XLSX]
 
 class HotelAdminForm(forms.ModelForm):
     description_ru = forms.CharField(widget=CKEditorUploadingWidget())
@@ -238,7 +242,7 @@ class RoomTypeFeaturesDetailed_Tab(admin.TabularInline):
 
         return formset
 
-class HotelAdmin(ImportExportModelAdmin):
+class HotelAdmin(BaseImportExportAdmin):
     form = HotelAdminForm
     inlines = [
         HotelGallery_Tab, HotelFeatures_Tab, RoomType_Tab, RoomTypeDescription_Tab, 
@@ -247,7 +251,7 @@ class HotelAdmin(ImportExportModelAdmin):
     search_fields = ['user__username', 'name']
     list_filter = ['featured', 'status']
     list_editable = ['status']
-    list_display = ['thumbnail', 'name_ru', 'user', 'status', 'featured', 'views', 'chessboard_link']
+    list_display = ['thumbnail', 'name_ru', 'user', 'status', 'featured', 'views']
     list_per_page = 100
     prepopulated_fields = {"slug": ("name_en", )}
     exclude = ['description']
@@ -257,94 +261,16 @@ class HotelAdmin(ImportExportModelAdmin):
             return ['thumbnail', 'name_ru']  # Упрощенный список для менеджеров
         return super().get_list_display(request)
 
-
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
 
         if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
             form.base_fields.pop('user', None)  # Без ошибки, если поля нет
-
     
             for field in ['featured','slug','hid','status','views','name']:
                 if field in form.base_fields:
                     form.base_fields[field].widget = forms.HiddenInput()
         return form
-
-    def get_urls(self):
-        urls = super().get_urls()
-        from django.urls import path
-        custom_urls = [
-            path('<int:hotel_id>/chessboard/', 
-                 self.admin_site.admin_view(self.chessboard_view), 
-                 name='hotel_chessboard'),
-        ]
-        return custom_urls + urls
-
-    def chessboard_view(self, request, hotel_id):
-        if not is_manager(request.user):
-            self.message_user(request, "У вас нет доступа к шахматке.", level='error')
-            return redirect('admin:index')
-
-        try:
-            hotel = Hotel.objects.get(id=hotel_id, user=request.user)
-        except Hotel.DoesNotExist:
-            self.message_user(request, "Отель не найден или не принадлежит вам.", level='error')
-            return redirect('admin:hotel_hotel_changelist')
-
-        start_date = timezone.now().date()
-        days_to_show = 30
-        end_date = start_date + timedelta(days=days_to_show)
-        
-        rooms = Room.objects.filter(hotel=hotel).select_related('room_type')
-        bookings = Booking.objects.filter(
-            hotel=hotel,
-            check_in_date__lte=end_date,
-            check_out_date__gte=start_date,
-            is_active=True
-        ).prefetch_related('room')
-        
-        date_range = [start_date + timedelta(days=x) for x in range(days_to_show)]
-        
-        # Преобразуем chessboard_data в формат, удобный для шаблона
-        chessboard_data = []
-        for room in rooms:
-            room_data = {
-                'room': room,
-                'dates': {}
-            }
-            for date in date_range:
-                booking = next(
-                    (b for b in bookings 
-                    if room in b.room.all() and b.check_in_date <= date < b.check_out_date),
-                    None
-                )
-                room_data['dates'][date] = {
-                    'booking': booking,
-                    'status': booking.payment_status if booking else 'free',
-                }
-            chessboard_data.append(room_data)
-
-        context = {
-            'hotel': hotel,
-            'chessboard_data': chessboard_data,
-            'date_range': date_range,
-            'opts': self.model._meta,
-        }
-        return render(request, 'admin/hotel_chessboard.html', context)
-    
-    # Добавляем ссылку на шахматку в список отелей
-    def chessboard_link(self, obj):
-        if is_manager(self.request.user):
-            url = reverse('admin:hotel_chessboard', args=[obj.id])
-            return format_html('<a href="{}">Шахматка</a>', url)
-        return "-"
-    chessboard_link.short_description = "Шахматка"
-
-    def get_list_display(self, request):
-        self.request = request  # Сохраняем request для chessboard_link
-        if is_manager(request.user):
-            return ['thumbnail', 'name_ru', 'chessboard_link']
-        return super().get_list_display(request)
 
     # Ограничение видимости записей
     def get_queryset(self, request):
@@ -361,7 +287,7 @@ class HotelAdmin(ImportExportModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-class RoomAdmin(ImportExportModelAdmin):
+class RoomAdmin(BaseImportExportAdmin):
     list_display = ['hotel' ,'room_number',  'room_type', 'price', 'number_of_beds' ,'is_available']
     list_per_page = 100
 
@@ -374,7 +300,7 @@ class RoomAdmin(ImportExportModelAdmin):
         return queryset
 
 
-class BookingAdmin(ImportExportModelAdmin):
+class BookingAdmin(BaseImportExportAdmin):
     inlines = [ActivityLog_Tab, StaffOnDuty_Tab]
     list_filter = [ 'hotel', 'room_type', 'check_in_date', 'check_out_date', 'is_active' , 'checked_in' ,'checked_out']
     list_display = ['booking_id', 'user', 'hotel', 'room_type', 'rooms', 'total', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'is_active' , 'checked_in' ,'checked_out']
@@ -390,7 +316,7 @@ class BookingAdmin(ImportExportModelAdmin):
         return queryset
 
 
-class RoomServicesAdmin(ImportExportModelAdmin):
+class RoomServicesAdmin(BaseImportExportAdmin):
     list_display = ['booking', 'room', 'date', 'price', 'service_type']
     list_per_page = 100
 
@@ -402,7 +328,7 @@ class RoomServicesAdmin(ImportExportModelAdmin):
         return queryset
     
 
-class CouponAdmin(ImportExportModelAdmin):
+class CouponAdmin(BaseImportExportAdmin):
     inlines = [CouponUsers_Tab]
     list_editable = ['valid_from', 'valid_to', 'active', 'type']
     list_display = ['code', 'discount', 'type', 'redemption', 'valid_from', 'valid_to', 'active', 'date']
@@ -414,7 +340,7 @@ class CouponAdmin(ImportExportModelAdmin):
             queryset = queryset.filter(hotel__user=request.user)
         return queryset
 
-class NotificationAdmin(ImportExportModelAdmin):
+class NotificationAdmin(BaseImportExportAdmin):
     list_editable = ['seen', 'type']
     list_display = ['user', 'booking', 'type', 'seen', 'date']
     
@@ -426,7 +352,7 @@ class NotificationAdmin(ImportExportModelAdmin):
         return queryset
 
 
-class BookmarkAdmin(ImportExportModelAdmin):
+class BookmarkAdmin(BaseImportExportAdmin):
     list_display = ['user', 'hotel']
 
     def get_queryset(self, request):
