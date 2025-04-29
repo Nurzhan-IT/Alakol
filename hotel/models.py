@@ -108,6 +108,9 @@ class Hotel(models.Model):
     email = models.CharField(max_length=20)
     status = models.CharField(choices=HOTEL_STATUS, max_length=10, default="published", null=True, blank=True)
 
+    check_in_time = models.TimeField(null=True, blank=True)
+    check_out_time = models.TimeField(null=True, blank=True)
+
     tags = TaggableManager(blank=True)
     views = models.PositiveIntegerField(default=0)
     featured = models.BooleanField(default=False)

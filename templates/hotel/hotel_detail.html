@@ -486,25 +486,20 @@
             <div id="utf_listing_overview" class="utf_listing_section">
                 <h3 class="utf_listing_headline_part margin-top-30 margin-bottom-30">{% trans "Description" %}</h3>
                 <p>{{hotel.description|safe}}</p>
-                <div id="utf_listing_tags" class="utf_listing_section listing_tags_section margin-bottom-10 margin-top-0">
-                    <a href="#"><i class="fas fa-phone" aria-hidden="true"></i> {{hotel.mobile}}</a>
-                    <a href="#"><i class="fa fa-envelope-o" aria-hidden="true"></i> {{hotel.email}}</a>
-                </div>
-                <div class="social-contact">
-                    <a href="#" class="facebook-link"><i class="fab fa-facebook"></i> {% trans "Facebook" %}</a>
-                    <a href="#" class="twitter-link"><i class="fab fa-twitter"></i> {% trans "Twitter" %}</a>
-                    <a href="#" class="instagram-link"><i class="fab fa-instagram"></i> {% trans "Instagram" %}</a>
-                    <a href="#" class="linkedin-link"><i class="fab fa-linkedin"></i> {% trans "Linkedin" %}</a>
-                    <a href="#" class="youtube-link"><i class="fab fa-youtube-play"></i> {% trans "Youtube" %}</a>
-                </div>
+                {% if hotel.check_in_time and hotel.check_out_time %}
+                    <p>{% trans "check in time:" %} {{hotel.check_in_time}}</p>
+                    <p>{% trans "check out time:" %} {{hotel.check_out_time}}</p>
+                {% endif %}
             </div>
 
+            {% if hotel.tags.all %}
             <div id="utf_listing_tags" class="utf_listing_section listing_tags_section">
                 <h3 class="utf_listing_headline_part margin-top-40 margin-bottom-40">{% trans "Tags" %}</h3>
                 {% for h in hotel.tags.all %}
                 <a href="#"><i class="fa fa-tag" aria-hidden="true"></i>{{h}}</a>
                 {% endfor %}
             </div>
+            {% endif %}
 
             <div class="utf_listing_section">
                 <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">{% trans "Pricing" %}</h3>
@@ -542,12 +537,13 @@
                 </ul>
             </div>
 
+            {% if hotel.hotel_faqs %}
             <div id="utf_listing_faq" class="utf_listing_section">
                 <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">{% trans "FAQ's" %}</h3>
                 <div class="style-2">
                     <div class="accordion">
                         {% for h in hotel.hotel_faqs %}
-                        <h3><span class="ui-accordion-header-icon ui-icon ui-accordion-icon"></span><i class="sl sl-icon-plus"></i> ({{forloop.counter}}) {{h.question}}</h3>
+                        <h3><span class="ui-accordion-header-icon ui-icon ui-accordion-icon"></span><i class="sl sl-icon-plus"></i> {{h.question}}</h3>
                         <div>
                             <p>{{h.answer}}</p>
                         </div>
@@ -555,6 +551,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
 
             <div id="utf_listing_reviews" class="utf_listing_section">
                 <h3 class="utf_listing_headline_part margin-top-75 margin-bottom-20">{% trans "Reviews" %} <span>({{all_reviews.count}})</span></h3>
