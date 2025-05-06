@@ -1,0 +1,49 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+<div id="main_wrapper">
+  <div id="titlebar" class="gradient">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>{% trans "Payment Failed" %}</h2>
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a href="{% url 'hotel:index' %}">{% trans "Home" %}</a></li>
+              <li><a href="{% url 'hotel:detail' booking.hotel.slug %}">{% trans "Hotel" %}</a></li>
+              <li>{% trans "Payment Failed" %}</li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container margin-bottom-75">
+    <div class="row">
+      <div class="col-lg-8 col-md-8 offset-md-2">
+        <div class="notification error closeable">
+          <p><span>{% trans "Payment Failed!" %}</span> {% trans "We're sorry, but your payment was not successful." %}</p>
+          <a class="close"></a>
+        </div>
+        
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+          <h3><i class="fas fa-exclamation-circle"></i> {% trans "Details" %}</h3>
+          <div class="utf_listing_section">
+            <p>{% trans "Your booking has not been confirmed because the payment could not be processed." %}</p>
+            <p>{% trans "Booking ID" %}: <strong>{{ booking.booking_id }}</strong></p>
+            <p>{% trans "Total Amount" %}: <strong>{{ booking.total }} {% trans "Tenge" %}</strong></p>
+            
+            <div class="margin-top-30">
+              <a href="{% url 'hotel:payment_method_selection' %}" class="button">{% trans "Try Again" %}</a>
+              <a href="{% url 'hotel:index' %}" class="button">{% trans "Return to Home" %}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

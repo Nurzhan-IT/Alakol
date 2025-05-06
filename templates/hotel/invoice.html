@@ -165,7 +165,7 @@
                             {% for r in room %}
                                 <tr>
                                     <td class="col-md-">{{r.room_type.type}}</td>
-                                    <td class="col-md-3"><i class="fa fa-inr"></i> ${{r.room_type.price}}</td>
+                                    <td class="col-md-3"><i class="fa fa-inr"></i> {{r.room_type.price}} {% trans "Tenge" %}</td>
                                 </tr>
                             {% endfor %}
                             
@@ -191,14 +191,14 @@
                                 <p class="mb-2"><b>Total Days: </b> {{booking.total_days}} Days</p>
                                 <p class="mb-2"><b>Adults: </b> {{booking.num_adults}} Adult</p>
                                 <p class="mb-2"><b>Chilren: </b> {{booking.num_children}} Children</p>
-                                <p class="mb-2"><b>VAT: </b> $0.00</p>
+                                <p class="mb-2"><b>VAT: </b> 0 {% trans "Tenge" %}</p>
                                 
                                 {% if booking.saved != 0.00 %}
-                                    <p class="mb-2 text-danger"><b>Discount: </b> -${{booking.saved}}</p>
+                                    <p class="mb-2 text-danger"><b>Discount: </b> -{{booking.saved}} {% trans "Tenge" %}</p>
                                 {% endif %}
                                 <hr />
 
-                                <p class="mb-2 text-success"><b>Total: </b> ${{booking.total|floatformat:2}}</p>
+                                <p class="mb-2 text-success"><b>Total: </b> {{booking.total|floatformat:2}} {% trans "Tenge" %}</p>
                             </div>
                         </div>
                     </div>

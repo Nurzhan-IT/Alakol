@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-m*t5wynyhd=2udczig6#n&0337+m=ga!p=cglnd-+srqdpq4r2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'userauths',
     'user_dashboard',
     'search',
+    'robokassa',
 
     # Third Party Apps
     'import_export',
@@ -64,26 +65,27 @@ INSTALLED_APPS = [
     'django_ckeditor_5',
     'taggit',
     "anymail",
-    'paypal.standard.ipn',
     'geoip2',
     'django_user_agents',
     'storages',
     'channels',
     'multiupload',
     'modeltranslation',
+    'django.contrib.humanize',
+    'django_crontab',
     
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'hms_prj.urls'
@@ -153,13 +155,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'Asia/Yekaterinburg'  # UTC+5, Алматы не обновленый там +6 до сих пор
 
 USE_I18N = True
 
 USE_L10N = True
+
+USE_THOUSAND_SEPARATOR = True
 
 USE_TZ = True
 
@@ -197,13 +201,6 @@ LOGIN_REDIRECT_URL = ""
 LOGOUT_REDIRECT_URL = "userauths:sign-in"
 
 AUTH_USER_MODEL = 'userauths.User'
-
-# Stripe 
-STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
-STRIPE_PRIVATE_KEY = env("STRIPE_PRIVATE_KEY")
-
-# Flutterwave
-FLUTTERWAVE_PUBLIC = env("STRIPE_PRIVATE_KEY")
 
 # Website Address
 WEBSITE_ADDRESS = env("WEBSITE_ADDRESS")
@@ -474,4 +471,61 @@ CKEDITOR_5_CONFIGS = {
         },
     },
 }
+
+# Robokassa Settings
+ROBOKASSA_MERCHANT_LOGIN = env("ROBOKASSA_MERCHANT_LOGIN")
+ROBOKASSA_MERCHANT_PASSWORD_1 = env("ROBOKASSA_MERCHANT_PASSWORD_1")
+ROBOKASSA_MERCHANT_PASSWORD_2 = env("ROBOKASSA_MERCHANT_PASSWORD_2")
+ROBOKASSA_TEST_PASSWORD_1 = env("ROBOKASSA_TEST_PASSWORD_1")
+ROBOKASSA_TEST_PASSWORD_2 = env("ROBOKASSA_TEST_PASSWORD_2")
+ROBOKASSA_USE_TEST_MODE = env("ROBOKASSA_USE_TEST_MODE")
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.ngrok-free.app',
+    'http://localhost:8000',
+    'https://b855-2a0d-b201-c0-774-907e-b5d8-ed29-207b.ngrok-free.app',
+]
+
+
+CRONJOBS = [
+    ('*/5 * * * *', 'hotel.cron.handle_bookings_payment_status_processing'),
+]
+
+# Настройки логирования
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'hotel.views': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'robokassa.robokassa': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 
