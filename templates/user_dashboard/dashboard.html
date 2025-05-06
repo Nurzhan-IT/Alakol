@@ -24,7 +24,7 @@
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="utf_dashboard_stat color-2">
                         <div class="utf_dashboard_stat_content">
-                            <h4>${{total_spent.amount|floatformat:2}}</h4>
+                            <h4>{{total_spent.amount|floatformat:2}} {% trans "Tenge" %}</h4>
                             <span>{% trans "Total Spent" %}</span>
                         </div>
                         <div class="utf_dashboard_stat_icon"><i class="fas fa-dollar"></i></div>
@@ -34,7 +34,7 @@
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="utf_dashboard_stat color-3">
                         <div class="utf_dashboard_stat_content">
-                            <h4>${{request.user.profile.wallet|floatformat:2}}</h4>
+                            <h4>{{request.user.profile.wallet|floatformat:2}} {% trans "Tenge" %}</h4>
                             <span>{% trans "Wallet Balance" %}</span>
                         </div>
                         <div class="utf_dashboard_stat_icon"><i class="fas fa-wallet"></i></div>

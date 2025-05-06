@@ -1,6 +1,7 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load humanize %}
 {% block content %}
   
 <div id="main_wrapper" class="selection-list">
@@ -41,7 +42,7 @@
                                       <span class="check-in-date">{{checkin}}</span> - 
                                       <span class="check-out-date">{{checkout}}</span>
                                     </p> {% endcomment %}
-                                  <span>${{item.room_price}} </span>
+                                  <span> {{item.room_price}} {% trans "Tenge" %} </span>
                                     
                                 </li>
                             {% endfor %}
@@ -149,8 +150,8 @@
 			<li>Total Days <span>{{total_days}} Days</span></li>            
             <li>Adults <span>{{ adult }} Adult</span></li>
             <li>Children <span>{{ children }} Children</span></li>
-			      <li>V.A.T <span>$0.00</span></li>
-            <li class="total-costs">Total Cost <span>${{total}}</span></li>
+			      {% comment %} <li>V.A.T <span>0 {% trans "Tenge" %}</span></li> {% endcomment %}
+            <li class="total-costs">Total Cost <span>{{total|floatformat:0}} {% trans "Tenge" %}</span></li>
           </ul>
         </div>
       </div>

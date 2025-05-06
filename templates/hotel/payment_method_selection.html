@@ -1,0 +1,121 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+  
+<div id="main_wrapper" class="selection-list">
+  
+  <div id="titlebar" class="gradient">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>{% trans "Payment Method Selection" %}</h2>
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a>{% trans "Home" %}</a></li>
+              <li><a>{% trans "Hotel" %}</a></li>
+              <li><a>{% trans "Rooms" %}</a></li>
+              <li>{% trans "Payment Method" %}</li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container margin-bottom-75">
+    <div class="row">
+      <div class="col-lg-8 col-md-8 utf_listing_payment_section">
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+          <h3><i class="fas fa-credit-card"></i> {% trans "Choose Payment Method" %}</h3>
+          <div class="utf_listing_section">
+            <div class="payment_methods_wrap">
+              <div class="payment_method_option">
+                <div class="payment_info_block">
+                  <h4>{% trans "Pay with Robokassa" %}</h4>
+                  <p>{% trans "Process your payment securely through Robokassa. Multiple payment methods available." %}</p>
+                  <div class="payment_logo">
+                    <i class="fas fa-credit-card fa-3x" style="color: #4285f4;"></i>
+                  </div>
+                </div>
+                <a href="{% url 'hotel:api_robokassa_payment' %}" class="button booking-confirmation">{% trans "Pay with Robokassa" %}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+          <h3><i class="fas fa-user"></i> {% trans "Order Information" %}</h3>
+          <div class="utf_listing_section">
+            <div class="row">
+              <div class="col-md-6">
+                <label>{% trans "Full Name" %}</label>
+                <div class="input-info">{{ user_data.full_name }}</div>
+              </div>
+              <div class="col-md-6">
+                <label>{% trans "Email" %}</label>
+                <div class="input-info">{{ user_data.email }}</div>
+              </div>
+              <div class="col-md-6">
+                <label>{% trans "Phone" %}</label>
+                <div class="input-info">{{ user_data.phone }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-4 col-md-4 margin-top-0 utf_listing_payment_section">
+        <div class="boxed-widget opening-hours summary margin-top-0">
+          <h3><i class="fa fa-calendar-check-o"></i> {% trans "Booking Summary" %}</h3>
+          <ul>
+            <li class="total-costs">{% trans "Total Cost" %} <span>${{ total }}</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+  
+{% endblock content %}
+
+{% block script_links %}
+<style>
+  .payment_methods_wrap {
+    margin-top: 20px;
+  }
+  .payment_method_option {
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .payment_info_block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .payment_logo {
+    max-width: 180px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+  }
+  .payment_logo img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  .input-info {
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background: #f9f9f9;
+    margin-bottom: 15px;
+  }
+</style>
+{% endblock script_links %} 
