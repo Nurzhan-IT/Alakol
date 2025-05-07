@@ -14,7 +14,7 @@ TEST_PASSWORD_2 = getattr(settings, 'ROBOKASSA_TEST_PASSWORD_2')
 PAYMENT_URL = "https://auth.robokassa.kz/Merchant/Index.aspx"
 
 # Переключатель тестового/реального режима
-USE_TEST_MODE = getattr(settings, 'ROBOKASSA_USE_TEST_MODE', True)
+USE_TEST_MODE = getattr(settings, 'ROBOKASSA_USE_TEST_MODE')
 
 def calculate_signature(*args) -> str:
     """Create signature MD5."""
