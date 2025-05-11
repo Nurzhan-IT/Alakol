@@ -15,13 +15,12 @@ import os
 
 from django.utils.translation import gettext
 
-from environs import Env
-env = Env()  
-env.read_env()  
+from dotenv import load_dotenv
+ 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -203,15 +202,15 @@ LOGOUT_REDIRECT_URL = "userauths:sign-in"
 AUTH_USER_MODEL = 'userauths.User'
 
 # Website Address
-WEBSITE_ADDRESS = env("WEBSITE_ADDRESS")
+WEBSITE_ADDRESS = os.getenv("WEBSITE_ADDRESS")
 
 # Anymail
-EMAIL_BACKEND = env("EMAIL_BACKEND")
+EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
 
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 ANYMAIL = {
-    "MAILGUN_API_KEY": env("MAILGUN_API_KEY"),
-    "MAILGUN_SENDER_DOMAIN": env("MAILGUN_SENDER_DOMAIN"),  
+    "MAILGUN_API_KEY": os.getenv("MAILGUN_API_KEY"),
+    "MAILGUN_SENDER_DOMAIN": os.getenv("MAILGUN_SENDER_DOMAIN"),  
 }
 
 
@@ -473,12 +472,14 @@ CKEDITOR_5_CONFIGS = {
 }
 
 # Robokassa Settings
-ROBOKASSA_MERCHANT_LOGIN = env("ROBOKASSA_MERCHANT_LOGIN")
-ROBOKASSA_MERCHANT_PASSWORD_1 = env("ROBOKASSA_MERCHANT_PASSWORD_1")
-ROBOKASSA_MERCHANT_PASSWORD_2 = env("ROBOKASSA_MERCHANT_PASSWORD_2")
-ROBOKASSA_TEST_PASSWORD_1 = env("ROBOKASSA_TEST_PASSWORD_1")
-ROBOKASSA_TEST_PASSWORD_2 = env("ROBOKASSA_TEST_PASSWORD_2")
-ROBOKASSA_USE_TEST_MODE = env("ROBOKASSA_USE_TEST_MODE")
+ROBOKASSA_MERCHANT_LOGIN = os.getenv('ROBOKASSA_MERCHANT_LOGIN')
+ROBOKASSA_MERCHANT_PASSWORD_1 = os.getenv('ROBOKASSA_MERCHANT_PASSWORD_1')
+ROBOKASSA_MERCHANT_PASSWORD_2 = os.getenv('ROBOKASSA_MERCHANT_PASSWORD_2')
+ROBOKASSA_TEST_PASSWORD_1 = os.getenv('ROBOKASSA_TEST_PASSWORD_1')
+ROBOKASSA_TEST_PASSWORD_2 = os.getenv('ROBOKASSA_TEST_PASSWORD_2')
+ROBOKASSA_USE_TEST_MODE = os.getenv('ROBOKASSA_USE_TEST_MODE') == 'True'
+
+
 
 CSRF_TRUSTED_ORIGINS = [
     'https://*.ngrok-free.app',

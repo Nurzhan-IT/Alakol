@@ -17,7 +17,7 @@ PAYMENT_URL = "https://auth.robokassa.kz/Merchant/Index.aspx"
 USE_TEST_MODE = getattr(settings, 'ROBOKASSA_USE_TEST_MODE')
 
 def calculate_signature(*args) -> str:
-    """Create signature MD5."""
+    """Create signature SHA256."""
     return hashlib.sha256(':'.join(str(arg) for arg in args).encode()).hexdigest()
 
 def parse_response(query_string: str) -> dict:
@@ -43,13 +43,16 @@ def generate_payment_link(
     cost: decimal.Decimal,
     number: int,
     description: str,
+    culture: str,
     email: str = None,
-    culture: str = "ru",
 ) -> str:
     """Generate URL for payment redirection."""
     # Выбор пароля в зависимости от режима
     password = TEST_PASSWORD_1 if USE_TEST_MODE else MERCHANT_PASSWORD_1
     is_test = 1 if USE_TEST_MODE else 0
+
+    # 10% от total_cost суммы (беру только процент платформы)
+    cost = cost * 0.1
 
     signature = calculate_signature(
         MERCHANT_LOGIN,
@@ -62,12 +65,19 @@ def generate_payment_link(
     expiration_date = datetime.datetime.now() + datetime.timedelta(minutes=9, seconds=50)
     # Форматируем дату в формате для Robokassa (YYYY-MM-DDThh:mm:ss)
     expiration_date_formatted = expiration_date.strftime("%Y-%m-%dT%H:%M:%S")
+    if culture == 'ru':
+        final_description = f"Данная сумма является предоплатой для бронирования #{description}, остальную сумму в 90% вы оплачиваете при заселении."
+    elif culture == 'en':
+        final_description = f"This amount is a prepayment for the booking #{description}, the remaining 90% you pay upon check-in."
+    elif culture == 'kk':
+        final_description = f"Данная сумма является предоплатой для бронирования #{description}, остальную сумму в 90% вы оплачиваете при заселении."
+    
 
     data = {
         'MerchantLogin': MERCHANT_LOGIN,
         'OutSum': cost,
         'InvId': number,
-        'Description': description,
+        'Description': final_description,
         'SignatureValue': signature,
         'IsTest': is_test,
         'Culture': culture,
