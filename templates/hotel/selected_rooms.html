@@ -1,6 +1,8 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load humanize %}
+{% load mathfilters %}
 {% block content %}
   
 <div id="main_wrapper" class="selection-list">
@@ -41,7 +43,7 @@
                                       <span class="check-in-date">{{checkin}}</span> - 
                                       <span class="check-out-date">{{checkout}}</span>
                                     </p> {% endcomment %}
-                                  <span>${{item.room_price}} </span>
+                                  <span> {{item.room_price}} {% trans "Tenge" %} </span>
                                     
                                 </li>
                             {% endfor %}
@@ -49,51 +51,68 @@
                     </div>
             </div>
         </div>
+        
+        
         <div class="utf_booking_listing_section_form margin-bottom-40">
-            <h3><i class="fas fa-check-circle"></i> {% trans "Update Selection" %}</h3>
-            <div class="utf_listing_section">
-                    <div class="utf_pricing_list_section">
-                      <form class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}">
-                        {% csrf_token %}
-                        <input type="hidden" value="{{hotel.id}}" name="hotel-id" id="">
-                        <div class="col-lg-12 col-md-12 select_date_box">
-                            <label for="">{% trans "Check-in Date" %}</label>
-                            <input type="date" id="date-picker" value="{{checkin}}" name="checkin" placeholder="Select Date">
-                        </div>
-                        <div class="col-lg-12 col-md-12 select_date_box">
-                            <label for="">{% trans "Check-out Date" %}</label>
-                            <input type="date" name="checkout" value="{{checkout}}" id="date-picker" placeholder="Select Date">
-                        </div>
-                        <div class="with-forms">
-                            <div class="col-lg-12 col-md-12">
-                                <a href="#">{% trans "Guests" %} <span class="qtyTotal" style="visibility: hidden;" name="qtyTotal"></span></a>
-                                <div class="panel-dropdown-content">
-                                    <div class="qtyButtons">
-                                        <div class="qtyTitle">{% trans "Adults" %}</div>
-                                        <input type="text" name="adult" {% if adult == None %}value="1"{% else %}value="{{adult}}"{% endif %}>
-                                    </div>
-                                    <div class="qtyButtons">
-                                        <div class="qtyTitle">{% trans "Childrens" %}</div>
-                                        <input type="text" name="children" {% if children == None %}value="1"{% else %}value="{{children}}"{% endif %}>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+          <h3><i class="fas fa-check-circle"></i> {% trans "Update Selection" %}</h3>
+          <div class="utf_listing_section">
+              <div class="utf_pricing_list_section">
+                  {% if data %}
+                      {% with first_item=data|dictsort:"0"|first %}
+                          {% with room_type_id=first_item.1.room_type %}
+                                   {% comment %} <!-- Отладочная информация -->
+                                   <div style="background-color: #f8f9fa; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+                                       <h5>Отладочная информация:</h5>
+                                       <p>room_type_id: {{ room_type_id }}</p>
+                                       <p>first_item data: {{ first_item.1 }}</p>
+                                       <p>first_room_type: {% if first_room_type %}ID: {{ first_room_type.id }}, Slug: {{ first_room_type.slug }}{% else %}Not available{% endif %}</p>
+                                       <p>Даты бронирования: Check-in: {{ checkin }}, Check-out: {{ checkout }}</p>
+                                       <p>Данные выбора комнат: {{ data }}</p>
+                                   </div>
 
-                        <a style="margin-top: 50px;">{% trans "Select Room Type (*required)" %} </a>
-                        <select name="room-type">
-                            {% comment %} <option value="">{% trans "Select Room" %}</option> {% endcomment %}
-                            
-                            {% for r in hotel.hotel_room_types %}
-                                <option value="{{r.slug}}">{{r.type}}</option>
-                            {% endfor %}
-                        </select>
-                      
-                        <button type="submit" class="utf_progress_button button fullwidth_block margin-top-5"> <i class="fas fa-check-circle"></i> {% trans "Update Selection" %} </button>
-                    </form>
-                    </div>
-            </div>
-        </div>
+                                   <!-- Выбор дат бронирования -->
+                                   <div class="utf_booking_listing_section_form margin-bottom-20">
+                                       <div class="row with-forms margin-top-0">
+                                           <div class="col-md-6">
+                                               <label>{% trans "Check-in" %} <small>{% trans "Текущая дата" %}: {{ checkin }}</small></label>
+                                               <input type="date" id="display-checkin" value="{{ checkin }}" class="form-control">
+                                           </div>
+                                           <div class="col-md-6">
+                                               <label>{% trans "Check-out" %} <small>{% trans "Текущая дата" %}: {{ checkout }}</small></label>
+                                               <input type="date" id="display-checkout" value="{{ checkout }}" class="form-control">
+                                           </div>
+                                       </div>
+                                   </div> {% endcomment %}
+
+                                   <!-- Форма обновления выбора -->
+                                   <form id="update-selection-form" class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}">
+                                       {% csrf_token %}
+                                       <input type="hidden" value="{{ hotel.id }}" name="hotel-id">
+                                       <input type="hidden" id="checkin-input" value="{{ checkin }}" name="checkin">
+                                       <input type="hidden" id="checkout-input" value="{{ checkout }}" name="checkout">
+                                       <input type="hidden" value="{{ adult }}" name="adult">
+                                       <input type="hidden" value="{{ children }}" name="children">
+                                       <!-- Явное установление обоих полей -->
+                                       <input type="hidden" value="{{ room_type_id }}" name="room-type-id">
+                                       {% if first_room_type %}
+                                           <input type="hidden" id="room-type-input" name="room-type" value="{{ first_room_type.slug }}">
+                                       {% else %}
+                                           <input type="hidden" id="room-type-input" name="room-type" value="{{ first_item.1.room_type_slug|default:room_type_id }}">
+                                       {% endif %}
+                                   </form>
+                                  <!-- Кнопка для отправки формы -->
+                                  <button type="button" id="update-selection-btn" class="utf_progress_button button fullwidth_block margin-top-5">
+                                      <i class="fas fa-check-circle"></i> {% trans "Update Selection" %}
+                                  </button>
+                          {% endwith %}
+                      {% endwith %}
+                  {% else %}
+                      <p>{% trans "No rooms selected. Please select a room to update." %}</p>
+                  {% endif %}
+              </div>
+          </div>
+      </div>
+
             
       <div class="utf_booking_listing_section_form margin-bottom-40">
         <h3><i class="fas fa-user"></i> {% trans "Billing Information" %}</h3>
@@ -115,7 +134,7 @@
             <div class="col-md-6">
               <div class="medium-icons">
                 <label>{% trans "Phone" %}</label>
-                <input name="phone" type="tel" value="{{request.user.phone}}" placeholder="Phone" required pattern="[0-9+\s()-]{10,}">
+                <input name="phone" type="tel" value="" placeholder="Phone" required pattern="[0-9+\s()-]{10,}">
                 <div class="error-message" id="phoneError"></div>
               </div>
             </div>
@@ -145,12 +164,25 @@
           <h3><i class="fa fa-calendar-check-o"></i> Booking Summary</h3>
           <ul>
             <li>Check-in <span>{{checkin}}</span></li>
-			<li>Check-out <span>{{checkout}}</span></li>            
-			<li>Total Days <span>{{total_days}} Days</span></li>            
+            <li>Check-out <span>{{checkout}}</span></li>            
+            <li>Total Days <span>{{total_days}} Days</span></li>            
             <li>Adults <span>{{ adult }} Adult</span></li>
             <li>Children <span>{{ children }} Children</span></li>
-			      <li>V.A.T <span>$0.00</span></li>
-            <li class="total-costs">Total Cost <span>${{total}}</span></li>
+			      {% comment %} <li>V.A.T <span>0 {% trans "Tenge" %}</span></li> {% endcomment %}
+            <li class="total-costs" style="border-top: 1px dashed #ddd; padding-top: 10px;">
+              <strong>{% trans "Total Cost" %}</strong> <span>{{total|floatformat:0}} {% trans "Tenge" %}</span>
+            </li>
+            <li class="prepayment" style="background-color: #f0f9ff; padding: 12px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                <span style="display: flex; align-items: center; gap: 8px;">
+                  <i class="fas fa-credit-card" style="color: #007bff; font-size: 16px;"></i>
+                  <strong style="font-weight: bold;">{% trans "Prepayment (10%)" %}</strong>
+                </span>
+                <span style="color: #007bff; font-weight: bold; font-size: 1.1em; white-space: nowrap;">{{total|div:10|floatformat:0}} {% trans "Tenge" %}</span>
+            </li>
+            <li class="payment-info" style="background-color: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #6c757d; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <i class="fas fa-info-circle" style="color: #6c757d; margin-right: 8px; font-size: 16px;"></i>
+                <small style="color: #495057;">{% trans "The remaining 90% will be paid upon check-in at the hotel" %}</small>
+            </li>
           </ul>
         </div>
       </div>
@@ -164,51 +196,88 @@
 
 {% block script_links %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const checkinInput = document.querySelector('input[name="checkin"]');
-    const checkoutInput = document.querySelector('input[name="checkout"]');
-    
-    // Устанавливаем минимальную дату для check-in как сегодня
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    const minDate = `${year}-${month}-${day}`;
-    
-    checkinInput.min = minDate;
-    checkinInput.value = minDate;
-    
-    // Устанавливаем минимальную дату для check-out как завтра
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const tomorrowYear = tomorrow.getFullYear();
-    const tomorrowMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
-    const tomorrowDay = String(tomorrow.getDate()).padStart(2, '0');
-    const minCheckoutDate = `${tomorrowYear}-${tomorrowMonth}-${tomorrowDay}`;
-    
-    checkoutInput.min = minCheckoutDate;
-    checkoutInput.value = minCheckoutDate;
-    
-    // Обработчик изменения даты check-in
-    checkinInput.addEventListener('change', function() {
-        const checkinDate = new Date(this.value);
-        const nextDay = new Date(checkinDate);
-        nextDay.setDate(nextDay.getDate() + 1);
-        
-        const nextDayYear = nextDay.getFullYear();
-        const nextDayMonth = String(nextDay.getMonth() + 1).padStart(2, '0');
-        const nextDayDay = String(nextDay.getDate()).padStart(2, '0');
-        const nextDayFormatted = `${nextDayYear}-${nextDayMonth}-${nextDayDay}`;
-        
-        checkoutInput.min = nextDayFormatted;
-        
-        // Если текущая дата check-out раньше новой минимальной даты
-        if (new Date(checkoutInput.value) < nextDay) {
-            checkoutInput.value = nextDayFormatted;
-        }
-    });
 
-    // Billing Information Form Validation
+document.addEventListener('DOMContentLoaded', function() {
+    const updateButton = document.getElementById('update-selection-btn');
+    const updateForm = document.getElementById('update-selection-form');
+    const roomTypeInput = document.getElementById('room-type-input');
+    
+    // Поля для дат бронирования
+    const displayCheckinInput = document.getElementById('display-checkin');
+    const displayCheckoutInput = document.getElementById('display-checkout');
+    const checkinInput = document.getElementById('checkin-input');
+    const checkoutInput = document.getElementById('checkout-input');
+    
+    // Обновляем реальные даты при изменении отображаемых дат
+    if (displayCheckinInput && checkinInput) {
+        displayCheckinInput.addEventListener('change', function() {
+            checkinInput.value = this.value;
+            
+            
+            // Обновляем минимальную дату выезда
+            if (displayCheckoutInput) {
+                const checkinDate = new Date(this.value);
+                const nextDay = new Date(checkinDate);
+                nextDay.setDate(nextDay.getDate() + 1);
+                
+                const nextDayFormatted = nextDay.toISOString().split('T')[0];
+                displayCheckoutInput.min = nextDayFormatted;
+                
+                // Если дата выезда меньше даты заезда + 1 день, обновляем её
+                if (new Date(displayCheckoutInput.value) <= checkinDate) {
+                    displayCheckoutInput.value = nextDayFormatted;
+                    checkoutInput.value = nextDayFormatted;
+                }
+            }
+        });
+    }
+    
+    if (displayCheckoutInput && checkoutInput) {
+        displayCheckoutInput.addEventListener('change', function() {
+            checkoutInput.value = this.value;
+            
+        });
+    }
+
+    if (updateButton && updateForm) {
+        // Отправка формы при нажатии на кнопку
+        updateButton.addEventListener('click', function() {
+            // Если значение room-type-input пустое, используем то же значение, что и в room-type-id
+            if (!roomTypeInput.value) {
+                const roomTypeId = document.querySelector('input[name="room-type-id"]').value;
+                roomTypeInput.value = roomTypeId;
+                
+            }
+            
+            // Убедимся, что даты установлены
+            if (displayCheckinInput && checkinInput) {
+                checkinInput.value = displayCheckinInput.value;
+            }
+            
+            if (displayCheckoutInput && checkoutInput) {
+                checkoutInput.value = displayCheckoutInput.value;
+            }
+            
+            
+            const formData = new FormData(updateForm);
+            
+            
+            // Дополнительная проверка перед отправкой
+            const roomTypeValue = formData.get('room-type');
+            const roomTypeIdValue = formData.get('room-type-id');
+            
+            if (!roomTypeValue && !roomTypeIdValue) {
+                console.error("ОШИБКА: Отсутствуют обязательные поля room-type и room-type-id!");
+                alert("Ошибка: Не удалось получить информацию о типе номера. Пожалуйста, обновите страницу и попробуйте снова.");
+                return; // Прерываем отправку формы
+            }
+            
+            // Отправляем форму
+            updateForm.submit();
+        });
+    }
+
+    // Существующая валидация формы биллинга и логика дат остаются без изменений
     const billingForm = document.getElementById('billingForm');
     if (billingForm) {
         billingForm.addEventListener('submit', function(e) {

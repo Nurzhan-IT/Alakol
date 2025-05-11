@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView
-from django.db.models import Q, Min, Avg, Count, F, Exists, OuterRef, Sum, Case, When, IntegerField
+from django.db.models import Q, Min, Avg, Count, F, Exists, OuterRef, Sum, Case, When, IntegerField, Subquery
 from hotel.models import Hotel, HotelFeatures, RoomType, Room, Booking, Review
 import datetime
 
@@ -27,15 +27,40 @@ class SearchListView(ListView):
         guests = self.request.GET.get('guests')
         sort_by = self.request.GET.get('sort_by', 'name')
         
+        # Подготовка запроса для получения ID забронированных номеров
+        booked_room_ids = []
+        if check_in_date and check_out_date:
+            try:
+                check_in = datetime.datetime.strptime(check_in_date, '%Y-%m-%d').date()
+                check_out = datetime.datetime.strptime(check_out_date, '%Y-%m-%d').date()
+                
+                # Получаем ID всех забронированных номеров на указанные даты
+                booked_room_ids = Booking.objects.filter(
+                    Q(check_in_date__lt=check_out, check_out_date__gt=check_in),
+                    is_active=True,
+                    payment_status__in=["paid", "processing", "pending"]
+                ).values_list('room__id', flat=True).distinct()
+            except ValueError:
+                # В случае неверного формата даты продолжаем без фильтрации
+                pass
+        
         # Базовая аннотация для получения мин. цены и среднего рейтинга
         queryset = queryset.annotate(
             min_price=Min('roomtype__price'),
             avg_rating=Avg('reviews__rating', filter=Q(reviews__active=True)),
-            rooms_count=Count('roomtype__room', filter=Q(roomtype__room__is_available=True), distinct=True),
-            # Рассчитываем общую вместимость как room_capacity * количество доступных комнат
+            # Подсчет только доступных и не забронированных номеров
+            rooms_count=Count(
+                'roomtype__room', 
+                filter=Q(roomtype__room__is_available=True) & ~Q(roomtype__room__id__in=booked_room_ids), 
+                distinct=True
+            ),
+            # Рассчитываем общую вместимость для доступных и не забронированных номеров
             total_capacity=Sum(
                 Case(
-                    When(roomtype__room__is_available=True, then=F('roomtype__room_capacity')),
+                    When(
+                        Q(roomtype__room__is_available=True) & ~Q(roomtype__room__id__in=booked_room_ids), 
+                        then=F('roomtype__room_capacity')
+                    ),
                     default=0,
                     output_field=IntegerField()
                 )
@@ -70,28 +95,14 @@ class SearchListView(ListView):
                 queryset = queryset.filter(hotelfeatures__name=feature)
         
         # Фильтрация по датам (наличие свободных номеров)
-        if check_in_date and check_out_date:
-            try:
-                check_in = datetime.datetime.strptime(check_in_date, '%Y-%m-%d').date()
-                check_out = datetime.datetime.strptime(check_out_date, '%Y-%m-%d').date()
-                
-                # Подзапрос для бронирований, пересекающихся с выбранными датами
-                booked_rooms = Booking.objects.filter(
-                    Q(check_in_date__lt=check_out, check_out_date__gt=check_in),
-                    room__room_type__hotel=OuterRef('pk'),
-                    is_active=True
-                ).values('room')
-                
-                # Подзапрос для отелей с доступными номерами
-                available_rooms = Room.objects.filter(
-                    hotel=OuterRef('pk'),
-                    is_available=True
-                ).exclude(id__in=booked_rooms)
-                
-                queryset = queryset.filter(Exists(available_rooms))
-            except ValueError:
-                # В случае неверного формата даты - продолжаем без фильтрации по датам
-                pass
+        if check_in_date and check_out_date and booked_room_ids:
+            # Подзапрос для отелей с доступными номерами
+            available_rooms = Room.objects.filter(
+                hotel=OuterRef('pk'),
+                is_available=True
+            ).exclude(id__in=booked_room_ids)
+            
+            queryset = queryset.filter(Exists(available_rooms))
         
         # Сортировка результатов
         if sort_by == 'price_asc':
