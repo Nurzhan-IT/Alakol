@@ -9,8 +9,7 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.db.models import Q, Count, OuterRef
-
-
+import uuid
 
 from hotel.models import Coupon, CouponUsers, Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType, RoomTypeGallery, Notification, Bookmark, Review
 
@@ -66,6 +65,14 @@ def room_type_detail(request, slug, rt_slug):
     children = request.GET.get("children")
     room_type_ = request.GET.get("room-type")
 
+    # Если даты не переданы через GET, но есть в сессии - берем их оттуда
+    if not all([checkin, checkout]) and 'booking_common_data' in request.session:
+        booking_data = request.session['booking_common_data']
+        checkin = booking_data.get('checkin')
+        checkout = booking_data.get('checkout')
+        adult = booking_data.get('adult', adult)
+        children = booking_data.get('children', children)
+    
     if not all([checkin, checkout]):
         messages.warning(request, "Please enter your booking data to check availability.")
         return redirect("booking:booking_data", hotel.slug)
@@ -103,6 +110,12 @@ def room_type_detail(request, slug, rt_slug):
     return render(request, "hotel/room_type_detail.html", context)
 
 
+def get_visitor_id(request):
+    """Получает или создает уникальный идентификатор посетителя"""
+    if not request.session.get('visitor_id'):
+        request.session['visitor_id'] = str(uuid.uuid4())
+    return request.session['visitor_id']
+
 
 def selected_rooms(request):
     # request.session.pop('selection_data_obj', None)
@@ -116,9 +129,29 @@ def selected_rooms(request):
     checkout = "" 
     children = 0 
     
-    if 'selection_data_obj' in request.session:
-
-        if request.method == "POST":
+    # Если пришли данные POST с датами, обновим booking_common_data
+    if request.method == "POST" and 'selection_data_obj' in request.session:
+        update_booking_dates = False
+        # Проверяем, есть ли в запросе данные о датах
+        if 'checkin' in request.POST and 'checkout' in request.POST:
+            checkin = request.POST.get('checkin')
+            checkout = request.POST.get('checkout')
+            update_booking_dates = True
+            
+            # Создаем или обновляем booking_common_data в сессии
+            if 'booking_common_data' not in request.session:
+                request.session['booking_common_data'] = {}
+                request.session['booking_common_data']['adult'] = request.POST.get('adult', '1')
+                request.session['booking_common_data']['children'] = request.POST.get('children', '0')
+            
+            request.session['booking_common_data']['checkin'] = checkin
+            request.session['booking_common_data']['checkout'] = checkout
+            request.session.modified = True
+            
+            print(f"Обновлены данные в сессии: checkin={checkin}, checkout={checkout}")
+    
+    if 'selection_data_obj' in request.session and 'booking_common_data' in request.session:
+        if request.method == "POST" and not 'checkin' in request.POST:
             # Получаем данные из формы
             full_name = request.POST.get("full_name")
             email = request.POST.get("email")
@@ -138,40 +171,140 @@ def selected_rooms(request):
             return redirect("hotel:payment_method_selection")
 
         hotel = None
+        total = 0
+        room_types_data = {}  # Словарь для хранения данных о типах номеров
 
+        # Получаем общие данные бронирования
+        if 'booking_common_data' in request.session:
+            booking_data = request.session['booking_common_data']
+            checkin = booking_data['checkin']
+            checkout = booking_data['checkout']
+            adult = int(booking_data['adult'])
+            children = int(booking_data['children'])
+            
+            # Расчет общей стоимости и количества дней
+            date_format = "%Y-%m-%d"
+            try:
+                checkin_date = datetime.strptime(checkin, date_format)
+                checkout_date = datetime.strptime(checkout, date_format)
+                time_difference = checkout_date - checkin_date
+                total_days = time_difference.days
+            except Exception as e:
+                print(f"Ошибка при расчете дат: {e}")
+                # Устанавливаем значения по умолчанию, если даты некорректны
+                today = datetime.now().strftime(date_format)
+                tomorrow = (datetime.now() + timedelta(days=1)).strftime(date_format)
+                booking_data['checkin'] = today
+                booking_data['checkout'] = tomorrow
+                request.session['booking_common_data'] = booking_data
+                request.session.modified = True
+                checkin = today
+                checkout = tomorrow
+                checkin_date = datetime.strptime(checkin, date_format)
+                checkout_date = datetime.strptime(checkout, date_format)
+                time_difference = checkout_date - checkin_date
+                total_days = time_difference.days
+            
+            # Получаем первую комнату для определения отеля
+            if len(request.session['selection_data_obj']) > 0:
+                first_item_id = next(iter(request.session['selection_data_obj']))
+                first_item = request.session['selection_data_obj'][first_item_id]
+                hotel_id = int(first_item['hotel_id'])
+                try:
+                    hotel = Hotel.objects.get(id=hotel_id)
+                except Hotel.DoesNotExist:
+                    print(f"Отель с ID {hotel_id} не найден")
+        
         for h_id, item in request.session['selection_data_obj'].items():
                 
-            id = int(item['hotel_id'])
-            hotel_id = int(item['hotel_id'])
-
-            checkin = item["checkin"]
-            checkout = item["checkout"]
-            adult = int(item["adult"])
-            children = int(item["children"])
             room_type_ = item["room_type"]
             room_id = int(item["room_id"])
             
             room_type = RoomType.objects.get(id=room_type_)
             room = Room.objects.get(id=room_id)
 
+            # Добавляем стоимость текущей комнаты к общей сумме
+            price = room_type.price
+            total += price * total_days
+            
+            # Сохраняем данные о комнате и добавляем информацию о slug типа комнаты
+            request.session['selection_data_obj'][h_id]['room_number'] = room.room_number
+            request.session['selection_data_obj'][h_id]['room_type_slug'] = room_type.slug
+            
+            # Сохраняем данные о типе номера для последующего использования
+            room_types_data[room_type_] = {
+                'id': room_type.id,
+                'slug': room_type.slug,
+                'name': room_type.type if hasattr(room_type, 'type') else str(room_type)
+            }
+
+        # Обновляем room_types_data в сессии для использования в JavaScript
+        request.session['room_types_data'] = room_types_data
+        request.session.modified = True
+
+        # print("hotel ===", hotel)
+        print("selection_data_obj ===", request.session['selection_data_obj'])
+        print("room_types_data ===", room_types_data)
+        if 'booking_common_data' in request.session:
+            print("booking_common_data ===", request.session['booking_common_data'])
+        else:
+            print("booking_common_data не найден в сессии")
+            # Создаем booking_common_data со значениями по умолчанию, если он отсутствует
+            today = datetime.now().strftime("%Y-%m-%d")
+            tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+            request.session['booking_common_data'] = {
+                'checkin': today,
+                'checkout': tomorrow,
+                'adult': 1,
+                'children': 0
+            }
+            checkin = today
+            checkout = tomorrow
+            adult = 1
+            children = 0
+            
+            # Рассчитываем total_days
             date_format = "%Y-%m-%d"
             checkin_date = datetime.strptime(checkin, date_format)
-            checout_date = datetime.strptime(checkout, date_format)
-            time_difference = checout_date - checkin_date
+            checkout_date = datetime.strptime(checkout, date_format)
+            time_difference = checkout_date - checkin_date
             total_days = time_difference.days
-
-            room_count += 1
-            days = total_days
-            price = room_type.price
-
-            room_price = price * room_count
-            total = room_price * days
             
-            hotel = Hotel.objects.get(id=id)
+            # Пересчитываем total с новыми значениями дат
+            total = 0
+            for h_id, item in request.session['selection_data_obj'].items():
+                room_type_ = item["room_type"]
+                room_type = RoomType.objects.get(id=room_type_)
+                price = room_type.price
+                total += price * total_days
+            print("booking_common_data ===", request.session['booking_common_data'])
+        
+        
+        # Получаем информацию о пользователе
+        if request.user.is_authenticated:
+            print("User:", request.user.username)
+            print("User ID:", request.user.id)
+        else:
+            visitor_id = get_visitor_id(request)
+            print("Visitor ID:", visitor_id)
+            print("User: Anonymous")
+            print("User ID: Not authenticated")
+        
+        # Получаем первый тип номера для отображения на странице
+        first_room_type = None
+        if len(request.session['selection_data_obj']) > 0:
+            first_id = next(iter(request.session['selection_data_obj']))
+            first_room_type_id = request.session['selection_data_obj'][first_id]['room_type']
+            try:
+                first_room_type = RoomType.objects.get(id=first_room_type_id)
+            except RoomType.DoesNotExist:
+                pass
 
-            request.session['selection_data_obj'][h_id]['room_number'] = room.room_number
-
-        print("hotel ===", hotel)
+        # Преобразуем room_types_data в формат, подходящий для JSON
+        room_types_json = {}
+        for key, value in room_types_data.items():
+            room_types_json[str(key)] = value
+            
         context = {
             "data":request.session['selection_data_obj'], 
             "total_selected_items": len(request.session['selection_data_obj']),
@@ -181,9 +314,11 @@ def selected_rooms(request):
             "children":children,   
             "checkin":checkin,   
             "checkout":checkout,   
-            "hotel":hotel,   
+            "hotel":hotel,
+            "room_types_data": json.dumps(room_types_json),
+            "first_room_type": first_room_type, # Первый тип номера
         }
-
+        print("context ===", context)
         return render(request, "hotel/selected_rooms.html", context)
     else:
         messages.warning(request, "You don't have any room selections yet!")
@@ -199,27 +334,37 @@ def payment_method_selection(request):
     # Расчет итоговой суммы для отображения
     total = 0
     total_days = 0
-    room_count = 0
+    checkin = ""
+    checkout = ""
     
-    for h_id, item in request.session['selection_data_obj'].items():
-        room_type_ = item["room_type"]
-        room_type = RoomType.objects.get(id=room_type_)
+    # Получаем общие данные бронирования
+    if 'booking_common_data' in request.session:
+        booking_data = request.session['booking_common_data']
+        checkin = booking_data['checkin']
+        checkout = booking_data['checkout']
         
+        # Расчет количества дней
         date_format = "%Y-%m-%d"
-        checkin_date = datetime.strptime(item["checkin"], date_format)
-        checkout_date = datetime.strptime(item["checkout"], date_format)
+        checkin_date = datetime.strptime(checkin, date_format)
+        checkout_date = datetime.strptime(checkout, date_format)
         time_difference = checkout_date - checkin_date
         total_days = time_difference.days
         
-        room_count += 1
-        price = room_type.price
-        
-        room_price = price * room_count
-        total = room_price * total_days
+        # Рассчитываем общую стоимость
+        for h_id, item in request.session['selection_data_obj'].items():
+            room_type_id = item["room_type"]
+            room_type = RoomType.objects.get(id=room_type_id)
+            
+            # Рассчитываем стоимость текущей комнаты и добавляем к общей сумме
+            price = room_type.price
+            total += price * total_days
     
     context = {
         "total": total,
         "user_data": request.session['user_data'],
+        "checkin": checkin,
+        "checkout": checkout,
+        "total_days": total_days,
     }
     
     return render(request, "hotel/payment_method_selection.html", context)
@@ -229,23 +374,26 @@ def process_booking(request):
     import logging
     logger = logging.getLogger(__name__)
     
-    if 'selection_data_obj' not in request.session or 'user_data' not in request.session:
+    if 'selection_data_obj' not in request.session or 'user_data' not in request.session or 'booking_common_data' not in request.session:
         messages.warning(request, "Missing booking information!")
         return None
     
     try:
         total = 0
         room_count = 0
-        total_days = 0
         
-        # Берем первый элемент для общих данных
-        first_item = next(iter(request.session['selection_data_obj'].values()))
+        # Получаем общие данные бронирования
+        booking_data = request.session['booking_common_data']
+        checkin = booking_data['checkin']
+        checkout = booking_data['checkout']
+        adult = int(booking_data['adult'])
+        children = int(booking_data['children'])
+        
+        # Получаем первый элемент для определения отеля
+        first_item_id = next(iter(request.session['selection_data_obj']))
+        first_item = request.session['selection_data_obj'][first_item_id]
         hotel_id = int(first_item['hotel_id'])
         hotel = Hotel.objects.get(id=hotel_id)
-        checkin = first_item["checkin"]
-        checkout = first_item["checkout"]
-        adult = int(first_item["adult"])
-        children = int(first_item["children"])
         room_type_id = first_item["room_type"]
         room_type = RoomType.objects.get(id=room_type_id)
         
@@ -286,11 +434,13 @@ def process_booking(request):
             room = Room.objects.get(id=room_id)
             booking.room.add(room)
             
-            room_count += 1
-            price = room_type.price
+            # Получаем тип комнаты для текущей комнаты
+            room_type_id = item["room_type"]
+            room_type = RoomType.objects.get(id=room_type_id)
             
-            room_price = price * room_count
-            total = room_price * total_days
+            # Рассчитываем стоимость текущей комнаты и добавляем к общей сумме
+            price = room_type.price
+            total += price * total_days
         
         # Обновляем сумму бронирования
         booking.total = float(total)
@@ -313,8 +463,14 @@ def create_robokassa_payment(request, payment_key=None):
     
     try:
         # Проверяем доступность номеров перед созданием бронирования
-        if payment_key is None and 'selection_data_obj' in request.session:
+        if payment_key is None and 'selection_data_obj' in request.session and 'booking_common_data' in request.session:
             unavailable_rooms = []
+            
+            # Получаем общие данные бронирования для проверки дат
+            booking_data = request.session['booking_common_data']
+            date_format = "%Y-%m-%d"
+            checkin_date = datetime.strptime(booking_data['checkin'], date_format).date()
+            checkout_date = datetime.strptime(booking_data['checkout'], date_format).date()
             
             for h_id, item in request.session['selection_data_obj'].items():
                 room_id = int(item["room_id"])
@@ -328,11 +484,6 @@ def create_robokassa_payment(request, payment_key=None):
                         'reason': 'not_available'
                     })
                     continue
-                
-                # Проверяем, что номер не забронирован на указанные даты
-                date_format = "%Y-%m-%d"
-                checkin_date = datetime.strptime(item["checkin"], date_format).date()
-                checkout_date = datetime.strptime(item["checkout"], date_format).date()
                 
                 # Ищем пересекающиеся бронирования с оплаченным или находящимся в процессе оплаты статусом
                 overlapping_bookings = Booking.objects.filter(
@@ -392,10 +543,23 @@ def create_robokassa_payment(request, payment_key=None):
         
         # Используем абсолютный домен без языкового префикса
         domain = request.build_absolute_uri('/').rstrip('/')
+
+        relative_path = request.path
+        culture='ru'
+
         if '/ru/' in domain:
             domain = domain.replace('/ru/', '/')
         elif '/en/' in domain:
             domain = domain.replace('/en/', '/')
+        elif '/kk/' in domain:
+            domain = domain.replace('/kk/', '/')
+
+        if '/ru/' in relative_path:
+            culture = 'ru'
+        elif '/en/' in relative_path:
+            culture = 'en'
+        elif '/kk/' in relative_path:
+            culture = 'ru'
         
         # Формируем URL-ы для успешной/неудачной оплаты БЕЗ языкового префикса
         success_url = f"{domain}/robokassa/success/"
@@ -410,7 +574,8 @@ def create_robokassa_payment(request, payment_key=None):
         payment_link = generate_payment_link(
             cost=booking.total,
             number=int(booking.id),
-            description=f"Оплата бронирования #{booking.booking_id}",
+            description=booking.booking_id,
+            culture= culture,
             email=booking.email
         )
         
@@ -504,6 +669,10 @@ def robokassa_result(request):
                     if 'selection_data_obj' in request.session:
                         del request.session['selection_data_obj']
                     
+                    # Удаляем общие данные бронирования из сессии
+                    if 'booking_common_data' in request.session:
+                        del request.session['booking_common_data']
+                    
                     # Удаляем данные пользователя из сессии
                     if 'user_data' in request.session:
                         del request.session['user_data']
@@ -573,6 +742,9 @@ def robokassa_success(request, booking_id):
             if 'selection_data_obj' in request.session:
                 del request.session['selection_data_obj']
             
+            if 'booking_common_data' in request.session:
+                del request.session['booking_common_data']
+            
             if 'user_data' in request.session:
                 del request.session['user_data']
             
@@ -609,6 +781,16 @@ def robokassa_failed(request, booking_id):
         
         booking.payment_status = "failed"
         booking.save()
+        
+        # Удаляем данные из сессии
+        if 'selection_data_obj' in request.session:
+            del request.session['selection_data_obj']
+            
+        if 'booking_common_data' in request.session:
+            del request.session['booking_common_data']
+        
+        if 'user_data' in request.session:
+            del request.session['user_data']
         
         logger.info(f"Статус бронирования {booking_id} обновлен на 'failed'")
         
@@ -660,6 +842,9 @@ def robokassa_success_direct(request):
         if 'selection_data_obj' in request.session:
             del request.session['selection_data_obj']
         
+        if 'booking_common_data' in request.session:
+            del request.session['booking_common_data']
+        
         if 'user_data' in request.session:
             del request.session['user_data']
         
@@ -697,6 +882,17 @@ def robokassa_failed_direct(request):
             # Сразу устанавливаем статус 'failed'
             booking.payment_status = "failed"
             booking.save()
+            
+            # Удаляем данные из сессии при неудачной оплате
+            if 'selection_data_obj' in request.session:
+                del request.session['selection_data_obj']
+                
+            if 'booking_common_data' in request.session:
+                del request.session['booking_common_data']
+                
+            if 'user_data' in request.session:
+                del request.session['user_data']
+                
             return redirect('hotel:robokassa_failed', booking_id=booking.booking_id)
         except Exception as e:
             logger.error(f"Ошибка при обработке прямого failed URL: {str(e)}")

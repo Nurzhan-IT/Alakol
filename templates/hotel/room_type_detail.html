@@ -127,18 +127,41 @@
         const minDate = `${year}-${month}-${day}`;
         
         checkinInput.min = minDate;
-        checkinInput.value = minDate;
         
-        // Устанавливаем минимальную дату для check-out как завтра
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const tomorrowYear = tomorrow.getFullYear();
-        const tomorrowMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
-        const tomorrowDay = String(tomorrow.getDate()).padStart(2, '0');
-        const minCheckoutDate = `${tomorrowYear}-${tomorrowMonth}-${tomorrowDay}`;
+        // Устанавливаем значение check-in только если оно не задано
+        if (!checkinInput.value) {
+            checkinInput.value = minDate;
+        }
+        
+        // Устанавливаем минимальную дату для check-out
+        let minCheckoutDate;
+        
+        // Если дата заезда установлена, то минимальная дата выезда - следующий день после заезда
+        if (checkinInput.value) {
+            const checkinDate = new Date(checkinInput.value);
+            const nextDay = new Date(checkinDate);
+            nextDay.setDate(nextDay.getDate() + 1);
+            
+            const nextDayYear = nextDay.getFullYear();
+            const nextDayMonth = String(nextDay.getMonth() + 1).padStart(2, '0');
+            const nextDayDay = String(nextDay.getDate()).padStart(2, '0');
+            minCheckoutDate = `${nextDayYear}-${nextDayMonth}-${nextDayDay}`;
+        } else {
+            // Иначе - завтра от текущей даты
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowYear = tomorrow.getFullYear();
+            const tomorrowMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const tomorrowDay = String(tomorrow.getDate()).padStart(2, '0');
+            minCheckoutDate = `${tomorrowYear}-${tomorrowMonth}-${tomorrowDay}`;
+        }
         
         checkoutInput.min = minCheckoutDate;
-        checkoutInput.value = minCheckoutDate;
+        
+        // Устанавливаем значение check-out только если оно не задано
+        if (!checkoutInput.value) {
+            checkoutInput.value = minCheckoutDate;
+        }
         
         // Обработчик изменения даты check-in
         checkinInput.addEventListener('change', function() {
