@@ -248,13 +248,18 @@ class HotelAdmin(BaseImportExportAdmin):
         HotelGallery_Tab, HotelFeatures_Tab, RoomType_Tab, RoomTypeDescription_Tab, 
         RoomTypeGallery_Tab, RoomTypeFeatures_Tab, RoomTypeFeaturesDetailed_Tab, Room_Tab, HotelFAQs_Tab
     ]
-    search_fields = ['user__username', 'name']
+    #search_fields = ['user__username', 'name']
     list_filter = ['featured', 'status']
     list_editable = ['status']
     list_display = ['thumbnail', 'name_ru', 'user', 'status', 'featured', 'views']
     list_per_page = 100
     prepopulated_fields = {"slug": ("name_en", )}
     exclude = ['description']
+
+    def get_list_filter(self, request):
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            return []  # Возвращаем пустой список фильтров для менеджеров
+        return self.list_filter  # Возвращаем все фильтры для суперпользователей
 
     def get_list_display(self, request):
         if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
@@ -300,11 +305,43 @@ class RoomAdmin(BaseImportExportAdmin):
         return queryset
 
 
+class HotelFilter(admin.SimpleListFilter):
+    title = 'Отель'
+    parameter_name = 'hotel'
+
+    def lookups(self, request, model_admin):
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            hotels = Hotel.objects.filter(user=request.user)
+        else:
+            hotels = Hotel.objects.all()
+        return [(hotel.id, hotel.name) for hotel in hotels]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(hotel_id=self.value())
+        return queryset
+
+class RoomTypeFilter(admin.SimpleListFilter):
+    title = 'Тип номера'
+    parameter_name = 'room_type'
+
+    def lookups(self, request, model_admin):
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            room_types = RoomType.objects.filter(hotel__user=request.user)
+        else:
+            room_types = RoomType.objects.all()
+        return [(rt.id, rt.type) for rt in room_types]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(room_type_id=self.value())
+        return queryset
+
 class BookingAdmin(BaseImportExportAdmin):
-    inlines = [ActivityLog_Tab, StaffOnDuty_Tab]
-    list_filter = [ 'hotel', 'room_type', 'check_in_date', 'check_out_date', 'is_active' , 'checked_in' ,'checked_out']
+    #inlines = [ActivityLog_Tab, StaffOnDuty_Tab]
+    list_filter = [HotelFilter, RoomTypeFilter, 'check_in_date', 'check_out_date', 'is_active', 'checked_in', 'checked_out']
     list_display = ['booking_id', 'user', 'hotel', 'room_type', 'rooms', 'total', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'is_active' , 'checked_in' ,'checked_out']
-    search_fields = ['booking_id', 'user__username', 'user__email']
+    #search_fields = ['booking_id', 'user__username', 'user__email']
     list_per_page = 100
 
     def get_queryset(self, request):
@@ -344,6 +381,10 @@ class NotificationAdmin(BaseImportExportAdmin):
     list_editable = ['seen', 'type']
     list_display = ['user', 'booking', 'type', 'seen', 'date']
     
+    def has_module_permission(self, request):
+        # Разрешаем доступ только суперпользователям
+        return request.user.is_superuser
+    
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         # Ограничиваем видимость записей для менеджеров
@@ -367,6 +408,10 @@ class ReviewAdmin(admin.ModelAdmin):
     list_editable = ['active']
     list_display = ['user', 'hotel', 'review', 'reply', 'rating', 'active']
 
+    def has_module_permission(self, request):
+        # Разрешаем доступ только суперпользователям
+        return request.user.is_superuser
+
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         # Ограничиваем видимость записей для менеджеров
@@ -380,7 +425,14 @@ admin.site.register(Room, RoomAdmin)
 admin.site.register(Booking, BookingAdmin)
 admin.site.register(RoomServices, RoomServicesAdmin)
 admin.site.register(Coupon, CouponAdmin)
-admin.site.register(Notification, NotificationAdmin)
+
+# Регистрируем Notification только для суперпользователей
+if not admin.site.is_registered(Notification):
+    admin.site.register(Notification, NotificationAdmin)
+
 admin.site.register(Bookmark, BookmarkAdmin)
-admin.site.register(Review, ReviewAdmin)
+
+# Регистрируем Review только для суперпользователей
+if not admin.site.is_registered(Review):
+    admin.site.register(Review, ReviewAdmin)
 

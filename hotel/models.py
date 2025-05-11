@@ -1,5 +1,3 @@
-
-
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
 from django.template.defaultfilters import escape
@@ -15,6 +13,9 @@ from taggit.managers import TaggableManager
 
 from django import forms
 from multiupload.fields import MultiFileField
+
+from django.utils import timezone
+from datetime import timedelta
 
 ICON_TPYE = (
     ('Bootstap Icons', 'Bootstap Icons'),
@@ -380,16 +381,28 @@ class Booking(models.Model):
     checked_out_tracker = models.BooleanField(default=False, help_text="DO NOT CHECK THIS BOX")
     date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     coupons = models.ManyToManyField("hotel.Coupon", blank=True)
-    stripe_payment_intent = models.CharField(max_length=200,null=True, blank=True)
-    success_id = ShortUUIDField(length=300, max_length=505, alphabet="abcdefghijklmnopqrstuvxyz1234567890")
     booking_id = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
+    robokassa_inv_id = models.IntegerField(null=True, blank=True, help_text="InvId from Robokassa payment system")
 
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True, null=True, blank=True,)
+    expires_at = models.DateTimeField(null=True, blank=True, db_index=True)
+
+    def save(self, *args, **kwargs):
+        # Устанавливаем expires_at при создании записи
+        if not self.pk and not self.expires_at:  # Проверяем, что это новая запись
+            self.expires_at = self.created_at + timedelta(minutes=10) if self.created_at else timezone.now() + timedelta(minutes=10)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.booking_id}"
     
     def rooms(self):
         return self.room.all().count()
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['expires_at']),
+        ]
     
 class ActivityLog(models.Model):
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
@@ -464,7 +477,12 @@ class Notification(models.Model):
     date= models.DateField(auto_now_add=True)
     
     def __str__(self):
-        return str(self.user.username)
+        if self.user:
+            return str(self.user.username)
+        elif self.booking:
+            return f"Уведомление {self.type} для бронирования {self.booking.booking_id}"
+        else:
+            return f"Уведомление {self.nid}"
     
     class Meta:
         ordering = ['-date']
@@ -477,7 +495,12 @@ class Bookmark(models.Model):
     date= models.DateField(auto_now_add=True)
     
     def __str__(self):
-        return str(self.user.username)
+        if self.user:
+            return str(self.user.username)
+        elif self.hotel:
+            return f"Закладка на отель {self.hotel.name}"
+        else:
+            return f"Закладка {self.bid}"
     
     class Meta:
         ordering = ['-date']
@@ -499,5 +522,10 @@ class Review(models.Model):
         ordering = ["-date"]
         
     def __str__(self):
-        return f"{self.user.username} - {self.rating}"
+        if self.user:
+            return f"{self.user.username} - {self.rating}"
+        elif self.hotel:
+            return f"Отзыв на отель {self.hotel.name} - {self.rating}"
+        else:
+            return f"Отзыв #{self.id} - {self.rating}"
         

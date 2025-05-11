@@ -242,21 +242,5 @@ $(document).ready(function(){
             }
         })
     })
-
-    function makeAjaxCall() {
-        $.ajax({
-            url: '/update_room_status/',  
-            type: 'GET',
-            success: function(data) {
-                console.log("Checked Rooms");
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                console.log('Error:', errorThrown);
-            }
-        });
-    }
-
-    setInterval(makeAjaxCall, 60000);
-    // makeAjaxCall();
 })
 

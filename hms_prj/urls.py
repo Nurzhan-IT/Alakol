@@ -19,6 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from django.conf.urls.i18n import i18n_patterns
+from hotel.views import robokassa_result, robokassa_success_direct, robokassa_failed_direct
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,6 +34,10 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')), 
     path('i18n/', include('django.conf.urls.i18n')),
 
+    # Прямые URL для Робокассы без языкового префикса
+    path('robokassa/result/', robokassa_result, name='robokassa_result_direct'),
+    path('robokassa/success/', robokassa_success_direct, name='robokassa_success_direct'), 
+    path('robokassa/failed/', robokassa_failed_direct, name='robokassa_failed_direct'),
 ]
 
 urlpatterns += i18n_patterns(
