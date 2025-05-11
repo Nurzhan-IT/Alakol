@@ -11,7 +11,7 @@
                             <h2>{% trans "Alakol vacation bases" %}</h2>
                             <h4>{% trans "Discover top rated hotels of Alakol" %}</h4>
                             <div class="main_input_search_part">
-                                <form action="{% url 'search:search_results' %}" method="get">
+                                <form action="{% url 'search:search_results' %}" method="get" class="main_input_search_part_form">
                                     <div class="main_input_search_part_item">
                                         <input type="text" placeholder="{% trans 'Hotel...' %}" name="name" value="" />
                                     </div>

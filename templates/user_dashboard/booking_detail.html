@@ -99,7 +99,7 @@
                               <div class="utf_inner_booking_listing_list">
                                 <h5>{% trans "Price" %}:</h5>
                                 <ul class="utf_booking_listing_list">
-                                  <li class="highlighted">${{booking.total|floatformat:2}}</li>
+                                  <li class="highlighted">{{booking.total|floatformat:2}} {% trans "Tenge" %}</li>
                                 </ul>
                               </div>
                               <hr>
@@ -142,7 +142,7 @@
                                 <div class="utf_inner_booking_listing_list">
                                   <h5>{% trans "Room Price" %}:</h5>
                                   <ul class="utf_booking_listing_list">
-                                    <li class="highlighted">${{r.room_type.price|floatformat:2}}</li>
+                                    <li class="highlighted">{{r.room_type.price|floatformat:2}} {% trans "Tenge" %}</li>
                                   </ul>
                                 </div>
                               </div>
