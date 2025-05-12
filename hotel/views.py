@@ -12,6 +12,7 @@ from django.db.models import Q, Count, OuterRef
 import uuid
 
 from hotel.models import Coupon, CouponUsers, Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType, RoomTypeGallery, Notification, Bookmark, Review
+from booking.models import RoomUnavailability
 
 from datetime import datetime, timedelta
 from decimal import Decimal
@@ -92,9 +93,14 @@ def room_type_detail(request, slug, rt_slug):
         is_active=True,
         payment_status__in=["paid", "processing", "pending"]
     ).values_list('room__id', flat=True).distinct()
+
+    # Получаем ID номеров, которые находятся в RoomUnavailability на указанные даты
+    unavailable_room_ids = RoomUnavailability.objects.filter(
+        Q(start_date__lt=user_checkout_date, end_date__gt=user_checkin_date)
+    ).values_list('room__id', flat=True).distinct()
     
     # Исключаем забронированные номера из списка доступных
-    available_rooms = rooms.exclude(id__in=booked_room_ids)
+    available_rooms = rooms.exclude(id__in=booked_room_ids).exclude(id__in=unavailable_room_ids)
     
     context = {
         "hotel": hotel,
@@ -499,6 +505,21 @@ def create_robokassa_payment(request, payment_key=None):
                         'room': room,
                         'reason': 'already_booked'
                     })
+                    continue
+
+                # Проверяем, что номер не находится в таблице RoomUnavailability
+                unavailable = RoomUnavailability.objects.filter(
+                    room=room,
+                    start_date__lt=checkout_date,
+                    end_date__gt=checkin_date
+                ).exists()
+
+                if unavailable:
+                    unavailable_rooms.append({
+                        'h_id': h_id,
+                        'room': room,
+                        'reason': 'marked_unavailable'
+                    })
             
             # Если есть недоступные номера, удаляем их из сессии и показываем сообщение
             if unavailable_rooms:
@@ -515,6 +536,8 @@ def create_robokassa_payment(request, payment_key=None):
                         
                         if reason == 'not_available':
                             messages.error(request, f"Номер {room_number} недоступен для бронирования и был удален из списка.")
+                        elif reason == 'marked_unavailable':
+                            messages.error(request, f"Номер {room_number} отмечен как недоступный на выбранные даты и был удален из списка.")
                         else:
                             messages.error(request, f"Номер {room_number} уже забронирован на выбранные даты и был удален из списка.")
                 
