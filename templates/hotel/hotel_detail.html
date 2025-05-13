@@ -492,14 +492,14 @@
                 {% endif %}
             </div>
 
-            {% if hotel.tags.all %}
+            {% comment %} {% if hotel.tags.all %}
             <div id="utf_listing_tags" class="utf_listing_section listing_tags_section">
                 <h3 class="utf_listing_headline_part margin-top-40 margin-bottom-40">{% trans "Tags" %}</h3>
                 {% for h in hotel.tags.all %}
                 <a href="#"><i class="fa fa-tag" aria-hidden="true"></i>{{h}}</a>
                 {% endfor %}
             </div>
-            {% endif %}
+            {% endif %} {% endcomment %}
 
             <div class="utf_listing_section">
                 <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">{% trans "Pricing" %}</h3>

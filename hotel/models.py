@@ -112,7 +112,7 @@ class Hotel(models.Model):
     check_in_time = models.TimeField(null=True, blank=True)
     check_out_time = models.TimeField(null=True, blank=True)
 
-    tags = TaggableManager(blank=True)
+    # tags = TaggableManager(blank=True)
     views = models.PositiveIntegerField(default=0)
     featured = models.BooleanField(default=False)
     hid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
@@ -227,6 +227,7 @@ class RoomType(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     type = models.CharField(max_length=10)
     price = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    dynamic_pricing = models.JSONField(null=True, blank=True, default=dict)  # Используем default=dict для инициализации пустым словарем
     number_of_beds = models.PositiveIntegerField(default=0)
     room_capacity = models.PositiveIntegerField(default=0)
     room_size = models.IntegerField(default=0, verbose_name="Room size (m²)")
@@ -254,7 +255,16 @@ class RoomType(models.Model):
         while RoomType.objects.filter(rtid=self.rtid).exists():
             self.rtid = shortuuid.uuid()[:10]  # Regenerate if it already exists
     
-        super(RoomType, self).save(*args, **kwargs) 
+        super(RoomType, self).save(*args, **kwargs)
+         
+    def get_price_for_date(self, date):
+        """
+        Возвращает цену для указанной даты. Если нет динамической цены, возвращает базовую цену.
+        """
+        if self.dynamic_pricing and isinstance(self.dynamic_pricing, dict):
+            date_str = date.strftime("%Y-%m-%d")
+            return self.dynamic_pricing.get(date_str, self.price)
+        return self.price
 
 class RoomTypeDescription(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
@@ -361,6 +371,7 @@ class Booking(models.Model):
 
     full_name = models.CharField(max_length=1000, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
+    country_code = models.CharField(max_length=10, null=True, blank=True)
     phone = models.CharField(max_length=1000, null=True, blank=True)
     
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True)
@@ -404,23 +415,23 @@ class Booking(models.Model):
             models.Index(fields=['expires_at']),
         ]
     
-class ActivityLog(models.Model):
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
-    guest_out = models.DateTimeField()
-    guest_in = models.DateTimeField()
-    description = models.TextField(null=True, blank=True)
-    date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+# class ActivityLog(models.Model):
+#     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+#     guest_out = models.DateTimeField()
+#     guest_in = models.DateTimeField()
+#     description = models.TextField(null=True, blank=True)
+#     date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
-    def __str__(self):
-        return str(self.booking)
+#     def __str__(self):
+#         return str(self.booking)
     
-class StaffOnDuty(models.Model):
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
-    staff_id = models.CharField(null=True, blank=True, max_length=100)
-    date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+# class StaffOnDuty(models.Model):
+#     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+#     staff_id = models.CharField(null=True, blank=True, max_length=100)
+#     date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
-    def __str__(self):
-        return str(self.staff_id)
+#     def __str__(self):
+#         return str(self.staff_id)
     
 
 class Coupon(models.Model):

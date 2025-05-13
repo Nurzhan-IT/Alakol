@@ -134,7 +134,8 @@
             <div class="col-md-6">
               <div class="medium-icons">
                 <label>{% trans "Phone" %}</label>
-                <input name="phone" type="tel" value="" placeholder="Phone" required pattern="[0-9+\s()-]{10,}">
+                <input name="phone" type="tel" class="phone-input" placeholder="{% trans 'Enter phone number' %}" required>
+                <input type="hidden" name="country_code" id="country_code" value="">
                 <div class="error-message" id="phoneError"></div>
               </div>
             </div>
@@ -195,9 +196,70 @@
 {% endblock content %}
 
 {% block script_links %}
+<!-- Добавляем CSS и JS для International Telephone Input -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
+
+<style>
+  /* Стили для телефонного поля */
+  .iti {
+    width: 100%;
+  }
+  .error-message {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  input.phone-input.error {
+    border-color: #e74c3c;
+  }
+</style>
+
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Инициализация телефонного поля
+    const phoneInput = document.querySelector('input[name="phone"]');
+    if (phoneInput) {
+        const iti = window.intlTelInput(phoneInput, {
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.js",
+            initialCountry: "kz",
+            preferredCountries: ["kz", "ru", "cn", "us"],
+            separateDialCode: true,
+            autoPlaceholder: "aggressive"
+        });
+
+        // Сохраняем код страны при изменении
+        const countryCodeInput = document.getElementById('country_code');
+        if (countryCodeInput) {
+            // Сохраняем начальное значение
+            countryCodeInput.value = "+" + iti.getSelectedCountryData().dialCode;
+            
+            // Обновляем при изменении страны
+            phoneInput.addEventListener("countrychange", function() {
+                countryCodeInput.value = "+" + iti.getSelectedCountryData().dialCode;
+            });
+        }
+
+        // Обновляем валидацию телефона
+        phoneInput.addEventListener("blur", function() {
+            if (phoneInput.value.trim()) {
+                if (iti.isValidNumber()) {
+                    document.getElementById('phoneError').textContent = '';
+                    phoneInput.setCustomValidity('');
+                    phoneInput.classList.remove('error');
+                } else {
+                    document.getElementById('phoneError').textContent = '{% trans "Please enter a valid phone number" %}';
+                    phoneInput.setCustomValidity('{% trans "Please enter a valid phone number" %}');
+                    phoneInput.classList.add('error');
+                }
+            } else {
+                document.getElementById('phoneError').textContent = '{% trans "Phone number is required" %}';
+                phoneInput.classList.add('error');
+            }
+        });
+    }
+
     const updateButton = document.getElementById('update-selection-btn');
     const updateForm = document.getElementById('update-selection-form');
     const roomTypeInput = document.getElementById('room-type-input');
@@ -277,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Существующая валидация формы биллинга и логика дат остаются без изменений
+    // Обновленная валидация формы биллинга
     const billingForm = document.getElementById('billingForm');
     if (billingForm) {
         billingForm.addEventListener('submit', function(e) {
@@ -303,14 +365,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('emailError').textContent = '';
             }
 
-            // Phone Validation
-            const phone = billingForm.querySelector('input[name="phone"]');
-            const phoneRegex = /^[0-9+\s()-]{10,}$/;
-            if (!phoneRegex.test(phone.value)) {
-                document.getElementById('phoneError').textContent = '{% trans "Please enter a valid phone number" %}';
-                isValid = false;
-            } else {
-                document.getElementById('phoneError').textContent = '';
+            // Phone Validation с использованием intl-tel-input
+            if (phoneInput && typeof iti !== 'undefined') {
+                if (!iti.isValidNumber()) {
+                    document.getElementById('phoneError').textContent = '{% trans "Please enter a valid phone number" %}';
+                    phoneInput.classList.add('error');
+                    isValid = false;
+                } else {
+                    document.getElementById('phoneError').textContent = '';
+                    phoneInput.classList.remove('error');
+                    // Сохраняем полный номер телефона в международном формате
+                    phoneInput.value = iti.getNumber();
+                }
             }
 
             if (isValid) {
