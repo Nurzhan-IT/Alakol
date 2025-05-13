@@ -1,5 +1,3 @@
-
-
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
 from django.template.defaultfilters import escape
@@ -15,6 +13,9 @@ from taggit.managers import TaggableManager
 
 from django import forms
 from multiupload.fields import MultiFileField
+
+from django.utils import timezone
+from datetime import timedelta
 
 ICON_TPYE = (
     ('Bootstap Icons', 'Bootstap Icons'),
@@ -111,7 +112,7 @@ class Hotel(models.Model):
     check_in_time = models.TimeField(null=True, blank=True)
     check_out_time = models.TimeField(null=True, blank=True)
 
-    tags = TaggableManager(blank=True)
+    # tags = TaggableManager(blank=True)
     views = models.PositiveIntegerField(default=0)
     featured = models.BooleanField(default=False)
     hid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
@@ -226,6 +227,7 @@ class RoomType(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     type = models.CharField(max_length=10)
     price = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    dynamic_pricing = models.JSONField(null=True, blank=True, default=dict)  # Используем default=dict для инициализации пустым словарем
     number_of_beds = models.PositiveIntegerField(default=0)
     room_capacity = models.PositiveIntegerField(default=0)
     room_size = models.IntegerField(default=0, verbose_name="Room size (m²)")
@@ -253,7 +255,16 @@ class RoomType(models.Model):
         while RoomType.objects.filter(rtid=self.rtid).exists():
             self.rtid = shortuuid.uuid()[:10]  # Regenerate if it already exists
     
-        super(RoomType, self).save(*args, **kwargs) 
+        super(RoomType, self).save(*args, **kwargs)
+         
+    def get_price_for_date(self, date):
+        """
+        Возвращает цену для указанной даты. Если нет динамической цены, возвращает базовую цену.
+        """
+        if self.dynamic_pricing and isinstance(self.dynamic_pricing, dict):
+            date_str = date.strftime("%Y-%m-%d")
+            return self.dynamic_pricing.get(date_str, self.price)
+        return self.price
 
 class RoomTypeDescription(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
@@ -360,6 +371,7 @@ class Booking(models.Model):
 
     full_name = models.CharField(max_length=1000, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
+    country_code = models.CharField(max_length=10, null=True, blank=True)
     phone = models.CharField(max_length=1000, null=True, blank=True)
     
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True)
@@ -380,10 +392,17 @@ class Booking(models.Model):
     checked_out_tracker = models.BooleanField(default=False, help_text="DO NOT CHECK THIS BOX")
     date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     coupons = models.ManyToManyField("hotel.Coupon", blank=True)
-    stripe_payment_intent = models.CharField(max_length=200,null=True, blank=True)
-    success_id = ShortUUIDField(length=300, max_length=505, alphabet="abcdefghijklmnopqrstuvxyz1234567890")
     booking_id = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
+    robokassa_inv_id = models.IntegerField(null=True, blank=True, help_text="InvId from Robokassa payment system")
 
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True, null=True, blank=True,)
+    expires_at = models.DateTimeField(null=True, blank=True, db_index=True)
+
+    def save(self, *args, **kwargs):
+        # Устанавливаем expires_at при создании записи
+        if not self.pk and not self.expires_at:  # Проверяем, что это новая запись
+            self.expires_at = self.created_at + timedelta(minutes=10) if self.created_at else timezone.now() + timedelta(minutes=10)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.booking_id}"
@@ -391,23 +410,28 @@ class Booking(models.Model):
     def rooms(self):
         return self.room.all().count()
     
-class ActivityLog(models.Model):
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
-    guest_out = models.DateTimeField()
-    guest_in = models.DateTimeField()
-    description = models.TextField(null=True, blank=True)
-    date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-
-    def __str__(self):
-        return str(self.booking)
+    class Meta:
+        indexes = [
+            models.Index(fields=['expires_at']),
+        ]
     
-class StaffOnDuty(models.Model):
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
-    staff_id = models.CharField(null=True, blank=True, max_length=100)
-    date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+# class ActivityLog(models.Model):
+#     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+#     guest_out = models.DateTimeField()
+#     guest_in = models.DateTimeField()
+#     description = models.TextField(null=True, blank=True)
+#     date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
-    def __str__(self):
-        return str(self.staff_id)
+#     def __str__(self):
+#         return str(self.booking)
+    
+# class StaffOnDuty(models.Model):
+#     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+#     staff_id = models.CharField(null=True, blank=True, max_length=100)
+#     date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+#     def __str__(self):
+#         return str(self.staff_id)
     
 
 class Coupon(models.Model):
@@ -464,7 +488,12 @@ class Notification(models.Model):
     date= models.DateField(auto_now_add=True)
     
     def __str__(self):
-        return str(self.user.username)
+        if self.user:
+            return str(self.user.username)
+        elif self.booking:
+            return f"Уведомление {self.type} для бронирования {self.booking.booking_id}"
+        else:
+            return f"Уведомление {self.nid}"
     
     class Meta:
         ordering = ['-date']
@@ -477,7 +506,12 @@ class Bookmark(models.Model):
     date= models.DateField(auto_now_add=True)
     
     def __str__(self):
-        return str(self.user.username)
+        if self.user:
+            return str(self.user.username)
+        elif self.hotel:
+            return f"Закладка на отель {self.hotel.name}"
+        else:
+            return f"Закладка {self.bid}"
     
     class Meta:
         ordering = ['-date']
@@ -499,5 +533,10 @@ class Review(models.Model):
         ordering = ["-date"]
         
     def __str__(self):
-        return f"{self.user.username} - {self.rating}"
+        if self.user:
+            return f"{self.user.username} - {self.rating}"
+        elif self.hotel:
+            return f"Отзыв на отель {self.hotel.name} - {self.rating}"
+        else:
+            return f"Отзыв #{self.id} - {self.rating}"
         

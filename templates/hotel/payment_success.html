@@ -14,7 +14,6 @@
             <div class="utf_error_description_part utf_ferror_description">  
                 <span class="f-primary animated v fadeInRight">We have sent your booking summary to <b>{{ booking.email }}. Thank you.</b></span> 
             </div>
-            <a href="{% url 'hotel:invoice' booking.booking_id %}" class="button margin-top-20">Visit Dashboard</a>
             <a href="{% url 'hotel:invoice' booking.booking_id %}" target="_blank" class="button margin-top-20">View Invoice 🧾</a>
             <div class="row">
               <div class="col-lg-6 col-lg-offset-3">

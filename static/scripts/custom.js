@@ -57,7 +57,14 @@ $(document).ready(function(){
                 button.html("<i class='fas fa-clock-rotate-left'></i> Adding room... ")
             },
             success: function(response){
-                button.html("<i class='fas fa-check-circle'></i> Added to selection ")
+                let buttonText = button.text().trim();
+                
+                // Определяем новый текст кнопки
+                if (buttonText === "Update" || buttonText === "Обновить") {
+                    button.html("<i class='fas fa-check-circle'></i> Updated ")
+                } else {
+                    button.html("<i class='fas fa-check-circle'></i> Added to selection ")
+                }
 
                 console.log("Added Room To Selection!");
                 $(".room-count").text(response.total_selected_items)
@@ -72,7 +79,8 @@ $(document).ready(function(){
                     
                 Toast.fire({
                     icon: 'success',
-                    title: 'Added Room To Selection!'
+                    title: buttonText === "Update" || buttonText === "Обновить" ? 
+                        'Room Updated Successfully!' : 'Added Room To Selection!'
                 })
             }
         })
@@ -242,21 +250,5 @@ $(document).ready(function(){
             }
         })
     })
-
-    function makeAjaxCall() {
-        $.ajax({
-            url: '/update_room_status/',  
-            type: 'GET',
-            success: function(data) {
-                console.log("Checked Rooms");
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                console.log('Error:', errorThrown);
-            }
-        });
-    }
-
-    setInterval(makeAjaxCall, 60000);
-    // makeAjaxCall();
 })
 
