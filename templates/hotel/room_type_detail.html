@@ -1,6 +1,7 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load hotel_extras %}
 {% block content %}
   
   <div id="titlebar" class="gradient">
@@ -33,7 +34,7 @@
               <div class="plan featured col-md-4 col-sm-6 col-xs-12">
               <div class="utf_price_plan">
                   <h3>{% trans "Room No." %} {{ r.room_number }}</h3>
-                  <span class="value"> {{r.room_type.price}} {% trans "Tenge" %}<span>{% trans "/Per Night" %}</span></span> 
+                  <span class="value"> {{ dynamic_price }} {% trans "Tenge" %}<span>{% trans "/For" %} {{ total_days }} {% trans "night(s)" %}</span></span> 
               </div>
               <div class="utf_price_plan_features">
                   <ul>
@@ -42,14 +43,23 @@
                   </ul>
                   <input type="hidden" class="room_id_{{r.id}}" value="{{r.id}}" id="room_id">
                   <input type="hidden" class="room_number_{{r.id}}" value="{{r.room_number}}" id="room_number">
-                  <button class="button border add-to-selection" data-index="{{r.id}}"><i class="fas fa-shopping-cart"></i> {% trans "Add To Selection" %}</button> 
+                  <button class="button border add-to-selection" data-index="{{r.id}}">
+                    <i class="fas fa-shopping-cart"></i> 
+                    {% if room_statuses and room_statuses|get_item:r.id == "Added To Selection" %}
+                      {% trans "Added To Selection" %}
+                    {% elif room_statuses and room_statuses|get_item:r.id == "Update" %}
+                      {% trans "Update" %}
+                    {% else %}
+                      {% trans "Add To Selection" %}
+                    {% endif %}
+                  </button> 
               </div>
               </div>
           {% endfor %}
           <input type="hidden" value="{{hotel.id}}" id="id">
           <input type="hidden" value="{{hotel.name}}" id="hotel_name">
           <input type="hidden" value="{{room_type.type}}" id="room_name">
-          <input type="hidden" value="{{room_type.price}}" id="room_price">
+          <input type="hidden" value="{{dynamic_price}}" id="room_price">
           <input type="hidden" value="{{room_type.number_of_beds}}" id="number_of_beds">
           <input type="hidden" value="{{room_type.id}}" id="room_type">
           <input type="hidden" value="{{checkin}}" id="checkin">

@@ -23,12 +23,8 @@ class ProfileAdmin(admin.ModelAdmin):
         "gender", 
         "country", 
         "city", 
-        "state", 
         "address", 
-        "identity_type", 
-        "identity_image", 
-        "facebook", 
-        "twitter"
+
     ]
     
     # Поля для отображения в списке
