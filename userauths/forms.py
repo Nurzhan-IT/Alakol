@@ -41,12 +41,7 @@ class ProfileUpdateForm(forms.ModelForm):
             'gender',
             'country',
             'city',
-            'state',
             'address',
-            'identity_type',
-            'identity_image',
-            'facebook',
-            'twitter',
         ]
         widgets = {
             'image': FileInput(attrs={'onchange': 'loadFile(event)', 'class':'upload'}),
