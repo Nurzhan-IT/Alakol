@@ -1,0 +1,487 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls static %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+  /* Стили для улучшения UI динамических цен */
+  .dynamic-pricing-container {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+  }
+  
+  .pricing-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+    align-items: flex-end;
+  }
+  
+  .pricing-field {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .pricing-field label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .pricing-field input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .pricing-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .pricing-actions button {
+    padding: 8px 15px;
+    background-color: #79aec8;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .pricing-actions button:hover {
+    background-color: #417690;
+  }
+  
+  .pricing-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+  }
+  
+  .pricing-table th,
+  .pricing-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .pricing-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .pricing-table tr:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .delete-price {
+    color: #ba2121;
+    cursor: pointer;
+  }
+</style>
+{% endblock %}
+
+{% block after_field_sets %}
+{{ block.super }}
+
+{% if original %} {# Проверяем, что это страница редактирования существующего объекта #}
+<fieldset class="module aligned dynamic-pricing-container">
+      <h2>Динамические цены</h2>
+  
+  <div class="pricing-controls">
+    <div class="pricing-field">
+      <label for="start_date">Начальная дата:</label>
+      <input type="date" id="start_date">
+    </div>
+    
+    <div class="pricing-field">
+      <label for="end_date">Конечная дата:</label>
+      <input type="date" id="end_date">
+      </div>
+    
+    <div class="pricing-field">
+      <label for="price">Цена:</label>
+        <input type="number" id="price" step="0.01" min="0">
+      </div>
+  </div>
+  
+  <div class="pricing-actions">
+    <button type="button" id="add_pricing" class="add-button">Добавить цены</button>
+    <button type="button" id="clear_pricing" class="clear-button">Очистить выбранные даты</button>
+  </div>
+  
+  <hr>
+  
+  <div class="pricing-table-container">
+    <h3>Текущие динамические цены</h3>
+    <p id="pricing_info" style="margin-bottom: 10px; font-style: italic;"></p>
+    <table id="pricing_table" class="pricing-table">
+      <thead>
+        <tr>
+          <th>Период</th>
+          <th>Цена</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Данные будут добавлены через JavaScript -->
+      </tbody>
+    </table>
+      </div>
+  
+  <!-- Скрытое поле для хранения данных JSON -->
+      <div>
+    <!-- Явно указываем, что это основное поле формы с особым data-атрибутом для идентификации -->
+    <input type="hidden" id="id_dynamic_pricing_input" name="dynamic_pricing_input" value='{{ adminform.form.dynamic_pricing_input.value|default:"{}" }}' data-is-main-field="true">
+      </div>
+    </fieldset>
+  {% endif %}
+{% endblock %}
+
+{% block after_related_objects %}
+<!-- Удаляем любое дублирующее поле dynamic_pricing_input, если оно есть в основной форме -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Находим все поля с именем dynamic_pricing_input
+    const inputs = document.querySelectorAll('input[name="dynamic_pricing_input"], textarea[name="dynamic_pricing_input"]');
+    console.log('Найдено полей dynamic_pricing_input:', inputs.length);
+    
+    if (inputs.length > 1) {
+      console.log('Обнаружены дублирующиеся поля dynamic_pricing_input, оставляю только наше основное поле');
+      
+      // Оставляем только наше отмеченное поле
+      let mainField = null;
+      inputs.forEach(input => {
+        if (input.getAttribute('data-is-main-field') === 'true') {
+          mainField = input;
+        } else {
+          console.log('Удаляю дублирующее поле:', input);
+          // Удаляем родительскую строку, если она есть
+          let row = input.closest('.form-row');
+          if (row) {
+            row.remove();
+          } else if (input.parentNode) {
+            input.parentNode.removeChild(input);
+          }
+        }
+      });
+      
+      // Если наше основное поле не найдено, но есть другие поля, используем первое из них
+      if (!mainField && inputs.length > 0) {
+        inputs[0].id = 'id_dynamic_pricing_input';
+        inputs[0].setAttribute('data-is-main-field', 'true');
+      }
+    }
+    
+    // Добавляем обработчик для кнопки сохранения
+    const saveButtons = document.querySelectorAll('input[name="_save"], button[name="_save"]');
+    saveButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        console.log('Сохранение формы с dynamic_pricing_input:', document.getElementById('id_dynamic_pricing_input').value);
+      });
+    });
+  });
+</script>
+{{ block.super }}
+{% endblock %}
+
+{% block admin_change_form_document_ready %}
+{{ block.super }}
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+  // Получаем ссылки на элементы формы
+        const startDateInput = document.getElementById('start_date');
+        const endDateInput = document.getElementById('end_date');
+        const priceInput = document.getElementById('price');
+        const addPricingButton = document.getElementById('add_pricing');
+  const clearPricingButton = document.getElementById('clear_pricing');
+  const pricingTable = document.getElementById('pricing_table').getElementsByTagName('tbody')[0];
+        const dynamicPricingInput = document.getElementById('id_dynamic_pricing_input');
+  const form = document.querySelector('form#roomtype_form');
+  
+  // Проверяем, найдена ли форма
+  if (!form) {
+    // Если форма не найдена по ID, ищем основную форму
+    const forms = document.querySelectorAll('form');
+    if (forms.length > 0) {
+      form = forms[0]; // Берем первую форму на странице
+    }
+  }
+  
+  // Добавляем отладочную информацию
+  console.log('Form found:', form !== null);
+  console.log('Initial dynamic_pricing value:', dynamicPricingInput.value);
+  
+  // Устанавливаем минимальную дату как сегодня
+  const today = new Date().toISOString().split('T')[0];
+  startDateInput.min = today;
+  endDateInput.min = today;
+  
+  // Глобальная функция для обновления значения поля формы
+  window.updateDynamicPricingField = function() {
+    const hiddenField = document.getElementById('id_dynamic_pricing_input');
+    console.log('Dynamic pricing field updated:', hiddenField.value);
+  };
+  
+  // Если форма найдена, добавляем обработчик отправки
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      // Проверяем, что данные правильно заполнены перед отправкой
+      if (dynamicPricingInput.value) {
+        try {
+          const pricing = JSON.parse(dynamicPricingInput.value);
+          // Данные корректны, можно отправлять форму
+          console.log('Submitting form with dynamic pricing:', pricing);
+        } catch (err) {
+          // Если JSON некорректный, предотвращаем отправку
+          e.preventDefault();
+          alert('Ошибка в данных динамических цен. Пожалуйста, проверьте формат.');
+          console.error('Error parsing dynamic pricing JSON:', err);
+        }
+      }
+    });
+  }
+  
+  // Функция для форматирования даты
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('ru-RU');
+  }
+  
+  // Функция для слияния периодов с одинаковой ценой
+  function mergePricingPeriods(pricing) {
+    // Если нет данных, возвращаем пустой массив
+    if (Object.keys(pricing).length === 0) {
+      return [];
+    }
+    
+    // Конвертируем объект цен в массив периодов
+    let periods = [];
+    
+    // Сначала сортируем даты
+    const sortedDates = Object.keys(pricing).sort();
+    
+    // Начинаем новый период с первой даты
+    let currentPeriod = {
+      start: sortedDates[0],
+      end: sortedDates[0],
+      price: pricing[sortedDates[0]]
+    };
+    
+    // Проходим по всем остальным датам
+    for (let i = 1; i < sortedDates.length; i++) {
+      const currentDate = sortedDates[i];
+      const currentPrice = pricing[currentDate];
+      
+      // Проверяем, можно ли добавить текущую дату к текущему периоду
+      if (currentPrice === currentPeriod.price) {
+        // Если цена та же и дата следующая, расширяем период
+        const nextDay = new Date(currentPeriod.end);
+        nextDay.setDate(nextDay.getDate() + 1);
+        
+        if (nextDay.toISOString().split('T')[0] === currentDate) {
+          currentPeriod.end = currentDate;
+        } else {
+          // Если дата не следующая, сохраняем текущий период и начинаем новый
+          periods.push(currentPeriod);
+          currentPeriod = {
+            start: currentDate,
+            end: currentDate,
+            price: currentPrice
+          };
+        }
+      } else {
+        // Если цена отличается, сохраняем текущий период и начинаем новый
+        periods.push(currentPeriod);
+        currentPeriod = {
+          start: currentDate,
+          end: currentDate,
+          price: currentPrice
+        };
+      }
+    }
+    
+    // Добавляем последний период
+    periods.push(currentPeriod);
+    
+    return periods;
+  }
+  
+  // Функция для отображения текущих цен в таблице
+  function updatePricingTable() {
+    let pricing = {};
+    
+    try {
+      pricing = JSON.parse(dynamicPricingInput.value || '{}');
+    } catch (e) {
+      console.error('Ошибка при разборе JSON динамических цен:', e);
+      return;
+    }
+    
+    // Очищаем текущую таблицу
+    pricingTable.innerHTML = '';
+    
+    // Обновляем информацию о количестве цен
+    const pricingInfo = document.getElementById('pricing_info');
+    const datesCount = Object.keys(pricing).length;
+    pricingInfo.textContent = `Всего установлено цен на ${datesCount} дней`;
+    
+    // Объединяем даты в периоды
+    const periods = mergePricingPeriods(pricing);
+    
+    // Добавляем строки в таблицу
+    periods.forEach(period => {
+      const row = pricingTable.insertRow();
+      
+      // Ячейка с периодом
+      const periodCell = row.insertCell(0);
+      if (period.start === period.end) {
+        periodCell.textContent = formatDate(period.start);
+      } else {
+        periodCell.textContent = `${formatDate(period.start)} - ${formatDate(period.end)}`;
+      }
+      
+      // Ячейка с ценой
+      const priceCell = row.insertCell(1);
+      priceCell.textContent = period.price.toFixed(2);
+      
+      // Ячейка с действиями
+      const actionCell = row.insertCell(2);
+      const deleteButton = document.createElement('span');
+      deleteButton.className = 'delete-price';
+      deleteButton.innerHTML = '&#10006;'; // Символ X
+      deleteButton.title = 'Удалить';
+      deleteButton.dataset.start = period.start;
+      deleteButton.dataset.end = period.end;
+      
+      deleteButton.addEventListener('click', function() {
+        // Удаляем цены для этого периода
+        const start = new Date(this.dataset.start);
+        const end = new Date(this.dataset.end);
+        let current = new Date(start);
+        
+        while (current <= end) {
+          const dateStr = current.toISOString().split('T')[0];
+          delete pricing[dateStr];
+          current.setDate(current.getDate() + 1);
+        }
+        
+        // Обновляем скрытое поле и таблицу
+        dynamicPricingInput.value = JSON.stringify(pricing);
+        console.log('Updated dynamic_pricing_input value:', dynamicPricingInput.value);
+        console.log('Form field name:', dynamicPricingInput.name);
+        updatePricingTable();
+      });
+      
+      actionCell.appendChild(deleteButton);
+    });
+    
+    // Если нет периодов, показываем сообщение
+    if (periods.length === 0) {
+      const row = pricingTable.insertRow();
+      const cell = row.insertCell(0);
+      cell.colSpan = 3;
+      cell.textContent = 'Нет установленных динамических цен';
+      cell.style.textAlign = 'center';
+      cell.style.fontStyle = 'italic';
+    }
+  }
+  
+  // Получаем все даты в диапазоне
+        function getDatesInRange(startDate, endDate) {
+          const dates = [];
+          let currentDate = new Date(startDate);
+    const end = new Date(endDate);
+    
+    while (currentDate <= end) {
+            dates.push(new Date(currentDate).toISOString().split('T')[0]);
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+    
+          return dates;
+        }
+
+  // Добавляем обработчик для кнопки добавления цен
+        addPricingButton.addEventListener('click', function() {
+          const startDate = startDateInput.value;
+          const endDate = endDateInput.value;
+          const price = parseFloat(priceInput.value);
+
+    // Проверяем корректность введенных данных
+          if (!startDate || !endDate || isNaN(price) || price < 0) {
+            alert('Пожалуйста, заполните все поля корректно.');
+            return;
+          }
+
+          const start = new Date(startDate);
+          const end = new Date(endDate);
+    
+    // Проверяем, что конечная дата не раньше начальной
+          if (start > end) {
+            alert('Дата начала не может быть позже даты окончания.');
+            return;
+          }
+
+    // Получаем все даты в диапазоне
+          const dates = getDatesInRange(start, end);
+    
+    // Загружаем текущие цены
+          let pricing = {};
+          try {
+            pricing = JSON.parse(dynamicPricingInput.value || '{}');
+          } catch (e) {
+            alert('Ошибка в формате текущих цен.');
+            return;
+          }
+
+    // Добавляем новые цены
+          dates.forEach(date => {
+            pricing[date] = price;
+          });
+
+    // Обновляем скрытое поле и таблицу
+    dynamicPricingInput.value = JSON.stringify(pricing);
+    console.log('Updated dynamic_pricing_input value:', dynamicPricingInput.value);
+    console.log('Form field name:', dynamicPricingInput.name);
+    updatePricingTable();
+    
+    // Очищаем поля ввода
+    startDateInput.value = '';
+    endDateInput.value = '';
+    priceInput.value = '';
+  });
+  
+  // Убедимся, что форма отправляется с правильными данными
+  if (form) {
+    form.addEventListener('submit', function() {
+      // Ещё раз обновим значение поля перед отправкой формы
+      if (dynamicPricingInput.value) {
+        // Проверяем, что это валидный JSON
+        try {
+          JSON.parse(dynamicPricingInput.value);
+          console.log('Form submitting with valid JSON value:', dynamicPricingInput.value);
+        } catch (e) {
+          console.error('Invalid JSON in dynamic pricing field:', e);
+        }
+      }
+    });
+  }
+  
+  // Обработчик для кнопки очистки полей
+  clearPricingButton.addEventListener('click', function() {
+          startDateInput.value = '';
+          endDateInput.value = '';
+          priceInput.value = '';
+        });
+  
+  // Инициализируем таблицу при загрузке страницы
+  updatePricingTable();
+      });
+    </script>
+{% endblock %}

@@ -113,23 +113,23 @@ WSGI_APPLICATION = 'hms_prj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'alakol',
-#         'USER':'alakol_admin',
-#         'PASSWORD':'fINyNm89Ct0s9xci',
-#         'HOST':'127.0.0.1',
-#         'PORT':'5432',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation
@@ -232,8 +232,8 @@ JAZZMIN_SETTINGS = {
     "topmenu_links": [
 
         {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
-        {"name": "Company", "url": "/admin/addons/company/"},
-        {"name": "Users", "url": "/admin/userauths/user/"},
+        # {"name": "Company", "url": "/admin/addons/company/"},
+        # {"name": "Users", "url": "/admin/userauths/user/"},
 
         {"model": "AUTH_USER_MODEL.User"},
     ],
@@ -294,8 +294,8 @@ JAZZMIN_UI_TWEAKS = {
     "sidebar_nav_compact_style": False,
     "sidebar_nav_legacy_style": False,
     "sidebar_nav_flat_style": False,
-    "theme": "cyborg",
-    "dark_mode_theme": "cyborg",
+    "theme": "default",
+    "dark_mode_theme": "default",
     "button_classes": {
         "primary": "btn-primary",
         "secondary": "btn-secondary",

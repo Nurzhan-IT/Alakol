@@ -12,6 +12,7 @@ from django.db.models import Q, Count, OuterRef
 import uuid
 
 from hotel.models import Coupon, CouponUsers, Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType, RoomTypeGallery, Notification, Bookmark, Review
+from booking.models import RoomUnavailability
 
 from datetime import datetime, timedelta
 from decimal import Decimal
@@ -92,9 +93,46 @@ def room_type_detail(request, slug, rt_slug):
         is_active=True,
         payment_status__in=["paid", "processing", "pending"]
     ).values_list('room__id', flat=True).distinct()
+
+    # Получаем ID номеров, которые находятся в RoomUnavailability на указанные даты
+    unavailable_room_ids = RoomUnavailability.objects.filter(
+        Q(start_date__lt=user_checkout_date, end_date__gt=user_checkin_date)
+    ).values_list('room__id', flat=True).distinct()
     
     # Исключаем забронированные номера из списка доступных
-    available_rooms = rooms.exclude(id__in=booked_room_ids)
+    available_rooms = rooms.exclude(id__in=booked_room_ids).exclude(id__in=unavailable_room_ids)
+    
+    # Рассчитываем стоимость с учетом динамических цен
+    total_days = (user_checkout_date - user_checkin_date).days
+    dynamic_price = calculate_total_price(room_type, user_checkin_date, user_checkout_date)
+    
+    # Проверяем статусы комнат в selection_data_obj
+    room_statuses = {}
+    if 'selection_data_obj' in request.session and request.session['selection_data_obj']:
+        selection_data = request.session['selection_data_obj']
+        booking_common_data = request.session.get('booking_common_data', {})
+        room_type_search_dates = request.session.get('room_type_search_dates', {})
+        
+        for room in available_rooms:
+            room_statuses[room.id] = "Add To Selection"
+            
+            # Проверяем, есть ли комната в selection_data_obj
+            for index, item in selection_data.items():
+                try:
+                    if int(item['room_id']) == room.id:
+                        # Проверяем совпадение дат
+                        if booking_common_data.get('checkin') == room_type_search_dates.get('checkin') and \
+                           booking_common_data.get('checkout') == room_type_search_dates.get('checkout'):
+                            room_statuses[room.id] = "Added To Selection"
+                        else:
+                            room_statuses[room.id] = "Update"
+                        break
+                except (KeyError, ValueError):
+                    continue
+    else:
+        # Если selection_data_obj не существует, все кнопки будут "Add To Selection"
+        for room in available_rooms:
+            room_statuses[room.id] = "Add To Selection"
     
     context = {
         "hotel": hotel,
@@ -106,6 +144,9 @@ def room_type_detail(request, slug, rt_slug):
         "adult": adult,
         "children": children,
         "room_type_": room_type_,
+        "dynamic_price": dynamic_price,  # Добавляем динамическую цену в контекст
+        "total_days": total_days,        # Добавляем общее количество дней
+        "room_statuses": room_statuses,  # Добавляем статусы кнопок для комнат
     }
     return render(request, "hotel/room_type_detail.html", context)
 
@@ -156,6 +197,7 @@ def selected_rooms(request):
             full_name = request.POST.get("full_name")
             email = request.POST.get("email")
             phone = request.POST.get("phone")
+            country_code = request.POST.get("country_code") # Получаем код страны
             
             # Сохраняем данные пользователя в сессии для последующего использования при оплате
             if 'user_data' not in request.session:
@@ -164,7 +206,8 @@ def selected_rooms(request):
             request.session['user_data'] = {
                 'full_name': full_name,
                 'email': email,
-                'phone': phone
+                'phone': phone,
+                'country_code': country_code # Сохраняем код страны
             }
             
             # Перенаправляем на страницу выбора способа оплаты
@@ -185,8 +228,8 @@ def selected_rooms(request):
             # Расчет общей стоимости и количества дней
             date_format = "%Y-%m-%d"
             try:
-                checkin_date = datetime.strptime(checkin, date_format)
-                checkout_date = datetime.strptime(checkout, date_format)
+                checkin_date = datetime.strptime(checkin, date_format).date()
+                checkout_date = datetime.strptime(checkout, date_format).date()
                 time_difference = checkout_date - checkin_date
                 total_days = time_difference.days
             except Exception as e:
@@ -200,8 +243,8 @@ def selected_rooms(request):
                 request.session.modified = True
                 checkin = today
                 checkout = tomorrow
-                checkin_date = datetime.strptime(checkin, date_format)
-                checkout_date = datetime.strptime(checkout, date_format)
+                checkin_date = datetime.strptime(checkin, date_format).date()
+                checkout_date = datetime.strptime(checkout, date_format).date()
                 time_difference = checkout_date - checkin_date
                 total_days = time_difference.days
             
@@ -223,13 +266,18 @@ def selected_rooms(request):
             room_type = RoomType.objects.get(id=room_type_)
             room = Room.objects.get(id=room_id)
 
-            # Добавляем стоимость текущей комнаты к общей сумме
-            price = room_type.price
-            total += price * total_days
+            # Используем динамические цены вместо фиксированной цены
+            # Рассчитываем стоимость с учетом динамических цен
+            room_total = calculate_total_price(room_type, checkin_date, checkout_date)
+            total += room_total
             
             # Сохраняем данные о комнате и добавляем информацию о slug типа комнаты
             request.session['selection_data_obj'][h_id]['room_number'] = room.room_number
             request.session['selection_data_obj'][h_id]['room_type_slug'] = room_type.slug
+            
+            # Обновляем хранимую цену в сессии с учетом динамического ценообразования
+            request.session['selection_data_obj'][h_id]['room_price'] = str(room_total)
+            request.session.modified = True
             
             # Сохраняем данные о типе номера для последующего использования
             room_types_data[room_type_] = {
@@ -345,19 +393,19 @@ def payment_method_selection(request):
         
         # Расчет количества дней
         date_format = "%Y-%m-%d"
-        checkin_date = datetime.strptime(checkin, date_format)
-        checkout_date = datetime.strptime(checkout, date_format)
+        checkin_date = datetime.strptime(checkin, date_format).date()
+        checkout_date = datetime.strptime(checkout, date_format).date()
         time_difference = checkout_date - checkin_date
         total_days = time_difference.days
         
-        # Рассчитываем общую стоимость
+        # Рассчитываем общую стоимость с учетом динамических цен
         for h_id, item in request.session['selection_data_obj'].items():
             room_type_id = item["room_type"]
             room_type = RoomType.objects.get(id=room_type_id)
             
-            # Рассчитываем стоимость текущей комнаты и добавляем к общей сумме
-            price = room_type.price
-            total += price * total_days
+            # Рассчитываем стоимость с учетом динамических цен
+            room_total = calculate_total_price(room_type, checkin_date, checkout_date)
+            total += room_total
     
     context = {
         "total": total,
@@ -398,8 +446,8 @@ def process_booking(request):
         room_type = RoomType.objects.get(id=room_type_id)
         
         date_format = "%Y-%m-%d"
-        checkin_date = datetime.strptime(checkin, date_format)
-        checkout_date = datetime.strptime(checkout, date_format)
+        checkin_date = datetime.strptime(checkin, date_format).date()
+        checkout_date = datetime.strptime(checkout, date_format).date()
         time_difference = checkout_date - checkin_date
         total_days = time_difference.days
         
@@ -408,6 +456,7 @@ def process_booking(request):
         full_name = user_data['full_name']
         email = user_data['email']
         phone = user_data['phone']
+        country_code = user_data.get('country_code', '')  # Получаем код страны, по умолчанию пустая строка
         
         # Создаем бронирование
         booking = Booking.objects.create(
@@ -421,6 +470,7 @@ def process_booking(request):
             full_name=full_name,
             email=email,
             phone=phone,
+            country_code=country_code,  # Сохраняем код страны
             payment_status="initiated"  # Статус "инициировано"
         )
         
@@ -428,7 +478,7 @@ def process_booking(request):
             booking.user = request.user
             booking.save()
         
-        # Добавляем комнаты к бронированию
+        # Добавляем комнаты к бронированию и рассчитываем общую стоимость
         for h_id, item in request.session['selection_data_obj'].items():
             room_id = int(item["room_id"])
             room = Room.objects.get(id=room_id)
@@ -438,9 +488,9 @@ def process_booking(request):
             room_type_id = item["room_type"]
             room_type = RoomType.objects.get(id=room_type_id)
             
-            # Рассчитываем стоимость текущей комнаты и добавляем к общей сумме
-            price = room_type.price
-            total += price * total_days
+            # Рассчитываем стоимость с учетом динамических цен
+            room_total = calculate_total_price(room_type, checkin_date, checkout_date)
+            total += room_total
         
         # Обновляем сумму бронирования
         booking.total = float(total)
@@ -499,6 +549,21 @@ def create_robokassa_payment(request, payment_key=None):
                         'room': room,
                         'reason': 'already_booked'
                     })
+                    continue
+
+                # Проверяем, что номер не находится в таблице RoomUnavailability
+                unavailable = RoomUnavailability.objects.filter(
+                    room=room,
+                    start_date__lt=checkout_date,
+                    end_date__gt=checkin_date
+                ).exists()
+
+                if unavailable:
+                    unavailable_rooms.append({
+                        'h_id': h_id,
+                        'room': room,
+                        'reason': 'marked_unavailable'
+                    })
             
             # Если есть недоступные номера, удаляем их из сессии и показываем сообщение
             if unavailable_rooms:
@@ -515,6 +580,8 @@ def create_robokassa_payment(request, payment_key=None):
                         
                         if reason == 'not_available':
                             messages.error(request, f"Номер {room_number} недоступен для бронирования и был удален из списка.")
+                        elif reason == 'marked_unavailable':
+                            messages.error(request, f"Номер {room_number} отмечен как недоступный на выбранные даты и был удален из списка.")
                         else:
                             messages.error(request, f"Номер {room_number} уже забронирован на выбранные даты и был удален из списка.")
                 
@@ -926,3 +993,32 @@ def invoice(request, booking_id):
         logger.error(f"Ошибка при доступе к квитанции {booking_id}: {str(e)}")
         messages.error(request, f"Произошла ошибка при получении квитанции: {str(e)}")
         return redirect("/")
+
+# Добавим вспомогательную функцию для расчета общей стоимости с учетом динамических цен
+def calculate_total_price(room_type, checkin_date, checkout_date):
+    """
+    Рассчитывает общую стоимость проживания с учетом динамических цен.
+    
+    Args:
+        room_type: Объект модели RoomType
+        checkin_date: Дата заезда (datetime.date)
+        checkout_date: Дата выезда (datetime.date)
+    
+    Returns:
+        Decimal: Общая стоимость проживания
+    """
+    from decimal import Decimal
+    
+    total = Decimal('0.00')
+    current_date = checkin_date
+    
+    # Проходим по всем дням пребывания
+    while current_date < checkout_date:
+        # Получаем цену для текущего дня
+        price_for_day = room_type.get_price_for_date(current_date)
+        total += Decimal(str(price_for_day))
+        
+        # Переходим к следующему дню
+        current_date += timedelta(days=1)
+    
+    return total

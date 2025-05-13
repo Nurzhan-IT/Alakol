@@ -6,6 +6,7 @@ from django.template import RequestContext
 
 
 from hotel.models import Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType
+from hotel.views import calculate_total_price  # Импортируем функцию для расчета динамических цен
 
 from datetime import datetime, timedelta
 from decimal import Decimal
@@ -107,16 +108,18 @@ def check_room_availability(request):
             messages.error(request, "Выбранный тип номера недоступен. Пожалуйста, выберите другой тип номера.")
             return redirect("hotel:detail", slug=hotel.slug)
 
-        # Сохраняем общие данные бронирования в сессии
-        if 'booking_common_data' not in request.session:
-            request.session['booking_common_data'] = {}
+        # Сохраняем данные о датах поиска в новой сессии room_type_search_dates
+        if 'room_type_search_dates' not in request.session:
+            request.session['room_type_search_dates'] = {}
         
-        request.session['booking_common_data'] = {
+        request.session['room_type_search_dates'] = {
             'checkin': checkin,
             'checkout': checkout,
             'adult': adult,
             'children': children,
         }
+        print("room_type_search_dates === ", request.session['room_type_search_dates'])
+        request.session.modified = True
         
         logger.info(f"Redirecting to room_type_detail with hotel_slug={hotel.slug}, room_type_slug={room_type_obj.slug}")
         url = reverse("hotel:room_type_detail", args=[hotel.slug, room_type_obj.slug])
@@ -136,14 +139,28 @@ def booking_data(request, slug):
 
 
 def add_to_selection(request):
-    # Проверяем наличие общих данных бронирования
-    if 'booking_common_data' not in request.session:
+    # Проверяем наличие данных о поиске типа номера
+    if 'room_type_search_dates' in request.session:
+        # Используем эти данные для обновления booking_common_data
+        if 'booking_common_data' not in request.session:
+            request.session['booking_common_data'] = {}
+        
+        # Обновляем booking_common_data данными из room_type_search_dates
         request.session['booking_common_data'] = {
-            'checkin': request.GET['checkin'],
-            'checkout': request.GET['checkout'],
-            'adult': request.GET['adult'],
-            'children': request.GET['children'],
+            'checkin': request.session['room_type_search_dates'].get('checkin', request.GET['checkin']),
+            'checkout': request.session['room_type_search_dates'].get('checkout', request.GET['checkout']),
+            'adult': request.session['room_type_search_dates'].get('adult', request.GET['adult']),
+            'children': request.session['room_type_search_dates'].get('children', request.GET['children']),
         }
+    else:
+        # Если room_type_search_dates отсутствует, используем данные из запроса
+        if 'booking_common_data' not in request.session:
+            request.session['booking_common_data'] = {
+                'checkin': request.GET['checkin'],
+                'checkout': request.GET['checkout'],
+                'adult': request.GET['adult'],
+                'children': request.GET['children'],
+            }
     
     room_selection = {}
 
@@ -169,14 +186,9 @@ def add_to_selection(request):
             request.session['selection_data_obj'] = selection_data
     else:
         request.session['selection_data_obj'] = room_selection
-        
-    # Обновляем общие данные бронирования при необходимости
-    request.session['booking_common_data'] = {
-        'checkin': request.GET['checkin'],
-        'checkout': request.GET['checkout'],
-        'adult': request.GET['adult'],
-        'children': request.GET['children'],
-    }
+    
+    # Помечаем сессию как измененную
+    request.session.modified = True
     
     data = {
         "data": request.session['selection_data_obj'], 
@@ -240,8 +252,8 @@ def delete_selection(request):
         # Расчет общей стоимости и количества дней
         date_format = "%Y-%m-%d"
         try:
-            checkin_date = datetime.strptime(checkin, date_format)
-            checkout_date = datetime.strptime(checkout, date_format)
+            checkin_date = datetime.strptime(checkin, date_format).date()
+            checkout_date = datetime.strptime(checkout, date_format).date()
             time_difference = checkout_date - checkin_date
             total_days = time_difference.days
         except Exception as e:
@@ -251,19 +263,19 @@ def delete_selection(request):
             tomorrow = (datetime.now() + timedelta(days=1)).strftime(date_format)
             checkin = today
             checkout = tomorrow
-            checkin_date = datetime.strptime(checkin, date_format)
-            checkout_date = datetime.strptime(checkout, date_format)
+            checkin_date = datetime.strptime(checkin, date_format).date()
+            checkout_date = datetime.strptime(checkout, date_format).date()
             time_difference = checkout_date - checkin_date
             total_days = time_difference.days
         
-        # Вычисляем общую стоимость бронирования
+        # Вычисляем общую стоимость бронирования с учетом динамических цен
         for h_id, item in request.session['selection_data_obj'].items():
             room_type_id = item["room_type"]
             try:
                 room_type = RoomType.objects.get(id=room_type_id)
-                # Рассчитываем стоимость комнаты и добавляем к общей сумме
-                price = room_type.price
-                total += price * total_days
+                # Рассчитываем стоимость комнаты с учетом динамических цен
+                room_total = calculate_total_price(room_type, checkin_date, checkout_date)
+                total += room_total
                 
                 # Добавляем slug типа номера в данные сессии
                 if not 'room_type_slug' in item:
