@@ -8,12 +8,13 @@ urlpatterns = [
     path("detail/<slug:slug>/", views.hotel_detail, name="detail"),
     path("detail/<slug:slug>/room-type/<slug:rt_slug>/", views.room_type_detail, name="room_type_detail"),
     path("selected_rooms/", views.selected_rooms, name="selected_rooms"),
-    path("checkout/<booking_id>/", views.checkout, name="checkout"),
+    path("payment_method_selection/", views.payment_method_selection, name="payment_method_selection"),
     path("invoice/<booking_id>/", views.invoice, name="invoice"),
-    path("update_room_status/", views.update_room_status, name="update_room_status"),
     
-    # Payment API
-    path('api/checkout-session/<booking_id>/', views.create_checkout_session, name='api_checkout_session'),
-    path('success/<booking_id>/', views.payment_success, name='success'),
-    path('failed/<booking_id>/', views.payment_failed, name='failed'),
+    # Robokassa Payment API
+    path('api/robokassa-payment/', views.create_robokassa_payment, name='api_robokassa_payment'),
+    path('api/robokassa-payment/<payment_key>/', views.create_robokassa_payment, name='api_robokassa_payment_with_key'),
+    path('robokassa/result/', views.robokassa_result, name='robokassa_result'),
+    path('robokassa/success/<booking_id>/', views.robokassa_success, name='robokassa_success'),
+    path('robokassa/failed/<booking_id>/', views.robokassa_failed, name='robokassa_failed'),
 ] 

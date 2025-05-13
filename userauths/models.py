@@ -11,11 +11,7 @@ from shortuuid.django_fields import ShortUUIDField
 import os 
 
 
-IDENTITY_TYPE = (
-    ("national_id_card", "National ID Card"),
-    ("drivers_licence", "Drives Licence"),
-    ("international_passport", "International Passport")
-)
+
 
 GENDER = (
     ("female", "Female"),
@@ -62,14 +58,9 @@ class Profile(models.Model):
 
     country = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
-    state = models.CharField(max_length=100, null=True, blank=True)
     address = models.CharField(max_length=1000, null=True, blank=True)
     
-    identity_type = models.CharField(choices=IDENTITY_TYPE, default="national_id_card", max_length=100, null=True, blank=True)
-    identity_image = models.ImageField(upload_to=user_directory_path, default="id.jpg", null=True, blank=True)
 
-    facebook = models.URLField(default="https://facebook.com/", null=True, blank=True)
-    twitter = models.URLField(default="https://twitter.com/", null=True, blank=True)
     wallet = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
     verified = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
