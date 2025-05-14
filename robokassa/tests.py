@@ -97,14 +97,14 @@ class RobokassaTestCase(TestCase):
         description = "Тестовый платеж"
         
         # Тест базового URL без email
-        url = generate_payment_link(cost, number, description)
+        url = generate_payment_link(cost, number, description, culture="ru")
         
         # Проверяем, что URL начинается с правильного адреса
         self.assertTrue(url.startswith(PAYMENT_URL))
         
         # Проверяем наличие всех обязательных параметров
         self.assertIn(f'MerchantLogin={MERCHANT_LOGIN}', url)
-        self.assertIn('OutSum=100.00', url)
+        self.assertIn('OutSum=10.0', url)  # 100.00 * 0.1 = 10.0
         self.assertIn('InvId=123', url)
         self.assertIn('Description=', url)
         self.assertIn('IsTest=1', url)
@@ -119,7 +119,7 @@ class RobokassaTestCase(TestCase):
         
         # Тест с указанием email
         email = "test@example.com"
-        url_with_email = generate_payment_link(cost, number, description, email)
+        url_with_email = generate_payment_link(cost, number, description, culture="ru", email=email)
         self.assertIn('Email=test%40example.com', url_with_email)
         
         # Тест с другой культурой
