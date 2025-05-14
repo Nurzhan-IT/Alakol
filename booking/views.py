@@ -163,9 +163,10 @@ def add_to_selection(request):
             }
     
     room_selection = {}
+    current_hotel_id = request.GET['hotel_id']
 
     room_selection[str(request.GET['id'])] = {
-        'hotel_id': request.GET['hotel_id'],
+        'hotel_id': current_hotel_id,
         'hotel_name': request.GET['hotel_name'],
         'room_name': request.GET['room_name'],
         'room_price': request.GET['room_price'],
@@ -175,6 +176,22 @@ def add_to_selection(request):
         'room_id': request.GET['room_id'],
     }
 
+    # Проверяем, есть ли уже номера в корзине и из какого они отеля
+    if 'selection_data_obj' in request.session and request.session['selection_data_obj']:
+        # Получаем первый номер из корзины для проверки отеля
+        first_item_id = next(iter(request.session['selection_data_obj']))
+        first_item = request.session['selection_data_obj'][first_item_id]
+        existing_hotel_id = first_item['hotel_id']
+        
+        # Если пытаемся добавить номер из другого отеля
+        if existing_hotel_id != current_hotel_id:
+            # Возвращаем сообщение с предложением очистить корзину
+            return JsonResponse({
+                "error": True,
+                "message": "Вы можете бронировать номера только из одного отеля. Хотите очистить данные о уже выбранных номерах?",
+                "hotel_id": current_hotel_id
+            })
+    
     if 'selection_data_obj' in request.session:
         if str(request.GET['id']) in request.session['selection_data_obj']:
             # Обновляем только данные о комнате, общие данные теперь хранятся отдельно
@@ -200,7 +217,19 @@ def add_to_selection(request):
 def delete_session(request):
     request.session.pop('selection_data_obj', None)
     request.session.pop('booking_common_data', None)
+    request.session.pop('room_types_data', None)
     return redirect(request.META.get("HTTP_REFERER"))
+
+
+# Новый метод для очистки сессии и добавления нового номера
+def clear_session_and_add_new(request):
+    # Очищаем данные о выбранных номерах
+    request.session.pop('selection_data_obj', None)
+    request.session.pop('booking_common_data', None)
+    request.session.pop('room_types_data', None)
+    
+    # Добавляем новый номер
+    return add_to_selection(request)
 
 
 def delete_selection(request):
