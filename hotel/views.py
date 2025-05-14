@@ -169,7 +169,9 @@ def selected_rooms(request):
     checkin = "0" 
     checkout = "" 
     children = 0 
-    
+    if request.session['selection_data_obj'] == {}:
+        messages.warning(request, "You don't have any room selections yet!")
+        return redirect("/")
     # Если пришли данные POST с датами, обновим booking_common_data
     if request.method == "POST" and 'selection_data_obj' in request.session:
         update_booking_dates = False
