@@ -11,5 +11,6 @@ urlpatterns = [
     # Ajax
     path("add_to_selection/", views.add_to_selection, name="add_to_selection"),
     path("delete_selection/", views.delete_selection, name="delete_selection"),
+    path("clear_session_and_add_new/", views.clear_session_and_add_new, name="clear_session_and_add_new"),
     
 ]
