@@ -9,13 +9,14 @@
     /* Стили для кнопки Photo */
 .hrm-photo-btn {
     /* Основные стили */
-    background-color: #8400ff; /* Основной цвет */
-    color: #ffffff; /* Белый текст для контраста */
-    border: none; /* Убираем стандартную рамку */
+    background-color: white; /* Основной цвет */
+    color: #8400ff; /* Белый текст для контраста */
+    border: 1px solid #8400ff; /* Убираем стандартную рамку */
     border-radius: 8px; /* Скругленные углы */
     padding: 10px 20px; /* Внутренние отступы */
     font-size: 14px; /* Размер шрифта */
     font-weight: 600; /* Полужирный шрифт */
+    width: 100px;
     text-transform: uppercase; /* Текст в верхнем регистре */
     cursor: pointer; /* Курсор указателя */
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
@@ -25,6 +26,7 @@
 /* Эффект при наведении */
 .hrm-photo-btn:hover {
     background-color: #6b00cc; /* Темнее на 20% для ховера */
+    color: white;
     transform: translateY(-2px); /* Легкий подъем */
     box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2); /* Усиленная тень */
 }
@@ -102,7 +104,7 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
+        height: 80vh;
         z-index: 1000;
         overflow: auto;
         background: transparent;
@@ -152,7 +154,7 @@
     }
 
     .custom-modal-header {
-        background: linear-gradient(135deg, #3498db, #2980b9);
+        background:  #8400ff;
         padding: 12px 16px;
         display: flex;
         justify-content: space-between;
@@ -162,7 +164,8 @@
 
     .custom-modal-title {
         color: #fff;
-        font-size: clamp(1.3rem, 3vw, 1.6rem);
+        /*font-size: clamp(1.3rem, 3vw, 1.6rem);*/
+        font-size: 24px;
         font-weight: 600;
         text-align: center;
         flex-grow: 1;
@@ -173,7 +176,7 @@
         background: none;
         border: none;
         color: #fff;
-        font-size: 1.4rem;
+        font-size: 30px;
         cursor: pointer;
         padding: 4px 8px;
         transition: color 0.2s ease;
@@ -234,11 +237,11 @@
     .custom-room-description {
         flex: 1;
         padding: 16px;
-        background: #f9f9f9;
         border-radius: 8px;
         overflow-y: auto;
         max-height: 400px;
-        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        /*font-size: clamp(0.9rem, 2.5vw, 1rem);*/
+        font-size: 14px;
         line-height: 1.5;
     }
 
@@ -283,8 +286,7 @@
         flex-wrap: wrap;
         gap: 15px;
         margin: 15px 0;
-        padding: 10px;
-        background: #f8f9fa;
+        /*background: #f8f9fa;*/
         border-radius: 8px;
     }
 
@@ -303,27 +305,29 @@
     /* Стили для размера комнаты */
     .room-size-info {
         margin: 15px 0;
-        padding: 10px;
-        background: #f8f9fa;
+
+        /*background: #f8f9fa;*/
         border-radius: 8px;
         font-weight: 500;
     }
 
     .custom-modal-footer {
         padding: 12px;
-        background: #ecf0f1;
+        /*background: #ecf0f1;*/
         display: flex;
         justify-content: center;
         border-radius: 0 0 12px 12px;
     }
 
     .custom-btn-close {
-        background-color: #7f8c8d;
         border: none;
         border-radius: 20px;
         padding: 8px 16px;
-        font-size: clamp(0.9rem, 2.5vw, 1rem);
+        /*font-size: clamp(0.9rem, 2.5vw, 1rem);*/
+        font-size: 16px;
+        width: 100px;
         color: #fff;
+        background-color: black;
         cursor: pointer;
         transition: background-color 0.2s ease;
     }
@@ -513,8 +517,8 @@
                                     <h5>{{ r.type }}</h5>
                                     <p><strong>{% trans "Beds" %}:</strong> {{ r.number_of_beds }} - <strong>{% trans "Rooms" %}:</strong> {{ r.rooms_count }}</p>
                                 </div>
+                                <button type="button" class="hrm-photo-btn" data-room-id="{{ r.id }}">{% trans "Photos" %}</button>
                                 <div class="hrm-room-actions">
-                                    <button type="button" class="hrm-photo-btn" data-room-id="{{ r.id }}">{% trans "Photo" %}</button>
                                     <span>{{ r.price }} {% trans "Tenge" %}</span>
                                 </div>
                             </li>

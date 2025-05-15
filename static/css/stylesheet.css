@@ -4013,6 +4013,7 @@ a.send-message-to-owner.button {
     cursor: pointer;
 }
 
+
 .like-button:hover {
     background-color: #fafafa;
     border: 1px solid #ddd;
@@ -4540,8 +4541,13 @@ ul.listing_item_social {
 .utf_pricing_list_section ul li {
     padding: 15px 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    padding-right: 70px;
+    /*padding-right: 70px;*/
     position: relative;
+
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
 }
 
 .utf_pricing_list_section ul li:hover {
@@ -4616,19 +4622,19 @@ ul.listing_item_social {
 }
 
 .utf_pricing_list_section span {
-    position: absolute;
-    right: 20px;
-    top: 50%;
+    /*position: absolute;*/
+    /*right: 20px;*/
+    /*top: 50%;*/
     font-weight: 600;
-    transform: translateY(-50%);
-    display: inline-block;
+    /*transform: translateY(-50%);*/
+    /*display: inline-block;*/
     font-size: 16px;
     color: #626262;
     background: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.1);
     padding: 2px 12px;
     border-radius: 4px;
-    vertical-align: middle;
+    /*vertical-align: middle;*/
     text-align: center;
 }
 
@@ -19781,7 +19787,7 @@ h4 span.headline_part-detail {
     }
 }
 
-@media only screen and (min-width: 1240px) and (max-width: 1366px) {
+@media only screen and (min-width: 1000px) and (max-width: 1699px) {
     header.fullwidth_block.dashboard .container {
         padding-left: 270px;
     }
@@ -19804,13 +19810,13 @@ h4 span.headline_part-detail {
     }
     .utf_left_side {
         float: left;
-        width: 70%;
+        width: 600px;
         display: inline-block;
     }
     .utf_right_side {
         float: right;
-        width: 28%;
-        display: inline-block;
+        width: 500px;
+        display: flex;
     }
     .dashboard #logo a img {
         top: 50%;
@@ -19819,18 +19825,31 @@ h4 span.headline_part-detail {
     }
 }
 
-@media only screen and (min-width: 900px) and (max-width: 1700px) {
-    .utf_left_side {
-        float: left;
-        width: 60%;
-        display: inline-block;
-    }
-    .utf_right_side {
-        float: right;
-        width: 40%;
-        display: inline-block;
-    }
-}
+/*@media (max-width: 1000px) {*/
+/*    .utf_right_side {*/
+/*        width: 400px;*/
+/*    }*/
+/*}*/
+
+
+/*@media (max-width: 14000px) {*/
+/*    .utf_right_side {*/
+/*        width: 40%;*/
+/*    }*/
+/*}*/
+
+/*@media only screen and (min-width: 900px) and (max-width: 1700px) {*/
+/*    .utf_left_side {*/
+/*        float: left;*/
+/*        width: 60%;*/
+/*        display: inline-block;*/
+/*    }*/
+/*    .utf_right_side {*/
+/*        float: right;*/
+/*        width: 40%;*/
+/*        display: inline-block;*/
+/*    }*/
+/*}*/
 
 @media (max-width: 767px) {
     .search_categorie_block {
@@ -19916,6 +19935,8 @@ h4 span.headline_part-detail {
         width: 100%;
         margin-bottom: 10px;
     }
+
+
 }
 
 @media (max-width: 479px) {
@@ -19990,6 +20011,75 @@ h4 span.headline_part-detail {
     }
 }
 
+.selected-rooms-button{
+    display: flex;
+    background-color: rgb(132, 0, 255);
+    color: white;
+    height: 44px;
+    width: 110px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    padding: 15px 15px;
+    border-radius: 4px;
+}
+
+.selected-rooms-button:hover {
+    background-color: white;
+    border: 1px solid rgb(132, 0, 255);
+    color: rgb(132, 0, 255);
+}
+
+.sign-in-button {
+    display: flex;
+    background-color: rgb(132, 0, 255);
+    color: white;
+    height: 44px;
+    width: 110px;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    padding: 15px 15px;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.sign-in-button:hover {
+    background-color: white;
+    border: 1px solid rgb(132, 0, 255);
+    color: rgb(132, 0, 255);
+}
+
+@media (max-width: 490px){
+    .header_widget .sign-in {
+        display: block;
+        top: 0px;
+        margin-bottom: 10px;
+
+        padding: 0px;
+    }
+
+    .sign-in-span{
+        display: none;
+    }
+
+    .sign-up-span{
+        display: none;
+    }
+
+    .selected-rooms-button {
+        width: 50px;
+    }
+
+    .sign-in-button {
+        width: 50px;
+    }
+
+    .sign-up-button {
+        width: 50px;
+    }
+}
+
 @media (max-width: 480px) {
     .utf_tabs_nav.blog li,
     .utf_tabs_nav.blog li a,
@@ -20012,14 +20102,9 @@ h4 span.headline_part-detail {
         top: 0;
         display: block;
     }
-    .header_widget .sign-in {
-        position: relative;
-        display: block;
-        top: 0px;
-        margin-bottom: 10px;
-        margin-right: 25px;
-    }
 }
+
+
 
 .main_popular_categories {
     display: inline-block;
@@ -21105,6 +21190,7 @@ select.selectpicker {
 .form-inline .bootstrap-select.btn-group .form-control {
     width: 100%;
 }
+
 
 .bootstrap-select.btn-group.disabled,
 .bootstrap-select.btn-group>.disabled {
