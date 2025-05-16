@@ -225,7 +225,7 @@ class HotelFAQs(models.Model):
 
 class RoomType(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    type = models.CharField(max_length=10)
+    type = models.CharField(max_length=120)
     price = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     dynamic_pricing = models.JSONField(null=True, blank=True, default=dict)  # Используем default=dict для инициализации пустым словарем
     number_of_beds = models.PositiveIntegerField(default=0)
@@ -235,6 +235,9 @@ class RoomType(models.Model):
     slug = models.SlugField(null=True, blank=True,unique=True)
     date = models.DateTimeField(auto_now_add=True)
     
+    class Meta:
+        verbose_name = 'Тип комнаты'
+        verbose_name_plural = 'Типы комнат'
 
     def __str__(self):
         return f"{self.type} - {self.hotel.name} - {self.price}"
@@ -266,6 +269,8 @@ class RoomType(models.Model):
             return self.dynamic_pricing.get(date_str, self.price)
         return self.price
 
+
+
 class RoomTypeDescription(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_description')
@@ -275,6 +280,9 @@ class RoomTypeDescription(models.Model):
         return str(self.hotel)
     class Meta:
         verbose_name_plural = "Room Type Description"
+        constraints = [
+            models.UniqueConstraint(fields=['room_type'], name='unique_room_type_description')
+        ]
 
 class RoomTypeGallery(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
