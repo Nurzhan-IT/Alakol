@@ -52,7 +52,7 @@ def generate_payment_link(
     is_test = 1 if USE_TEST_MODE else 0
 
     # 10% от total_cost суммы (беру только процент платформы)
-    cost = cost * 0.1
+    cost = decimal.Decimal(str(cost)) * decimal.Decimal('0.1')
 
     signature = calculate_signature(
         MERCHANT_LOGIN,
