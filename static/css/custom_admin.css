@@ -9,3 +9,85 @@
 textarea {
     width: 100% !important;  /* Увеличиваем ширину для текстовых полей */
 }
+
+/* Кастомные стили для админ-панели */
+
+/* Стили для динамических цен */
+.dynamic-pricing-container {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.pricing-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+  align-items: flex-end;
+}
+
+.pricing-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.pricing-field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.pricing-field input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.pricing-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.pricing-actions button {
+  padding: 8px 15px;
+  background-color: #79aec8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pricing-actions button:hover {
+  background-color: #417690;
+}
+
+.pricing-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.pricing-table th,
+.pricing-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.pricing-table th {
+  background-color: #f2f2f2;
+}
+
+.pricing-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.delete-price {
+  color: #ba2121;
+  cursor: pointer;
+}

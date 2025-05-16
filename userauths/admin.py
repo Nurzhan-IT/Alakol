@@ -1,7 +1,7 @@
 from django.contrib import admin
 from userauths.models import User, Profile
 from django.utils.html import mark_safe
-
+from hotel.admin import custom_admin_site
 class UserAdmin(admin.ModelAdmin):
     search_fields  = ['full_name', 'username', 'email',  'phone', 'gender']
     list_display  = ['full_name', 'username', 'email',  'phone', 'gender']
@@ -55,5 +55,5 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 
-admin.site.register(User, UserAdmin)
-admin.site.register(Profile, ProfileAdmin)
+custom_admin_site.register(User, UserAdmin)
+custom_admin_site.register(Profile, ProfileAdmin)

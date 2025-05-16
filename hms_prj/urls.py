@@ -20,9 +20,9 @@ from django.conf.urls.static import static
 
 from django.conf.urls.i18n import i18n_patterns
 from hotel.views import robokassa_result, robokassa_success_direct, robokassa_failed_direct
-
+from hotel.admin import custom_admin_site
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', custom_admin_site.urls),
 
     # Apps Routes
     # path("booking/", include("booking.urls")),
