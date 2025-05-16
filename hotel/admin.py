@@ -21,6 +21,15 @@ from django import forms
 from django.core.exceptions import ValidationError
 import json
 from django.core.serializers.json import DjangoJSONEncoder
+
+from django.utils.translation import gettext_lazy as _
+
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
+
+
 # Проверка принадлежности пользователя к группе Manager
 def is_manager(user):
     return user.groups.filter(name='Manager').exists() and not user.is_superuser
@@ -320,6 +329,14 @@ class HotelAdmin(BaseImportExportAdmin):
     list_per_page = 100
     prepopulated_fields = {"slug": ("name_en", )}
     exclude = ['description']
+    search_fields = ['name_ru', 'user__username', 'status']
+    search_help_text = 'Поиск по Названию [RU], Пользователю, Статусу'
+
+    def get_search_fields(self, request):
+        if is_manager(request.user):
+            self.search_help_text = 'Поиск по Названию [RU]'
+            return ['name_ru']
+        return self.search_fields
 
     def get_list_filter(self, request):
         if is_manager(request.user):
@@ -352,8 +369,40 @@ class HotelAdmin(BaseImportExportAdmin):
         super().save_model(request, obj, form, change)
 
 class RoomAdmin(BaseImportExportAdmin):
-    list_display = ['hotel' ,'room_number',  'room_type', 'price', 'number_of_beds' ,'is_available']
+    list_display = ['hotel', 'room_type', 'room_number', 'get_price', 'number_of_beds', 'is_available']
     list_per_page = 100
+    list_filter = ['is_available']
+    search_fields = ['hotel__name_ru', 'room_type__type', 'room_number', 'room_type__price']
+    search_help_text = 'Поиск по Отелю, Типу номера, Номеру комнаты, Цене'
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        # Если пользователь является менеджером, ограничиваем выбор отелей и типов комнат
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            if db_field.name == "hotel":
+                # Показываем только отели, созданные пользователем
+                kwargs["queryset"] = Hotel.objects.filter(user=request.user)
+            elif db_field.name == "room_type":
+                # Показываем только типы комнат, относящиеся к отелям пользователя
+                kwargs["queryset"] = RoomType.objects.filter(hotel__user=request.user)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def get_price(self, obj):
+        if obj.room_type:
+            return obj.room_type.price
+        return None
+    
+    get_price.short_description = 'Цена'
+    get_price.admin_order_field = 'room_type__price'
+
+    def get_list_filter(self, request):
+        if is_manager(request.user):
+            return []
+        return self.list_filter
+    def get_search_fields(self, request):
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            self.search_help_text = 'Поиск по Типу номера, Номеру комнаты'
+            return ['room_type__type', 'room_number']
+        return self.search_fields
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -396,21 +445,62 @@ class RoomTypeFilter(admin.SimpleListFilter):
             return queryset.filter(room_type_id=self.value())
         return queryset
 
+
+class CheckInDateFilter(admin.SimpleListFilter):
+    title = _('Check-In Date')
+    parameter_name = 'check_in_date'
+    template = 'admin/input_filter.html'
+
+    def lookups(self, request, model_admin):
+        return (),
+
+    def choices(self, changelist):
+        all_choice = next(super().choices(changelist))
+        all_choice['query_parts'] = (
+            (k, v)
+            for k, v in changelist.get_filters_params().items()
+            if k != self.parameter_name
+        )
+        yield all_choice
+
+    def queryset(self, request, queryset):
+        date_value = request.GET.get(self.parameter_name)
+        if date_value:
+            try:
+                filter_date = datetime.strptime(date_value, '%Y-%m-%d').date()
+                return queryset.filter(check_in_date=filter_date).distinct()
+            except ValueError:
+                return queryset
+        return queryset
+
+
+
 class BookingAdmin(BaseImportExportAdmin):
-    #inlines = [ActivityLog_Tab, StaffOnDuty_Tab]
-    list_filter = [HotelFilter, RoomTypeFilter, 'check_in_date', 'check_out_date', 'is_active', 'checked_in', 'checked_out']
-    list_display = ['booking_id', 'user', 'hotel', 'room_type', 'rooms', 'total', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'is_active' , 'checked_in' ,'checked_out']
-    #search_fields = ['booking_id', 'user__username', 'user__email']
+    # inlines = [ActivityLog_Tab, StaffOnDuty_Tab]
+    list_filter = [HotelFilter, RoomTypeFilter, 'is_active', 'checked_in', 'checked_out', CheckInDateFilter]
+    list_display = ['booking_id', 'user', 'hotel', 'room_type', 'rooms', 'total', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'is_active', 'checked_in', 'checked_out']
+    search_fields = ['booking_id', 'robokassa_inv_id']
+    search_help_text = 'Поиск по ID бронирования, ID инвойса Robokassa, Сумме'
     list_per_page = 100
+
+    def get_search_fields(self, request):
+        if is_manager(request.user):
+            self.search_help_text = 'Поиск по ID бронирования, ID инвойса Robokassa'
+            return ['booking_id', 'robokassa_inv_id']
+        return self.search_fields
+
+    def get_list_filter(self, request):
+        if is_manager(request.user):
+            return [HotelFilter, RoomTypeFilter, 'checked_in', 'checked_out']
+        return self.list_filter
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         # Если пользователь принадлежит группе Manager и не является суперпользователем
         if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
-            # Фильтруем только бронирования, относящиеся к отелям, созданным пользователем
+            # Фильтруем только те комнаты, которые связаны с отелями, созданным пользователем
             queryset = queryset.filter(hotel__user=request.user)
         return queryset
-
 
 class RoomServicesAdmin(BaseImportExportAdmin):
     list_display = ['booking', 'room', 'date', 'price', 'service_type']
@@ -466,6 +556,9 @@ class BookmarkAdmin(BaseImportExportAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     list_editable = ['active']
     list_display = ['user', 'hotel', 'review', 'reply', 'rating', 'active']
+    search_fields = ['user__username', 'hotel__name_ru']
+    search_help_text = 'Поиск по Пользователю, Отелю'
+    list_filter = ['rating', 'active']
 
     def has_module_permission(self, request):
         # Разрешаем доступ только суперпользователям
@@ -480,37 +573,65 @@ class ReviewAdmin(admin.ModelAdmin):
 
 class PriceOnDateAdmin(BaseImportExportAdmin):
     form = PriceOnDateForm
-    list_display = ['hotel', 'type']
+    list_display = ['type', 'hotel']
     list_filter = [HotelFilter]
-    exclude = ['dynamic_pricing', 'number_of_beds', 'room_capacity', 'room_size','rtid']
+    search_fields = ['type', 'hotel__name_ru']
+    search_help_text = 'Поиск по Типу номера, Отелю'
+    exclude = ['dynamic_pricing', 'number_of_beds', 'room_capacity', 'room_size', 'rtid']
     prepopulated_fields = {"slug": ("type", )}
     change_form_template = 'admin/hotel/roomtype/change_form.html'  # Кастомный шаблон для PriceOnDate
-    
-    verbose_name = "Цена по датам"
-    verbose_name_plural = "Цены по датам"
+
+    def has_module_permission(self, request):
+        # Разрешаем доступ суперпользователям и менеджерам для модели PriceOnDate
+        if request.user.is_superuser:
+            return True
+        if request.user.groups.filter(name='Manager').exists():
+            return True
+        return False
+ 
+    def has_view_permission(self, request, obj=None):
+        # Разрешаем просмотр суперпользователям и менеджерам
+        if request.user.is_superuser:
+            return True
+        if request.user.groups.filter(name='Manager').exists():
+            if obj is None:
+                return True
+            return obj.hotel.user == request.user
+        return False
+ 
+    def has_change_permission(self, request, obj=None):
+        # Разрешаем изменение суперпользователям и менеджерам только своих записей
+        if request.user.is_superuser:
+            return True
+        if request.user.groups.filter(name='Manager').exists():
+            if obj is None:
+                return True
+            return obj.hotel.user == request.user
+        return False
+
+    def has_add_permission(self, request):
+        # Запрещаем добавление записей для пользователей группы Manager
+        return False
+
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
             queryset = queryset.filter(hotel__user=request.user)
         return queryset
-    
+ 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         if is_manager(request.user):
             # Hide fields for Managers
-            for field in ['slug', 'rtid','hotel','type', 'price']:
+            for field in ['slug', 'rtid', 'hotel', 'type', 'price']:
                 if field in form.base_fields:
                     form.base_fields[field].widget = forms.HiddenInput()
         return form
-    
+ 
     def save_model(self, request, obj, form, change):
-        # Проверим наличие данных в форме и их корректность
         print(f"Save model called. POST data: {request.POST}")
-        
-        # Получаем значение напрямую из POST запроса
         if 'dynamic_pricing_input' in request.POST:
             try:
-                # Так как POST может содержать несколько значений, берем первое, которое обычно содержит актуальные данные
                 dynamic_pricing_input = request.POST.getlist('dynamic_pricing_input')[0]
                 print(f"Raw dynamic_pricing_input from POST: {dynamic_pricing_input}")
                 if dynamic_pricing_input and dynamic_pricing_input.strip() != '{}':
@@ -521,39 +642,56 @@ class PriceOnDateAdmin(BaseImportExportAdmin):
                     print("Empty or blank dynamic_pricing_input, not updating.")
             except (json.JSONDecodeError, IndexError) as e:
                 print(f"Error processing dynamic pricing: {e}")
-                
-        # Также берем из cleaned_data если оно там есть
+             
         if hasattr(form, 'cleaned_data') and 'dynamic_pricing_input' in form.cleaned_data:
             pricing_data = form.cleaned_data['dynamic_pricing_input']
             print(f"Setting dynamic_pricing from cleaned_data: {pricing_data}")
             obj.dynamic_pricing = pricing_data
-            
+         
         super().save_model(request, obj, form, change)
-        
-        # Дополнительная проверка после сохранения
         print(f"After save: obj.dynamic_pricing = {obj.dynamic_pricing}")
-        
+     
     def response_change(self, request, obj):
-        # После сохранения проверим, что данные сохранились
         if obj.dynamic_pricing:
             pricing_count = len(obj.dynamic_pricing) if isinstance(obj.dynamic_pricing, dict) else 0
             self.message_user(request, f"Динамические цены успешно сохранены. {pricing_count} дней с ценами.")
         return super().response_change(request, obj)
+    
+@receiver(post_migrate)
+def add_permissions_to_manager_group(sender, **kwargs):
+    if sender.name == 'hotel':  # Только для приложения hotel
+        # Получаем или создаем группу Manager
+        manager_group, created = Group.objects.get_or_create(name='Manager')
+        
+        # Добавляем разрешения для PriceOnDate
+        content_type = ContentType.objects.get_for_model(RoomType)
+        permissions = Permission.objects.filter(content_type=content_type)
+        
+        for permission in permissions:
+            manager_group.permissions.add(permission)
+        
+        print(f"Разрешения для PriceOnDate добавлены группе Manager: {[p.codename for p in permissions]}")
 
-admin.site.register(Hotel, HotelAdmin)
-admin.site.register(Room, RoomAdmin)
-admin.site.register(RoomType, PriceOnDateAdmin)  # Регистрируем RoomType с нашим новым админ-классом
-admin.site.register(Booking, BookingAdmin)
-admin.site.register(RoomServices, RoomServicesAdmin)
-admin.site.register(Coupon, CouponAdmin)
+class CustomAdminSite(admin.AdminSite):
+    def get_app_list(self, request):
+        app_list = super().get_app_list(request)
+        for app in app_list:
+            if app['app_label'] == 'hotel':
+                for model in app['models']:
+                    if model['object_name'] == 'RoomType' and model['admin_url'] == '/admin/hotel/roomtype/':
+                        model['name'] = 'Цены по датам'
+        return app_list
 
-# Регистрируем Notification только для суперпользователей
-if not admin.site.is_registered(Notification):
-    admin.site.register(Notification, NotificationAdmin)
+# Instantiate the custom admin site
+custom_admin_site = CustomAdminSite(name='custom_admin')
 
-admin.site.register(Bookmark, BookmarkAdmin)
-
-# Регистрируем Review только для суперпользователей
-if not admin.site.is_registered(Review):
-    admin.site.register(Review, ReviewAdmin)
-
+# Register models with the custom admin site
+custom_admin_site.register(Hotel, HotelAdmin)
+custom_admin_site.register(Room, RoomAdmin)
+custom_admin_site.register(RoomType, PriceOnDateAdmin)
+custom_admin_site.register(Booking, BookingAdmin)
+custom_admin_site.register(RoomServices, RoomServicesAdmin)
+custom_admin_site.register(Coupon, CouponAdmin)
+custom_admin_site.register(Notification, NotificationAdmin)
+custom_admin_site.register(Bookmark, BookmarkAdmin)
+custom_admin_site.register(Review, ReviewAdmin)
