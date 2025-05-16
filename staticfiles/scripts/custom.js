@@ -57,7 +57,71 @@ $(document).ready(function(){
                 button.html("<i class='fas fa-clock-rotate-left'></i> Adding room... ")
             },
             success: function(response){
-                button.html("<i class='fas fa-check-circle'></i> Added to selection ")
+                // Проверяем, есть ли ошибка с отелем
+                if (response.error) {
+                    // Показываем уведомление с возможностью очистить корзину
+                    Swal.fire({
+                        title: 'Внимание!',
+                        text: response.message,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Да, очистить',
+                        cancelButtonText: 'Нет, отмена'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Если пользователь согласился очистить корзину
+                            $.ajax({
+                                url: '/booking/clear_session_and_add_new/',
+                                data: {
+                                    'id': id,
+                                    'hotel_id': hotel_id,
+                                    'hotel_name': hotel_name,
+                                    'room_number': room_number,
+                                    'room_name': room_name,
+                                    'room_price': room_price,
+                                    'number_of_beds': number_of_beds,
+                                    'room_type': room_type,
+                                    'room_id': room_id,
+                                    'checkin': checkin,
+                                    'checkout': checkout,
+                                    'adult': adult,
+                                    'children': children,
+                                },
+                                dataType: 'json',
+                                success: function(res) {
+                                    button.html("<i class='fas fa-check-circle'></i> Added to selection ");
+                                    $(".room-count").text(res.total_selected_items);
+                                    
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        timer: 1500,
+                                        timerProgressBar: true,
+                                    });
+                                    
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Корзина очищена и добавлен новый номер'
+                                    });
+                                }
+                            });
+                        } else {
+                            // Если пользователь отменил
+                            button.html("<i class='fas fa-plus'></i> Add To Selection");
+                        }
+                    });
+                    return;
+                }
+                
+                let buttonText = button.text().trim();
+                
+                // Определяем новый текст кнопки
+                if (buttonText === "Update" || buttonText === "Обновить") {
+                    button.html("<i class='fas fa-check-circle'></i> Updated ")
+                } else {
+                    button.html("<i class='fas fa-check-circle'></i> Added to selection ")
+                }
 
                 console.log("Added Room To Selection!");
                 $(".room-count").text(response.total_selected_items)
@@ -72,7 +136,8 @@ $(document).ready(function(){
                     
                 Toast.fire({
                     icon: 'success',
-                    title: 'Added Room To Selection!'
+                    title: buttonText === "Update" || buttonText === "Обновить" ? 
+                        'Room Updated Successfully!' : 'Added Room To Selection!'
                 })
             }
         })
