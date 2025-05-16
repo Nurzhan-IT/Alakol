@@ -169,7 +169,9 @@ def selected_rooms(request):
     checkin = "0" 
     checkout = "" 
     children = 0 
-    
+    if request.session['selection_data_obj'] == {}:
+        messages.warning(request, "You don't have any room selections yet!")
+        return redirect("/")
     # Если пришли данные POST с датами, обновим booking_common_data
     if request.method == "POST" and 'selection_data_obj' in request.session:
         update_booking_dates = False
@@ -426,6 +428,7 @@ def process_booking(request):
         messages.warning(request, "Missing booking information!")
         return None
     
+    booking = None
     try:
         total = 0
         room_count = 0
@@ -493,15 +496,25 @@ def process_booking(request):
             total += room_total
         
         # Обновляем сумму бронирования
-        booking.total = float(total)
-        booking.before_discount = float(total)
+        from decimal import Decimal
+        booking.total = Decimal(str(total))
+        booking.before_discount = Decimal(str(total))
         booking.save()
         
         logger.info(f"Создано бронирование {booking.booking_id} на сумму {booking.total}")
+        logger.info (f"{booking.booking_id}: selection_data_obj ===", request.session['selection_data_obj'])
+        logger.info (f"{booking.booking_id}: booking_common_data ===", request.session['booking_common_data'])
         return booking
         
     except Exception as e:
         logger.error(f"Ошибка при создании бронирования: {str(e)}")
+        # Если объект бронирования был создан, но произошла ошибка - удаляем его
+        if booking and booking.id:
+            try:
+                booking.delete()
+                logger.info(f"Удалено неполное бронирование из-за ошибки")
+            except Exception as del_err:
+                logger.error(f"Ошибка при удалении неполного бронирования: {str(del_err)}")
         return None
 
 # Обновляем функцию Робокассы для создания бронирования перед платежом
@@ -596,6 +609,7 @@ def create_robokassa_payment(request, payment_key=None):
                     return redirect("hotel:selected_rooms")
         
         # Если бронирование еще не создано
+        booking = None
         if payment_key is None:
             # Создаем бронирование из данных в сессии
             booking = process_booking(request)
@@ -637,36 +651,55 @@ def create_robokassa_payment(request, payment_key=None):
         logger.info(f"Fail URL: {fail_url}")
         logger.info(f"Result URL: {result_url}")
         
-        # Генерируем ссылку на оплату
-        payment_link = generate_payment_link(
-            cost=booking.total,
-            number=int(booking.id),
-            description=booking.booking_id,
-            culture= culture,
-            email=booking.email
-        )
-        
-        # Сохраняем InvId в booking сразу после генерации ссылки
-        booking.robokassa_inv_id = int(booking.id)
-        
-        # Обновляем статус платежа
-        booking.payment_status = "processing"
-        booking.save()
-        
-        logger.info(f"Сгенерированная ссылка на оплату: {payment_link}")
-        logger.info(f"InvId {booking.robokassa_inv_id} сохранен в бронировании {booking.booking_id}")
-        
-        # Если это AJAX-запрос, возвращаем JSON
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({
-                'payment_url': payment_link,
-                'success_url': success_url,
-                'fail_url': fail_url
-            })
-        
-        # Иначе перенаправляем на страницу оплаты
-        return redirect(payment_link)
-        
+        try:
+            # Конвертируем booking.total в decimal.Decimal перед передачей в generate_payment_link
+            from decimal import Decimal
+            payment_total = Decimal(str(booking.total))
+            
+            # Генерируем ссылку на оплату
+            payment_link = generate_payment_link(
+                cost=payment_total,
+                number=int(booking.id),
+                description=booking.booking_id,
+                culture=culture,
+                email=booking.email
+            )
+            
+            # Сохраняем InvId в booking сразу после генерации ссылки
+            booking.robokassa_inv_id = int(booking.id)
+            
+            # Обновляем статус платежа
+            booking.payment_status = "processing"
+            booking.save()
+            
+            logger.info(f"Сгенерированная ссылка на оплату: {payment_link}")
+            logger.info(f"InvId {booking.robokassa_inv_id} сохранен в бронировании {booking.booking_id}")
+            
+            # Если это AJAX-запрос, возвращаем JSON
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'payment_url': payment_link,
+                    'success_url': success_url,
+                    'fail_url': fail_url
+                })
+            
+            # Иначе перенаправляем на страницу оплаты
+            return redirect(payment_link)
+            
+        except Exception as e:
+            logger.error(f"Ошибка при создании платежной ссылки: {str(e)}")
+            # Если произошла ошибка и бронирование было создано, удаляем его
+            if booking and booking.id and payment_key is None:
+                try:
+                    booking.delete()
+                    logger.info(f"Удалено бронирование {booking.booking_id} из-за ошибки создания платежа")
+                except Exception as del_err:
+                    logger.error(f"Ошибка при удалении бронирования: {str(del_err)}")
+            
+            # Сообщаем об ошибке пользователю
+            messages.error(request, f"Ошибка при создании платежа: {str(e)}")
+            return redirect("/")
+            
     except Exception as e:
         logger.error(f"Ошибка при создании платежа: {str(e)}")
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -1016,6 +1049,7 @@ def calculate_total_price(room_type, checkin_date, checkout_date):
     while current_date < checkout_date:
         # Получаем цену для текущего дня
         price_for_day = room_type.get_price_for_date(current_date)
+        # Убедимся, что price_for_day - это Decimal, преобразуем явно во избежание ошибок
         total += Decimal(str(price_for_day))
         
         # Переходим к следующему дню
