@@ -44,6 +44,11 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+    def save(self, *args, **kwargs):
+        if self.email:
+            self.email = self.email.lower()
+        super(User, self).save(*args, **kwargs)
 
 
 

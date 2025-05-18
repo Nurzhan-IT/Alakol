@@ -45,12 +45,101 @@ def hotel_detail(request, slug):
         bookmark = Bookmark.objects.filter(user=request.user, hotel=hotel)
     else:
         bookmark = None
+        
+    # Подготовка данных для таблицы динамических цен
+    room_types = RoomType.objects.filter(hotel=hotel)
+    
+    # Собираем все даты из dynamic_pricing всех типов номеров
+    all_dates = []
+    for room_type in room_types:
+        if room_type.dynamic_pricing and isinstance(room_type.dynamic_pricing, dict):
+            all_dates.extend([date for date in room_type.dynamic_pricing.keys()])
+    
+    # Сортируем и удаляем дубликаты
+    unique_dates = sorted(set(all_dates))
+    
+    # Группируем даты по неделям или другим интервалам
+    date_ranges = []
+    range_prices = {}
+    
+    if unique_dates:
+        from datetime import datetime
+        
+        # Преобразуем строки в даты для сортировки
+        date_objects = []
+        for date_str in unique_dates:
+            try:
+                date_obj = datetime.strptime(date_str, "%Y-%m-%d").date()
+                date_objects.append((date_str, date_obj))
+            except ValueError:
+                continue
+        
+        # Сортируем даты
+        date_objects.sort(key=lambda x: x[1])
+        
+        # Получаем первую и последнюю даты в отсортированном списке
+        if date_objects:
+            # Группируем даты по интервалам (например, неделям)
+            from datetime import timedelta
+            
+            step = 7  # Количество дней в одном интервале
+            current_date_index = 0
+            
+            while current_date_index < len(date_objects):
+                start_date = date_objects[current_date_index][1]
+                end_date = start_date + timedelta(days=step-1)
+                
+                # Находим конечную дату в интервале
+                end_index = current_date_index
+                while end_index < len(date_objects) and date_objects[end_index][1] <= end_date:
+                    end_index += 1
+                
+                # Если достигли конца списка, используем последнюю доступную дату
+                if end_index > len(date_objects) - 1:
+                    end_index = len(date_objects) - 1
+                
+                actual_end_date = date_objects[end_index][1]
+                
+                # Форматируем интервал для отображения
+                date_range = f"{start_date.strftime('%d.%m.%Y')} - {actual_end_date.strftime('%d.%m.%Y')}"
+                date_ranges.append(date_range)
+                
+                # Сохраняем цены для каждого типа номера в этом интервале дат
+                range_prices[date_range] = {}
+                
+                # Для каждого типа номера вычисляем среднюю цену в этом интервале
+                for room_type in room_types:
+                    if room_type.dynamic_pricing and isinstance(room_type.dynamic_pricing, dict):
+                        # Собираем цены для дат в интервале
+                        prices_in_range = []
+                        current_index = current_date_index
+                        
+                        while current_index <= end_index:
+                            date_str = date_objects[current_index][0]
+                            if date_str in room_type.dynamic_pricing:
+                                try:
+                                    price = float(room_type.dynamic_pricing[date_str])
+                                    prices_in_range.append(price)
+                                except (ValueError, TypeError):
+                                    pass
+                            current_index += 1
+                        
+                        # Если есть цены в интервале, вычисляем среднюю
+                        if prices_in_range:
+                            avg_price = sum(prices_in_range) / len(prices_in_range)
+                            range_prices[date_range][room_type.id] = int(avg_price)
+                
+                # Переходим к следующему интервалу
+                current_date_index = end_index + 1
+    
     context = {
-        "hotel":hotel,
-        "bookmark":bookmark,
-        "reviews":reviews,
-        "all_reviews":all_reviews,
-        "room_type_images":room_type_images,
+        "hotel": hotel,
+        "bookmark": bookmark,
+        "reviews": reviews,
+        "all_reviews": all_reviews,
+        "room_type_images": room_type_images,
+        "date_ranges": date_ranges,
+        "range_prices": range_prices,
     }
     return render(request, "hotel/hotel_detail.html", context)
 
