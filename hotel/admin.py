@@ -673,8 +673,12 @@ def add_permissions_to_manager_group(sender, **kwargs):
         print(f"Разрешения для PriceOnDate добавлены группе Manager: {[p.codename for p in permissions]}")
 
 class CustomAdminSite(admin.AdminSite):
-    def get_app_list(self, request):
-        app_list = super().get_app_list(request)
+    def get_app_list(self, request, app_label=None):
+        if app_label:
+            app_list = super().get_app_list(request, app_label)
+        else:
+            app_list = super().get_app_list(request)
+        
         for app in app_list:
             if app['app_label'] == 'hotel':
                 for model in app['models']:
@@ -695,3 +699,9 @@ custom_admin_site.register(Coupon, CouponAdmin)
 custom_admin_site.register(Notification, NotificationAdmin)
 custom_admin_site.register(Bookmark, BookmarkAdmin)
 custom_admin_site.register(Review, ReviewAdmin)
+
+# Register Django auth models
+from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.admin import GroupAdmin, UserAdmin
+custom_admin_site.register(Group, GroupAdmin)
+custom_admin_site.register(Permission)
