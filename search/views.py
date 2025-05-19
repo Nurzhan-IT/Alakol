@@ -35,6 +35,15 @@ class SearchListView(ListView):
             try:
                 check_in_date_obj = datetime.datetime.strptime(check_in_date, '%Y-%m-%d').date()
                 check_out_date_obj = datetime.datetime.strptime(check_out_date, '%Y-%m-%d').date()
+                
+                # Фильтрация отелей по датам активности
+                # Если start_date указана, то check_in_date_obj должна быть >= start_date
+                # Если end_date указана, то check_out_date_obj должна быть <= end_date
+                queryset = queryset.filter(
+                    Q(start_date__isnull=True) | Q(start_date__lte=check_in_date_obj)
+                ).filter(
+                    Q(end_date__isnull=True) | Q(end_date__gte=check_out_date_obj)
+                )
             except ValueError:
                 # В случае ошибки формата используем None
                 pass

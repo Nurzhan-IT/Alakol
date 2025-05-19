@@ -173,6 +173,12 @@ def room_type_detail(request, slug, rt_slug):
     user_checkin_date = datetime.strptime(checkin, date_format).date()
     user_checkout_date = datetime.strptime(checkout, date_format).date()
     
+    # Проверяем, активен ли отель на выбранные даты
+    hotel_available = hotel.is_active_for_dates(user_checkin_date, user_checkout_date)
+    if not hotel_available:
+        messages.warning(request, "Отель не доступен для бронирования на выбранные даты.")
+        return redirect("booking:booking_data", hotel.slug)
+    
     # Получаем все доступные номера данного типа
     rooms = Room.objects.filter(room_type=room_type, is_available=True)
     
@@ -548,6 +554,12 @@ def process_booking(request):
         time_difference = checkout_date - checkin_date
         total_days = time_difference.days
         
+        # Проверяем, активен ли отель на выбранные даты
+        hotel_available = hotel.is_active_for_dates(checkin_date, checkout_date)
+        if not hotel_available:
+            messages.warning(request, "Отель не доступен для бронирования на выбранные даты.")
+            return None
+        
         # Получаем данные пользователя из сессии
         user_data = request.session['user_data']
         full_name = user_data['full_name']
@@ -628,6 +640,18 @@ def create_robokassa_payment(request, payment_key=None):
             date_format = "%Y-%m-%d"
             checkin_date = datetime.strptime(booking_data['checkin'], date_format).date()
             checkout_date = datetime.strptime(booking_data['checkout'], date_format).date()
+            
+            # Получаем информацию об отеле
+            first_item_id = next(iter(request.session['selection_data_obj']))
+            first_item = request.session['selection_data_obj'][first_item_id]
+            hotel_id = int(first_item['hotel_id'])
+            hotel = Hotel.objects.get(id=hotel_id)
+            
+            # Проверяем, активен ли отель на выбранные даты
+            hotel_available = hotel.is_active_for_dates(checkin_date, checkout_date)
+            if not hotel_available:
+                messages.warning(request, "Отель не доступен для бронирования на выбранные даты.")
+                return redirect("/")
             
             for h_id, item in request.session['selection_data_obj'].items():
                 room_id = int(item["room_id"])
