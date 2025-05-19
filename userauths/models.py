@@ -32,7 +32,7 @@ def user_directory_path(instance, filename):
 
 class User(AbstractUser):
     full_name = models.CharField(max_length=1000, null=True, blank=True)
-    username = models.CharField(max_length=100, null=True, blank=True)
+    username = models.CharField(max_length=100, null=True)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=100, null=True, blank=True)
     gender = models.CharField(max_length=100, choices=GENDER, null=True, blank=True)
@@ -43,7 +43,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['username']
 
     def __str__(self):
-        return self.username
+        return self.username if self.username else str(self.email)
     
     def save(self, *args, **kwargs):
         if self.email:

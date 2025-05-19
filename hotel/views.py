@@ -23,6 +23,7 @@ import string
 # Импорт модуля Робокассы
 from robokassa.robokassa import generate_payment_link, result_payment, check_success_payment
 
+from hotel.decorators import require_selection_data
 
 def index(request):
     hotel = Hotel.objects.filter(status="Live")
@@ -194,6 +195,8 @@ def room_type_detail(request, slug, rt_slug):
     # Рассчитываем стоимость с учетом динамических цен
     total_days = (user_checkout_date - user_checkin_date).days
     dynamic_price = calculate_total_price(room_type, user_checkin_date, user_checkout_date)
+
+    dynamic_price_json_data = room_type.dynamic_pricing
     
     # Проверяем статусы комнат в selection_data_obj
     room_statuses = {}
@@ -234,6 +237,7 @@ def room_type_detail(request, slug, rt_slug):
         "children": children,
         "room_type_": room_type_,
         "dynamic_price": dynamic_price,  # Добавляем динамическую цену в контекст
+        "dynamic_price_json_data": dynamic_price_json_data,
         "total_days": total_days,        # Добавляем общее количество дней
         "room_statuses": room_statuses,  # Добавляем статусы кнопок для комнат
     }
@@ -247,6 +251,7 @@ def get_visitor_id(request):
     return request.session['visitor_id']
 
 
+@require_selection_data
 def selected_rooms(request):
     # request.session.pop('selection_data_obj', None)
 
@@ -258,7 +263,7 @@ def selected_rooms(request):
     checkin = "0" 
     checkout = "" 
     children = 0 
-    if request.session['selection_data_obj'] == {}:
+    if request.session['selection_data_obj'] == {} or 'selection_data_obj' not in request.session :
         messages.warning(request, "You don't have any room selections yet!")
         return redirect("/")
     # Если пришли данные POST с датами, обновим booking_common_data

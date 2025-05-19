@@ -202,12 +202,6 @@ LOGOUT_REDIRECT_URL = "userauths:sign-in"
 
 AUTH_USER_MODEL = 'userauths.User'
 
-# Настройки аутентификации
-AUTHENTICATION_BACKENDS = [
-    'userauths.backends.CaseInsensitiveEmailBackend',
-    'django.contrib.auth.backends.ModelBackend',
-]
-
 # Website Address
 WEBSITE_ADDRESS = os.getenv("WEBSITE_ADDRESS")
 
