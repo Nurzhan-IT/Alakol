@@ -111,6 +111,10 @@ class Hotel(models.Model):
 
     check_in_time = models.TimeField(null=True, blank=True)
     check_out_time = models.TimeField(null=True, blank=True)
+    
+    # Даты начала и окончания работы отеля
+    start_date = models.DateField(null=True, blank=True, help_text="Дата начала работы отеля")
+    end_date = models.DateField(null=True, blank=True, help_text="Дата окончания работы отеля")
 
     # tags = TaggableManager(blank=True)
     views = models.PositiveIntegerField(default=0)
@@ -121,6 +125,32 @@ class Hotel(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def is_active_for_dates(self, check_in_date, check_out_date):
+        """
+        Проверяет, доступен ли отель для работы в указанный период дат
+        
+        Args:
+            check_in_date (date): Дата заезда
+            check_out_date (date): Дата выезда
+            
+        Returns:
+            bool: True если отель доступен для указанных дат, иначе False
+        """
+        # Если даты работы отеля не указаны, считаем что отель доступен всегда
+        if not self.start_date and not self.end_date:
+            return True
+            
+        # Если указана только дата начала работы
+        if self.start_date and not self.end_date:
+            return check_in_date >= self.start_date
+            
+        # Если указана только дата окончания работы
+        if not self.start_date and self.end_date:
+            return check_out_date <= self.end_date
+            
+        # Если указаны обе даты
+        return check_in_date >= self.start_date and check_out_date <= self.end_date
     
     def save(self, *args, **kwargs):
         if self.slug == "" or self.slug == None:
