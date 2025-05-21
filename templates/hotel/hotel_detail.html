@@ -1,6 +1,7 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load hotel_extras %}
 
 {% block special_header_links %}
 <link rel="stylesheet" href="{% static 'css/bootstrap_part_for_modal.css' %}"> 
@@ -258,7 +259,7 @@
         font-weight: bold;
         color: #2c3e50;
         margin: 15px 0 10px;
-        {% comment %} font-size: 1.1em; {% endcomment %}
+        font-size: 1.1em;
     }
 
     .room-feature-list {
@@ -423,6 +424,8 @@
             font-size: 0.9rem;
         }
     }
+
+
 </style>
 {% endblock special_header_links %}
 
@@ -528,6 +531,8 @@
                 </div>
                 <a href="#" class="show-more-button" data-more-title="Show More" data-less-title="Show Less"><i class="fas fa-down-arrow"></i></a>
             </div>
+
+
 
             <div id="utf_listing_amenities" class="utf_listing_section">
                 <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">{% trans "Amenities" %}</h3>
