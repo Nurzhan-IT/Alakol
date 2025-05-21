@@ -425,55 +425,6 @@
         }
     }
 
-    /* Стили для таблицы динамических цен */
-    .dynamic-pricing-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    
-    .dynamic-pricing-table th, .dynamic-pricing-table td {
-        padding: 12px 15px;
-        text-align: center;
-        border: 1px solid #e0e0e0;
-    }
-    
-    .dynamic-pricing-table th {
-        background-color: #8400ff;
-        color: white;
-        font-weight: 600;
-        white-space: nowrap;
-    }
-    
-    .dynamic-pricing-table tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    
-    .dynamic-pricing-table tr:hover {
-        background-color: #f1f1f1;
-    }
-    
-    .dynamic-pricing-table td:first-child {
-        text-align: left;
-        font-weight: 600;
-        background-color: #f0f0f0;
-    }
-    
-    .dynamic-pricing-table .price-value {
-        font-weight: 600;
-        color: #333;
-    }
-    
-    @media (max-width: 767px) {
-        .dynamic-pricing-table {
-            display: block;
-            overflow-x: auto;
-        }
-    }
 
 </style>
 {% endblock special_header_links %}
@@ -581,40 +532,7 @@
                 <a href="#" class="show-more-button" data-more-title="Show More" data-less-title="Show Less"><i class="fas fa-down-arrow"></i></a>
             </div>
 
-            <!-- Таблица динамических цен -->
-            <div class="utf_listing_section">
-                
-                <div class="table-responsive">
-                    <table class="dynamic-pricing-table">
-                        <thead>
-                            <tr>
-                                <th>{% trans "Тип номера" %}</th>
-                                {% for date_range in date_ranges %}
-                                <th>{{ date_range }}</th>
-                                {% endfor %}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for room_type in hotel.hotel_room_types %}
-                            <tr>
-                                <td>{{ room_type.type }}</td>
-                                {% for date_range in date_ranges %}
-                                <td class="price-value">
-                                    {% with range_prices|get_item:date_range|get_item:room_type.id as price %}
-                                        {% if price %}
-                                            {{ price }} {% trans "тенге" %}
-                                        {% else %}
-                                            {{ room_type.price }} {% trans "тенге" %}
-                                        {% endif %}
-                                    {% endwith %}
-                                </td>
-                                {% endfor %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+
 
             <div id="utf_listing_amenities" class="utf_listing_section">
                 <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">{% trans "Amenities" %}</h3>
