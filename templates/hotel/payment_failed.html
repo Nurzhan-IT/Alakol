@@ -1,6 +1,7 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load price_format %}
 
 {% block content %}
 <div id="main_wrapper">
@@ -34,7 +35,7 @@
           <div class="utf_listing_section">
             <p>{% trans "Your booking has not been confirmed because the payment could not be processed." %}</p>
             <p>{% trans "Booking ID" %}: <strong>{{ booking.booking_id }}</strong></p>
-            <p>{% trans "Total Amount" %}: <strong>{{ booking.total }} {% trans "Tenge" %}</strong></p>
+            <p>{% trans "Total Amount" %}: <strong>{{ booking.total | price_format }} {% trans "Tenge" %}</strong></p>
             
             <div class="margin-top-30">
               <a href="{% url 'hotel:payment_method_selection' %}" class="button">{% trans "Try Again" %}</a>

@@ -1,0 +1,4 @@
+# locale/kk/formats.py
+THOUSAND_SEPARATOR = ' '
+DECIMAL_SEPARATOR = ','
+NUMBER_GROUPING = 3

@@ -490,7 +490,7 @@ msgstr "Качество"
 
 #: .\templates\hotel\hotel_detail.html:582
 msgid "Location"
-msgstr "Местоположение"
+msgstr "Место"
 
 #: .\templates\hotel\hotel_detail.html:586
 msgid "Space"

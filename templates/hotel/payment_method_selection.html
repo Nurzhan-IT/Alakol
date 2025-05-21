@@ -3,6 +3,7 @@
 {% load i18n %}
 {% load mathfilters %}
 {% load humanize %}
+{% load price_format %}
 {% block content %}
   
 <div id="main_wrapper" class="selection-list">
@@ -49,11 +50,11 @@
                   <div class="payment-summary" style="background-color: #e8f4fd; padding: 15px; border-radius: 8px; margin: 15px 0;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
                       <span style="font-weight: 500;">{% trans "Total Cost" %}:</span>
-                      <span style="font-weight: 600;">{{total|floatformat:0}} {% trans "Tenge" %}</span>
+                      <span style="font-weight: 600;">{{total|price_format}} {% trans "Tenge" %}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; color: #007bff; font-weight: 500;">
                       <span>{% trans "Prepayment (10%)" %}:</span>
-                      <span>{{total|div:10|floatformat:0}} {% trans "Tenge" %}</span>
+                      <span>{{total|div:10|price_format}} {% trans "Tenge" %}</span>
                     </div>
                   </div>
                 </div>
@@ -103,14 +104,14 @@
             <li>Children <span>{{ children }} Children</span></li>
 			      {% comment %} <li>V.A.T <span>0 {% trans "Tenge" %}</span></li> {% endcomment %}
             <li class="total-costs" style="border-top: 1px dashed #ddd; padding-top: 10px;">
-              <strong>{% trans "Total Cost" %}</strong> <span>{{total|floatformat:0}} {% trans "Tenge" %}</span>
+              <strong>{% trans "Total Cost" %}</strong> <span>{{total|price_format}} {% trans "Tenge" %}</span>
             </li>
             <li class="prepayment" style="background-color: #f0f9ff; padding: 12px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                 <span style="display: flex; align-items: center; gap: 8px;">
                   <i class="fas fa-credit-card" style="color: #007bff; font-size: 16px;"></i>
                   <strong style="font-weight: bold;">{% trans "Prepayment (10%)" %}</strong>
                 </span>
-                <span style="color: #007bff; font-weight: bold; font-size: 1.1em; white-space: nowrap;">{{total|div:10|floatformat:0}} {% trans "Tenge" %}</span>
+                <span style="color: #007bff; font-weight: bold; font-size: 1.1em; white-space: nowrap;">{{total|div:10|price_format}} {% trans "Tenge" %}</span>
             </li>
             <li class="payment-info" style="background-color: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #6c757d; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
                 <i class="fas fa-info-circle" style="color: #6c757d; margin-right: 8px; font-size: 16px;"></i>

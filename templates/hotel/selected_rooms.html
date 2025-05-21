@@ -3,6 +3,7 @@
 {% load i18n %}
 {% load humanize %}
 {% load mathfilters %}
+{% load price_format %}
 {% block content %}
   
 <div id="main_wrapper" class="selection-list">
@@ -43,7 +44,7 @@
                                       <span class="check-in-date">{{checkin}}</span> - 
                                       <span class="check-out-date">{{checkout}}</span>
                                     </p> {% endcomment %}
-                                  <span> {{item.room_price}} {% trans "Tenge" %} </span>
+                                  <span> {{item.room_price | price_format}} {% trans "Tenge" %} </span>
                                     
                                 </li>
                             {% endfor %}
@@ -171,14 +172,14 @@
             <li>Children <span>{{ children }} Children</span></li>
 			      {% comment %} <li>V.A.T <span>0 {% trans "Tenge" %}</span></li> {% endcomment %}
             <li class="total-costs" style="border-top: 1px dashed #ddd; padding-top: 10px;">
-              <strong>{% trans "Total Cost" %}</strong> <span>{{total|floatformat:0}} {% trans "Tenge" %}</span>
+              <strong>{% trans "Total Cost" %}</strong> <span>{{total|price_format}} {% trans "Tenge" %}</span>
             </li>
             <li class="prepayment" style="background-color: #f0f9ff; padding: 12px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                 <span style="display: flex; align-items: center; gap: 8px;">
                   <i class="fas fa-credit-card" style="color: #007bff; font-size: 16px;"></i>
                   <strong style="font-weight: bold;">{% trans "Prepayment (10%)" %}</strong>
                 </span>
-                <span style="color: #007bff; font-weight: bold; font-size: 1.1em; white-space: nowrap;">{{total|div:10|floatformat:0}} {% trans "Tenge" %}</span>
+                <span style="color: #007bff; font-weight: bold; font-size: 1.1em; white-space: nowrap;">{{total|div:10|price_format}} {% trans "Tenge" %}</span>
             </li>
             <li class="payment-info" style="background-color: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #6c757d; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
                 <i class="fas fa-info-circle" style="color: #6c757d; margin-right: 8px; font-size: 16px;"></i>
