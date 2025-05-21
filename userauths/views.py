@@ -23,6 +23,10 @@ def RegisterView(request, *args, **kwargs):
         email = form.cleaned_data.get('email')
         password = form.cleaned_data.get('password1')
 
+        # Email уже должен быть в нижнем регистре благодаря clean_email в форме,
+        # но лучше перестраховаться
+        email = email.lower()
+
         user = authenticate(email=email, password=password)
         login(request, user)
 
@@ -45,6 +49,9 @@ def LoginView(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
+
+        if email:
+            email = email.lower()
 
         try:
             user = User.objects.get(email=email)
@@ -71,6 +78,9 @@ def loginViewTemp(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
+
+        if email:
+            email = email.lower()
 
         try:
             user = User.objects.get(email=email)

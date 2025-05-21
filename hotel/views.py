@@ -23,6 +23,7 @@ import string
 # Импорт модуля Робокассы
 from robokassa.robokassa import generate_payment_link, result_payment, check_success_payment
 
+from hotel.decorators import require_selection_data
 
 def index(request):
     hotel = Hotel.objects.filter(status="Live")
@@ -45,12 +46,101 @@ def hotel_detail(request, slug):
         bookmark = Bookmark.objects.filter(user=request.user, hotel=hotel)
     else:
         bookmark = None
+        
+    # Подготовка данных для таблицы динамических цен
+    room_types = RoomType.objects.filter(hotel=hotel)
+    
+    # Собираем все даты из dynamic_pricing всех типов номеров
+    all_dates = []
+    for room_type in room_types:
+        if room_type.dynamic_pricing and isinstance(room_type.dynamic_pricing, dict):
+            all_dates.extend([date for date in room_type.dynamic_pricing.keys()])
+    
+    # Сортируем и удаляем дубликаты
+    unique_dates = sorted(set(all_dates))
+    
+    # Группируем даты по неделям или другим интервалам
+    date_ranges = []
+    range_prices = {}
+    
+    if unique_dates:
+        from datetime import datetime
+        
+        # Преобразуем строки в даты для сортировки
+        date_objects = []
+        for date_str in unique_dates:
+            try:
+                date_obj = datetime.strptime(date_str, "%Y-%m-%d").date()
+                date_objects.append((date_str, date_obj))
+            except ValueError:
+                continue
+        
+        # Сортируем даты
+        date_objects.sort(key=lambda x: x[1])
+        
+        # Получаем первую и последнюю даты в отсортированном списке
+        if date_objects:
+            # Группируем даты по интервалам (например, неделям)
+            from datetime import timedelta
+            
+            step = 7  # Количество дней в одном интервале
+            current_date_index = 0
+            
+            while current_date_index < len(date_objects):
+                start_date = date_objects[current_date_index][1]
+                end_date = start_date + timedelta(days=step-1)
+                
+                # Находим конечную дату в интервале
+                end_index = current_date_index
+                while end_index < len(date_objects) and date_objects[end_index][1] <= end_date:
+                    end_index += 1
+                
+                # Если достигли конца списка, используем последнюю доступную дату
+                if end_index > len(date_objects) - 1:
+                    end_index = len(date_objects) - 1
+                
+                actual_end_date = date_objects[end_index][1]
+                
+                # Форматируем интервал для отображения
+                date_range = f"{start_date.strftime('%d.%m.%Y')} - {actual_end_date.strftime('%d.%m.%Y')}"
+                date_ranges.append(date_range)
+                
+                # Сохраняем цены для каждого типа номера в этом интервале дат
+                range_prices[date_range] = {}
+                
+                # Для каждого типа номера вычисляем среднюю цену в этом интервале
+                for room_type in room_types:
+                    if room_type.dynamic_pricing and isinstance(room_type.dynamic_pricing, dict):
+                        # Собираем цены для дат в интервале
+                        prices_in_range = []
+                        current_index = current_date_index
+                        
+                        while current_index <= end_index:
+                            date_str = date_objects[current_index][0]
+                            if date_str in room_type.dynamic_pricing:
+                                try:
+                                    price = float(room_type.dynamic_pricing[date_str])
+                                    prices_in_range.append(price)
+                                except (ValueError, TypeError):
+                                    pass
+                            current_index += 1
+                        
+                        # Если есть цены в интервале, вычисляем среднюю
+                        if prices_in_range:
+                            avg_price = sum(prices_in_range) / len(prices_in_range)
+                            range_prices[date_range][room_type.id] = int(avg_price)
+                
+                # Переходим к следующему интервалу
+                current_date_index = end_index + 1
+    
     context = {
-        "hotel":hotel,
-        "bookmark":bookmark,
-        "reviews":reviews,
-        "all_reviews":all_reviews,
-        "room_type_images":room_type_images,
+        "hotel": hotel,
+        "bookmark": bookmark,
+        "reviews": reviews,
+        "all_reviews": all_reviews,
+        "room_type_images": room_type_images,
+        "date_ranges": date_ranges,
+        "range_prices": range_prices,
     }
     return render(request, "hotel/hotel_detail.html", context)
 
@@ -83,6 +173,12 @@ def room_type_detail(request, slug, rt_slug):
     user_checkin_date = datetime.strptime(checkin, date_format).date()
     user_checkout_date = datetime.strptime(checkout, date_format).date()
     
+    # Проверяем, активен ли отель на выбранные даты
+    hotel_available = hotel.is_active_for_dates(user_checkin_date, user_checkout_date)
+    if not hotel_available:
+        messages.warning(request, "Отель не доступен для бронирования на выбранные даты.")
+        return redirect("hotel:detail", hotel.slug)
+    
     # Получаем все доступные номера данного типа
     rooms = Room.objects.filter(room_type=room_type, is_available=True)
     
@@ -105,6 +201,8 @@ def room_type_detail(request, slug, rt_slug):
     # Рассчитываем стоимость с учетом динамических цен
     total_days = (user_checkout_date - user_checkin_date).days
     dynamic_price = calculate_total_price(room_type, user_checkin_date, user_checkout_date)
+
+    dynamic_price_json_data = room_type.dynamic_pricing
     
     # Проверяем статусы комнат в selection_data_obj
     room_statuses = {}
@@ -145,6 +243,7 @@ def room_type_detail(request, slug, rt_slug):
         "children": children,
         "room_type_": room_type_,
         "dynamic_price": dynamic_price,  # Добавляем динамическую цену в контекст
+        "dynamic_price_json_data": dynamic_price_json_data,
         "total_days": total_days,        # Добавляем общее количество дней
         "room_statuses": room_statuses,  # Добавляем статусы кнопок для комнат
     }
@@ -158,6 +257,7 @@ def get_visitor_id(request):
     return request.session['visitor_id']
 
 
+@require_selection_data
 def selected_rooms(request):
     # request.session.pop('selection_data_obj', None)
 
@@ -169,7 +269,7 @@ def selected_rooms(request):
     checkin = "0" 
     checkout = "" 
     children = 0 
-    if request.session['selection_data_obj'] == {}:
+    if request.session['selection_data_obj'] == {} or 'selection_data_obj' not in request.session :
         messages.warning(request, "You don't have any room selections yet!")
         return redirect("/")
     # Если пришли данные POST с датами, обновим booking_common_data
@@ -454,6 +554,12 @@ def process_booking(request):
         time_difference = checkout_date - checkin_date
         total_days = time_difference.days
         
+        # Проверяем, активен ли отель на выбранные даты
+        hotel_available = hotel.is_active_for_dates(checkin_date, checkout_date)
+        if not hotel_available:
+            messages.warning(request, "Отель не доступен для бронирования на выбранные даты.")
+            return None
+        
         # Получаем данные пользователя из сессии
         user_data = request.session['user_data']
         full_name = user_data['full_name']
@@ -534,6 +640,18 @@ def create_robokassa_payment(request, payment_key=None):
             date_format = "%Y-%m-%d"
             checkin_date = datetime.strptime(booking_data['checkin'], date_format).date()
             checkout_date = datetime.strptime(booking_data['checkout'], date_format).date()
+            
+            # Получаем информацию об отеле
+            first_item_id = next(iter(request.session['selection_data_obj']))
+            first_item = request.session['selection_data_obj'][first_item_id]
+            hotel_id = int(first_item['hotel_id'])
+            hotel = Hotel.objects.get(id=hotel_id)
+            
+            # Проверяем, активен ли отель на выбранные даты
+            hotel_available = hotel.is_active_for_dates(checkin_date, checkout_date)
+            if not hotel_available:
+                messages.warning(request, "Отель не доступен для бронирования на выбранные даты.")
+                return redirect("/")
             
             for h_id, item in request.session['selection_data_obj'].items():
                 room_id = int(item["room_id"])
