@@ -1,7 +1,5 @@
 {% extends 'partials/base.html' %}
-{% load static %}
-{% load i18n %}
-{% load hotel_extras %}
+{% load static %}{% load i18n %}{% load hotel_extras %}{% load price_format %}
 
 {% block special_header_links %}
 <link rel="stylesheet" href="{% static 'css/bootstrap_part_for_modal.css' %}"> 
@@ -522,7 +520,7 @@
                                 </div>
                                 <button type="button" class="hrm-photo-btn" data-room-id="{{ r.id }}">{% trans "Photos" %}</button>
                                 <div class="hrm-room-actions">
-                                    <span>{{ r.price }} {% trans "Tenge" %}</span>
+                                    <span>{{ r.price|price_format }} {% trans "Tenge" %}</span>
                                 </div>
                             </li>
                             {% endfor %}
@@ -663,7 +661,7 @@
                     <li><a class="twitter" href="{{hotel.user.profile.twitter}}"><i class="fab fa-twitter"></i></a></li>
                 </ul>
                 <ul class="utf_listing_detail_sidebar">
-                    <li><i class="fas fa-location-arrow"></i> {{hotel.user.profile.address}} {{hotel.user.profile.state}} {{hotel.user.profile.city}} {{hotel.user.profile.country}}</li>
+                    <li><i class="fas fa-location-arrow"></i> {{hotel.user.profile.address}} {{hotel.user.profile.city}} {{hotel.user.profile.country}}</li>
                     <li><i class="fas fa-phone"></i> {{hotel.user.profile.phone}}</li>
                     <li><i class="fas fa-envelope-o"></i> <a href="mailto:{{hotel.user.email}}">{{hotel.user.email}}</a></li>
                 </ul>
