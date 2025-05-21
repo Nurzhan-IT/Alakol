@@ -177,7 +177,7 @@ def room_type_detail(request, slug, rt_slug):
     hotel_available = hotel.is_active_for_dates(user_checkin_date, user_checkout_date)
     if not hotel_available:
         messages.warning(request, "Отель не доступен для бронирования на выбранные даты.")
-        return redirect("booking:booking_data", hotel.slug)
+        return redirect("hotel:detail", hotel.slug)
     
     # Получаем все доступные номера данного типа
     rooms = Room.objects.filter(room_type=room_type, is_available=True)
