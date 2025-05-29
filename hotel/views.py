@@ -34,21 +34,37 @@ def index(request):
 
 
 def hotel_detail(request, slug):
-    hotel = Hotel.objects.get(status="Live", slug=slug)
-    room_type_images = RoomTypeGallery.objects.filter(hotel=hotel)
-    try:
-        reviews = Review.objects.filter(user=request.user, hotel=hotel)
-    except:
+    # Оптимизация: используем select_related и prefetch_related для загрузки связанных данных
+    hotel = get_object_or_404(
+        Hotel.objects.prefetch_related(
+            'roomtype_set',
+            'hotelgallery_set',
+            'hotelfeatures_set'
+        ), 
+        status="Live", 
+        slug=slug
+    )
+    
+    # Оптимизация: загружаем все изображения типов номеров одним запросом
+    room_type_images = RoomTypeGallery.objects.select_related('hotel', 'room_type').filter(hotel=hotel)
+    
+    # Оптимизация: обработка отзывов
+    if request.user.is_authenticated:
+        reviews = Review.objects.select_related('user', 'hotel').filter(user=request.user, hotel=hotel)
+    else:
         reviews = None
-    all_reviews = Review.objects.filter(hotel=hotel, active=True)
+        
+    # Загружаем все отзывы одним запросом с предварительной загрузкой связанных пользователей
+    all_reviews = Review.objects.select_related('user', 'hotel').filter(hotel=hotel, active=True)
     
     if request.user.is_authenticated:
-        bookmark = Bookmark.objects.filter(user=request.user, hotel=hotel)
+        bookmark = Bookmark.objects.select_related('user', 'hotel').filter(user=request.user, hotel=hotel)
     else:
         bookmark = None
         
     # Подготовка данных для таблицы динамических цен
-    room_types = RoomType.objects.filter(hotel=hotel)
+    # Оптимизация: уже получили room_types через prefetch_related для hotel
+    room_types = hotel.roomtype_set.all()
     
     # Собираем все даты из dynamic_pricing всех типов номеров
     all_dates = []
@@ -105,7 +121,7 @@ def hotel_detail(request, slug):
                 date_range = f"{start_date.strftime('%d.%m.%Y')} - {actual_end_date.strftime('%d.%m.%Y')}"
                 date_ranges.append(date_range)
                 
-                # Сохраняем цены для каждого типа номера в этом интервале дат
+                # Сохраняем цены для каждого типа номера в этом интервале
                 range_prices[date_range] = {}
                 
                 # Для каждого типа номера вычисляем среднюю цену в этом интервале
@@ -146,8 +162,19 @@ def hotel_detail(request, slug):
 
 
 def room_type_detail(request, slug, rt_slug):
-    hotel = Hotel.objects.get(status="Live", slug=slug)
-    room_type = RoomType.objects.get(hotel=hotel, slug=rt_slug)
+    # Оптимизация: используем select_related для загрузки связанных данных отеля и типа номера
+    hotel = get_object_or_404(
+        Hotel.objects.prefetch_related('roomtype_set'),
+        status="Live", 
+        slug=slug
+    )
+    
+    # Получаем тип номера с предварительно загруженным отелем
+    room_type = get_object_or_404(
+        RoomType.objects.select_related('hotel'),
+        hotel=hotel, 
+        slug=rt_slug
+    )
     
     id = request.GET.get("hotel-id")
     checkin = request.GET.get("checkin")
@@ -179,24 +206,26 @@ def room_type_detail(request, slug, rt_slug):
         messages.warning(request, "Отель не доступен для бронирования на выбранные даты.")
         return redirect("hotel:detail", hotel.slug)
     
-    # Получаем все доступные номера данного типа
-    rooms = Room.objects.filter(room_type=room_type, is_available=True)
+    # Оптимизация: получаем все номера с предварительно загруженными типами
+    rooms = Room.objects.select_related('room_type').filter(room_type=room_type, is_available=True)
     
-    # Получаем ID номеров, которые уже забронированы на указанные даты
-    # Учитываем, что в день выезда номер уже доступен (за счет -1 день)
+    # Оптимизация: получаем ID забронированных номеров за один запрос
+    # Используем подзапрос для получения только нужных нам данных
     booked_room_ids = Booking.objects.filter(
         Q(check_in_date__lt=user_checkout_date, check_out_date__gt=user_checkin_date),
         is_active=True,
         payment_status__in=["paid", "processing", "pending"]
     ).values_list('room__id', flat=True).distinct()
 
-    # Получаем ID номеров, которые находятся в RoomUnavailability на указанные даты
+    # Оптимизация: получаем ID недоступных номеров за один запрос
     unavailable_room_ids = RoomUnavailability.objects.filter(
         Q(start_date__lt=user_checkout_date, end_date__gt=user_checkin_date)
     ).values_list('room__id', flat=True).distinct()
     
-    # Исключаем забронированные номера из списка доступных
-    available_rooms = rooms.exclude(id__in=booked_room_ids).exclude(id__in=unavailable_room_ids)
+    # Оптимизация: исключаем забронированные и недоступные номера за один запрос
+    available_rooms = rooms.exclude(
+        id__in=list(set(list(booked_room_ids) + list(unavailable_room_ids)))
+    )
     
     # Рассчитываем стоимость с учетом динамических цен
     total_days = (user_checkout_date - user_checkin_date).days
@@ -356,38 +385,61 @@ def selected_rooms(request):
                 first_item = request.session['selection_data_obj'][first_item_id]
                 hotel_id = int(first_item['hotel_id'])
                 try:
-                    hotel = Hotel.objects.get(id=hotel_id)
+                    # Оптимизация: используем select_related для загрузки связанных данных отеля
+                    hotel = Hotel.objects.select_related().get(id=hotel_id)
                 except Hotel.DoesNotExist:
                     print(f"Отель с ID {hotel_id} не найден")
         
+        # Оптимизация N+1: получаем все room_type_ids и room_ids из сессии
+        room_type_ids = []
+        room_ids = []
         for h_id, item in request.session['selection_data_obj'].items():
-                
-            room_type_ = item["room_type"]
+            room_type_ids.append(item["room_type"])
+            room_ids.append(int(item["room_id"]))
+        
+        # Получаем все типы номеров и комнаты за один запрос
+        room_types = {}
+        rooms = {}
+        
+        if room_type_ids:
+            # Оптимизация: загружаем все типы номеров одним запросом
+            room_types_query = RoomType.objects.filter(id__in=room_type_ids)
+            room_types = {str(rt.id): rt for rt in room_types_query}
+            
+            # Оптимизация: загружаем все комнаты одним запросом
+            rooms_query = Room.objects.select_related('room_type').filter(id__in=room_ids)
+            rooms = {str(r.id): r for r in rooms_query}
+        
+        # Теперь обрабатываем данные из сессии, используя предварительно загруженные объекты
+        for h_id, item in request.session['selection_data_obj'].items():
+            room_type_id = item["room_type"]
             room_id = int(item["room_id"])
             
-            room_type = RoomType.objects.get(id=room_type_)
-            room = Room.objects.get(id=room_id)
-
-            # Используем динамические цены вместо фиксированной цены
-            # Рассчитываем стоимость с учетом динамических цен
-            room_total = calculate_total_price(room_type, checkin_date, checkout_date)
-            total += room_total
+            # Используем предварительно загруженные объекты вместо отдельных запросов
+            room_type = room_types.get(room_type_id)
+            room = rooms.get(str(room_id))
             
-            # Сохраняем данные о комнате и добавляем информацию о slug типа комнаты
-            request.session['selection_data_obj'][h_id]['room_number'] = room.room_number
-            request.session['selection_data_obj'][h_id]['room_type_slug'] = room_type.slug
-            request.session['selection_data_obj'][h_id]['room_capacity'] = room_type.room_capacity
-            
-            # Обновляем хранимую цену в сессии с учетом динамического ценообразования
-            request.session['selection_data_obj'][h_id]['room_price'] = str(room_total)
-            request.session.modified = True
-            
-            # Сохраняем данные о типе номера для последующего использования
-            room_types_data[room_type_] = {
-                'id': room_type.id,
-                'slug': room_type.slug,
-                'name': room_type.type if hasattr(room_type, 'type') else str(room_type)
-            }
+            if room_type and room:
+                # Используем динамические цены вместо фиксированной цены
+                # Рассчитываем стоимость с учетом динамических цен
+                room_total = calculate_total_price(room_type, checkin_date, checkout_date)
+                total += room_total
+                
+                # Сохраняем данные о комнате и добавляем информацию о slug типа комнаты
+                request.session['selection_data_obj'][h_id]['room_number'] = room.room_number
+                request.session['selection_data_obj'][h_id]['room_type_slug'] = room_type.slug
+                request.session['selection_data_obj'][h_id]['room_capacity'] = room_type.room_capacity
+                
+                # Обновляем хранимую цену в сессии с учетом динамического ценообразования
+                request.session['selection_data_obj'][h_id]['room_price'] = str(room_total)
+                request.session.modified = True
+                
+                # Сохраняем данные о типе номера для последующего использования
+                room_types_data[room_type_id] = {
+                    'id': room_type.id,
+                    'slug': room_type.slug,
+                    'name': room_type.type if hasattr(room_type, 'type') else str(room_type)
+                }
 
         # Обновляем room_types_data в сессии для использования в JavaScript
         request.session['room_types_data'] = room_types_data
@@ -424,10 +476,11 @@ def selected_rooms(request):
             # Пересчитываем total с новыми значениями дат
             total = 0
             for h_id, item in request.session['selection_data_obj'].items():
-                room_type_ = item["room_type"]
-                room_type = RoomType.objects.get(id=room_type_)
-                price = room_type.price
-                total += price * total_days
+                room_type_id = item["room_type"]
+                room_type = room_types.get(room_type_id)
+                if room_type:
+                    price = room_type.price
+                    total += price * total_days
             print("booking_common_data ===", request.session['booking_common_data'])
         
         
@@ -446,10 +499,7 @@ def selected_rooms(request):
         if len(request.session['selection_data_obj']) > 0:
             first_id = next(iter(request.session['selection_data_obj']))
             first_room_type_id = request.session['selection_data_obj'][first_id]['room_type']
-            try:
-                first_room_type = RoomType.objects.get(id=first_room_type_id)
-            except RoomType.DoesNotExist:
-                pass
+            first_room_type = room_types.get(first_room_type_id)
 
         # Преобразуем room_types_data в формат, подходящий для JSON
         room_types_json = {}
@@ -545,9 +595,33 @@ def process_booking(request):
         first_item_id = next(iter(request.session['selection_data_obj']))
         first_item = request.session['selection_data_obj'][first_item_id]
         hotel_id = int(first_item['hotel_id'])
-        hotel = Hotel.objects.get(id=hotel_id)
+        
+        # Оптимизация: загружаем отель и связанные данные за один запрос
+        hotel = Hotel.objects.select_related().get(id=hotel_id)
+        
         room_type_id = first_item["room_type"]
-        room_type = RoomType.objects.get(id=room_type_id)
+        
+        # Оптимизация: загружаем все типы номеров и комнаты за один запрос
+        room_ids = [int(item["room_id"]) for item_id, item in request.session['selection_data_obj'].items()]
+        room_type_ids = [item["room_type"] for item_id, item in request.session['selection_data_obj'].items()]
+        
+        # Получаем все комнаты одним запросом
+        rooms_dict = {}
+        if room_ids:
+            rooms = Room.objects.select_related('room_type').filter(id__in=room_ids)
+            rooms_dict = {str(room.id): room for room in rooms}
+        
+        # Получаем все типы номеров одним запросом
+        room_types_dict = {}
+        if room_type_ids:
+            room_types = RoomType.objects.filter(id__in=room_type_ids)
+            room_types_dict = {str(rt.id): rt for rt in room_types}
+        
+        # Получаем тип комнаты для основного бронирования
+        room_type = room_types_dict.get(room_type_id)
+        if not room_type:
+            # Если не нашли в кэше, делаем отдельный запрос
+            room_type = RoomType.objects.get(id=room_type_id)
         
         date_format = "%Y-%m-%d"
         checkin_date = datetime.strptime(checkin, date_format).date()
@@ -592,15 +666,24 @@ def process_booking(request):
         # Добавляем комнаты к бронированию и рассчитываем общую стоимость
         for h_id, item in request.session['selection_data_obj'].items():
             room_id = int(item["room_id"])
-            room = Room.objects.get(id=room_id)
+            
+            # Используем кэшированные данные вместо обращения к БД
+            room = rooms_dict.get(str(room_id))
+            if not room:
+                # Если комната не была найдена в кэше, делаем отдельный запрос
+                room = Room.objects.get(id=room_id)
+                
             booking.room.add(room)
             
-            # Получаем тип комнаты для текущей комнаты
-            room_type_id = item["room_type"]
-            room_type = RoomType.objects.get(id=room_type_id)
+            # Получаем тип комнаты из кэша
+            item_room_type_id = item["room_type"]
+            item_room_type = room_types_dict.get(item_room_type_id)
+            if not item_room_type:
+                # Если тип комнаты не был найден в кэше, делаем отдельный запрос
+                item_room_type = RoomType.objects.get(id=item_room_type_id)
             
             # Рассчитываем стоимость с учетом динамических цен
-            room_total = calculate_total_price(room_type, checkin_date, checkout_date)
+            room_total = calculate_total_price(item_room_type, checkin_date, checkout_date)
             total += room_total
         
         # Обновляем сумму бронирования
@@ -610,8 +693,8 @@ def process_booking(request):
         booking.save()
         
         logger.info(f"Создано бронирование {booking.booking_id} на сумму {booking.total}")
-        logger.info (f"{booking.booking_id}: selection_data_obj ===", request.session['selection_data_obj'])
-        logger.info (f"{booking.booking_id}: booking_common_data ===", request.session['booking_common_data'])
+        logger.info(f"{booking.booking_id}: selection_data_obj === {request.session['selection_data_obj']}")
+        logger.info(f"{booking.booking_id}: booking_common_data === {request.session['booking_common_data']}")
         return booking
         
     except Exception as e:
