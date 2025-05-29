@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.template.loader import render_to_string
 from django.template import RequestContext
+from django.db.models import Q, Prefetch, Count
 
 
 from hotel.models import Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType
@@ -10,6 +11,7 @@ from hotel.views import calculate_total_price  # Импортируем функ
 
 from datetime import datetime, timedelta
 from decimal import Decimal
+import json
 
 from django.contrib import messages
 import logging
@@ -60,7 +62,8 @@ def check_room_availability(request):
             return redirect("hotel:index")
 
         try:
-            hotel = Hotel.objects.get(status="Live", id=id)
+            # Оптимизация: используем select_related для получения связанных данных отеля за один запрос
+            hotel = Hotel.objects.select_related().get(status="Live", id=id)
         except Hotel.DoesNotExist:
             logger.error(f"Hotel with id={id} not found")
             messages.error(request, "Отель не найден.")
@@ -71,7 +74,7 @@ def check_room_availability(request):
             if room_type and room_type.isdigit() and room_type_id and room_type == room_type_id:
                 logger.info(f"room-type содержит ID типа номера: {room_type}")
                 try:
-                    room_type_obj = RoomType.objects.get(hotel=hotel, id=room_type)
+                    room_type_obj = RoomType.objects.select_related('hotel').get(hotel=hotel, id=room_type)
                     logger.info(f"Найден тип номера по id (из поля room-type): {room_type}")
                 except RoomType.DoesNotExist:
                     logger.error(f"RoomType с id={room_type} не найден")
@@ -80,12 +83,12 @@ def check_room_availability(request):
             # Иначе приоритет поиска: сначала по ID, затем по slug
             elif room_type_id:
                 try:
-                    room_type_obj = RoomType.objects.get(hotel=hotel, id=room_type_id)
+                    room_type_obj = RoomType.objects.select_related('hotel').get(hotel=hotel, id=room_type_id)
                     logger.info(f"Найден тип номера по id: {room_type_id}")
                 except (RoomType.DoesNotExist, ValueError):
                     # Если не удалось найти по ID, пробуем найти по slug
                     if room_type:
-                        room_type_obj = RoomType.objects.get(hotel=hotel, slug=room_type)
+                        room_type_obj = RoomType.objects.select_related('hotel').get(hotel=hotel, slug=room_type)
                         logger.info(f"Найден тип номера по slug: {room_type}")
                     else:
                         raise RoomType.DoesNotExist("Не найден тип номера ни по id, ни по slug")
@@ -93,10 +96,10 @@ def check_room_availability(request):
                 # Пробуем сначала как ID, потом как slug
                 try:
                     if room_type.isdigit():
-                        room_type_obj = RoomType.objects.get(hotel=hotel, id=room_type)
+                        room_type_obj = RoomType.objects.select_related('hotel').get(hotel=hotel, id=room_type)
                         logger.info(f"Найден тип номера по id (из поля room-type): {room_type}")
                     else:
-                        room_type_obj = RoomType.objects.get(hotel=hotel, slug=room_type)
+                        room_type_obj = RoomType.objects.select_related('hotel').get(hotel=hotel, slug=room_type)
                         logger.info(f"Найден тип номера по slug: {room_type}")
                 except (RoomType.DoesNotExist, ValueError):
                     raise RoomType.DoesNotExist(f"Не найден тип номера: {room_type}")
@@ -131,9 +134,10 @@ def check_room_availability(request):
         return redirect("hotel:index")
     
 def booking_data(request, slug):
-    hotel = Hotel.objects.get(status="Live", slug=slug)
+    # Оптимизация: используем select_related для загрузки связанных объектов отеля
+    hotel = get_object_or_404(Hotel.objects.select_related(), status="Live", slug=slug)
     context = {
-        "hotel":hotel,
+        "hotel": hotel,
     }
     return render(request, "booking/booking_data.html", context)
 
@@ -165,28 +169,39 @@ def add_to_selection(request):
     room_selection = {}
     current_hotel_id = request.GET['hotel_id']
 
-    room_selection[str(request.GET['id'])] = {
+    room_id = str(request.GET['id'])
+    room_type_id = request.GET['room_type']
+    
+    # Оптимизация: если нужно получить room_capacity из базы, делаем это за один запрос
+    need_room_capacity = 'room_capacity' not in request.GET or not request.GET['room_capacity']
+    room_type_obj = None
+    
+    if need_room_capacity:
+        try:
+            room_type_obj = RoomType.objects.get(id=room_type_id)
+        except RoomType.DoesNotExist:
+            pass
+
+    room_selection[room_id] = {
         'hotel_id': current_hotel_id,
         'hotel_name': request.GET['hotel_name'],
         'room_name': request.GET['room_name'],
         'room_price': request.GET['room_price'],
         'number_of_beds': request.GET['number_of_beds'],
         'room_number': request.GET['room_number'],
-        'room_type': request.GET['room_type'],
+        'room_type': room_type_id,
         'room_id': request.GET['room_id'],
     }
 
     # Добавляем room_capacity
     if 'room_capacity' in request.GET and request.GET['room_capacity']:
-        room_selection[str(request.GET['id'])]['room_capacity'] = request.GET['room_capacity']
+        room_selection[room_id]['room_capacity'] = request.GET['room_capacity']
     else:
-        # Если room_capacity отсутствует в запросе, получаем из модели RoomType
-        try:
-            room_type_obj = RoomType.objects.get(id=request.GET['room_type'])
-            room_selection[str(request.GET['id'])]['room_capacity'] = room_type_obj.room_capacity
-        except RoomType.DoesNotExist:
-            # Если тип комнаты не найден, устанавливаем capacity в 0
-            room_selection[str(request.GET['id'])]['room_capacity'] = 0
+        # Используем полученный ранее объект вместо нового запроса
+        if room_type_obj:
+            room_selection[room_id]['room_capacity'] = room_type_obj.room_capacity
+        else:
+            room_selection[room_id]['room_capacity'] = 0
 
     # Проверяем, есть ли уже номера в корзине и из какого они отеля
     if 'selection_data_obj' in request.session and request.session['selection_data_obj']:
@@ -205,7 +220,7 @@ def add_to_selection(request):
             })
     
     if 'selection_data_obj' in request.session:
-        if str(request.GET['id']) in request.session['selection_data_obj']:
+        if room_id in request.session['selection_data_obj']:
             # Обновляем только данные о комнате, общие данные теперь хранятся отдельно
             selection_data = request.session['selection_data_obj']
             request.session['selection_data_obj'] = selection_data
@@ -260,6 +275,7 @@ def delete_selection(request):
     checkin = "" 
     checkout = "" 
     hotel = None
+    first_room_type = None
 
     if 'selection_data_obj' in request.session and len(request.session['selection_data_obj']) > 0:
         # Проверяем наличие booking_common_data
@@ -285,8 +301,10 @@ def delete_selection(request):
         first_room_id = next(iter(request.session['selection_data_obj']))
         first_room = request.session['selection_data_obj'][first_room_id]
         id = int(first_room['hotel_id'])
+        
+        # Оптимизация: используем select_related для загрузки связанных данных отеля
         try:
-            hotel = Hotel.objects.get(id=id)
+            hotel = Hotel.objects.select_related().get(id=id)
         except Hotel.DoesNotExist:
             logger.error(f"Отель с ID {id} не найден")
         
@@ -309,32 +327,37 @@ def delete_selection(request):
             time_difference = checkout_date - checkin_date
             total_days = time_difference.days
         
+        # Оптимизация N+1: получаем все ID типов номеров и загружаем их одним запросом
+        room_type_ids = [item["room_type"] for item_id, item in request.session['selection_data_obj'].items()]
+        
+        # Получаем все типы номеров одним запросом
+        room_types_dict = {}
+        if room_type_ids:
+            room_types = RoomType.objects.filter(id__in=room_type_ids)
+            room_types_dict = {str(rt.id): rt for rt in room_types}
+        
+            # Получаем первый тип номера для отображения на странице
+            if room_types:
+                first_room_type_id = request.session['selection_data_obj'][first_room_id]['room_type']
+                first_room_type = room_types_dict.get(first_room_type_id)
+        
         # Вычисляем общую стоимость бронирования с учетом динамических цен
         for h_id, item in request.session['selection_data_obj'].items():
             room_type_id = item["room_type"]
-            try:
-                room_type = RoomType.objects.get(id=room_type_id)
+            room_type = room_types_dict.get(room_type_id)
+            
+            if room_type:
                 # Рассчитываем стоимость комнаты с учетом динамических цен
                 room_total = calculate_total_price(room_type, checkin_date, checkout_date)
                 total += room_total
                 
-                # Добавляем slug типа номера в данные сессии
+                # Добавляем slug типа номера в данные сессии, если его нет
                 if not 'room_type_slug' in item:
                     request.session['selection_data_obj'][h_id]['room_type_slug'] = room_type.slug
                     request.session['selection_data_obj'][h_id]['room_capacity'] = room_type.room_capacity
                     request.session.modified = True
-            except RoomType.DoesNotExist:
+            else:
                 logger.error(f"Тип номера с ID {room_type_id} не найден")
-    
-    # Получаем первый тип номера для отображения на странице
-    first_room_type = None
-    if 'selection_data_obj' in request.session and len(request.session['selection_data_obj']) > 0:
-        first_id = next(iter(request.session['selection_data_obj']))
-        first_room_type_id = request.session['selection_data_obj'][first_id]['room_type']
-        try:
-            first_room_type = RoomType.objects.get(id=first_room_type_id)
-        except RoomType.DoesNotExist:
-            pass
     
     context = {
         "data": request.session['selection_data_obj'] if 'selection_data_obj' in request.session else {},
