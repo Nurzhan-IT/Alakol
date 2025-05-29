@@ -84,7 +84,7 @@
                             {% for b in bookings %}
                                 <li><i class="fas fa-receipt"></i> <strong>{{b.hotel.name}} <span class="paid">{{b.payment_status|title}}</span></strong>
                                     <ul>
-                                        <li><span>{% trans "Order Number" %}:-</span> {{b.booking_id}}</li>
+                                        <li><span>{% trans "Booking ID" %}:-</span> {{b.booking_id}}</li>
                                         <li><span>{% trans "Date" %}:-</span> {{b.date|date:"d M, Y"}}</li>
                                     </ul>
                                     <div class="buttons-to-right"> <a href="{% url 'hotel:invoice' b.booking_id %}" class="button gray"><i class="fas fa-arrow-right"></i> {% trans "Invoice" %}</a> </div>

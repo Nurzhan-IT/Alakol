@@ -95,13 +95,13 @@
       
       <div class="col-lg-4 col-md-4 margin-top-0 utf_listing_payment_section">
         <div class="boxed-widget opening-hours summary margin-top-0">
-          <h3><i class="fa fa-calendar-check-o"></i> Booking Summary</h3>
+          <h3><i class="fa fa-calendar-check-o"></i> {% trans "Booking Summary" %}</h3>
           <ul>
-            <li>Check-in <span>{{checkin}}</span></li>
-            <li>Check-out <span>{{checkout}}</span></li>            
-            <li>Total Days <span>{{total_days}} Days</span></li>            
-            <li>Adults <span>{{ adult }} Adult</span></li>
-            <li>Children <span>{{ children }} Children</span></li>
+            <li>{% trans "Check-in Date" %} <span>{{checkin}}</span></li>
+            <li>{% trans "Check-out Date" %} <span>{{checkout}}</span></li>            
+            <li>{% trans "Total Days" %} <span>{{total_days}} {% trans "Days" %}</span></li>            
+            <li>{% trans "Adults" %} <span>{{ adult }} {% trans "Adult" %}</span></li>
+            <li>{% trans "Children" %} <span>{{ children }} {% trans "Children" %}</span></li>
 			      {% comment %} <li>V.A.T <span>0 {% trans "Tenge" %}</span></li> {% endcomment %}
             <li class="total-costs" style="border-top: 1px dashed #ddd; padding-top: 10px;">
               <strong>{% trans "Total Cost" %}</strong> <span>{{total|price_format}} {% trans "Tenge" %}</span>

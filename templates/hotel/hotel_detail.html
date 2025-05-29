@@ -445,8 +445,7 @@
                     <h2>
                         {{hotel.name}}
                     </h2>
-                    <span><a href="#utf_listing_location" class="listing-address"><i class="fas fa-location-arrow"></i> {{hotel.address}}</a></span>
-                    <span class="call_now"><i class="fas fa-phone"></i> {{hotel.mobile}}</span>
+                    <span><i class="fas fa-location-arrow" style="color: #8400ff;"></i> {{hotel.address}}</span>
                     <div class="utf_star_rating_section" data-rating="{{hotel.average_rating}}">
                         {% if hotel.average_rating == None %}
                         <div class="utf_counter_star_rating">{% trans "No Reviews Yet" %}</div>
@@ -469,7 +468,7 @@
                                 <h3 class="review_text">{% trans "Write a review" %}</h3>
                             </div>
                             <div class="utf_message_reply_block margin-top-0" id="review_div">
-                                <textarea cols="40" rows="3" id="review-input" placeholder="Your Message..."></textarea>
+                                <textarea cols="40" rows="3" id="review-input" placeholder="{% trans 'Your Message...' %}"></textarea>
                                 <select name="" id="rating-input">
                                     <option value="1">★☆☆☆☆</option>
                                     <option value="2">★★☆☆☆</option>
@@ -518,7 +517,7 @@
                                     <h5>{{ r.type }}</h5>
                                     <p><strong>{% trans "Beds" %}:</strong> {{ r.number_of_beds }} - <strong>{% trans "Rooms" %}:</strong> {{ r.rooms_count }}</p>
                                 </div>
-                                <button type="button" class="hrm-photo-btn" data-room-id="{{ r.id }}">{% trans "Photos" %}</button>
+                                <button type="button" class="hrm-photo-btn" data-room-id="{{ r.id }}">{% trans "Photo" %}</button>
                                 <div class="hrm-room-actions">
                                     <span>{{ r.price|price_format }} {% trans "Tenge" %}</span>
                                 </div>
@@ -566,13 +565,18 @@
                 <div class="reviews-container">
                     <div class="row">
                         <div class="col-lg-3">
-                            <div id="review_summary">
+                            <!-- <div id="review_summary">
                                 {% if hotel.average_rating == None %}
                                 <strong>{% trans "Not Rated Yet" %}</strong>
                                 {% else %}
                                 <strong>{{hotel.average_rating}}/5</strong>
                                 {% endif %}
-                            </div>
+                            </div> -->
+                            {% if hotel.average_rating != None %}
+                                <div id="review_summary">
+                                    <strong>{{hotel.average_rating}}/5</strong>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -646,26 +650,7 @@
                 <button class="like-button add_to_wishlist"><span class="like-icon"></span> {% trans "Add to Wishlist" %}</button>
                 <div class="clearfix"></div>
             </div>
-            <div class="utf_box_widget margin-top-35">
-                <h3><i class="fas fa-user"></i> {% trans "Contact Info" %}</h3>
-                <div class="utf_hosted_by_user_title">
-                    <a href="#" class="utf_hosted_by_avatar_listing"><img src="{{hotel.user.profile.image.url}}" style="object-fit: cover;" alt=""></a>
-                    <h4>
-                        <a href="#">{{hotel.user.profile.full_name}}</a>
-                        <span>@{{hotel.user.username}}</span>
-                        <span>{% trans "Posted on" %}: {{hotel.date|date:"d M, Y"}}</span>
-                    </h4>
-                </div>
-                <ul class="utf_social_icon rounded margin-top-10">
-                    <li><a class="facebook" href="{{hotel.user.profile.facebook}}"><i class="fab fa-facebook"></i></a></li>
-                    <li><a class="twitter" href="{{hotel.user.profile.twitter}}"><i class="fab fa-twitter"></i></a></li>
-                </ul>
-                <ul class="utf_listing_detail_sidebar">
-                    <li><i class="fas fa-location-arrow"></i> {{hotel.user.profile.address}} {{hotel.user.profile.city}} {{hotel.user.profile.country}}</li>
-                    <li><i class="fas fa-phone"></i> {{hotel.user.profile.phone}}</li>
-                    <li><i class="fas fa-envelope-o"></i> <a href="mailto:{{hotel.user.email}}">{{hotel.user.email}}</a></li>
-                </ul>
-            </div>
+
             <div class="utf_box_widget listing-share margin-top-35 margin-bottom-40 no-border">
                 <h3><i class="fas fa-tag"></i> {% trans "Bookmark Listing" %}</h3>
                 <span>{{all_reviews.count}} {% trans "People Bookmarked This Hotel" %}</span>
