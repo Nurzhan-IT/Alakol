@@ -46,15 +46,7 @@
 
 <body>
 
-    <!-- Preloader Start -->
-    <!-- <div class="preloader">
-        <div class="utf-preloader">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    </div> -->
-    <!-- Preloader End -->
+
 
     <!-- Wrapper -->
     <div id="main_wrapper">
@@ -70,32 +62,7 @@
                                 </span>
                             </button>
                         </div>
-<!--                        <nav id="navigation" class="style_one">-->
-<!--                            <ul id="responsive">-->
-<!--                                <li><a class="current" href="{% url 'hotel:index' %}">{% trans "Home" %}</a></li>-->
-<!--                                <li><a href="#">{% trans "Hotels" %}</a>-->
-<!--                                    <ul>-->
-<!--                                        <li><a href="#">{% trans "Luxury" %}</a></li>-->
-<!--                                        <li><a href="#">{% trans "Business" %}</a></li>-->
-<!--                                        <li><a href="#">{% trans "Classic" %}</a></li>-->
-<!--                                        <li><a href="#">{% trans "Economy" %}</a></li>-->
-<!--                                        -->
-<!--                                    </ul>-->
-<!--                                </li>-->
-<!--                                <li><a href="#">{% trans "Account" %}</a>-->
-<!--                                    <ul>-->
-<!--                                        <li><a href="{% url 'dashboard:dashboard' %}">{% trans "Dashboard" %}</a></li>-->
-<!--                                    </ul>-->
-<!--                                </li>-->
-<!--                                <li><a href="#">{% trans "Blog" %}</a></li>-->
-<!--                                <li><a href="#">{% trans "Pages" %}</a>-->
-<!--                                    <ul>-->
-<!--                                        <li><a href="">{% trans "About Us" %}</a></li>-->
-<!--                                        <li><a href="">{% trans "Contact" %}</a></li>-->
-<!--                                    </ul>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </nav>-->
+
                         <div class="clearfix"></div>
                     </div>
                     
@@ -152,12 +119,12 @@
                                     <form method="post" class="login">
                                         <p class="utf_row_form utf_form_wide_block">
                                             <label for="username">
-                      <input type="text" class="input-text" name="username" id="username" value="" placeholder="Username" />
+                      <input type="text" class="input-text" name="username" id="username" value="" placeholder="{% trans "Username" %}" />
                     </label>
                                         </p>
                                         <p class="utf_row_form utf_form_wide_block">
                                             <label for="password">
-                      <input class="input-text" type="password" name="password" id="password" placeholder="Password"/>
+                      <input class="input-text" type="password" name="password" id="password" placeholder="{% trans "Password" %}"/>
                     </label>
                                         </p>
                                         <div class="utf_row_form utf_form_wide_block form_forgot_part"> <span class="lost_password fl_left"> <a href="javascript:void(0);">{% trans "Forgot Password?" %}</a> </span>
@@ -167,7 +134,7 @@
                                             </div>
                                         </div>
                                         <div class="utf_row_form">
-                                            <input type="submit" class="button border margin-top-5" name="login" value="Login" />
+                                            <input type="submit" class="button border margin-top-5" name="login" value="{% trans "Login" %}" />
                                         </div>
                                         <div class="utf-login_with my-3">
                                             <span class="txt">{% trans "Or Login in With" %}</span>
@@ -187,25 +154,25 @@
                                     <form method="post" class="register">
                                         <p class="utf_row_form utf_form_wide_block">
                                             <label for="username2">
-                      <input type="text" class="input-text" name="username" id="username2" value="" placeholder="Username" />
+                      <input type="text" class="input-text" name="username" id="username2" value="" placeholder="{% trans "Username" %}" />
                     </label>
                                         </p>
                                         <p class="utf_row_form utf_form_wide_block">
                                             <label for="email2">
-                      <input type="text" class="input-text" name="email" id="email2" value="" placeholder="Email" />
+                      <input type="text" class="input-text" name="email" id="email2" value="" placeholder="{% trans "Email" %}" />
                     </label>
                                         </p>
                                         <p class="utf_row_form utf_form_wide_block">
                                             <label for="password1">
-                      <input class="input-text" type="password" name="password1" id="password1" placeholder="Password" />
+                      <input class="input-text" type="password" name="password1" id="password1" placeholder="{% trans "Password" %}" />
                     </label>
                                         </p>
                                         <p class="utf_row_form utf_form_wide_block">
                                             <label for="password2">
-                      <input class="input-text" type="password" name="password2" id="password2" placeholder="Confirm Password" />
+                      <input class="input-text" type="password" name="password2" id="password2" placeholder="{% trans "Confirm Password" %}" />
                     </label>
                                         </p>
-                                        <input type="submit" class="button border fw margin-top-10" name="register" value="Register" />
+                                        <input type="submit" class="button border fw margin-top-10" name="register" value="{% trans "Register" %}" />
                                     </form>
                                 </div>
                             </div>
@@ -227,59 +194,20 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6 col-sm-12 col-xs-12">
-<!--                        <h4>{% trans "About Us" %}</h4>-->
-<!--                        {% comment %} <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore</p> {% endcomment %}-->
                         <h4>{% trans "Contacts" %}</h4>
                         <div>
                             <span><b>{% trans "Phone:" %}</b> +7 (700) 100-00-00</span><br/>
                             <span><b>{% trans "E-mail:" %}</b> support@alakolhotel.kz</span><br/>
                             <span><b>{% trans "Address:" %}</b> Some street 32/3</span><br/>
-                            <span><b>{% trans "IIN/BIN:" %}</b> 0000 0000 0000</span>
+                            <span><b>{% trans "BIN/IIN:" %}</b> 0000 0000 0000</span>
                         </div>
                     </div>
-<!--                    <div class="col-md-2 col-sm-3 col-xs-6">-->
-<!--                        <h4>{% trans "Useful Links" %}</h4>-->
-<!--                        <ul class="social_footer_link">-->
-<!--                            <li><a href="#">{% trans "Home" %}</a></li>-->
-<!--                            <li><a href="#">{% trans "Listing" %}</a></li>-->
-<!--                            <li><a href="#">{% trans "Blog" %}</a></li>-->
-<!--                            <li><a href="#">{% trans "Privacy Policy" %}</a></li>-->
-<!--                            <li><a href="#">{% trans "Contact" %}</a></li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
-<!--                    <div class="col-md-2 col-sm-3 col-xs-6">-->
-<!--                        <h4>{% trans "My Account" %}</h4>-->
-<!--                        <ul class="social_footer_link">-->
-<!--                            <li><a href="#">{% trans "Dashboard" %}</a></li>-->
-<!--                            <li><a href="#">{% trans "Profile" %}</a></li>-->
-<!--                            <li><a href="#">{% trans "My Listing" %}</a></li>-->
-<!--                            <li><a href="#">{% trans "Favorites" %}</a></li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
-<!--                    <div class="col-md-2 col-sm-3 col-xs-6">-->
-<!--                        <h4>{% trans "Pages" %}</h4>-->
-<!--                        <ul class="social_footer_link">-->
-<!--                            <li><a href="#">{% trans "Blog" %}</a></li>-->
-<!--                            <li><a href="#">{% trans "Our Partners" %}</a></li>-->
-<!--                            <li><a href="#">{% trans "How It Work" %}</a></li>-->
-<!--                            <li><a href="#">{% trans "Privacy Policy" %}</a></li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
-<!--                    <div class="col-md-2 col-sm-3 col-xs-6">-->
-<!--                        <h4>{% trans "Help" %}</h4>-->
-<!--                        <ul class="social_footer_link">-->
-<!--                            <li><a href="#">{% trans "Sign In" %}</a></li>-->
-<!--                            <li><a href="#">{% trans "Register" %}</a></li>-->
-<!--                            <li><a href="#">{% trans "Add Listing" %}</a></li>-->
-<!--                            <li><a href="#">{% trans "Pricing" %}</a></li>-->
-<!--                            <li><a href="#">{% trans "Contact Us" %}</a></li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
+
                 </div>
 
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="footer_copyright_part">Copyright © 2024 All Rights Reserved.</div>
+                        <div class="footer_copyright_part">Copyright © 2025 All Rights Reserved.</div>
                     </div>
                 </div>
             </div>
@@ -288,7 +216,7 @@
     </div>
 
     <script>
-        {% for message in messages %}
+        // {% for message in messages %}
 
         Swal.fire({
             icon: '{{message.tags}}',
@@ -296,7 +224,7 @@
             text: '{{message.tags}}',
             timer: 15000
         })
-        {% endfor %}
+        // {% endfor %}
     </script>
 
     <!-- Scripts -->

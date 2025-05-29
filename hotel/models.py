@@ -210,7 +210,7 @@ class HotelFeatures(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     # icon_type = models.CharField(max_length=100, null=True, blank=True, choices=ICON_TPYE)
     icon = models.CharField(max_length=100, null=True, blank=True)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=35)
     hfid = models.CharField(max_length=20,blank=True)
 
     def save(self, *args, **kwargs):
@@ -415,6 +415,7 @@ class Booking(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True)
     room_type = models.ForeignKey(RoomType, on_delete=models.SET_NULL, null=True)
     room = models.ManyToManyField(Room)
+    selection_data = models.JSONField(null=True, blank=True, help_text="Данные о выбранных номерах из selection_data_obj")
     before_discount = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     saved = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)

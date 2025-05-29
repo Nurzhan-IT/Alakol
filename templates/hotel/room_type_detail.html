@@ -40,7 +40,7 @@
               <div class="plan featured col-md-4 col-sm-6 col-xs-12">
               <div class="utf_price_plan">
                   <h3>{% trans "Room No." %} {{ r.room_number }}</h3>
-                  <span class="value"> {{ dynamic_price|price_format }} {% trans "Tenge" %}<span>{% trans "/For" %} {{ total_days }} {% trans "night(s)" %}</span></span> 
+                  <span class="value"> {{ dynamic_price|price_format }} {% trans "Tenge" %}<span>{% trans "For" %} {{ total_days }} {% trans "night(s)" %}</span></span> 
               </div>
               <div class="utf_price_plan_features">
                   <ul>
@@ -49,19 +49,6 @@
                   </ul>
                   <input type="hidden" class="room_id_{{r.id}}" value="{{r.id}}" id="room_id">
                   <input type="hidden" class="room_number_{{r.id}}" value="{{r.room_number}}" id="room_number">
-                  <!-- <button class="button border add-to-selection" data-index="{{r.id}}"> -->
-                    <!-- <i class="fas fa-shopping-cart"></i>  -->
-                    <!-- {% if room_statuses and room_statuses|get_item:r.id == "Added To Selection" %}
-                      <i class="fas fa-check-circle"></i>
-                      {% trans "Added To Selection" %}
-                    {% elif room_statuses and room_statuses|get_item:r.id == "Update" %}
-                      <i class="fas fa-refresh"></i>
-                      {% trans "Update" %}
-                    {% else %}
-                      <i class="fas fa-shopping-cart"></i>
-                      {% trans "Add To Selection" %}
-                    {% endif %}
-                  </button>  -->
 
                   
                   {% if room_statuses and room_statuses|get_item:r.id == "Added To Selection" %}
