@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'modeltranslation',
     'django.contrib.humanize',
     'django_crontab',
+    'clearcache',
 
     
 ]
@@ -155,7 +156,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'ru-ru'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'Asia/Yekaterinburg'  # UTC+5, Алматы не обновленый там +6 до сих пор
 
@@ -163,7 +164,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_THOUSAND_SEPARATOR = True
+USE_THOUSAND_SEPARATOR = False
 
 USE_TZ = True
 

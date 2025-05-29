@@ -580,7 +580,8 @@ def process_booking(request):
             email=email,
             phone=phone,
             country_code=country_code,  # Сохраняем код страны
-            payment_status="initiated"  # Статус "инициировано"
+            payment_status="initiated",  # Статус "инициировано"
+            selection_data=request.session['selection_data_obj']  # Сохраняем данные о выбранных номерах
         )
         
         if request.user.is_authenticated:
@@ -1135,9 +1136,30 @@ def invoice(request, booking_id):
             messages.error(request, "Доступ к квитанции возможен только для оплаченных бронирований.")
             return redirect("/")
         
+        # Преобразуем selection_data из JSON в словарь Python для использования в шаблоне
+        selection_data = booking.selection_data or {}
+        
+        # Подготавливаем информацию о комнатах с ценами
+        rooms_with_prices = []
+        for room in booking.room.all():
+            room_data = {
+                'room': room,
+                'price': room.room_type.price  # Цена по умолчанию
+            }
+            
+            # Ищем цену в selection_data
+            for item_id, item in selection_data.items():
+                if str(item.get('room_id')) == str(room.id):
+                    room_data['price'] = item.get('room_price', room.room_type.price)
+                    break
+            
+            rooms_with_prices.append(room_data)
+        
         context = {
             "booking": booking,  
-            "room": booking.room.all(),  
+            "room": booking.room.all(),
+            "selection_data": selection_data,
+            "rooms_with_prices": rooms_with_prices,
         }
         return render(request, "hotel/invoice.html", context)
     except Exception as e:

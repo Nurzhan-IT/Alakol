@@ -1,0 +1,134 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta name="author" content="">
+    <meta name="description" content="">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Alakol hotel booking" %}</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="images/favicon.png">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mmenu.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" id="colors">
+    {% comment %} <link href="{% static 'css/datedropper.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
+
+    <!-- Icons, Font and assets -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script> -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">     -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon-ligatures@2.5.0/fonts/remixicon.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script> 
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800&display=swap&subset=latin-ext,vietnamese" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700,800" rel="stylesheet" type="text/css">
+    {% block special_header_links %}
+    
+    {% endblock special_header_links %}
+</head>
+
+<body>
+
+
+
+    {% block content %}
+    
+    {% endblock content %}
+
+    <script>
+        // {% for message in messages %}
+
+        Swal.fire({
+            icon: '{{message.tags}}',
+            title: '{{message}}',
+            text: '{{message.tags}}',
+            timer: 15000
+        })
+        // {% endfor %}
+    </script>
+
+    <!-- Scripts -->
+    <script src="{% static 'scripts/custom.js' %}"></script>
+    <script src="{% static 'scripts/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'scripts/chosen.min.js' %}"></script>
+    <script src="{% static 'scripts/slick.min.js' %}"></script>
+    <script src="{% static 'scripts/rangeslider.min.js' %}"></script>
+    <script src="{% static 'scripts/magnific-popup.min.js' %}"></script>
+    <script src="{% static 'scripts/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'scripts/bootstrap-select.min.js' %}"></script>
+    <script src="{% static 'scripts/mmenu.js' %}"></script>
+    <script src="{% static 'scripts/tooltips.min.js' %}"></script>
+    <script src="{% static 'scripts/color_switcher.js' %}"></script>
+    <script src="{% static 'scripts/jquery_custom.js' %}"></script>
+    <script src="{% static 'scripts/typed.js' %}"></script>
+    <script src="{% static 'scripts/infobox.min.js' %}"></script> 
+    <script src="{% static 'scripts/markerclusterer.js' %}"></script> 
+    <script src="{% static 'scripts/maps.js' %}"></script>
+    {% comment %} <script src="{% static 'scripts/datedropper.js' %}"></script>  {% endcomment %}
+    <script src="{% static 'scripts/quantityButtons.js' %}"></script>
+    <script src="{% static 'scripts/moment.min.js' %}"></script>
+    <script src="{% static 'scripts/daterangepicker.js' %}"></script>
+    <script src="{% static 'scripts/moment.min.js' %}"></script>
+    <script src="{% static 'scripts/daterangepicker.js' %}"></script>
+    
+    {% block script_links %}
+    {% endblock script_links %}
+
+    <script>
+        $(function() {
+
+            var start = moment().subtract(0, 'days');
+            var end = moment().add(2, 'days');
+
+            function cb(start, end) {
+                $('#booking-date-search').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+            cb(start, end);
+            $('#booking-date-search').daterangepicker({
+                "opens": "right",
+                "autoUpdateInput": true,
+                "alwaysShowCalendars": true,
+                startDate: start,
+                endDate: end
+            }, cb);
+
+            cb(start, end);
+
+        });
+
+        // Calendar animation and visual settings
+        $('#booking-date-search').on('show.daterangepicker', function(ev, picker) {
+            $('.daterangepicker').addClass('calendar-visible calendar-animated bordered-style');
+            $('.daterangepicker').removeClass('calendar-hidden');
+        });
+        $('#booking-date-search').on('hide.daterangepicker', function(ev, picker) {
+            $('.daterangepicker').removeClass('calendar-visible');
+            $('.daterangepicker').addClass('calendar-hidden');
+        });
+
+        $(window).on('load', function() {
+            $('#booking-date-search').val('');
+        });
+
+    
+    </script>
+</body>
+
+</html>

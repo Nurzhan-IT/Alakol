@@ -89,9 +89,9 @@
 {% block after_field_sets %}
 {{ block.super }}
 
-{% if original %} {# Проверяем, что это страница редактирования существующего объекта #}
+{% if original %}
 <fieldset class="module aligned dynamic-pricing-container">
-      <h2>Динамические цены</h2>
+      <h2>Цены по датам</h2>
   
   <div class="pricing-controls">
     <div class="pricing-field">
@@ -118,7 +118,7 @@
   <hr>
   
   <div class="pricing-table-container">
-    <h3>Текущие динамические цены</h3>
+    <h3>Текущие цены по датам</h3>
     <p id="pricing_info" style="margin-bottom: 10px; font-style: italic;"></p>
     <table id="pricing_table" class="pricing-table">
       <thead>

@@ -3,6 +3,14 @@
 {% load i18n %}
 {% load humanize %}
 {% load mathfilters %}
+{% load price_format %}
+{% load hotel_extras %}
+
+{% block special_header_links %}
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+
+{% endblock special_header_links %}
+
 {% block content %}
   
 <div id="main_wrapper" class="selection-list">
@@ -36,14 +44,9 @@
                         <ul>
                             {% for id, item in data.items %}
                                 <li>
-                                    <h5>{% trans "Room" %}: {{item.room_name}}  №{{item.room_number}} <small><a style="cursor: pointer;" class="delete-item" data-item="{{ id }}"><i class="fas fa-trash" style="color: red;"></i></a></small> </h5>
+                                    <h5>{{item.room_name}}  №{{item.room_number}} <small><a style="cursor: pointer;" class="delete-item" data-item="{{ id }}"><i class="fas fa-trash" style="color: red;"></i></a></small> </h5>
                                     <p><strong>{% trans "Beds" %} :</strong> {{item.number_of_beds}}  </p>
-                                    {% comment %} <p class="booking-dates">
-                                      <i class="fas fa-calendar-check"></i> 
-                                      <span class="check-in-date">{{checkin}}</span> - 
-                                      <span class="check-out-date">{{checkout}}</span>
-                                    </p> {% endcomment %}
-                                  <span> {{item.room_price}} {% trans "Tenge" %} </span>
+                                  <span> {{item.room_price | price_format}} {% trans "Tenge" %} </span>
                                     
                                 </li>
                             {% endfor %}
@@ -60,30 +63,6 @@
                   {% if data %}
                       {% with first_item=data|dictsort:"0"|first %}
                           {% with room_type_id=first_item.1.room_type %}
-                                   {% comment %} <!-- Отладочная информация -->
-                                   <div style="background-color: #f8f9fa; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
-                                       <h5>Отладочная информация:</h5>
-                                       <p>room_type_id: {{ room_type_id }}</p>
-                                       <p>first_item data: {{ first_item.1 }}</p>
-                                       <p>first_room_type: {% if first_room_type %}ID: {{ first_room_type.id }}, Slug: {{ first_room_type.slug }}{% else %}Not available{% endif %}</p>
-                                       <p>Даты бронирования: Check-in: {{ checkin }}, Check-out: {{ checkout }}</p>
-                                       <p>Данные выбора комнат: {{ data }}</p>
-                                   </div>
-
-                                   <!-- Выбор дат бронирования -->
-                                   <div class="utf_booking_listing_section_form margin-bottom-20">
-                                       <div class="row with-forms margin-top-0">
-                                           <div class="col-md-6">
-                                               <label>{% trans "Check-in" %} <small>{% trans "Текущая дата" %}: {{ checkin }}</small></label>
-                                               <input type="date" id="display-checkin" value="{{ checkin }}" class="form-control">
-                                           </div>
-                                           <div class="col-md-6">
-                                               <label>{% trans "Check-out" %} <small>{% trans "Текущая дата" %}: {{ checkout }}</small></label>
-                                               <input type="date" id="display-checkout" value="{{ checkout }}" class="form-control">
-                                           </div>
-                                       </div>
-                                   </div> {% endcomment %}
-
                                    <!-- Форма обновления выбора -->
                                    <form id="update-selection-form" class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}">
                                        {% csrf_token %}
@@ -153,32 +132,30 @@
           <div class="listing-item"> <img src="{{hotel.image.url}}" alt="">
             <div class="utf_listing_item_content">              
               <h3>{{hotel.name}}</h3>
-              <span><i class="fa fa-map-marker"></i> The Ritz-Carlton, Hong Kong</span>
-						<span><i class="fa fa-phone"></i> (+15) 124-796-3633</span>											
-			  <div class="utf_star_rating_section" data-rating="4.5">
-				<div class="utf_counter_star_rating">(18) Reviews</div>
+              <span><i class="fa fa-map-marker"></i> {{hotel.address}}</span>											
+			  <div class="utf_star_rating_section" data-rating="{{hotel.average_rating|to_decimal_dot}}">
+				<div class="utf_counter_star_rating">({{hotel.reviews.count}}) {% trans "Reviews" %}</div>
 			  </div>
 			</div>
           </div>
         </div>
         <div class="boxed-widget opening-hours summary margin-top-0">
-          <h3><i class="fa fa-calendar-check-o"></i> Booking Summary</h3>
+          <h3><i class="fa fa-calendar-check-o"></i> {% trans "Booking Summary" %}</h3>
           <ul>
-            <li>Check-in <span>{{checkin}}</span></li>
-            <li>Check-out <span>{{checkout}}</span></li>            
-            <li>Total Days <span>{{total_days}} Days</span></li>            
-            <li>Adults <span>{{ adult }} Adult</span></li>
-            <li>Children <span>{{ children }} Children</span></li>
-			      {% comment %} <li>V.A.T <span>0 {% trans "Tenge" %}</span></li> {% endcomment %}
+            <li>{% trans "Check-in" %} <span>{{checkin}}</span></li>
+            <li>{% trans "Check-out" %} <span>{{checkout}}</span></li>            
+            <li>{% trans "Total Days" %} <span>{{total_days}} {% trans "Days" %}</span></li>            
+            <li>{% trans "Adults" %} <span>{{ adult }} {% trans "Adult" %}</span></li>
+            <li>{% trans "Children" %} <span>{{ children }} {% trans "Children" %}</span></li>
             <li class="total-costs" style="border-top: 1px dashed #ddd; padding-top: 10px;">
-              <strong>{% trans "Total Cost" %}</strong> <span>{{total|floatformat:0}} {% trans "Tenge" %}</span>
+              <strong>{% trans "Total Cost" %}</strong> <span>{{total|price_format}} {% trans "Tenge" %}</span>
             </li>
             <li class="prepayment" style="background-color: #f0f9ff; padding: 12px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                 <span style="display: flex; align-items: center; gap: 8px;">
                   <i class="fas fa-credit-card" style="color: #007bff; font-size: 16px;"></i>
                   <strong style="font-weight: bold;">{% trans "Prepayment (10%)" %}</strong>
                 </span>
-                <span style="color: #007bff; font-weight: bold; font-size: 1.1em; white-space: nowrap;">{{total|div:10|floatformat:0}} {% trans "Tenge" %}</span>
+                <span style="color: #007bff; font-weight: bold; font-size: 1.1em; white-space: nowrap;">{{total|div:10|price_format}} {% trans "Tenge" %}</span>
             </li>
             <li class="payment-info" style="background-color: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #6c757d; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
                 <i class="fas fa-info-circle" style="color: #6c757d; margin-right: 8px; font-size: 16px;"></i>
