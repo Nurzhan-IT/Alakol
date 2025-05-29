@@ -376,6 +376,7 @@ def selected_rooms(request):
             # Сохраняем данные о комнате и добавляем информацию о slug типа комнаты
             request.session['selection_data_obj'][h_id]['room_number'] = room.room_number
             request.session['selection_data_obj'][h_id]['room_type_slug'] = room_type.slug
+            request.session['selection_data_obj'][h_id]['room_capacity'] = room_type.room_capacity
             
             # Обновляем хранимую цену в сессии с учетом динамического ценообразования
             request.session['selection_data_obj'][h_id]['room_price'] = str(room_total)

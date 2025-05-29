@@ -46,6 +46,7 @@
                                 <li>
                                     <h5>{{item.room_name}}  №{{item.room_number}} <small><a style="cursor: pointer;" class="delete-item" data-item="{{ id }}"><i class="fas fa-trash" style="color: red;"></i></a></small> </h5>
                                     <p><strong>{% trans "Beds" %} :</strong> {{item.number_of_beds}}  </p>
+                                    <p><strong>{% trans "Capacity" %} :</strong> {{item.room_capacity}}  </p>
                                   <span> {{item.room_price | price_format}} {% trans "Tenge" %} </span>
                                     
                                 </li>
