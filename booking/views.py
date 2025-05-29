@@ -176,6 +176,18 @@ def add_to_selection(request):
         'room_id': request.GET['room_id'],
     }
 
+    # Добавляем room_capacity
+    if 'room_capacity' in request.GET and request.GET['room_capacity']:
+        room_selection[str(request.GET['id'])]['room_capacity'] = request.GET['room_capacity']
+    else:
+        # Если room_capacity отсутствует в запросе, получаем из модели RoomType
+        try:
+            room_type_obj = RoomType.objects.get(id=request.GET['room_type'])
+            room_selection[str(request.GET['id'])]['room_capacity'] = room_type_obj.room_capacity
+        except RoomType.DoesNotExist:
+            # Если тип комнаты не найден, устанавливаем capacity в 0
+            room_selection[str(request.GET['id'])]['room_capacity'] = 0
+
     # Проверяем, есть ли уже номера в корзине и из какого они отеля
     if 'selection_data_obj' in request.session and request.session['selection_data_obj']:
         # Получаем первый номер из корзины для проверки отеля
@@ -309,6 +321,7 @@ def delete_selection(request):
                 # Добавляем slug типа номера в данные сессии
                 if not 'room_type_slug' in item:
                     request.session['selection_data_obj'][h_id]['room_type_slug'] = room_type.slug
+                    request.session['selection_data_obj'][h_id]['room_capacity'] = room_type.room_capacity
                     request.session.modified = True
             except RoomType.DoesNotExist:
                 logger.error(f"Тип номера с ID {room_type_id} не найден")
