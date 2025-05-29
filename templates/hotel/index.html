@@ -16,18 +16,18 @@
                                         <input type="text" placeholder="{% trans 'Hotel...' %}" name="name" value="" />
                                     </div>
                                     <div class="main_input_search_part_item main-search-input-item search-input-icon">
-                                        <input type="text" placeholder="Select Booking Date" id="booking-date-search">
+                                        <input type="text" placeholder="{% trans 'Select Booking Date' %}" id="booking-date-search">
                                         <i class="fa fa-calendar"></i>
                                         <input type="hidden" name="check_in_date" id="check_in_date">
                                         <input type="hidden" name="check_out_date" id="check_out_date">
                                     </div>
                                     <div class="main_input_search_part_item intro-search-field">
-                                        <select name="guests" data-placeholder="Number of Guests" class="selectpicker default" title="Guests" data-live-search="true" data-selected-text-format="count" data-size="5">
-                                            <option value="1">1 Guest</option>
-                                            <option value="2">2 Guests</option>
-                                            <option value="3">3 Guests</option>
-                                            <option value="4">4 Guests</option>
-                                            <option value="5">5+ Guests</option>
+                                        <select name="guests" data-placeholder="{% trans 'Number of Guests' %}" class="selectpicker default" title="{% trans 'Guests' %}" data-live-search="true" data-selected-text-format="count" data-size="5">
+                                            <option value="1">{% trans "1 Guest" %}</option>
+                                            <option value="2">{% trans "2 Guests" %}</option>
+                                            <option value="3">{% trans "3 Guests" %}</option>
+                                            <option value="4">{% trans "4 Guests" %}</option>
+                                            <option value="5">{% trans "5+ Guests" %}</option>
                                         </select>
                                     </div>
                                     <button class="button" type="submit">{% trans "Search" %}</button>
@@ -413,12 +413,12 @@
             locale: {
                 format: 'YYYY-MM-DD',
                 separator: ' - ',
-                applyLabel: 'Apply',
-                cancelLabel: 'Cancel',
-                fromLabel: 'From',
-                toLabel: 'To',
-                daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-                monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                applyLabel: '{% trans "Apply" %}',
+                cancelLabel: '{% trans "Cancel" %}',
+                fromLabel: '{% trans "From" %}',
+                toLabel: '{% trans "To" %}',
+                daysOfWeek: ['{% trans "Su" %}', '{% trans "Mo" %}', '{% trans "Tu" %}', '{% trans "We" %}', '{% trans "Th" %}', '{% trans "Fr" %}', '{% trans "Sa" %}'],
+                monthNames: ['{% trans "January" %}', '{% trans "February" %}', '{% trans "March" %}', '{% trans "April" %}', '{% trans "May" %}', '{% trans "June" %}', '{% trans "July" %}', '{% trans "August" %}', '{% trans "September" %}', '{% trans "October" %}', '{% trans "November" %}', '{% trans "December" %}'],
                 firstDay: 1
             }
         });
