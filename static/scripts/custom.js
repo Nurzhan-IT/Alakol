@@ -14,6 +14,7 @@ $(document).ready(function(){
         let room_price = $("#room_price").val()
         let number_of_beds = $("#number_of_beds").val()
         let room_type = $("#room_type").val()
+        let room_capacity = $("#room_capacity").val()
         let checkin = $("#checkin").val()
         let checkout = $("#checkout").val()
         let adult = $("#adult").val()
@@ -28,6 +29,7 @@ $(document).ready(function(){
         console.log(`room_price: ${room_price}`);
         console.log(`number_of_beds: ${number_of_beds}`);
         console.log(`room_type: ${room_type}`);
+        console.log(`room_capacity: ${room_capacity}`);
         console.log(`checkin: ${checkin}`);
         console.log(`checkout: ${checkout}`);
         console.log(`adult: ${adult}`);
@@ -46,6 +48,7 @@ $(document).ready(function(){
                 'number_of_beds': number_of_beds,
                 'room_type': room_type,
                 'room_id': room_id,
+                'room_capacity': room_capacity,
                 'checkin': checkin,
                 'checkout': checkout,
                 'adult': adult,
@@ -82,6 +85,7 @@ $(document).ready(function(){
                                     'number_of_beds': number_of_beds,
                                     'room_type': room_type,
                                     'room_id': room_id,
+                                    'room_capacity': room_capacity,
                                     'checkin': checkin,
                                     'checkout': checkout,
                                     'adult': adult,
