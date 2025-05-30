@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 
 from userauths.models import User, Profile
 from userauths.forms import UserRegisterForm
@@ -17,35 +18,31 @@ def RegisterView(request, *args, **kwargs):
 
     form = UserRegisterForm(request.POST or None)
     if form.is_valid():
-        form.save()
-        full_name = form.cleaned_data.get('full_name')
-        phone = form.cleaned_data.get('phone')
-        email = form.cleaned_data.get('email')
-        password = form.cleaned_data.get('password1')
+        with transaction.atomic():
+            user = form.save()
+            full_name = form.cleaned_data.get('full_name')
+            phone = form.cleaned_data.get('phone')
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password1')
 
-        # Email уже должен быть в нижнем регистре благодаря clean_email в форме,
-        # но лучше перестраховаться
-        email = email.lower()
+            email = email.lower()
 
-        user = authenticate(email=email, password=password)
-        login(request, user)
+            user = authenticate(email=email, password=password)
+            login(request, user)
 
-        messages.success(request, f"Hi {request.user.username}, your account have been created successfully.")
+            messages.success(request, f"Hi {request.user.username}, your account have been created successfully.")
 
-        profile = Profile.objects.get(user=request.user)
-        profile.full_name = full_name
-        profile.phone = phone
-        profile.save()
+            profile = user.profile
+            profile.full_name = full_name
+            profile.phone = phone
+            profile.save(update_fields=['full_name', 'phone'])
 
         return redirect('hotel:index')
     
-    context = {'form':form}
+    context = {'form': form}
     return render(request, 'userauths/sign-up.html', context)
 
 def LoginView(request):
-    # if request.user.is_authenticated:
-    #     return redirect('hotel:index')
-    
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -54,8 +51,8 @@ def LoginView(request):
             email = email.lower()
 
         try:
-            user = User.objects.get(email=email)
-
+            user = get_object_or_404(User, email=email)
+            
             user = authenticate(request, email=email, password=password)
 
             if user is not None:
@@ -65,7 +62,7 @@ def LoginView(request):
             else:
                 messages.error(request, 'Username or password does not exit.')
         
-        except:
+        except User.DoesNotExist:
             messages.error(request, 'User does not exist')
 
     return HttpResponseRedirect("/")
@@ -83,26 +80,26 @@ def loginViewTemp(request):
             email = email.lower()
 
         try:
-            user = User.objects.get(email=email)
-
+            user_exists = User.objects.filter(email=email).exists()
+            
+            if not user_exists:
+                messages.error(request, 'User does not exist')
+                return render(request, "userauths/sign-in.html")
+                
             user = authenticate(request, email=email, password=password)
 
             if user is not None:
                 login(request, user)
                 messages.success(request, "You are Logged In")
-                # return redirect()
                 next_url = request.GET.get("next", 'hotel:index')
                 return redirect(next_url)
-                
             else:
                 messages.error(request, 'Username or password does not exit.')
         
-        except:
-            messages.error(request, 'User does not exist')
+        except Exception as e:
+            messages.error(request, 'An error occurred during login')
 
     return render(request, "userauths/sign-in.html")
-
-
 
 def LogoutView(request):
     logout(request)
