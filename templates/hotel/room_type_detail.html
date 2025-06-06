@@ -6,6 +6,9 @@
 
 {% block special_header_links %}
 
+<link rel="stylesheet" href="{% static 'css/price_calendar.css' %}">
+<link rel="stylesheet" href="{% static 'css/room-detail.css' %}">
+
 {% endblock special_header_links %}
 
 {% block content %}
@@ -25,7 +28,29 @@
     </div>
   </div>
 
-  <!-- {{dynamic_price_json_data}} -->
+<!-- {{dynamic_price_json_data}}-->
+<div class="custom-calendar">
+    <div class="calendar-header">
+        <button class="prev-month">&lt;</button>
+        <span class="month-year"></span>
+        <button class="next-month">&gt;</button>
+    </div>
+    <table class="calendar-table">
+        <thead>
+        <tr>
+            <th>Пн</th>
+            <th>Вт</th>
+            <th>Ср</th>
+            <th>Чт</th>
+            <th>Пт</th>
+            <th>Сб</th>
+            <th>Вс</th>
+        </tr>
+        </thead>
+        <tbody class="calendar-body"></tbody>
+    </table>
+</div>
+
   <section class="fullwidth_block margin-top-0 padding-top-0 padding-bottom-50" data-background-color="#fff"> 
     <div class="container">
       <div class="row">
@@ -139,6 +164,93 @@
       </div>      
     </div>    
   </section>
+
+<pre style="display: none" id="debug-json">{{ dynamic_price_json_data }}</pre>
+
+  <script>
+      $(document).ready(function () {
+          let rawText = $("#debug-json").text();
+          rawText = rawText.replace(/'/g, '"');
+
+          let priceData;
+          try {
+              priceData = JSON.parse(rawText);
+          } catch (e) {
+              console.error("Ошибка парсинга JSON:", e);
+              priceData = {};
+          }
+
+          let currentMonth = new Date().getMonth();
+          let currentYear = new Date().getFullYear();
+
+          function renderCalendar(month, year) {
+              const $calendarBody = $(".custom-calendar .calendar-body");
+              $calendarBody.empty();
+
+              const firstDay = new Date(year, month, 1).getDay();
+              const firstWeekday = (firstDay === 0) ? 6 : firstDay - 1;
+              const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+              $(".custom-calendar .month-year").text(new Date(year, month).toLocaleString('ru-RU', { month: 'long', year: 'numeric' }));
+
+              let dateCounter = 1;
+
+              for (let i = 0; i < 6; i++) {
+                  const $row = $("<tr></tr>");
+
+                  for (let j = 0; j < 7; j++) {
+                      const $cell = $("<td></td>");
+
+                      if (i === 0 && j < firstWeekday) {
+                          $cell.html("&nbsp;");
+                      } else if (dateCounter > daysInMonth) {
+                          $cell.html("&nbsp;");
+                      } else {
+                          const fullDate = new Date(year, month, dateCounter);
+                          const dateStr = fullDate.toISOString().split("T")[0];
+
+                          $cell.append(dateCounter);
+
+                          if (priceData[dateStr]) {
+                              $cell.append("<br>");
+                              $("<span></span>")
+                                  .addClass("day-price")
+                                  .text(priceData[dateStr] + "₸")
+                                  .appendTo($cell);
+                          }
+
+                          dateCounter++;
+                      }
+
+                      $row.append($cell);
+                  }
+
+                  $calendarBody.append($row);
+                  if (dateCounter > daysInMonth) break;
+              }
+          }
+
+          $(".custom-calendar .prev-month").click(function () {
+              currentMonth--;
+              if (currentMonth < 0) {
+                  currentMonth = 11;
+                  currentYear--;
+              }
+              renderCalendar(currentMonth, currentYear);
+          });
+
+          $(".custom-calendar .next-month").click(function () {
+              currentMonth++;
+              if (currentMonth > 11) {
+                  currentMonth = 0;
+                  currentYear++;
+              }
+              renderCalendar(currentMonth, currentYear);
+          });
+
+          renderCalendar(currentMonth, currentYear);
+      });
+  </script>
 
   <script>
     
