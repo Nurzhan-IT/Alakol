@@ -6,6 +6,28 @@
 <link rel="stylesheet" href="{% static 'css/hotel_detail.css' %}"> 
 <style>
     /* Стили для кнопки Photo */
+    .check_in_out_time_container {
+        display: flex;
+        justify-content: left;
+        gap: 20px;
+        padding: 10px;
+        align-items: center;
+        width: fit-content;
+        border-bottom: 1px solid #8400ff;
+    }
+
+    .check_in_out_time {
+        text-align: center;
+        margin: 0px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .time {
+        margin-left: 10px;
+        font-size: 15px;
+    }
+
 .hrm-photo-btn {
     /* Основные стили */
     background-color: white; /* Основной цвет */
@@ -237,8 +259,6 @@
         flex: 1;
         padding: 16px;
         border-radius: 8px;
-        overflow-y: auto;
-        max-height: 400px;
         /*font-size: clamp(0.9rem, 2.5vw, 1rem);*/
         font-size: 14px;
         line-height: 1.5;
@@ -377,9 +397,11 @@
 
         .custom-room-gallery {
             gap: 10px;
+
         }
 
         .custom-room-description {
+            font-size: 10px;
             max-height: 250px;
             padding: 12px;
         }
@@ -429,6 +451,61 @@
 
 {% block content %}
 <div class="clearfix"></div>
+
+<div id="titlebar" class="utf_listing_titlebar">
+    <div class="utf_listing_titlebar_title">
+        <h2 class="utf_listing_titlebar_hotel_name">
+            {{hotel.name}}
+        </h2>
+        <div class="utf_listing_hotel_address_and_rating_container">
+            <span class="utf_listing_titlebar_hotel_address"><i class="fas fa-location-arrow" style="color: #8400ff;"></i> {{hotel.address}}</span>
+            <div class="utf_star_rating_section" data-rating="{{hotel.average_rating}}">
+                {% if hotel.average_rating == None %}
+                <div class="utf_counter_star_rating">{% trans "No Reviews Yet" %}</div>
+                {% else %}
+                <div class="utf_counter_star_rating">({{hotel.average_rating}}) / ({{hotel.rating_count}} {% trans "Reviews" %})</div>
+                {% endif %}
+            </div>
+        </div>
+<!--        <div class="fast-booking-button">-->
+<!--            {% trans "" %}-->
+<!--        </div>-->
+        <ul class="listing_item_social">
+            {% if bookmark %}
+            <li><a style="cursor: pointer;" data-hotel="{{hotel.id}}" class="add-to-bookmark-{{hotel.id}}" id="add-to-bookmark"><i class="fa fa-heart" style="color: red;"></i></a></li>
+            {% else %}
+            <li><a style="cursor: pointer;" data-hotel="{{hotel.id}}" class="add-to-bookmark-{{hotel.id}}" id="add-to-bookmark"><i class="fa fa-heart" style="color: gray;"></i></a></li>
+            {% endif %}
+
+            {% if request.user.is_authenticated %}
+            {% if not reviews %}
+            <a href="#small-dialog" class="popup-with-zoom-anim add-review-button" id="add-review-button"><i class="fa fa-star"></i><span class="add-review-button-text">{% trans "Add Review" %}</span></a></li>
+            <div id="small-dialog" class="zoom-anim-dialog mfp-hide">
+                <div class="small_dialog_header">
+                    <h3 class="review_text">{% trans "Write a review" %}</h3>
+                </div>
+                <div class="utf_message_reply_block margin-top-0" id="review_div">
+                    <textarea cols="40" rows="3" id="review-input" placeholder="{% trans 'Your Message...' %}"></textarea>
+                    <select name="" id="rating-input">
+                        <option value="1">★☆☆☆☆</option>
+                        <option value="2">★★☆☆☆</option>
+                        <option value="3">★★★☆☆</option>
+                        <option value="4">★★★★☆</option>
+                        <option value="5">★★★★★</option>
+                    </select>
+                    <button data-hotel="{{hotel.id}}" class="button" id="review-btn">{% trans "Reply Message" %}</button>
+                </div>
+            </div>
+            {% endif %}
+            {% else %}
+            <li><a href="{% url 'userauths:sign-in' %}?next={{request.path}}"><i class="fa fa-sign-in"></i> {% trans "Login to Write Review" %}</a></li>
+            {% endif %}
+            <li class="share-button"><a style="cursor: pointer;" id="clipboard"><i class="fa fa-share"></i> {% trans "Share" %}</a></li>
+        </ul>
+    </div>
+</div>
+
+
 <div id="utf_listing_gallery_part" class="utf_listing_section">
     <div class="utf_listing_slider utf_gallery_container margin-bottom-0">
         {% for h in hotel.hotel_gallery %}
@@ -440,59 +517,61 @@
 <div class="container">
     <div class="row utf_sticky_main_wrapper">
         <div class="col-lg-8 col-md-8">
-            <div id="titlebar" class="utf_listing_titlebar">
-                <div class="utf_listing_titlebar_title">
-                    <h2>
-                        {{hotel.name}}
-                    </h2>
-                    <span><i class="fas fa-location-arrow" style="color: #8400ff;"></i> {{hotel.address}}</span>
-                    <div class="utf_star_rating_section" data-rating="{{hotel.average_rating}}">
-                        {% if hotel.average_rating == None %}
-                        <div class="utf_counter_star_rating">{% trans "No Reviews Yet" %}</div>
-                        {% else %}
-                        <div class="utf_counter_star_rating">({{hotel.average_rating}}) / ({{hotel.rating_count}} {% trans "Reviews" %})</div>
-                        {% endif %}
-                    </div>
-                    <ul class="listing_item_social">
-                        {% if bookmark %}
-                        <li><a style="cursor: pointer;" data-hotel="{{hotel.id}}" class="add-to-bookmark-{{hotel.id}}" id="add-to-bookmark"><i class="fa fa-heart" style="color: red;"></i></a></li>
-                        {% else %}
-                        <li><a style="cursor: pointer;" data-hotel="{{hotel.id}}" class="add-to-bookmark-{{hotel.id}}" id="add-to-bookmark"><i class="fa fa-heart" style="color: gray;"></i></a></li>
-                        {% endif %}
+<!--            <div id="titlebar" class="utf_listing_titlebar">-->
+<!--                <div class="utf_listing_titlebar_title">-->
+<!--                    <h2>-->
+<!--                        {{hotel.name}}-->
+<!--                    </h2>-->
+<!--                    <span><i class="fas fa-location-arrow" style="color: #8400ff;"></i> {{hotel.address}}</span>-->
+<!--                    <div class="utf_star_rating_section" data-rating="{{hotel.average_rating}}">-->
+<!--                        {% if hotel.average_rating == None %}-->
+<!--                        <div class="utf_counter_star_rating">{% trans "No Reviews Yet" %}</div>-->
+<!--                        {% else %}-->
+<!--                        <div class="utf_counter_star_rating">({{hotel.average_rating}}) / ({{hotel.rating_count}} {% trans "Reviews" %})</div>-->
+<!--                        {% endif %}-->
+<!--                    </div>-->
+<!--                    <ul class="listing_item_social">-->
+<!--                        {% if bookmark %}-->
+<!--                        <li><a style="cursor: pointer;" data-hotel="{{hotel.id}}" class="add-to-bookmark-{{hotel.id}}" id="add-to-bookmark"><i class="fa fa-heart" style="color: red;"></i></a></li>-->
+<!--                        {% else %}-->
+<!--                        <li><a style="cursor: pointer;" data-hotel="{{hotel.id}}" class="add-to-bookmark-{{hotel.id}}" id="add-to-bookmark"><i class="fa fa-heart" style="color: gray;"></i></a></li>-->
+<!--                        {% endif %}-->
 
-                        {% if request.user.is_authenticated %}
-                        {% if not reviews %}
-                        <a href="#small-dialog" class="popup-with-zoom-anim" id="add-review-button"><i class="fa fa-star"></i>{% trans "Add Review" %}</a></li>
-                        <div id="small-dialog" class="zoom-anim-dialog mfp-hide">
-                            <div class="small_dialog_header">
-                                <h3 class="review_text">{% trans "Write a review" %}</h3>
-                            </div>
-                            <div class="utf_message_reply_block margin-top-0" id="review_div">
-                                <textarea cols="40" rows="3" id="review-input" placeholder="{% trans 'Your Message...' %}"></textarea>
-                                <select name="" id="rating-input">
-                                    <option value="1">★☆☆☆☆</option>
-                                    <option value="2">★★☆☆☆</option>
-                                    <option value="3">★★★☆☆</option>
-                                    <option value="4">★★★★☆</option>
-                                    <option value="5">★★★★★</option>
-                                </select>
-                                <button data-hotel="{{hotel.id}}" class="button" id="review-btn">{% trans "Reply Message" %}</button>
-                            </div>
-                        </div>
-                        {% endif %}
-                        {% else %}
-                        <li><a href="{% url 'userauths:sign-in' %}?next={{request.path}}"><i class="fa fa-sign-in"></i> {% trans "Login to Write Review" %}</a></li>
-                        {% endif %}
-                        <li><a style="cursor: pointer;" id="clipboard"><i class="fa fa-share"></i> {% trans "Share" %}</a></li>
-                    </ul>
-                </div>
-            </div>
+<!--                        {% if request.user.is_authenticated %}-->
+<!--                        {% if not reviews %}-->
+<!--                        <a href="#small-dialog" class="popup-with-zoom-anim" id="add-review-button"><i class="fa fa-star"></i>{% trans "Add Review" %}</a></li>-->
+<!--                        <div id="small-dialog" class="zoom-anim-dialog mfp-hide">-->
+<!--                            <div class="small_dialog_header">-->
+<!--                                <h3 class="review_text">{% trans "Write a review" %}</h3>-->
+<!--                            </div>-->
+<!--                            <div class="utf_message_reply_block margin-top-0" id="review_div">-->
+<!--                                <textarea cols="40" rows="3" id="review-input" placeholder="{% trans 'Your Message...' %}"></textarea>-->
+<!--                                <select name="" id="rating-input">-->
+<!--                                    <option value="1">★☆☆☆☆</option>-->
+<!--                                    <option value="2">★★☆☆☆</option>-->
+<!--                                    <option value="3">★★★☆☆</option>-->
+<!--                                    <option value="4">★★★★☆</option>-->
+<!--                                    <option value="5">★★★★★</option>-->
+<!--                                </select>-->
+<!--                                <button data-hotel="{{hotel.id}}" class="button" id="review-btn">{% trans "Reply Message" %}</button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        {% endif %}-->
+<!--                        {% else %}-->
+<!--                        <li><a href="{% url 'userauths:sign-in' %}?next={{request.path}}"><i class="fa fa-sign-in"></i> {% trans "Login to Write Review" %}</a></li>-->
+<!--                        {% endif %}-->
+<!--                        <li><a style="cursor: pointer;" id="clipboard"><i class="fa fa-share"></i> {% trans "Share" %}</a></li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+<!--            </div>-->
             <div id="utf_listing_overview" class="utf_listing_section">
                 <h3 class="utf_listing_headline_part margin-top-30 margin-bottom-30">{% trans "Description" %}</h3>
                 <p>{{hotel.description|safe}}</p>
                 {% if hotel.check_in_time and hotel.check_out_time %}
-                    <p>{% trans "check in time:" %} {{hotel.check_in_time}}</p>
-                    <p>{% trans "check out time:" %} {{hotel.check_out_time}}</p>
+                    <div class="check_in_out_time_container">
+                        <span class="check_in_out_time"><i>{% trans "Check-in Time" %}</i><span class="time">{{hotel.check_in_time}}</span></span>
+                        <span class="check_in_out_time"><i>{% trans "Check-out Time" %}</i><span class="time">{{hotel.check_out_time}}</span></span>
+                    </div>
                 {% endif %}
             </div>
 
@@ -526,7 +605,7 @@
                         </ul>
                     </div>
                 </div>
-                <a href="#" class="show-more-button" data-more-title="Show More" data-less-title="Show Less"><i class="fas fa-down-arrow"></i></a>
+<!--                <a href="#" class="show-more-button" data-more-title="Show More" data-less-title="Show Less"><i class="fas fa-down-arrow"></i></a>-->
             </div>
 
 
@@ -722,7 +801,7 @@
                 {% for description in r.roomtype_description.all %}
                 <p>{{ description.description | safe }}</p>
                 {% empty %}
-                <p>{% trans "No description available." %}</p>
+                <p>Welcome to Oceanview Retreat, a luxurious seaside hotel offering elegance, comfort, and world-class service. Nestled along a pristine coastline, our hotel features stunning ocean views, modern rooms with premium amenities, and exceptional dining experiences. Whether you're here for a romantic getaway, a family vacation, or a business trip, Oceanview Retreat ensures a memorable stay. Relax in our spa, enjoy a cocktail by the infinity pool, or explore nearby attractions. Our dedicated staff is committed to providing personalized service to make your stay unforgettable. Discover tranquility, adventure, and sophistication all in one place—your perfect escape begins here.</p>
                 {% endfor %}
 
                 <div class="room-size-info">

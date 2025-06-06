@@ -5,11 +5,11 @@
 {% block title %}{% trans "Hotel Search Results" %}{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
+<div class="search-base">
+    <div class="filters-and-results">
         <!-- Search Filters Sidebar -->
-        <div class="col-md-3">
-            <div class="card">
+
+            <div class="filters-card">
                 <div class="card-header">
                     <h4>{% trans "Filters" %}</h4>
                 </div>
@@ -24,11 +24,11 @@
                         <!-- Check-in & Check-out Date -->
                         <div class="mb-3">
                             <label for="check_in_date" class="form-label">{% trans "Check-in Date" %}</label>
-                            <input type="date" class="form-control" id="check_in_date" name="check_in_date" value="{{ search_params.check_in_date }}">
+                            <input type="date" class="check-in-out-input form-control" id="check_in_date" name="check_in_date" value="{{ search_params.check_in_date }}">
                         </div>
                         <div class="mb-3">
                             <label for="check_out_date" class="form-label">{% trans "Check-out Date" %}</label>
-                            <input type="date" class="form-control" id="check_out_date" name="check_out_date" value="{{ search_params.check_out_date }}">
+                            <input type="date" class="check-in-out-input form-control" id="check_out_date" name="check_out_date" value="{{ search_params.check_out_date }}">
                         </div>
                         
                         <!-- Price Range -->
@@ -95,35 +95,38 @@
                             </select>
                         </div>
                         
-                        <button type="submit" class="btn btn-primary w-100">{% trans "Search" %}</button>
+                        <button type="submit" class="submit-filters">{% trans "Search" %}</button>
                     </form>
                 </div>
             </div>
-        </div>
-        
+
         <!-- Search Results -->
-        <div class="col-md-9">
-            <div class="mb-3 d-flex justify-content-between align-items-center">
-                <h2>{% trans "Search Results" %}</h2>
-                <div>
-                    {% blocktrans count count=paginator.count %}Found {{ count }} hotel{% plural %}Found {{ count }} hotels{% endblocktrans %}
-                </div>
+        <div>
+
+        <div class="search-results-header">
+            <h2>{% trans "Search Results" %}</h2>
+            <div class="found-label">
+                {% blocktrans count count=paginator.count %}Found {{ count }} hotel{% plural %}Found {{ count }} hotels{% endblocktrans %}
             </div>
+        </div>
+
+
+        <div class="search-results-container">
+            <div class="fade-top"></div>
             
             {% if hotels %}
                 {% for hotel in hotels %}
-                <div class="card mb-4 hotel-card">
-                    <div class="row g-0">
-                        <div class="col-md-4">
+                <div class="results-hotel-card mb-4 hotel-card">
+                        <div class="results-hotel-card-left-part">
                             {% if hotel.image %}
-                            <img src="{{ hotel.image.url }}" class="img-fluid rounded-start h-100" alt="{{ hotel.name }}" style="object-fit: cover;">
+                            <img src="{{ hotel.image.url }}" class="search-results-hotel-image" alt="{{ hotel.name }}" style="object-fit: cover;">
                             {% else %}
                             <div class="bg-secondary h-100 w-100 d-flex align-items-center justify-content-center text-white">
                                 <span>{% trans "No Image" %}</span>
                             </div>
                             {% endif %}
                         </div>
-                        <div class="col-md-8">
+                        <div class="results-hotel-card-right-part">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
                                     <h4 class="card-title">{{ hotel.name }}</h4>
@@ -168,12 +171,12 @@
                                         {% else %}
                                         <div class="text-muted">{% trans "Price not available" %}</div>
                                         {% endif %}
-                                        <a href="{% url 'hotel:detail' hotel.slug %}" class="btn btn-primary mt-2">{% trans "View Details" %}</a>
+                                        <a href="{% url 'hotel:detail' hotel.slug %}" class="view-details-button">{% trans "View Details" %}</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+
                 </div>
                 {% endfor %}
                 
@@ -219,6 +222,7 @@
             {% endif %}
         </div>
     </div>
+    </div>
 </div>
 
 <script>
@@ -260,15 +264,4 @@
         }
     });
 </script>
-
-<style>
-    .hotel-card {
-        transition: transform 0.2s;
-    }
-    
-    .hotel-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-</style>
 {% endblock %} 
