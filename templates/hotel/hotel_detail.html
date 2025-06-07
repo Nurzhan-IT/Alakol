@@ -175,9 +175,9 @@
 
             <div id="utf_listing_amenities" class="utf_listing_section">
                 <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">{% trans "Amenities" %}</h3>
-                <ul class="utf_listing_features checfkboxes margin-top-0">
+                <ul class="utf_listing_features checkboxes margin-top-0">
                     {% for h in hotel.hotel_features %}
-                    <li>
+                    <li class="amenities_item">
                         <img src="{% static 'icons/' %}{{ h.icon }}" alt="icon img" width="35" height="35">
                         {{h.name}}
                     </li>
