@@ -1,0 +1,408 @@
+<!-- Generated on 2025-06-03 06:24 PM +05 -->
+{% extends 'legal/base_legal.html' %}
+
+{% block title %}Hotel Integration Technical Requirements{% endblock %}
+{% block page_name %}Hotel Integration Technical Requirements{% endblock %}
+{% block meta_description %}Technical requirements and integration instructions for Alakol Booking System hotel booking platform. Guide for hotel owners on working with Django 4.2.2 system and Robokassa.{% endblock %}
+{% block breadcrumb_current %}Technical Requirements{% endblock %}
+
+{% block content %}
+<h1 id="document-title" tabindex="-1">Hotel Integration Technical Requirements</h1>
+<p class="subtitle">"Alakol Booking System" platform integration instructions</p>
+
+<div class="document-meta">
+    <strong>Creation Date:</strong> June 3, 2025<br>
+    <strong>Document Version:</strong> 1.0<br>
+    <strong>Compatibility:</strong> Django 4.2.2, PostgreSQL, Robokassa<br>
+    <strong>Platform:</strong> Alakol Booking System<br>
+    <strong>Technology Stack:</strong> Django 4.2.2 (Python), PostgreSQL, Robokassa.kz<br>
+    <strong>Time Zone:</strong> Asia/Almaty (UTC+6)
+</div>
+
+<nav class="navigation-toc" aria-label="Document Contents">
+    <h3>Contents</h3>
+    <ol>
+        <li><a href="#section-1">General Technical Requirements</a></li>
+        <li><a href="#section-2">Hotel Profile Registration and Setup</a></li>
+        <li><a href="#section-3">Room Inventory Management</a></li>
+        <li><a href="#section-4">Pricing System</a></li>
+        <li><a href="#section-5">Robokassa Payment System Integration</a></li>
+        <li><a href="#section-6">Booking Management</a></li>
+        <li><a href="#section-7">Technical Support and API</a></li>
+        <li><a href="#section-8">Security and Data Protection</a></li>
+        <li><a href="#section-9">Content Requirements</a></li>
+    </ol>
+</nav>
+
+<section id="section-1" aria-labelledby="section-1-title">
+    <h2 id="section-1-title">1. General Technical Requirements</h2>
+    
+    <h3>1.1. System Requirements for Platform Operation:</h3>
+    <ul>
+        <li>Stable internet connection (minimum 10 Mbps)</li>
+        <li>Modern web browser (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+)</li>
+        <li>JavaScript and cookies support</li>
+        <li>Screen resolution not less than 1024x768 pixels</li>
+    </ul>
+    
+    <h3>1.2. Platform Technical Specifications:</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td><strong>Backend</strong></td>
+                    <td>Django 4.2.2 (Python web framework)</td>
+                </tr>
+                <tr>
+                    <td><strong>Database</strong></td>
+                    <td>PostgreSQL</td>
+                </tr>
+                <tr>
+                    <td><strong>Payment System</strong></td>
+                    <td>Robokassa.kz</td>
+                </tr>
+                <tr>
+                    <td><strong>Multilingual Support</strong></td>
+                    <td>Kazakh, Russian, English languages</td>
+                </tr>
+                <tr>
+                    <td><strong>Time Zone</strong></td>
+                    <td>Asia/Yekaterinburg (UTC+5)</td>
+                </tr>
+                <tr>
+                    <td><strong>Encryption</strong></td>
+                    <td>SSL/TLS (HTTPS)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section id="section-2" aria-labelledby="section-2-title">
+    <h2 id="section-2-title">2. Hotel Profile Registration and Setup</h2>
+    
+    <h3>2.1. Registration Procedure:</h3>
+    <ol>
+        <li>Creating an account on the platform through web interface</li>
+        <li>Email address verification (mandatory)</li>
+        <li>Mobile phone confirmation via SMS/OTP</li>
+        <li>Providing documents for hotel verification</li>
+    </ol>
+    
+    <h3>2.2. Required Data for Hotel Profile (Hotel Model):</h3>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Description</th>
+                    <th>Limitations</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>name</td>
+                    <td>Hotel name</td>
+                    <td>Maximum 100 characters</td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td>Hotel description</td>
+                    <td>Detailed text description</td>
+                </tr>
+                <tr>
+                    <td>image</td>
+                    <td>Main hotel image</td>
+                    <td>Formats: JPG, PNG, maximum 5MB</td>
+                </tr>
+                <tr>
+                    <td>address</td>
+                    <td>Full address</td>
+                    <td>Maximum 200 characters</td>
+                </tr>
+                <tr>
+                    <td>mobile</td>
+                    <td>Mobile phone</td>
+                    <td>Maximum 20 characters, format: +7XXXXXXXXXX</td>
+                </tr>
+                <tr>
+                    <td>email</td>
+                    <td>Hotel email</td>
+                    <td>Working email for guest communication</td>
+                </tr>
+                <tr>
+                    <td>check_in_time</td>
+                    <td>Check-in time</td>
+                    <td>Format: HH:MM (e.g., 14:00)</td>
+                </tr>
+                <tr>
+                    <td>check_out_time</td>
+                    <td>Check-out time</td>
+                    <td>Format: HH:MM (e.g., 12:00)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section id="section-3" aria-labelledby="section-3-title">
+    <h2 id="section-3-title">3. Room Inventory Management</h2>
+    
+    <h3>3.1. Room Types (RoomType Model):</h3>
+    <ul>
+        <li><strong>type:</strong> Room type name - maximum 120 characters</li>
+        <li><strong>price:</strong> Base price per night - in tenge, format: XXXXX.XX</li>
+        <li><strong>dynamic_pricing:</strong> Dynamic pricing - JSON format for special dates</li>
+        <li><strong>number_of_beds:</strong> Number of beds - integer</li>
+        <li><strong>room_capacity:</strong> Room capacity - maximum number of guests</li>
+        <li><strong>room_size:</strong> Room size - area in square meters</li>
+    </ul>
+    
+    <h3>3.2. Individual Rooms (Room Model):</h3>
+    <ul>
+        <li><strong>room_number:</strong> Room number - unique within the hotel</li>
+        <li><strong>is_available:</strong> Booking availability - boolean</li>
+        <li><strong>room_type:</strong> Connection to room type - mandatory relationship</li>
+    </ul>
+    
+    <h3>3.3. Additional Room Information:</h3>
+    <ul>
+        <li>Room type description (RoomTypeDescription)</li>
+        <li>Room image gallery (RoomTypeGallery) - up to 10 photos</li>
+        <li>Amenities list (RoomTypeFeatures) - icons and names</li>
+        <li>Detailed characteristics (RoomTypeFeaturesDetailed)</li>
+    </ul>
+</section>
+
+<section id="section-4" aria-labelledby="section-4-title">
+    <h2 id="section-4-title">4. Pricing System</h2>
+    
+    <h3>4.1. Base Pricing:</h3>
+    <ul>
+        <li>Setting price per night for each room type</li>
+        <li>Prices specified in Kazakhstani tenge (KZT)</li>
+        <li>Ability to set different prices for weekdays and weekends</li>
+    </ul>
+    
+    <h3>4.2. Dynamic Pricing (JSON Format):</h3>
+    <div class="code-example">
+        <pre><code>{
+  "2025-07-01": 25000,
+  "2025-07-02": 30000,
+  "2025-12-31": 50000,
+  "weekend_multiplier": 1.2,
+  "holiday_multiplier": 1.5
+}</code></pre>
+    </div>
+    
+    <h3>4.3. Pricing Recommendations:</h3>
+    <ul>
+        <li>Consider seasonality and local holidays</li>
+        <li>Set competitive prices</li>
+        <li>Regularly analyze and adjust prices</li>
+        <li>Use discounts and special offers</li>
+    </ul>
+</section>
+
+<section id="section-5" aria-labelledby="section-5-title">
+    <h2 id="section-5-title">5. Robokassa Payment System Integration</h2>
+    
+    <h3>5.1. Payment Workflow:</h3>
+    <div class="alert alert-info">
+        <ol>
+            <li>Customer pays 10% of total cost through Robokassa</li>
+            <li>Platform receives prepayment and confirms booking</li>
+            <li>Hotel receives information about confirmed booking</li>
+            <li>Upon check-in, customer pays remaining 90% at the hotel</li>
+        </ol>
+    </div>
+    
+    <h3>5.2. Integration Settings:</h3>
+    <ul>
+        <li>Support for test and live Robokassa modes</li>
+        <li>Automatic generation of secure SHA256 signatures</li>
+        <li>Payment lifetime: 10 minutes from creation</li>
+        <li>Supported currencies: KZT (tenge)</li>
+    </ul>
+    
+    <h3>5.3. Payment Notification Processing:</h3>
+    <ul>
+        <li><strong>ResultURL:</strong> automatic payment confirmation</li>
+        <li><strong>SuccessURL:</strong> redirect after successful payment</li>
+        <li><strong>FailURL:</strong> unsuccessful payment handling</li>
+        <li>All notifications processed in real-time</li>
+    </ul>
+</section>
+
+<section id="section-6" aria-labelledby="section-6-title">
+    <h2 id="section-6-title">6. Booking Management</h2>
+    
+    <h3>6.1. Booking Information (Booking Model):</h3>
+    <ul>
+        <li><strong>Guest Data:</strong> Full name, email, phone, country code</li>
+        <li><strong>Stay Information:</strong> check-in/check-out dates, number of days</li>
+        <li><strong>Guest Count:</strong> adults and children separately</li>
+        <li><strong>Selected Rooms:</strong> rooms and room type</li>
+        <li><strong>Financial Information:</strong> total amount, prepayment, additional payment</li>
+    </ul>
+    
+    <h3>6.2. Booking Statuses:</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="20%">Status</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="badge bg-warning">initiated</span></td>
+                    <td>Created, awaiting payment</td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-success">paid</span></td>
+                    <td>Paid, confirmed</td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-info">pending</span></td>
+                    <td>In processing</td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-secondary">cancelled</span></td>
+                    <td>Cancelled</td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-danger">failed</span></td>
+                    <td>Payment error</td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-primary">refunded</span></td>
+                    <td>Refunded</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <h3>6.3. Automated Processes:</h3>
+    <ul>
+        <li>Sending notifications to hotel for new bookings</li>
+        <li>Automatic cancellation of unpaid bookings after 10 minutes</li>
+        <li>Email notifications to customers about booking status</li>
+        <li>Data synchronization with hotel system</li>
+    </ul>
+</section>
+
+<section id="section-7" aria-labelledby="section-7-title">
+    <h2 id="section-7-title">7. Technical Support and API</h2>
+    
+    <h3>7.1. Administrator Web Interface:</h3>
+    <ul>
+        <li>Access through Django admin panel</li>
+        <li>Management of all hotel and room aspects</li>
+        <li>Viewing and managing bookings</li>
+        <li>Analytics and reporting</li>
+    </ul>
+    
+    <h3>7.2. API Capabilities (for advanced users):</h3>
+    <ul>
+        <li>REST API for automatic data updates</li>
+        <li>Webhooks for receiving booking notifications</li>
+        <li>PMS (Property Management System) integration</li>
+        <li>Data export in various formats</li>
+    </ul>
+    
+    <h3>7.3. Monitoring and Logging:</h3>
+    <ul>
+        <li>All operation logs maintained automatically</li>
+        <li>Real-time room availability monitoring</li>
+        <li>Problem tracking and automatic resolution</li>
+        <li>Data backup every 24 hours</li>
+    </ul>
+</section>
+
+<section id="section-8" aria-labelledby="section-8-title">
+    <h2 id="section-8-title">8. Security and Data Protection</h2>
+    
+    <h3>8.1. Technical Security Measures:</h3>
+    <ul>
+        <li>All connections protected with SSL/TLS (HTTPS)</li>
+        <li>Personal data encryption in database</li>
+        <li>Regular system security updates</li>
+        <li>Protection against CSRF, XSS and SQL injections</li>
+    </ul>
+    
+    <h3>8.2. Personal Data Processing:</h3>
+    <ul>
+        <li>Compliance with Republic of Kazakhstan Law "On Personal Data and Their Protection"</li>
+        <li>Minimization of processed data</li>
+        <li>Automatic deletion of outdated data</li>
+        <li>Logging access to personal data</li>
+    </ul>
+    
+    <h3>8.3. Security Recommendations for Hotels:</h3>
+    <div class="alert alert-warning">
+        <ul class="mb-0">
+            <li>Use complex passwords (minimum 8 characters)</li>
+            <li>Regular password changes (every 3 months)</li>
+            <li>Restrict access to administrative panel</li>
+            <li>Train staff on information security basics</li>
+        </ul>
+    </div>
+</section>
+
+<section id="section-9" aria-labelledby="section-9-title">
+    <h2 id="section-9-title">9. Content Requirements</h2>
+    
+    <h3>9.1. Images:</h3>
+    <ul>
+        <li><strong>Formats:</strong> JPEG, PNG</li>
+        <li><strong>Maximum size:</strong> 5MB per image</li>
+        <li><strong>Recommended resolution:</strong> 1920x1080 pixels</li>
+        <li><strong>Requirements:</strong> High-quality photos of rooms, territory, amenities</li>
+    </ul>
+    
+    <h3>9.2. Text Content:</h3>
+    <ul>
+        <li>Detailed description of hotel and rooms</li>
+        <li>Current information about amenities and services</li>
+        <li>Stay rules and additional services</li>
+        <li>FAQ (frequently asked questions)</li>
+    </ul>
+    
+    <h3>9.3. Multilingual Support:</h3>
+    <ul>
+        <li>Translation of main information into 3 languages: KZ, RU, EN</li>
+        <li>Use of Django translation system</li>
+        <li>Automatic user language detection</li>
+        <li>Ability to switch language anytime</li>
+    </ul>
+</section>
+
+<div class="contact-info">
+    <h3>🛠️ Technical Support</h3>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Technical Support:</h4>
+            <p>
+                <strong>Email:</strong> tech-support@alakol-booking.kz<br>
+                <strong>Phone:</strong> +7 (727) XXX-XX-XX<br>
+                <strong>Working Hours:</strong> 24/7
+            </p>
+        </div>
+        <div class="col-md-6">
+            <h4>Integration Support:</h4>
+            <p>
+                <strong>Email:</strong> integration@alakol-booking.kz<br>
+                <strong>Phone:</strong> +7 (727) XXX-XX-XX<br>
+                <strong>Working Hours:</strong> Mon-Fri 9:00-18:00
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="generation-info">
+    <p><em>Document generated: June 3, 2025, 18:24 UTC+5</em></p>
+</div>
+{% endblock %} 

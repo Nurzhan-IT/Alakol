@@ -566,9 +566,151 @@ def payment_method_selection(request):
         "checkin": checkin,
         "checkout": checkout,
         "total_days": total_days,
+        "adult": request.session.get('booking_common_data', {}).get('adult', 1),
+        "children": request.session.get('booking_common_data', {}).get('children', 0),
     }
     
     return render(request, "hotel/payment_method_selection.html", context)
+
+@csrf_exempt
+def check_session_data(request):
+    """API endpoint для проверки данных сессии перед оплатой"""
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    try:
+        # Проверяем наличие всех необходимых данных в сессии
+        required_session_keys = ['selection_data_obj', 'user_data', 'booking_common_data']
+        missing_keys = []
+        
+        for key in required_session_keys:
+            if key not in request.session:
+                missing_keys.append(key)
+        
+        if missing_keys:
+            error_msg = f"Отсутствуют данные в сессии: {', '.join(missing_keys)}"
+            logger.error(f"Session validation failed: {error_msg}")
+            return JsonResponse({
+                'success': False,
+                'error': error_msg
+            })
+        
+        # Проверяем содержимое selection_data_obj
+        if not request.session['selection_data_obj']:
+            return JsonResponse({
+                'success': False,
+                'error': 'Нет выбранных номеров для бронирования'
+            })
+        
+        # Проверяем обязательные поля в user_data
+        user_data = request.session['user_data']
+        required_user_fields = ['full_name', 'email', 'phone']
+        missing_user_fields = []
+        
+        for field in required_user_fields:
+            if field not in user_data or not user_data[field]:
+                missing_user_fields.append(field)
+        
+        if missing_user_fields:
+            return JsonResponse({
+                'success': False,
+                'error': f'Отсутствуют данные пользователя: {", ".join(missing_user_fields)}'
+            })
+        
+        # Проверяем booking_common_data
+        booking_data = request.session['booking_common_data']
+        required_booking_fields = ['checkin', 'checkout', 'adult']
+        missing_booking_fields = []
+        
+        for field in required_booking_fields:
+            if field not in booking_data or not booking_data[field]:
+                missing_booking_fields.append(field)
+        
+        if missing_booking_fields:
+            return JsonResponse({
+                'success': False,
+                'error': f'Отсутствуют данные бронирования: {", ".join(missing_booking_fields)}'
+            })
+        
+        # Дополнительная проверка дат
+        try:
+            date_format = "%Y-%m-%d"
+            checkin_date = datetime.strptime(booking_data['checkin'], date_format).date()
+            checkout_date = datetime.strptime(booking_data['checkout'], date_format).date()
+            
+            if checkin_date >= checkout_date:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Дата заезда должна быть раньше даты выезда'
+                })
+            
+            # Проверяем, что даты не в прошлом
+            from datetime import date
+            today = date.today()
+            if checkin_date < today:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Дата заезда не может быть в прошлом'
+                })
+                
+        except ValueError as e:
+            return JsonResponse({
+                'success': False,
+                'error': f'Некорректный формат дат: {str(e)}'
+            })
+        
+        # Проверяем существование номеров и отеля
+        try:
+            for h_id, item in request.session['selection_data_obj'].items():
+                # Проверяем что все необходимые поля есть
+                if not all(key in item for key in ['hotel_id', 'room_id', 'room_type']):
+                    return JsonResponse({
+                        'success': False,
+                        'error': f'Некорректные данные номера {h_id}'
+                    })
+                
+                # Проверяем существование отеля
+                hotel_id = int(item['hotel_id'])
+                if not Hotel.objects.filter(id=hotel_id, status='Live').exists():
+                    return JsonResponse({
+                        'success': False,
+                        'error': f'Отель с ID {hotel_id} не найден или не активен'
+                    })
+                
+                # Проверяем существование номера
+                room_id = int(item['room_id'])
+                if not Room.objects.filter(id=room_id).exists():
+                    return JsonResponse({
+                        'success': False,
+                        'error': f'Номер с ID {room_id} не найден'
+                    })
+                
+                # Проверяем существование типа номера
+                room_type_id = int(item['room_type'])
+                if not RoomType.objects.filter(id=room_type_id).exists():
+                    return JsonResponse({
+                        'success': False,
+                        'error': f'Тип номера с ID {room_type_id} не найден'
+                    })
+        
+        except (ValueError, TypeError, KeyError) as e:
+            return JsonResponse({
+                'success': False,
+                'error': f'Ошибка в данных номеров: {str(e)}'
+            })
+        
+        logger.info("Session data validation successful")
+        return JsonResponse({
+            'success': True,
+            'message': 'Данные сессии корректны'
+        })
+        
+    except Exception as e:
+        logger.error(f"Session validation error: {str(e)}")
+        return JsonResponse({
+            'success': False,
+            'error': f'Внутренняя ошибка проверки: {str(e)}'
+        })
 
 def process_booking(request):
     """Создает бронирование из данных сессии и возвращает booking_id"""
