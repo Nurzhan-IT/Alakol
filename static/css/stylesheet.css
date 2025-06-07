@@ -10575,11 +10575,6 @@ section.fullwidth_block .utf_listing_item-container.list-layout {
     white-space: nowrap;
 }
 
-.utf_listing_hotel_address_and_rating_container {
-    display: flex;
-    flex-direction: column;
-}
-
 .utf_dashboard_list_box .utf_counter_star_rating {
     line-height: 18px;
 }
