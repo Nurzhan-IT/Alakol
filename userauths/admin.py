@@ -1,10 +1,16 @@
 from django.contrib import admin
 from userauths.models import User, Profile
 from django.utils.html import mark_safe
-from hotel.admin import custom_admin_site
-class UserAdmin(admin.ModelAdmin):
+from hotel.admin import custom_admin_site, RussianModelAdminMixin
+
+class UserAdmin(RussianModelAdminMixin, admin.ModelAdmin):
     search_fields  = ['full_name', 'username', 'email',  'phone', 'gender']
     list_display  = ['full_name', 'username', 'email',  'phone', 'gender']
+    
+    def _setup_russian_verbose_names(self):
+        """Устанавливает русские названия для модели"""
+        self.model._meta.verbose_name = 'Пользователь'
+        self.model._meta.verbose_name_plural = 'Пользователи'
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -12,8 +18,13 @@ class UserAdmin(admin.ModelAdmin):
             queryset = queryset.filter(id=getattr(request.user, "id", None))
         return queryset
 
-class ProfileAdmin(admin.ModelAdmin):
+class ProfileAdmin(RussianModelAdminMixin, admin.ModelAdmin):
     search_fields = ['user__username', 'full_name']
+    
+    def _setup_russian_verbose_names(self):
+        """Устанавливает русские названия для модели"""
+        self.model._meta.verbose_name = 'Профиль'
+        self.model._meta.verbose_name_plural = 'Профили'
     
     # Список полей, доступных только для Manager
     manager_fields = [
@@ -51,8 +62,6 @@ class ProfileAdmin(admin.ModelAdmin):
         if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
             return ['thumbnail', 'full_name']  # Ограничиваем список до минимума
         return self.list_display
-
-
 
 
 custom_admin_site.register(User, UserAdmin)

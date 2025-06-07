@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'user_dashboard',
     'search',
     'robokassa',
+    'legal',
 
     # Third Party Apps
     'import_export',
@@ -80,6 +81,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'hotel.middleware.AdminRussianLanguageMiddleware',  # Принудительно устанавливает русский для админки
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -100,10 +102,12 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.i18n',
                 'hotel.context_processor.default',
+                'hotel.context_processor.admin_russian_language',  # Принудительно русский для админки
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'legal.context_processors.legal_documents',
             ],
         },
     },
@@ -118,7 +122,7 @@ WSGI_APPLICATION = 'hms_prj.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('DB_NAME'),
+        'NAME': 'alakol',
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
@@ -227,13 +231,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 JAZZMIN_SETTINGS = {
     'site_header': "Alakol",
-    'site_brand': "Your #1 marketplace for collectibles.",
+    'site_brand': "Ваша №1 площадка для коллекционирования.",
     'site_logo': "/images/logo.png",
-    'copyright':  "All Right Reserved 2024",
-    "welcome_sign": "Welcome to Alakol HMS, Login Now.",
+    'copyright':  "Все права защищены 2025",
+    "welcome_sign": "Добро пожаловать в Alakol HMS, войдите сейчас.",
+    
+    "language_chooser": False,
+    
     "topmenu_links": [
-
-        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Главная",  "url": "admin:index", "permissions": ["auth.view_user"]},
         # {"name": "Company", "url": "/admin/addons/company/"},
         # {"name": "Users", "url": "/admin/userauths/user/"},
 
@@ -271,7 +277,6 @@ JAZZMIN_SETTINGS = {
         "hotel.Coupon":"fas fa-tag",
         "hotel.Bookmark":"fas fa-heart",
     },
-
 
     "show_ui_builder" : True
 }

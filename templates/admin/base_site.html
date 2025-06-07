@@ -1,0 +1,206 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Alakol Admin{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    
+    <script>
+        // Принудительная русификация breadcrumb и других элементов
+        document.addEventListener('DOMContentLoaded', function() {
+            // Словарь переводов для breadcrumb
+            var breadcrumbTranslations = {
+                'Home': 'Главная',
+                'На главную': 'Главная', // уже переведенный текст
+                'Hotel': 'Отели',
+                'Room': 'Номера',
+                'RoomType': 'Типы номеров',
+                'Booking': 'Бронирования',
+                'RoomServices': 'Услуги номеров',
+                'Coupon': 'Купоны',
+                'Notification': 'Уведомления',
+                'Bookmark': 'Закладки',
+                'Review': 'Отзывы',
+                'User': 'Пользователи',
+                'Profile': 'Профили',
+                'Group': 'Группы',
+                'Permission': 'Разрешения',
+                'Add': 'Добавить',
+                'Change': 'Изменить',
+                'Delete': 'Удалить',
+                'Select': 'Выбрать',
+                'View': 'Просмотр',
+                'hotel': 'Отель',
+                'Userauths': 'Пользователи',
+                'booking': 'Бронирования',
+                'auth': 'Аутентификация',
+                'Room unavailabilities': 'Недоступность номеров',
+                'RoomUnavailability': 'Недоступность номеров'
+            };
+            
+            // Функция для безопасной замены текста в узле, сохраняя HTML структуру
+            function translateTextNode(node) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    var text = node.textContent.trim();
+                    if (breadcrumbTranslations[text]) {
+                        node.textContent = node.textContent.replace(text, breadcrumbTranslations[text]);
+                        return true;
+                    }
+                }
+                return false;
+            }
+            
+            // Функция для замены текста в breadcrumb с сохранением ссылок
+            function translateBreadcrumb() {
+                // Ищем breadcrumb элементы
+                var breadcrumbSelectors = [
+                    '.breadcrumb',
+                    '.breadcrumbs',
+                    '.grp-breadcrumbs',
+                    '.nav-breadcrumb'
+                ];
+                
+                breadcrumbSelectors.forEach(function(selector) {
+                    var breadcrumbContainers = document.querySelectorAll(selector);
+                    breadcrumbContainers.forEach(function(container) {
+                        // Обрабатываем каждый элемент breadcrumb отдельно
+                        var items = container.querySelectorAll('li, .breadcrumb-item');
+                        items.forEach(function(item) {
+                            // Если есть ссылка внутри элемента, переводим только ее текст
+                            var link = item.querySelector('a');
+                            if (link) {
+                                // Переводим текст ссылки
+                                var linkText = link.textContent.trim();
+                                if (breadcrumbTranslations[linkText]) {
+                                    link.textContent = breadcrumbTranslations[linkText];
+                                }
+                            } else {
+                                // Если нет ссылки, переводим текст самого элемента
+                                // Проходим только по прямым текстовым узлам
+                                for (var i = 0; i < item.childNodes.length; i++) {
+                                    translateTextNode(item.childNodes[i]);
+                                }
+                            }
+                        });
+                        
+                        // Также обрабатываем прямые ссылки в breadcrumb
+                        var directLinks = container.querySelectorAll('a');
+                        directLinks.forEach(function(link) {
+                            var linkText = link.textContent.trim();
+                            if (breadcrumbTranslations[linkText]) {
+                                link.textContent = breadcrumbTranslations[linkText];
+                            }
+                        });
+                    });
+                });
+                
+                // Обрабатываем также заголовки страниц
+                var pageHeaders = document.querySelectorAll('h1, .model-name, .object-name');
+                pageHeaders.forEach(function(header) {
+                    var headerText = header.textContent.trim();
+                    if (breadcrumbTranslations[headerText]) {
+                        header.textContent = breadcrumbTranslations[headerText];
+                    }
+                });
+            }
+            
+            // Запускаем переводы
+            translateBreadcrumb();
+            
+            // Наблюдаем за изменениями для динамически загружаемого контента
+            var observer = new MutationObserver(function(mutations) {
+                var shouldTranslate = false;
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            // Проверяем, добавлены ли breadcrumb элементы
+                            if (node.classList && (
+                                node.classList.contains('breadcrumb') ||
+                                node.classList.contains('breadcrumbs') ||
+                                node.querySelector && (
+                                    node.querySelector('.breadcrumb') ||
+                                    node.querySelector('.breadcrumbs')
+                                )
+                            )) {
+                                shouldTranslate = true;
+                            }
+                        }
+                    });
+                });
+                
+                if (shouldTranslate) {
+                    setTimeout(translateBreadcrumb, 100); // Небольшая задержка для загрузки контента
+                }
+            });
+            
+            observer.observe(document.body, { childList: true, subtree: true });
+        });
+    </script>
+    
+    <style>
+        /* Принудительно скрываем переключатель языка */
+        .language-chooser,
+        .language-selector,
+        [class*="language"] select,
+        .language-tool {
+            display: none !important;
+        }
+        
+        /* Стили для русского интерфейса */
+        .admin-russian .submit-row {
+            text-align: left;
+        }
+        
+        .admin-russian .button,
+        .admin-russian input[type="submit"] {
+            font-family: inherit;
+        }
+        
+        /* Стили для breadcrumb */
+        .breadcrumbs, .grp-breadcrumbs, .breadcrumb {
+            font-family: inherit;
+        }
+        
+        /* Убеждаемся, что ссылки в breadcrumb остаются ссылками */
+        .breadcrumb a, .breadcrumbs a, .grp-breadcrumbs a {
+            color: inherit;
+            text-decoration: underline;
+        }
+        
+        .breadcrumb a:hover, .breadcrumbs a:hover, .grp-breadcrumbs a:hover {
+            text-decoration: none;
+        }
+    </style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Админ панель Alakol</a></h1>
+{% endblock %}
+
+{% block nav-global %}
+    <div id="user-tools">
+        {% block welcome-msg %}
+            Добро пожаловать,
+            <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+        {% endblock %}
+        {% block userlinks %}
+            {% if site_url %}
+                <a href="{{ site_url }}">Просмотреть сайт</a> /
+            {% endif %}
+            {% if user.is_active and user.is_staff %}
+                {% url 'django-admindocs-docroot' as docsroot %}
+                {% if docsroot %}
+                    <a href="{{ docsroot }}">Документация</a> /
+                {% endif %}
+            {% endif %}
+            {% if user.has_usable_password %}
+                <a href="{% url 'admin:password_change' %}">Изменить пароль</a> /
+            {% endif %}
+            <a href="{% url 'admin:logout' %}">Выйти</a>
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} admin-russian{% endblock %} 

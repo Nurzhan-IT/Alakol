@@ -1,0 +1,381 @@
+<!-- Generated on 2025-05-31 02:42 AM +05 -->
+{% extends 'legal/base_legal.html' %}
+
+{% block title %}Privacy Policy{% endblock %}
+{% block page_name %}Privacy Policy{% endblock %}
+{% block meta_description %}Privacy Policy for HMS Alakol hotel booking system. Information about personal data processing, security measures, and user rights in accordance with Kazakhstan legislation.{% endblock %}
+{% block breadcrumb_current %}Privacy Policy{% endblock %}
+{% block privacy_active %}class="active"{% endblock %}
+
+{% block content %}
+<h1 id="document-title" tabindex="-1">Privacy Policy</h1>
+<p class="subtitle">HMS Alakol Hotel Booking System</p>
+
+<div class="document-meta">
+    <strong>Effective Date:</strong> [DATE]<br>
+    <strong>Document Version:</strong> 1.0<br>
+    <strong>System:</strong> HMS (Hotel Management System) - Alakol Hotel Management System<br>
+    <strong>Technology Platform:</strong> Django 4.2.2 (Python web framework)<br>
+    <strong>Database:</strong> PostgreSQL<br>
+    <strong>Payment System:</strong> Robokassa (official integration)<br>
+    <strong>Region:</strong> Alakol, Republic of Kazakhstan<br>
+    <strong>Time Zone:</strong> Kazakhstan/Astana (UTC+5)
+</div>
+
+<nav class="navigation-toc" aria-label="Table of Contents">
+    <h3>Table of Contents</h3>
+    <ol>
+        <li><a href="#section-1">General Provisions</a></li>
+        <li><a href="#section-2">Legal Basis for Processing</a></li>
+        <li><a href="#section-3">Categories of Personal Data</a></li>
+        <li><a href="#section-4">Processing Purposes</a></li>
+        <li><a href="#section-5">Processing Methods</a></li>
+        <li><a href="#section-6">Processing Terms</a></li>
+        <li><a href="#section-7">Third Party Transfers</a></li>
+        <li><a href="#section-8">Cross-border Transfers</a></li>
+        <li><a href="#section-9">Security Measures</a></li>
+        <li><a href="#section-10">Cookies and Technologies</a></li>
+        <li><a href="#section-11">Data Subject Rights</a></li>
+        <li><a href="#section-12">Minors' Rights</a></li>
+        <li><a href="#section-13">Policy Changes</a></li>
+        <li><a href="#section-14">Regulatory Control</a></li>
+        <li><a href="#section-15">Contact Information</a></li>
+    </ol>
+</nav>
+
+<section id="section-1" aria-labelledby="section-1-title">
+    <h2 id="section-1-title">1. General Provisions</h2>
+    
+    <p><strong>1.1.</strong> This Privacy Policy (hereinafter "Policy") defines the procedure for processing personal data of users of the HMS (Hotel Management System) Alakol system, located at [WEBSITE ADDRESS] (hereinafter "Website").</p>
+    
+    <p><strong>1.2.</strong> The personal data operator is [LEGAL ENTITY/INDIVIDUAL ENTREPRENEUR NAME], BIN/IIN: [BIN/IIN], legal address: [ADDRESS] (hereinafter "Operator", "Company", "we").</p>
+    
+    <p><strong>1.3.</strong> Personal data processing is carried out in accordance with the Law of the Republic of Kazakhstan "On Personal Data and Their Protection" and other regulatory legal acts of the Republic of Kazakhstan.</p>
+    
+    <p><strong>1.4.</strong> By using the HMS system, you consent to the processing of your personal data in accordance with this Policy.</p>
+</section>
+
+<section id="section-2" aria-labelledby="section-2-title">
+    <h2 id="section-2-title">2. Legal Basis for Processing Personal Data</h2>
+    
+    <p><strong>2.1.</strong> The legal basis for personal data processing includes:</p>
+    <ul>
+        <li>consent of the personal data subject</li>
+        <li>necessity for the performance of a contract to which the data subject is party</li>
+        <li>necessity for compliance with the Operator's legal obligations</li>
+        <li>protection of vital interests of the data subject</li>
+    </ul>
+</section>
+
+<section id="section-3" aria-labelledby="section-3-title">
+    <h2 id="section-3-title">3. Categories of Personal Data</h2>
+    
+    <p><strong>3.1.</strong> We process the following categories of personal data according to the HMS User model:</p>
+    
+    <h3>3.1.1. Account Data:</h3>
+    <ul>
+        <li>surname, first name, patronymic (full_name)</li>
+        <li>email address (email) - used as username, unique</li>
+        <li>phone number (phone)</li>
+        <li>gender (gender) - male/female</li>
+        <li>country and city of residence (country, city)</li>
+        <li>residential address (address)</li>
+        <li>password (encrypted using Django)</li>
+        <li>profile photo (image)</li>
+        <li>OTP code for verification</li>
+        <li>electronic wallet (wallet) - for future bonus programs</li>
+        <li>verification status (verified)</li>
+    </ul>
+    
+    <h3>3.1.2. Booking Data (according to Booking model):</h3>
+    <ul>
+        <li>guest full name (full_name)</li>
+        <li>guest email (email)</li>
+        <li>country code (country_code)</li>
+        <li>phone number (phone)</li>
+        <li>selected hotel (hotel)</li>
+        <li>room type (room_type)</li>
+        <li>specific rooms (room) - many-to-many relationship</li>
+        <li>selection data (selection_data) - JSON field</li>
+        <li>check-in and check-out dates (check_in_date, check_out_date)</li>
+        <li>number of days (total_days)</li>
+        <li>number of adults and children (num_adults, num_children)</li>
+        <li>check-in/check-out status (checked_in, checked_out)</li>
+        <li>unique booking ID (booking_id)</li>
+        <li>Robokassa transaction ID (robokassa_inv_id)</li>
+        <li>preferences and special requests</li>
+    </ul>
+    
+    <h3>3.1.3. Payment Information:</h3>
+    <ul>
+        <li>bank card data (processed by Robokassa payment system)</li>
+        <li>payment and transaction information</li>
+        <li>payment identifiers</li>
+        <li>amount before discount (before_discount)</li>
+        <li>total amount (total)</li>
+        <li>savings amount (saved)</li>
+        <li>payment status (payment_status)</li>
+        <li>applied coupons (coupons)</li>
+    </ul>
+    
+    <h3>3.1.4. Technical Data:</h3>
+    <ul>
+        <li>IP address</li>
+        <li>browser and device information</li>
+        <li>cookies</li>
+        <li>visit logs and user actions</li>
+        <li>session times</li>
+        <li>system fields: booking activity (is_active), creation time (created_at), expiration time (expires_at)</li>
+    </ul>
+    
+    <h3>3.1.5. Behavioral Data:</h3>
+    <ul>
+        <li>hotel search history</li>
+        <li>room selection preferences</li>
+        <li>service usage frequency</li>
+        <li>HMS interface interaction analytics</li>
+    </ul>
+</section>
+
+<section id="section-4" aria-labelledby="section-4-title">
+    <h2 id="section-4-title">4. Processing Purposes</h2>
+    
+    <p><strong>4.1.</strong> Personal data is processed for the following purposes:</p>
+    
+    <h3>4.1.1. Providing Booking Services:</h3>
+    <ul>
+        <li>processing booking requests through HMS booking module</li>
+        <li>booking confirmation and modification</li>
+        <li>communication with hotels for accommodation arrangements</li>
+    </ul>
+    
+    <h3>4.1.2. Ensuring HMS System Operation:</h3>
+    <ul>
+        <li>user registration and authentication through userauths module</li>
+        <li>OTP system for verification</li>
+        <li>interface personalization</li>
+        <li>security assurance</li>
+        <li>management through user_dashboard module</li>
+    </ul>
+    
+    <h3>4.1.3. Communications:</h3>
+    <ul>
+        <li>sending booking confirmations</li>
+        <li>notifying about order changes</li>
+        <li>technical support in Kazakh, Russian, and English</li>
+        <li>marketing messages (with consent)</li>
+    </ul>
+    
+    <h3>4.1.4. Analytics and Service Improvement:</h3>
+    <ul>
+        <li>HMS system usage analysis through search and addon modules</li>
+        <li>functionality improvement</li>
+        <li>statistical research</li>
+    </ul>
+    
+    <h3>4.1.5. Legal Compliance:</h3>
+    <ul>
+        <li>fulfilling Kazakhstan legislation requirements</li>
+        <li>fraud prevention</li>
+        <li>dispute resolution</li>
+    </ul>
+</section>
+
+<section id="section-5" aria-labelledby="section-5-title">
+    <h2 id="section-5-title">5. Processing Methods</h2>
+    
+    <p><strong>5.1.</strong> Personal data processing is carried out using Django 4.2.2 automation tools and without them.</p>
+    
+    <p><strong>5.2.</strong> Processing methods include:</p>
+    <ul>
+        <li>collection, systematization, accumulation, storage in PostgreSQL database</li>
+        <li>clarification, modification, use</li>
+        <li>distribution, transfer, depersonalization, blocking, deletion</li>
+    </ul>
+</section>
+
+<section id="section-6" aria-labelledby="section-6-title">
+    <h2 id="section-6-title">6. Processing Terms</h2>
+    
+    <p><strong>6.1.</strong> Personal data is processed for the following terms:</p>
+    
+    <h3>6.1.1. Account Data:</h3>
+    <p>Until consent withdrawal or account deletion application is submitted.</p>
+    
+    <h3>6.1.2. Booking Data:</h3>
+    <p>For 5 years after the last booking completion for accounting reporting and dispute resolution purposes.</p>
+    
+    <h3>6.1.3. Technical Data:</h3>
+    <p>For 1 year from the last HMS system visit.</p>
+    
+    <h3>6.1.4. Payment Information:</h3>
+    <p>In accordance with Kazakhstan financial legislation requirements and Robokassa policy.</p>
+    
+    <h3>6.1.5. Unpaid Bookings:</h3>
+    <p>Automatically deleted 10 minutes after payment deadline expiration.</p>
+</section>
+
+<section id="section-7" aria-labelledby="section-7-title">
+    <h2 id="section-7-title">7. Personal Data Transfer to Third Parties</h2>
+    
+    <p><strong>7.1.</strong> We may transfer personal data to the following third parties:</p>
+    
+    <h3>7.1.1. Partner Hotels in Alakol Region:</h3>
+    <p>For ensuring booking and accommodation.</p>
+    
+    <h3>7.1.2. Robokassa Payment System:</h3>
+    <p>For payment processing using secure SHA256 digital signatures.</p>
+    
+    <h3>7.1.3. IT Service Providers:</h3>
+    <p>For ensuring HMS system operation on Django 4.2.2 platform.</p>
+    
+    <h3>7.1.4. Email Provider (Mailgun or AWS):</h3>
+    <p>For sending notifications.</p>
+    
+    <h3>7.1.5. Hosting Providers:</h3>
+    <p>For ensuring website operation.</p>
+    
+    <h3>7.1.6. Government Agencies:</h3>
+    <p>In cases provided by Kazakhstan legislation.</p>
+    
+    <p><strong>7.2.</strong> Personal data transfer is carried out only to the extent necessary to achieve processing purposes.</p>
+    
+    <p><strong>7.3.</strong> We require third parties to comply with confidentiality and security of transferred personal data.</p>
+</section>
+
+<section id="section-8" aria-labelledby="section-8-title">
+    <h2 id="section-8-title">8. Cross-border Transfer of Personal Data</h2>
+    
+    <p><strong>8.1.</strong> Cross-border transfer of personal data may be carried out to countries providing adequate level of personal data protection.</p>
+    
+    <p><strong>8.2.</strong> When transferring data to other countries, we use appropriate protection guarantees in accordance with Kazakhstan legislation requirements.</p>
+</section>
+
+<section id="section-9" aria-labelledby="section-9-title">
+    <h2 id="section-9-title">9. Security Measures</h2>
+    
+    <p><strong>9.1.</strong> We apply technical and organizational measures to protect personal data:</p>
+    
+    <h3>9.1.1. Technical Measures:</h3>
+    <ul>
+        <li>data encryption during transmission (SSL/TLS)</li>
+        <li>password hashing (Django built-in)</li>
+        <li>regular backup</li>
+        <li>unauthorized access protection</li>
+        <li>security monitoring</li>
+        <li>CSRF attack protection</li>
+        <li>user input validation and sanitization</li>
+    </ul>
+    
+    <h3>9.1.2. Organizational Measures:</h3>
+    <ul>
+        <li>personal data access restriction</li>
+        <li>employee training on personal data protection</li>
+        <li>internal security policies</li>
+        <li>security system audits</li>
+        <li>limited access to personal data</li>
+        <li>administrator action logging</li>
+    </ul>
+    
+    <h3>9.1.3. Data Storage:</h3>
+    <ul>
+        <li>personal data stored in protected PostgreSQL database</li>
+        <li>payment information not stored locally</li>
+        <li>activity logs maintained for audit</li>
+        <li>automatic deletion of expired sessions</li>
+    </ul>
+</section>
+
+<section id="section-10" aria-labelledby="section-10-title">
+    <h2 id="section-10-title">10. Use of Cookies and Similar Technologies</h2>
+    
+    <p><strong>10.1.</strong> The HMS system uses cookies for:</p>
+    <ul>
+        <li>remembering user settings</li>
+        <li>analyzing traffic and user behavior</li>
+        <li>content personalization</li>
+        <li>ensuring security</li>
+    </ul>
+    
+    <p><strong>10.2.</strong> You can manage cookies through browser settings.</p>
+    
+    <p><strong>10.3.</strong> Disabling cookies may limit HMS system functionality.</p>
+</section>
+
+<section id="section-11" aria-labelledby="section-11-title">
+    <h2 id="section-11-title">11. Data Subject Rights</h2>
+    
+    <p><strong>11.1.</strong> You have the following rights regarding your personal data:</p>
+    
+    <h3>11.1.1. Right to Access:</h3>
+    <p>Obtaining information about processed personal data through user_dashboard personal cabinet.</p>
+    
+    <h3>11.1.2. Right to Rectification:</h3>
+    <p>Making changes to inaccurate or incomplete personal data.</p>
+    
+    <h3>11.1.3. Right to Erasure:</h3>
+    <p>Requesting deletion of personal data in cases provided by law.</p>
+    
+    <h3>11.1.4. Right to Restrict Processing:</h3>
+    <p>Suspending personal data processing.</p>
+    
+    <h3>11.1.5. Right to Withdraw Consent:</h3>
+    <p>Withdrawing previously given consent for personal data processing.</p>
+    
+    <h3>11.1.6. Right to Data Portability:</h3>
+    <p>Obtaining personal data in structured format.</p>
+    
+    <p><strong>11.2.</strong> To exercise your rights, contact: [EMAIL] or [ADDRESS].</p>
+</section>
+
+<section id="section-12" aria-labelledby="section-12-title">
+    <h2 id="section-12-title">12. Minors' Rights</h2>
+    
+    <p><strong>12.1.</strong> The HMS system is not intended for persons under 18 years of age.</p>
+    
+    <p><strong>12.2.</strong> We do not purposefully collect personal data of minors.</p>
+    
+    <p><strong>12.3.</strong> Upon discovering personal data of minors, we immediately delete it.</p>
+</section>
+
+<section id="section-13" aria-labelledby="section-13-title">
+    <h2 id="section-13-title">13. Changes to Privacy Policy</h2>
+    
+    <p><strong>13.1.</strong> We may update this Policy.</p>
+    
+    <p><strong>13.2.</strong> We notify users of significant changes through the HMS system or email.</p>
+    
+    <p><strong>13.3.</strong> Continued use of the HMS system after changes means consent to the new Policy version.</p>
+</section>
+
+<section id="section-14" aria-labelledby="section-14-title">
+    <h2 id="section-14-title">14. Regulatory Control</h2>
+    
+    <p><strong>14.1.</strong> Control over compliance with personal data legislation is exercised by the Ministry of Digital Development, Innovation and Aerospace Industry of the Republic of Kazakhstan.</p>
+    
+    <p><strong>14.2.</strong> You have the right to file a complaint with the authorized body about violation of your rights.</p>
+</section>
+
+<section id="section-15" aria-labelledby="section-15-title">
+    <h2 id="section-15-title">15. Contact Information</h2>
+    
+    <p><strong>15.1.</strong> For personal data processing issues, contact:</p>
+    
+    <div class="contact-info">
+        <p><strong>Data Protection Officer:</strong> [NAME, POSITION]</p>
+        <p><strong>Address:</strong> [LEGAL ADDRESS]</p>
+        <p><strong>Phone:</strong> [PHONE]</p>
+        <p><strong>Email:</strong> [PERSONAL DATA EMAIL]</p>
+        <p><strong>Response Time:</strong> Up to 30 days from receipt</p>
+    </div>
+</section>
+
+<div class="contact-info">
+    <h3>Final Provisions</h3>
+    <p>This Policy is an integral part of the Terms of Use and operates equally with it. Issues not regulated by this Policy are resolved in accordance with the legislation of the Republic of Kazakhstan.</p>
+    
+    <p><em>The system operates in Kazakhstan/Astana timezone (UTC+5)</em><br>
+    <em>Technology platform: Django 4.2.2 with PostgreSQL database</em><br>
+    <em>Payment system: Robokassa with PCI DSS standards support</em></p>
+</div>
+{% endblock %} 

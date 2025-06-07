@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
     <link rel="stylesheet" href="{% static 'css/mmenu.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" id="colors">
+    <!-- Legal Integration CSS - Generated on 2025-05-31 04:53 AM +05 -->
+    <link rel="stylesheet" href="{% static 'css/legal_integration.css' %}">
     {% comment %} <link href="{% static 'css/datedropper.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
 
     <!-- Icons, Font and assets -->
@@ -172,6 +174,45 @@
                       <input class="input-text" type="password" name="password2" id="password2" placeholder="{% trans "Confirm Password" %}" />
                     </label>
                                         </p>
+                                        
+                                        <!-- Legal Consent Section for Modal - Added 2025-05-31 04:53 AM +05 -->
+                                        <div class="legal-consent-section" style="padding: 15px; margin: 15px 0; background: #f8f9fa; border-radius: 5px;">
+                                            <div class="legal-checkbox-group">
+                                                <!-- Terms of Use - Required -->
+                                                <div class="legal-checkbox required" style="margin-bottom: 8px;">
+                                                    <input type="checkbox" id="modal_terms_consent" name="terms_consent" required style="margin-right: 8px;">
+                                                    <label for="modal_terms_consent" style="font-size: 12px; line-height: 1.3;">
+                                                        {% trans "I agree to" %}
+                                                        <a href="{% url 'legal:terms_of_use' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                                                            {% trans "Terms of Use" %}
+                                                        </a>
+                                                    </label>
+                                                </div>
+                                                
+                                                <!-- Privacy Policy - Required -->
+                                                <div class="legal-checkbox required" style="margin-bottom: 8px;">
+                                                    <input type="checkbox" id="modal_privacy_consent" name="privacy_consent" required style="margin-right: 8px;">
+                                                    <label for="modal_privacy_consent" style="font-size: 12px; line-height: 1.3;">
+                                                        {% trans "I agree to" %}
+                                                        <a href="{% url 'legal:privacy_policy' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                                                            {% trans "Privacy Policy" %}
+                                                        </a>
+                                                    </label>
+                                                </div>
+                                                
+                                                <!-- Personal Data Consent - Required -->
+                                                <div class="legal-checkbox required" style="margin-bottom: 8px;">
+                                                    <input type="checkbox" id="modal_personal_data_consent" name="personal_data_consent" required style="margin-right: 8px;">
+                                                    <label for="modal_personal_data_consent" style="font-size: 12px; line-height: 1.3;">
+                                                        {% trans "I consent to" %}
+                                                        <a href="{% url 'legal:personal_data_consent' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                                                            {% trans "Data Processing" %}
+                                                        </a>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
                                         <input type="submit" class="button border fw margin-top-10" name="register" value="{% trans "Register" %}" />
                                     </form>
                                 </div>
@@ -203,6 +244,32 @@
                         </div>
                     </div>
 
+                    <!-- Legal Documents Section - Added 2025-05-31 04:53 AM +05 -->
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="footer-legal-section">
+                            <h5>{% trans "Legal Information" %}</h5>
+                            <div class="footer-legal-links">
+                                <a href="{% url 'legal:terms_of_use' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                                    {% trans "Terms of Use" %}
+                                </a>
+                                <a href="{% url 'legal:privacy_policy' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                                    {% trans "Privacy Policy" %}
+                                </a>
+                                <a href="{% url 'legal:public_offer' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                                    {% trans "Public Offer" %}
+                                </a>
+                                <a href="{% url 'legal:booking_rules' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                                    {% trans "Booking Rules" %}
+                                </a>
+                                <a href="{% url 'legal:personal_data_consent' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                                    {% trans "Data Processing Consent" %}
+                                </a>
+                                <a href="{% url 'legal:payment_rules' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                                    {% trans "Payment Rules" %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">
@@ -250,6 +317,9 @@
     <script src="{% static 'scripts/daterangepicker.js' %}"></script>
     <script src="{% static 'scripts/moment.min.js' %}"></script>
     <script src="{% static 'scripts/daterangepicker.js' %}"></script>
+    
+    <!-- Legal Validation JavaScript - Generated on 2025-05-31 04:53 AM +05 -->
+    <script src="{% static 'js/legal_validation.js' %}"></script>
     
     {% block script_links %}
     {% endblock script_links %}
