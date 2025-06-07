@@ -341,7 +341,7 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   width: 100%;
   max-width: 1200px;
-  height: 1000px;
+  height: 700px;
   padding-bottom: 100px;
   z-index: 1002;
   transform: scale(0.9);
@@ -452,6 +452,11 @@
 /* Стили для особенностей номера */
 .room-features-section {
   margin-top: 20px;
+}
+
+.amenities_item {
+  display: flex;
+  justify-content: center;
 }
 
 .room-feature-category {
@@ -568,6 +573,7 @@
   .custom-modal-content {
     max-width: 95%;
     margin: auto;
+    height: 800px;
   }
 
   .custom-modal-body {
@@ -607,6 +613,7 @@
   .custom-modal-content {
     max-width: 98%;
     margin: auto;
+    height: 1000px;
   }
 
   .custom-main-image img {
