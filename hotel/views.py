@@ -26,7 +26,7 @@ from robokassa.robokassa import generate_payment_link, result_payment, check_suc
 from hotel.decorators import require_selection_data
 
 def index(request):
-    hotel = Hotel.objects.filter(status="Live")
+    hotel = Hotel.objects.filter(status="Live", featured=True)
     context = {
         "hotel":hotel
     }
