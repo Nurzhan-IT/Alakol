@@ -1,0 +1,499 @@
+<!-- Generated on 2025-05-31 02:59 AM +05 -->
+{% extends 'legal/base_legal.html' %}
+{% load i18n %}
+
+{% block title %}Payment and Refund Rules{% endblock %}
+
+{% block meta_description %}Payment methods, refund conditions, and financial procedures for HMS Alakol hotel booking system. Detailed information about 10%+90% payment scheme, Robokassa integration, and refund policies.{% endblock %}
+
+{% block page_name %}Payment and Refund Rules{% endblock %}
+
+{% block content %}
+<div class="generation-info">
+    Generated on {{ generation_time }}
+</div>
+
+<div class="document-version">
+    Document Version: {{ document_version }} | Last Updated: {{ last_updated }}
+</div>
+
+<h1 id="document-title">PAYMENT AND REFUND RULES</h1>
+<h2 class="text-center">HMS ALAKOL HOTEL BOOKING SYSTEM</h2>
+
+<div class="document-meta">
+    <p><strong>Effective Date:</strong> [DATE]</p>
+    <p><strong>Document Version:</strong> 1.0</p>
+    <p><strong>System:</strong> HMS (Hotel Management System) - Alakol Hotel Management System</p>
+    <p><strong>Technology Platform:</strong> Django 4.2.2 (Python web framework)</p>
+    <p><strong>Database:</strong> PostgreSQL</p>
+    <p><strong>Payment System:</strong> Robokassa (official integration)</p>
+    <p><strong>Region:</strong> Alakol, Republic of Kazakhstan</p>
+    <p><strong>Time Zone:</strong> Kazakhstan/Astana (UTC+5)</p>
+</div>
+
+<div class="legal-navigation">
+    <h3>Table of Contents</h3>
+    <ol>
+        <li><a href="#section-1">General Provisions</a></li>
+        <li><a href="#section-2">Payment Methods</a></li>
+        <li><a href="#section-3">Payment Structure</a></li>
+        <li><a href="#section-4">HMS Payment Process</a></li>
+        <li><a href="#section-5">Payment Confirmation</a></li>
+        <li><a href="#section-6">Refund Conditions</a></li>
+        <li><a href="#section-7">Refund Procedure</a></li>
+        <li><a href="#section-8">Refund Terms</a></li>
+        <li><a href="#section-9">Fees and Additional Costs</a></li>
+        <li><a href="#section-10">Dispute Situations</a></li>
+        <li><a href="#section-11">Chargeback</a></li>
+        <li><a href="#section-12">Security and Data Protection</a></li>
+        <li><a href="#section-13">Taxation</a></li>
+        <li><a href="#section-14">Contact Information</a></li>
+        <li><a href="#section-15">Final Provisions</a></li>
+    </ol>
+</div>
+
+<section id="section-1" aria-labelledby="section-1-title">
+    <h2 id="section-1-title">1. GENERAL PROVISIONS</h2>
+    
+    <h3>1.1. Purpose</h3>
+    <p>These Rules define the procedure for payment of hotel booking services and conditions for refund of money when using the HMS (Hotel Management System) for the Alakol region via the website [WEBSITE ADDRESS].</p>
+    
+    <h3>1.2. HMS Alakol Platform</h3>
+    <p>HMS Alakol is a modern web platform for hotel booking, built on Django 4.2.2 (Python web framework) technology with PostgreSQL database and integrated Robokassa payment system.</p>
+    
+    <h3>1.3. Legal Framework</h3>
+    <p>The Rules are developed in accordance with the legislation of the Republic of Kazakhstan and are an integral part of the Public Offer for booking services.</p>
+    
+    <h3>1.4. Agreement Acceptance</h3>
+    <p>By using the service and making payment, the User agrees to these Rules in full.</p>
+    
+    <h3>1.5. System Features</h3>
+    <p>The HMS system supports multilingual functionality (Kazakh, Russian, English languages) and operates in the Kazakhstan/Astana time zone (UTC+5).</p>
+    
+    <h3>1.6. Architecture</h3>
+    <p>The system architecture includes seven specialized modules: hotel (hotel management), booking (reservation), userauths (authentication), user_dashboard (personal cabinet), robokassa (payments), search (search), addon (additional functions).</p>
+</section>
+
+<section id="section-2" aria-labelledby="section-2-title">
+    <h2 id="section-2-title">2. PAYMENT METHODS</h2>
+    
+    <h3>2.1. Payment Processing</h3>
+    <p>Payment for services is made exclusively through the officially integrated Robokassa payment system, which supports the following payment methods:</p>
+    
+    <h3>2.2. Bank Cards</h3>
+    <ul>
+        <li>Visa (debit and credit)</li>
+        <li>MasterCard (debit and credit)</li>
+        <li>MIR (debit and credit)</li>
+        <li>UnionPay</li>
+        <li>Local RK bank cards</li>
+    </ul>
+    
+    <h3>2.3. Electronic Wallets</h3>
+    <ul>
+        <li>QIWI Wallet</li>
+        <li>YuMoney (Yandex.Money)</li>
+        <li>WebMoney</li>
+        <li>Payeer</li>
+        <li>Perfect Money</li>
+    </ul>
+    
+    <h3>2.4. Internet Banking</h3>
+    <ul>
+        <li>Sberbank Online</li>
+        <li>Alfa-Click</li>
+        <li>Robokassa partner banks in RK</li>
+    </ul>
+    
+    <h3>2.5. Mobile Payments</h3>
+    <ul>
+        <li>Apple Pay</li>
+        <li>Google Pay</li>
+        <li>Samsung Pay</li>
+        <li>Mobile operator payments</li>
+    </ul>
+    
+    <h3>2.6. Bank Transfers</h3>
+    <ul>
+        <li>Transfers via ATMs</li>
+        <li>Transfers at bank branches</li>
+        <li>Money transfer systems</li>
+    </ul>
+    
+    <h3>2.7. Security Standards</h3>
+    <p>All payments are processed in accordance with PCI DSS security standards.</p>
+    
+    <h3>2.8. Data Protection</h3>
+    <p>Payment information (card numbers, PIN codes) is not stored on our system servers and is processed exclusively by the Robokassa payment system.</p>
+</section>
+
+<section id="section-3" aria-labelledby="section-3-title">
+    <h2 id="section-3-title">3. PAYMENT STRUCTURE</h2>
+    
+    <h3>3.1. Innovative "10% + 90%" Payment Scheme</h3>
+    <p>HMS Alakol uses a unique payment structure:</p>
+    
+    <h3>3.2. Prepayment at Booking Confirmation</h3>
+    <ul>
+        <li><strong>Amount:</strong> Exactly 10% of total accommodation cost</li>
+        <li><strong>Purpose:</strong> Guarantee of serious intentions and booking confirmation</li>
+        <li><strong>Processing:</strong> Through integrated Robokassa payment system</li>
+        <li><strong>Currency:</strong> Tenge (KZT) or other available currencies</li>
+        <li><strong>Payment deadline:</strong> 10 minutes from booking creation (automatic expiration if not paid)</li>
+    </ul>
+    
+    <h3>3.3. Balance Payment at Hotel Check-in</h3>
+    <ul>
+        <li><strong>Amount:</strong> Remaining 90% of total accommodation cost</li>
+        <li><strong>Payment method:</strong> Directly at the hotel by any convenient method</li>
+        <li><strong>Currency:</strong> According to specific hotel policy</li>
+        <li><strong>Payment time:</strong> At check-in</li>
+    </ul>
+    
+    <h3>3.4. Additional Fees and Taxes</h3>
+    <ul>
+        <li><strong>VAT:</strong> Included in stated price (when applicable)</li>
+        <li><strong>Platform commission:</strong> Included in total cost</li>
+        <li><strong>Payment system fees:</strong> No fees charged to User for bank card payments</li>
+        <li><strong>E-wallet fees:</strong> According to respective system tariffs</li>
+        <li><strong>Bank transfer fees:</strong> According to bank tariffs</li>
+    </ul>
+    
+    <h3>3.5. Resort Fee (Tourist Tax)</h3>
+    <ul>
+        <li>Not included in booking cost</li>
+        <li>Paid separately at hotel check-in</li>
+        <li>Amount determined by local legislation</li>
+    </ul>
+</section>
+
+<section id="section-4" aria-labelledby="section-4-title">
+    <h2 id="section-4-title">4. HMS PAYMENT PROCESS</h2>
+    
+    <h3>4.1. Six-Stage HMS Alakol Booking Process</h3>
+    <ol>
+        <li>Search hotels by city, check-in/check-out dates, number of guests</li>
+        <li>Select specific room and view detailed information</li>
+        <li>Automatic availability check for selected rooms</li>
+        <li>Fill guest contact details with OTP verification</li>
+        <li>Confirm terms and proceed to 10% prepayment</li>
+        <li>Process payment through Robokassa and receive confirmation</li>
+    </ol>
+    
+    <h3>4.2. Technical Payment Processing Features</h3>
+    <ul>
+        <li>Use of secure SSL/TLS connection</li>
+        <li>Generation of SHA256 digital signatures for security</li>
+        <li>Automatic hotel system notification about confirmed booking</li>
+        <li>Instant confirmation sent to client via email and SMS</li>
+    </ul>
+</section>
+
+<section id="section-5" aria-labelledby="section-5-title">
+    <h2 id="section-5-title">5. PAYMENT CONFIRMATION</h2>
+    
+    <h3>5.1. Confirmation Methods</h3>
+    <ul>
+        <li>Automatic email notification immediately after successful payment</li>
+        <li>SMS notification to specified phone number</li>
+        <li>Status update in personal cabinet</li>
+        <li>Electronic receipt from payment system</li>
+    </ul>
+    
+    <h3>5.2. Payment Documents</h3>
+    <ul>
+        <li>Electronic receipt sent to email within 24 hours</li>
+        <li>Payment certificate provided if necessary</li>
+        <li>Documents comply with RK tax legislation requirements</li>
+    </ul>
+</section>
+
+<section id="section-6" aria-labelledby="section-6-title">
+    <h2 id="section-6-title">6. REFUND CONDITIONS</h2>
+    
+    <div class="document-meta" style="background-color: #fff5f5; border-left: 4px solid #e53e3e;">
+        <p><strong>IMPORTANT NOTICE:</strong> In accordance with HMS Alakol policy, the 10% prepayment is NON-REFUNDABLE for voluntary booking cancellation by the User, except for force majeure circumstances.</p>
+    </div>
+    
+    <h3>6.1. Refund Grounds and Compensation Amounts</h3>
+    
+    <h4>6.1.1. Voluntary Booking Cancellation by User</h4>
+    <ul>
+        <li><strong>Refund:</strong> 0% (no refund)</li>
+        <li><strong>Justification:</strong> prepayment serves as guarantee of serious intentions</li>
+        <li><strong>Applicability:</strong> regardless of cancellation time</li>
+    </ul>
+    
+    <h4>6.1.2. Force Majeure Circumstances</h4>
+    <ul>
+        <li><strong>Refund:</strong> 100% of prepayment amount</li>
+        <li><strong>Circumstances:</strong> natural disasters, emergencies, border closures by government decision</li>
+        <li><strong>Documentation:</strong> required</li>
+        <li><strong>Processing time:</strong> priority (1-3 business days)</li>
+    </ul>
+    
+    <h4>6.1.3. Hotel Closure Due to Independent Reasons</h4>
+    <ul>
+        <li><strong>Refund:</strong> 100% of prepayment amount</li>
+        <li><strong>Reasons:</strong> sanitary measures, repair works, license revocation</li>
+        <li><strong>Alternative:</strong> equivalent accommodation offer</li>
+    </ul>
+    
+    <h4>6.1.4. HMS System Technical Failures</h4>
+    <ul>
+        <li><strong>Refund:</strong> 100% of erroneously charged amounts</li>
+        <li><strong>Reasons:</strong> double charging, system errors, Robokassa integration failures</li>
+        <li><strong>Refund time:</strong> immediate (within 1-3 business days)</li>
+    </ul>
+    
+    <h4>6.1.5. Service Non-Compliance with Stated Characteristics</h4>
+    <ul>
+        <li><strong>Refund:</strong> 100% of prepayment amount with documentary confirmation</li>
+        <li><strong>Grounds:</strong> significant room non-compliance with description, absence of stated amenities</li>
+        <li><strong>Procedure:</strong> justified complaint filing with evidence</li>
+    </ul>
+</section>
+
+<section id="section-7" aria-labelledby="section-7-title">
+    <h2 id="section-7-title">7. REFUND PROCEDURE</h2>
+    
+    <h3>7.1. Refund Request Submission</h3>
+    
+    <h4>7.1.1. Through Personal Cabinet on Website</h4>
+    <ul>
+        <li>Fill out refund form</li>
+        <li>Specify reason and attach documents</li>
+        <li>Automatic request registration</li>
+    </ul>
+    
+    <h4>7.1.2. By Email [EMAIL]</h4>
+    <ul>
+        <li>Letter indicating booking number</li>
+        <li>Refund reason and contact details</li>
+        <li>Document scans (if necessary)</li>
+    </ul>
+    
+    <h4>7.1.3. By Hotline Phone [PHONE]</h4>
+    <ul>
+        <li>Verbal request with subsequent written confirmation</li>
+        <li>Working days from [TIME] to [TIME]</li>
+    </ul>
+    
+    <h3>7.2. Required Information in Request</h3>
+    <ul>
+        <li>Booking number (booking ID)</li>
+        <li>Payer's full name</li>
+        <li>Contact details (phone, email)</li>
+        <li>Refund reason</li>
+        <li>Refund details</li>
+        <li>Request submission date</li>
+    </ul>
+    
+    <h3>7.3. Request Processing</h3>
+    <ul>
+        <li><strong>Receipt confirmation:</strong> Within 2 hours</li>
+        <li><strong>Request review:</strong> 1-3 business days</li>
+        <li><strong>Decision notification:</strong> By email and SMS</li>
+        <li><strong>Additional documents:</strong> Requested if necessary</li>
+    </ul>
+</section>
+
+<section id="section-8" aria-labelledby="section-8-title">
+    <h2 id="section-8-title">8. REFUND TERMS</h2>
+    
+    <h3>8.1. Refund Through Robokassa Payment System</h3>
+    <ul>
+        <li><strong>Kazakhstan bank cards:</strong> 3-7 business days</li>
+        <li><strong>Foreign bank cards:</strong> 5-14 business days</li>
+        <li><strong>Electronic wallets:</strong> 1-3 business days</li>
+        <li><strong>Processing time:</strong> Depends on issuing bank speed</li>
+    </ul>
+    
+    <h3>8.2. Special Cases in HMS System</h3>
+    <ul>
+        <li><strong>Force majeure situations:</strong> Priority processing (1-3 days)</li>
+        <li><strong>System technical errors:</strong> Immediate processing (within a day)</li>
+        <li><strong>Dispute situations:</strong> Up to 10 business days from all documents provision</li>
+        <li><strong>Automatic expiration of unpaid bookings:</strong> No refund required (no funds charged)</li>
+    </ul>
+</section>
+
+<section id="section-9" aria-labelledby="section-9-title">
+    <h2 id="section-9-title">9. FEES AND ADDITIONAL COSTS</h2>
+    
+    <h3>9.1. Payment Fees</h3>
+    <ul>
+        <li><strong>Robokassa payment system fees:</strong> Included in service cost</li>
+        <li><strong>Additional bank or payment system fees:</strong> Paid by User</li>
+    </ul>
+    
+    <h3>9.2. Refund Fees</h3>
+    <ul>
+        <li><strong>Refund to same payment method:</strong> No fees</li>
+        <li><strong>Refund to different payment method:</strong> Fees according to payment system tariffs</li>
+        <li><strong>Bank transfers:</strong> Bank fees paid by recipient</li>
+    </ul>
+    
+    <h3>9.3. Currency Operations</h3>
+    <ul>
+        <li><strong>Payment in currency other than tenge:</strong> Robokassa rate applies</li>
+        <li><strong>Refund:</strong> Rate on refund date applies</li>
+        <li><strong>Currency risks:</strong> Borne by User</li>
+    </ul>
+</section>
+
+<section id="section-10" aria-labelledby="section-10-title">
+    <h2 id="section-10-title">10. DISPUTE SITUATIONS</h2>
+    
+    <h3>10.1. Unsuccessful Payments</h3>
+    <ul>
+        <li>In case of technical failures, funds are returned automatically</li>
+        <li>Automatic refund period: 5-10 business days</li>
+        <li>Contact technical support if delayed</li>
+    </ul>
+    
+    <h3>10.2. Partial Refunds</h3>
+    <ul>
+        <li>Possible for partial service cancellation</li>
+        <li>Calculation proportional to services rendered</li>
+        <li>Minimum partial refund amount: 1000 tenge</li>
+    </ul>
+    
+    <h3>10.3. Dispute Resolution</h3>
+    <ul>
+        <li>Claims reviewed within 10 business days</li>
+        <li>Payment system involvement if necessary</li>
+        <li>Final decision according to contract</li>
+    </ul>
+</section>
+
+<section id="section-11" aria-labelledby="section-11-title">
+    <h2 id="section-11-title">11. CHARGEBACK</h2>
+    
+    <h3>11.1. User Rights</h3>
+    <p>User has the right to apply to bank with chargeback request in cases:</p>
+    <ul>
+        <li>Non-provision of services without refund</li>
+        <li>Unauthorized fund charging</li>
+        <li>Contract terms violation by Contractor</li>
+    </ul>
+    
+    <h3>11.2. Chargeback Procedure</h3>
+    <ul>
+        <li><strong>Application period:</strong> Up to 120 days from transaction date</li>
+        <li><strong>Document provision:</strong> Evidence supporting grounds</li>
+        <li><strong>Review:</strong> By bank and payment system</li>
+    </ul>
+    
+    <h3>11.3. Contractor Response to Chargeback</h3>
+    <ul>
+        <li>Provide documents about services rendered</li>
+        <li>Justify legitimacy of fund charging</li>
+        <li>Initiate pre-trial settlement if necessary</li>
+    </ul>
+</section>
+
+<section id="section-12" aria-labelledby="section-12-title">
+    <h2 id="section-12-title">12. SECURITY AND DATA PROTECTION IN HMS</h2>
+    
+    <h3>12.1. Payment System Technical Security Measures</h3>
+    <ul>
+        <li>Data encryption using Django 4.2.2 built-in framework tools</li>
+        <li>Secure PostgreSQL database with restricted access</li>
+        <li>SSL/TLS encryption for all payment transactions</li>
+        <li>PCI DSS standard compliance through Robokassa payment system</li>
+    </ul>
+    
+    <h3>12.2. Personal Data Processing in HMS</h3>
+    <ul>
+        <li>Collection of minimum data volume necessary for booking</li>
+        <li><strong>Data categories:</strong> Account, booking, payments, technical, behavioral</li>
+        <li>Automatic logging of all actions for security audit</li>
+        <li>Limited staff access to payment information</li>
+    </ul>
+    
+    <h3>12.3. Data Storage</h3>
+    <ul>
+        <li>Payment data not stored on HMS servers</li>
+        <li>All payment information processed through Robokassa</li>
+        <li>Transaction data stored in encrypted form</li>
+        <li>Regular backup of booking data</li>
+    </ul>
+</section>
+
+<section id="section-13" aria-labelledby="section-13-title">
+    <h2 id="section-13-title">13. TAXATION</h2>
+    
+    <h3>13.1. VAT and Taxes</h3>
+    <ul>
+        <li>All prices stated including applicable taxes</li>
+        <li>VAT included in service cost (when applicable)</li>
+        <li>Reporting conducted according to RK tax legislation</li>
+    </ul>
+    
+    <h3>13.2. Document Management</h3>
+    <ul>
+        <li>Electronic receipts sent automatically</li>
+        <li>Payment certificates provided if necessary</li>
+        <li>All transaction records maintained for tax reporting</li>
+    </ul>
+</section>
+
+<section id="section-14" aria-labelledby="section-14-title">
+    <h2 id="section-14-title">14. CONTACT INFORMATION</h2>
+    
+    <div class="contact-info">
+        <h3>Payment Inquiries</h3>
+        <p>Email: [PAYMENT EMAIL]</p>
+        <p>Phone: [PAYMENT PHONE]</p>
+        <p>Working hours: [WORKING HOURS]</p>
+        
+        <h3>Refund Inquiries</h3>
+        <p>Email: [REFUND EMAIL]</p>
+        <p>Phone: [REFUND PHONE]</p>
+        <p>Working hours: [WORKING HOURS]</p>
+        
+        <h3>Technical Support</h3>
+        <p>Email: [SUPPORT EMAIL]</p>
+        <p>Phone: [SUPPORT PHONE]</p>
+        <p>24/7: Website chat</p>
+        
+        <h3>Robokassa Payment System</h3>
+        <p>Website: robokassa.kz</p>
+        <p>Technical support: support@robokassa.kz</p>
+        <p>Phone: +7 (495) 241-59-77</p>
+    </div>
+</section>
+
+<section id="section-15" aria-labelledby="section-15-title">
+    <h2 id="section-15-title">15. FINAL PROVISIONS</h2>
+    
+    <h3>15.1. Rule Changes</h3>
+    <p>These Rules may be changed with prior notification to Users.</p>
+    
+    <h3>15.2. Effective Date</h3>
+    <p>Changes become effective from the moment of publication on the website.</p>
+    
+    <h3>15.3. Continued Use</h3>
+    <p>Continued use of the service means agreement with new terms.</p>
+    
+    <h3>15.4. Unregulated Issues</h3>
+    <p>Issues not regulated by these Rules are resolved in accordance with current legislation of the Republic of Kazakhstan.</p>
+</section>
+
+<div class="document-meta">
+    <p><strong>Refund Account Details:</strong></p>
+    <p>[COMPANY NAME]</p>
+    <p>BIN/IIN: [BIN/IIN]</p>
+    <p>Bank: [BANK NAME]</p>
+    <p>BIC: [BIC]</p>
+    <p>IIC: [IIC]</p>
+    
+    <p><strong>Last Update Date:</strong> [DATE]</p>
+    
+    <p><strong>System Information:</strong></p>
+    <p>Technical platform: Django 4.2.2 with PostgreSQL database</p>
+    <p>Payment system: Robokassa with PCI DSS standards support</p>
+    <p>Operating timezone: Kazakhstan/Astana (UTC+5)</p>
+</div>
+{% endblock %} 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-29 16:10+0500\n"
+"POT-Creation-Date: 2025-06-03 22:55+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,7 +47,7 @@ msgstr "Бронь дата тандау"
 
 #: .\templates\booking\booking_data.html:22
 #: .\templates\hotel\hotel_detail.html:611
-#: .\templates\hotel\room_type_detail.html:89
+#: .\templates\hotel\room_type_detail.html:90
 #: .\templates\partials\dashboard_base.html:104
 #: .\templates\user_dashboard\dashboard.html:48
 msgid "Booking"
@@ -55,8 +55,8 @@ msgstr ""
 
 #: .\templates\booking\booking_data.html:27
 #: .\templates\hotel\hotel_detail.html:616
-#: .\templates\hotel\payment_method_selection.html:100
-#: .\templates\hotel\room_type_detail.html:94
+#: .\templates\hotel\payment_method_selection.html:150
+#: .\templates\hotel\room_type_detail.html:95
 #: .\templates\search\search_results.html:26
 msgid "Check-in Date"
 msgstr ""
@@ -70,25 +70,25 @@ msgstr "Бронь дата тандау"
 
 #: .\templates\booking\booking_data.html:31
 #: .\templates\hotel\hotel_detail.html:620
-#: .\templates\hotel\payment_method_selection.html:101
-#: .\templates\hotel\room_type_detail.html:98
+#: .\templates\hotel\payment_method_selection.html:151
+#: .\templates\hotel\room_type_detail.html:99
 #: .\templates\search\search_results.html:30
 msgid "Check-out Date"
 msgstr ""
 
 #: .\templates\booking\booking_data.html:36
-#: .\templates\hotel\hotel_detail.html:625 .\templates\hotel\index.html:25
-#: .\templates\hotel\room_type_detail.html:103
+#: .\templates\hotel\hotel_detail.html:625 .\templates\hotel\index.html:30
+#: .\templates\hotel\room_type_detail.html:104
 msgid "Guests"
 msgstr ""
 
 #: .\templates\booking\booking_data.html:39
 #: .\templates\email\booking_completed.html:519
-#: .\templates\hotel\async\selected_rooms.html:161
-#: .\templates\hotel\checkout.html:94 .\templates\hotel\hotel_detail.html:628
-#: .\templates\hotel\payment_method_selection.html:103
-#: .\templates\hotel\room_type_detail.html:106
-#: .\templates\hotel\selected_rooms.html:148
+#: .\templates\hotel\async\selected_rooms.html:162
+#: .\templates\hotel\checkout.html:93 .\templates\hotel\hotel_detail.html:628
+#: .\templates\hotel\payment_method_selection.html:153
+#: .\templates\hotel\room_type_detail.html:107
+#: .\templates\hotel\selected_rooms.html:149
 #: .\templates\user_dashboard\booking_detail.html:68
 #: .\templates\user_dashboard\booking_detail.html:70
 #: .\templates\user_dashboard\booking_detail.html:76
@@ -100,13 +100,13 @@ msgstr ""
 
 #: .\templates\booking\booking_data.html:43
 #: .\templates\hotel\hotel_detail.html:632
-#: .\templates\hotel\room_type_detail.html:110
+#: .\templates\hotel\room_type_detail.html:111
 msgid "Childrens"
 msgstr ""
 
 #: .\templates\booking\booking_data.html:52
 #: .\templates\hotel\hotel_detail.html:640
-#: .\templates\hotel\room_type_detail.html:119
+#: .\templates\hotel\room_type_detail.html:120
 msgid "Select Room Type"
 msgstr ""
 
@@ -117,13 +117,13 @@ msgstr ""
 
 #: .\templates\booking\booking_data.html:62
 #: .\templates\hotel\hotel_detail.html:649
-#: .\templates\hotel\room_type_detail.html:131
+#: .\templates\hotel\room_type_detail.html:132
 msgid "Check Availability"
 msgstr ""
 
 #: .\templates\booking\booking_data.html:64
 #: .\templates\hotel\hotel_detail.html:651
-#: .\templates\hotel\room_type_detail.html:133
+#: .\templates\hotel\room_type_detail.html:134
 msgid "Add to Wishlist"
 msgstr ""
 
@@ -140,10 +140,10 @@ msgid "has been successfully confirmed."
 msgstr ""
 
 #: .\templates\email\booking_completed.html:273
-#: .\templates\hotel\async\selected_rooms.html:156
-#: .\templates\hotel\checkout.html:90
-#: .\templates\hotel\payment_method_selection.html:98
-#: .\templates\hotel\selected_rooms.html:143
+#: .\templates\hotel\async\selected_rooms.html:157
+#: .\templates\hotel\checkout.html:89
+#: .\templates\hotel\payment_method_selection.html:148
+#: .\templates\hotel\selected_rooms.html:144
 msgid "Booking Summary"
 msgstr ""
 
@@ -160,19 +160,19 @@ msgid "Checkout Date"
 msgstr ""
 
 #: .\templates\email\booking_completed.html:507
-#: .\templates\hotel\async\selected_rooms.html:160
-#: .\templates\hotel\payment_method_selection.html:102
-#: .\templates\hotel\selected_rooms.html:147
+#: .\templates\hotel\async\selected_rooms.html:161
+#: .\templates\hotel\payment_method_selection.html:152
+#: .\templates\hotel\selected_rooms.html:148
 #: .\templates\user_dashboard\booking_detail.html:62
 #: .\templates\user_dashboard\bookings.html:55
 msgid "Total Days"
 msgstr ""
 
 #: .\templates\email\booking_completed.html:531
-#: .\templates\hotel\async\selected_rooms.html:162
-#: .\templates\hotel\checkout.html:95
-#: .\templates\hotel\payment_method_selection.html:104
-#: .\templates\hotel\selected_rooms.html:149
+#: .\templates\hotel\async\selected_rooms.html:163
+#: .\templates\hotel\checkout.html:94
+#: .\templates\hotel\payment_method_selection.html:154
+#: .\templates\hotel\selected_rooms.html:150
 #: .\templates\user_dashboard\booking_detail.html:74
 #: .\templates\user_dashboard\bookings.html:67
 msgid "Children"
@@ -183,7 +183,7 @@ msgid "Vat"
 msgstr ""
 
 #: .\templates\email\booking_completed.html:555
-#: .\templates\hotel\checkout.html:100
+#: .\templates\hotel\checkout.html:99
 msgid "Discount"
 msgstr ""
 
@@ -207,8 +207,8 @@ msgid "Address"
 msgstr ""
 
 #: .\templates\email\booking_completed.html:672
-#: .\templates\hotel\payment_method_selection.html:79
-#: .\templates\partials\base.html:164
+#: .\templates\hotel\payment_method_selection.html:129
+#: .\templates\partials\base.html:166
 #: .\templates\user_dashboard\profile.html:39
 msgid "Email"
 msgstr ""
@@ -325,19 +325,24 @@ msgid "Beds"
 msgstr ""
 
 #: .\templates\hotel\async\selected_rooms.html:65
-#: .\templates\hotel\async\selected_rooms.html:164
-#: .\templates\hotel\async\selected_rooms.html:171
-#: .\templates\hotel\checkout.html:42 .\templates\hotel\checkout.html:100
-#: .\templates\hotel\checkout.html:106 .\templates\hotel\hotel_detail.html:523
+#: .\templates\hotel\selected_rooms.html:49
+msgid "Capacity"
+msgstr ""
+
+#: .\templates\hotel\async\selected_rooms.html:66
+#: .\templates\hotel\async\selected_rooms.html:165
+#: .\templates\hotel\async\selected_rooms.html:172
+#: .\templates\hotel\checkout.html:42 .\templates\hotel\checkout.html:99
+#: .\templates\hotel\checkout.html:105 .\templates\hotel\hotel_detail.html:523
 #: .\templates\hotel\payment_failed.html:38
 #: .\templates\hotel\payment_method_selection.html:53
 #: .\templates\hotel\payment_method_selection.html:57
-#: .\templates\hotel\payment_method_selection.html:108
-#: .\templates\hotel\payment_method_selection.html:115
+#: .\templates\hotel\payment_method_selection.html:158
+#: .\templates\hotel\payment_method_selection.html:165
 #: .\templates\hotel\room_type_detail.html:43
-#: .\templates\hotel\selected_rooms.html:49
-#: .\templates\hotel\selected_rooms.html:151
-#: .\templates\hotel\selected_rooms.html:158
+#: .\templates\hotel\selected_rooms.html:50
+#: .\templates\hotel\selected_rooms.html:152
+#: .\templates\hotel\selected_rooms.html:159
 #: .\templates\user_dashboard\booking_detail.html:102
 #: .\templates\user_dashboard\booking_detail.html:145
 #: .\templates\user_dashboard\bookings.html:76
@@ -350,126 +355,126 @@ msgstr ""
 msgid "Tenge"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:74
-#: .\templates\hotel\async\selected_rooms.html:104
-#: .\templates\hotel\selected_rooms.html:60
-#: .\templates\hotel\selected_rooms.html:84
+#: .\templates\hotel\async\selected_rooms.html:75
+#: .\templates\hotel\async\selected_rooms.html:105
+#: .\templates\hotel\selected_rooms.html:61
+#: .\templates\hotel\selected_rooms.html:85
 msgid "Update Selection"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:99
-#: .\templates\hotel\selected_rooms.html:89
+#: .\templates\hotel\async\selected_rooms.html:100
+#: .\templates\hotel\selected_rooms.html:90
 msgid "No rooms selected. Please select a room to update."
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:111
-#: .\templates\hotel\checkout.html:51 .\templates\hotel\selected_rooms.html:97
+#: .\templates\hotel\async\selected_rooms.html:112
+#: .\templates\hotel\checkout.html:51 .\templates\hotel\selected_rooms.html:98
 msgid "Billing Information"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:116
-#: .\templates\hotel\checkout.html:54 .\templates\hotel\selected_rooms.html:102
+#: .\templates\hotel\async\selected_rooms.html:117
+#: .\templates\hotel\checkout.html:54 .\templates\hotel\selected_rooms.html:103
 msgid "First Name"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:122
-#: .\templates\hotel\checkout.html:59 .\templates\hotel\selected_rooms.html:108
+#: .\templates\hotel\async\selected_rooms.html:123
+#: .\templates\hotel\checkout.html:59 .\templates\hotel\selected_rooms.html:109
 msgid "E-Mail"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:129
+#: .\templates\hotel\async\selected_rooms.html:130
 #: .\templates\hotel\checkout.html:65
-#: .\templates\hotel\payment_method_selection.html:87
-#: .\templates\hotel\selected_rooms.html:115
+#: .\templates\hotel\payment_method_selection.html:137
+#: .\templates\hotel\selected_rooms.html:116
 msgid "Phone"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:130
-#: .\templates\hotel\selected_rooms.html:116
+#: .\templates\hotel\async\selected_rooms.html:131
+#: .\templates\hotel\selected_rooms.html:117
 msgid "Enter phone number"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:136
-#: .\templates\hotel\selected_rooms.html:122
+#: .\templates\hotel\async\selected_rooms.html:137
+#: .\templates\hotel\selected_rooms.html:123
 msgid "Continue to checkout"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:150
+#: .\templates\hotel\async\selected_rooms.html:151
 #: .\templates\hotel\hotel_detail.html:453
 #: .\templates\hotel\hotel_detail.html:564
 #: .\templates\hotel\hotel_detail.html:668
-#: .\templates\hotel\selected_rooms.html:137
+#: .\templates\hotel\selected_rooms.html:138
 msgid "Reviews"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:158
-#: .\templates\hotel\checkout.html:92 .\templates\hotel\selected_rooms.html:145
+#: .\templates\hotel\async\selected_rooms.html:159
+#: .\templates\hotel\checkout.html:91 .\templates\hotel\selected_rooms.html:146
 msgid "Check-in"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:159
-#: .\templates\hotel\checkout.html:93 .\templates\hotel\selected_rooms.html:146
+#: .\templates\hotel\async\selected_rooms.html:160
+#: .\templates\hotel\checkout.html:92 .\templates\hotel\selected_rooms.html:147
 msgid "Check-out"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:160
-#: .\templates\hotel\payment_method_selection.html:102
-#: .\templates\hotel\selected_rooms.html:147
+#: .\templates\hotel\async\selected_rooms.html:161
+#: .\templates\hotel\payment_method_selection.html:152
+#: .\templates\hotel\selected_rooms.html:148
 #: .\templates\user_dashboard\booking_detail.html:64
 #: .\templates\user_dashboard\bookings.html:57
 msgid "Days"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:161
-#: .\templates\hotel\payment_method_selection.html:103
-#: .\templates\hotel\selected_rooms.html:148
+#: .\templates\hotel\async\selected_rooms.html:162
+#: .\templates\hotel\payment_method_selection.html:153
+#: .\templates\hotel\selected_rooms.html:149
 msgid "Adult"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:164
-#: .\templates\hotel\checkout.html:106
+#: .\templates\hotel\async\selected_rooms.html:165
+#: .\templates\hotel\checkout.html:105
 #: .\templates\hotel\payment_method_selection.html:52
-#: .\templates\hotel\payment_method_selection.html:108
-#: .\templates\hotel\selected_rooms.html:151
+#: .\templates\hotel\payment_method_selection.html:158
+#: .\templates\hotel\selected_rooms.html:152
 msgid "Total Cost"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:169
+#: .\templates\hotel\async\selected_rooms.html:170
 #: .\templates\hotel\payment_method_selection.html:56
-#: .\templates\hotel\payment_method_selection.html:113
-#: .\templates\hotel\selected_rooms.html:156
+#: .\templates\hotel\payment_method_selection.html:163
+#: .\templates\hotel\selected_rooms.html:157
 #, python-format
 msgid "Prepayment (10%%)"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:175
-#: .\templates\hotel\payment_method_selection.html:119
-#: .\templates\hotel\selected_rooms.html:162
+#: .\templates\hotel\async\selected_rooms.html:176
+#: .\templates\hotel\payment_method_selection.html:169
+#: .\templates\hotel\selected_rooms.html:163
 #, python-format
 msgid "The remaining 90%% will be paid upon check-in at the hotel"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:228
 #: .\templates\hotel\async\selected_rooms.html:229
-#: .\templates\hotel\async\selected_rooms.html:409
-#: .\templates\hotel\selected_rooms.html:229
+#: .\templates\hotel\async\selected_rooms.html:230
+#: .\templates\hotel\async\selected_rooms.html:410
 #: .\templates\hotel\selected_rooms.html:230
-#: .\templates\hotel\selected_rooms.html:348
+#: .\templates\hotel\selected_rooms.html:231
+#: .\templates\hotel\selected_rooms.html:349
 msgid "Please enter a valid phone number"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:233
-#: .\templates\hotel\selected_rooms.html:234
+#: .\templates\hotel\async\selected_rooms.html:234
+#: .\templates\hotel\selected_rooms.html:235
 msgid "Phone number is required"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:389
-#: .\templates\hotel\selected_rooms.html:329
+#: .\templates\hotel\async\selected_rooms.html:390
+#: .\templates\hotel\selected_rooms.html:330
 msgid "Please enter your full name"
 msgstr ""
 
-#: .\templates\hotel\async\selected_rooms.html:399
-#: .\templates\hotel\selected_rooms.html:339
+#: .\templates\hotel\async\selected_rooms.html:400
+#: .\templates\hotel\selected_rooms.html:340
 msgid "Please enter a valid email address"
 msgstr ""
 
@@ -487,10 +492,8 @@ msgstr ""
 msgid "Room"
 msgstr ""
 
-#: .\templates\hotel\checkout.html:112
-#: .\templates\hotel\payment_method_selection.html:38
-#: .\templates\hotel\payment_method_selection.html:63
-msgid "Pay with Robokassa"
+#: .\templates\hotel\checkout.html:111
+msgid "Continue to Payment"
 msgstr ""
 
 #: .\templates\hotel\hotel_detail.html:451
@@ -605,164 +608,164 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: .\templates\hotel\index.html:11
+#: .\templates\hotel\index.html:16
 msgid "Alakol vacation bases"
 msgstr "Алаколь базалары"
 
-#: .\templates\hotel\index.html:12
+#: .\templates\hotel\index.html:17
 msgid "Discover top rated hotels of Alakol"
 msgstr ""
 
-#: .\templates\hotel\index.html:16 .\templates\hotel\index_translated.html:16
+#: .\templates\hotel\index.html:21 .\templates\hotel\index_translated.html:16
 msgid "Hotel..."
 msgstr ""
 
-#: .\templates\hotel\index.html:19 .\templates\hotel\index_translated.html:19
+#: .\templates\hotel\index.html:24 .\templates\hotel\index_translated.html:19
 msgid "Select Booking Date"
 msgstr ""
 
-#: .\templates\hotel\index.html:25 .\templates\search\search_results.html:46
+#: .\templates\hotel\index.html:30 .\templates\search\search_results.html:46
 msgid "Number of Guests"
 msgstr ""
 
-#: .\templates\hotel\index.html:26
+#: .\templates\hotel\index.html:31
 msgid "1 Guest"
 msgstr ""
 
-#: .\templates\hotel\index.html:27
+#: .\templates\hotel\index.html:32
 msgid "2 Guests"
 msgstr ""
 
-#: .\templates\hotel\index.html:28
+#: .\templates\hotel\index.html:33
 msgid "3 Guests"
 msgstr ""
 
-#: .\templates\hotel\index.html:29
+#: .\templates\hotel\index.html:34
 msgid "4 Guests"
 msgstr ""
 
-#: .\templates\hotel\index.html:30
+#: .\templates\hotel\index.html:35
 msgid "5+ Guests"
 msgstr ""
 
-#: .\templates\hotel\index.html:33 .\templates\hotel\index_translated.html:31
+#: .\templates\hotel\index.html:38 .\templates\hotel\index_translated.html:31
 #: .\templates\search\search_results.html:100
 msgid "Search"
 msgstr ""
 
-#: .\templates\hotel\index.html:46
+#: .\templates\hotel\index.html:51
 msgid "Our Popular Bases"
 msgstr ""
 
-#: .\templates\hotel\index.html:46
+#: .\templates\hotel\index.html:51
 msgid "Explore the greates places in the Alakol"
 msgstr ""
 
-#: .\templates\hotel\index.html:57 .\templates\hotel\index_translated.html:54
+#: .\templates\hotel\index.html:62 .\templates\hotel\index_translated.html:54
 msgid "Open Now"
 msgstr ""
 
-#: .\templates\hotel\index.html:71 .\templates\hotel\index_translated.html:68
+#: .\templates\hotel\index.html:76 .\templates\hotel\index_translated.html:68
 msgid "No Rating Yet"
 msgstr ""
 
-#: .\templates\hotel\index.html:73 .\templates\hotel\index_translated.html:70
+#: .\templates\hotel\index.html:78 .\templates\hotel\index_translated.html:70
 msgid "reviews"
 msgstr ""
 
-#: .\templates\hotel\index.html:423
+#: .\templates\hotel\index.html:123
 #: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm.html:195
 #: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm_sidebar.html:179
 msgid "Apply"
 msgstr ""
 
-#: .\templates\hotel\index.html:424
+#: .\templates\hotel\index.html:124
 #: .\venv\Lib\site-packages\grappelli\templates\admin\delete_confirmation.html:55
 #: .\venv\Lib\site-packages\grappelli\templates\admin\delete_selected_confirmation.html:58
 msgid "Cancel"
 msgstr ""
 
-#: .\templates\hotel\index.html:425 .\templates\search\search_results.html:169
+#: .\templates\hotel\index.html:125 .\templates\search\search_results.html:169
 msgid "From"
 msgstr ""
 
-#: .\templates\hotel\index.html:426
+#: .\templates\hotel\index.html:126
 msgid "To"
 msgstr ""
 
-#: .\templates\hotel\index.html:427
+#: .\templates\hotel\index.html:127
 msgid "Su"
 msgstr ""
 
-#: .\templates\hotel\index.html:427
+#: .\templates\hotel\index.html:127
 msgid "Mo"
 msgstr ""
 
-#: .\templates\hotel\index.html:427
+#: .\templates\hotel\index.html:127
 msgid "Tu"
 msgstr ""
 
-#: .\templates\hotel\index.html:427
+#: .\templates\hotel\index.html:127
 msgid "We"
 msgstr ""
 
-#: .\templates\hotel\index.html:427
+#: .\templates\hotel\index.html:127
 msgid "Th"
 msgstr ""
 
-#: .\templates\hotel\index.html:427
+#: .\templates\hotel\index.html:127
 msgid "Fr"
 msgstr ""
 
-#: .\templates\hotel\index.html:427
+#: .\templates\hotel\index.html:127
 msgid "Sa"
 msgstr ""
 
-#: .\templates\hotel\index.html:428
+#: .\templates\hotel\index.html:128
 msgid "January"
 msgstr ""
 
-#: .\templates\hotel\index.html:428
+#: .\templates\hotel\index.html:128
 msgid "February"
 msgstr ""
 
-#: .\templates\hotel\index.html:428
+#: .\templates\hotel\index.html:128
 msgid "March"
 msgstr ""
 
-#: .\templates\hotel\index.html:428
+#: .\templates\hotel\index.html:128
 msgid "April"
 msgstr ""
 
-#: .\templates\hotel\index.html:428
+#: .\templates\hotel\index.html:128
 msgid "May"
 msgstr ""
 
-#: .\templates\hotel\index.html:428
+#: .\templates\hotel\index.html:128
 msgid "June"
 msgstr ""
 
-#: .\templates\hotel\index.html:428
+#: .\templates\hotel\index.html:128
 msgid "July"
 msgstr ""
 
-#: .\templates\hotel\index.html:428
+#: .\templates\hotel\index.html:128
 msgid "August"
 msgstr ""
 
-#: .\templates\hotel\index.html:428
+#: .\templates\hotel\index.html:128
 msgid "September"
 msgstr ""
 
-#: .\templates\hotel\index.html:428
+#: .\templates\hotel\index.html:128
 msgid "October"
 msgstr ""
 
-#: .\templates\hotel\index.html:428
+#: .\templates\hotel\index.html:128
 msgid "November"
 msgstr ""
 
-#: .\templates\hotel\index.html:428
+#: .\templates\hotel\index.html:128
 msgid "December"
 msgstr ""
 
@@ -886,6 +889,11 @@ msgstr ""
 msgid "Choose Payment Method"
 msgstr ""
 
+#: .\templates\hotel\payment_method_selection.html:38
+#: .\templates\hotel\payment_method_selection.html:110
+msgid "Pay with Robokassa"
+msgstr ""
+
 #: .\templates\hotel\payment_method_selection.html:39
 msgid ""
 "Process your payment securely through Robokassa. Multiple payment methods "
@@ -898,18 +906,93 @@ msgid ""
 "button."
 msgstr ""
 
-#: .\templates\hotel\payment_method_selection.html:71
+#: .\templates\hotel\payment_method_selection.html:64
+#: .\templates\partials\legal_consent_component.html:10
+#: .\templates\partials\legal_consent_component.html:65
+#: .\templates\userauths\sign-up.html:33
+msgid "Legal Agreements"
+msgstr ""
+
+#: .\templates\hotel\payment_method_selection.html:70
+#: .\templates\partials\legal_consent_component.html:71
+msgid "I accept the terms of the"
+msgstr ""
+
+#: .\templates\hotel\payment_method_selection.html:72
+#: .\templates\partials\base.html:261
+#: .\templates\partials\legal_consent_component.html:73
+#: .\templates\partials\legal_consent_component.html:161
+msgid "Public Offer"
+msgstr ""
+
+#: .\templates\hotel\payment_method_selection.html:74
+#: .\templates\partials\legal_consent_component.html:75
+msgid "for HMS Alakol booking services"
+msgstr ""
+
+#: .\templates\hotel\payment_method_selection.html:82
+#: .\templates\partials\legal_consent_component.html:16
+#: .\templates\partials\legal_consent_component.html:28
+#: .\templates\partials\legal_consent_component.html:83
+#: .\templates\userauths\sign-up.html:40 .\templates\userauths\sign-up.html:52
+msgid "I agree to the"
+msgstr ""
+
+#: .\templates\hotel\payment_method_selection.html:84
+#: .\templates\partials\legal_consent_component.html:85
+msgid "Booking and Cancellation Rules"
+msgstr ""
+
+#: .\templates\hotel\payment_method_selection.html:86
+#: .\templates\partials\legal_consent_component.html:87
+msgid "including cancellation policies"
+msgstr ""
+
+#: .\templates\hotel\payment_method_selection.html:94
+#: .\templates\partials\legal_consent_component.html:95
+msgid "I understand and accept the"
+msgstr ""
+
+#: .\templates\hotel\payment_method_selection.html:96
+#: .\templates\partials\legal_consent_component.html:97
+msgid "Payment and Refund Rules"
+msgstr ""
+
+#: .\templates\hotel\payment_method_selection.html:98
+#: .\templates\partials\legal_consent_component.html:99
+#, python-format
+msgid "including the 10%% prepayment policy and non-refundable terms"
+msgstr ""
+
+#: .\templates\hotel\payment_method_selection.html:104
+#: .\templates\partials\legal_consent_component.html:105
+msgid "Please accept all required legal documents to proceed with payment."
+msgstr ""
+
+#: .\templates\hotel\payment_method_selection.html:113
+msgid "Please accept all legal agreements above to enable payment"
+msgstr ""
+
+#: .\templates\hotel\payment_method_selection.html:121
 msgid "Order Information"
 msgstr ""
 
-#: .\templates\hotel\payment_method_selection.html:75
+#: .\templates\hotel\payment_method_selection.html:125
 #: .\templates\user_dashboard\booking_detail.html:81
 #: .\templates\user_dashboard\profile.html:34
 msgid "Full Name"
 msgstr ""
 
-#: .\templates\hotel\payment_method_selection.html:83
+#: .\templates\hotel\payment_method_selection.html:133
 msgid "Country Code"
+msgstr ""
+
+#: .\templates\hotel\payment_method_selection.html:422
+msgid "Please accept all legal agreements before proceeding with payment."
+msgstr ""
+
+#: .\templates\hotel\payment_method_selection.html:462
+msgid "Processing..."
 msgstr ""
 
 #: .\templates\hotel\payment_success.html:13
@@ -974,7 +1057,7 @@ msgstr ""
 msgid "Alakol hotel booking"
 msgstr ""
 
-#: .\templates\partials\base.html:99
+#: .\templates\partials\base.html:101
 #: .\templates\partials\dashboard_base.html:11
 #: .\templates\partials\dashboard_base.html:63
 #: .\templates\partials\dashboard_base.html:102
@@ -982,83 +1065,135 @@ msgstr ""
 msgid "Dashboard"
 msgstr "Аккаунт"
 
-#: .\templates\partials\base.html:100
+#: .\templates\partials\base.html:102
 msgid "Sign Out"
 msgstr ""
 
-#: .\templates\partials\base.html:103 .\templates\partials\base.html:112
+#: .\templates\partials\base.html:105 .\templates\partials\base.html:114
 #: .\templates\userauths\sign-in.html:9 .\templates\userauths\sign-in.html:39
 msgid "Sign In"
 msgstr ""
 
-#: .\templates\partials\base.html:104 .\templates\userauths\sign-up.html:9
+#: .\templates\partials\base.html:106 .\templates\userauths\sign-up.html:9
 msgid "Sign Up"
 msgstr ""
 
-#: .\templates\partials\base.html:116
+#: .\templates\partials\base.html:118
 msgid "Log In"
 msgstr ""
 
-#: .\templates\partials\base.html:117 .\templates\partials\base.html:177
-#: .\templates\userauths\sign-up.html:30
+#: .\templates\partials\base.html:119 .\templates\partials\base.html:218
+#: .\templates\userauths\sign-up.html:86
 msgid "Register"
 msgstr ""
 
-#: .\templates\partials\base.html:124 .\templates\partials\base.html:159
+#: .\templates\partials\base.html:126 .\templates\partials\base.html:161
 msgid "Username"
 msgstr ""
 
-#: .\templates\partials\base.html:129 .\templates\partials\base.html:169
+#: .\templates\partials\base.html:131 .\templates\partials\base.html:171
 #: .\templates\userauths\sign-in.html:36
 msgid "Password"
 msgstr ""
 
-#: .\templates\partials\base.html:132
+#: .\templates\partials\base.html:134
 msgid "Forgot Password?"
 msgstr ""
 
-#: .\templates\partials\base.html:135
+#: .\templates\partials\base.html:137
 msgid "Remember Me"
 msgstr ""
 
-#: .\templates\partials\base.html:139
+#: .\templates\partials\base.html:141
 msgid "Login"
 msgstr ""
 
-#: .\templates\partials\base.html:142
+#: .\templates\partials\base.html:144
 msgid "Or Login in With"
 msgstr ""
 
-#: .\templates\partials\base.html:146
+#: .\templates\partials\base.html:148
 msgid "Facebook"
 msgstr ""
 
-#: .\templates\partials\base.html:149
+#: .\templates\partials\base.html:151
 msgid "Google"
 msgstr ""
 
-#: .\templates\partials\base.html:174
+#: .\templates\partials\base.html:176
 msgid "Confirm Password"
 msgstr ""
 
-#: .\templates\partials\base.html:199
+#: .\templates\partials\base.html:187 .\templates\partials\base.html:198
+#: .\templates\partials\legal_consent_component.html:117
+#: .\templates\partials\legal_consent_component.html:128
+msgid "I agree to"
+msgstr ""
+
+#: .\templates\partials\base.html:189 .\templates\partials\base.html:255
+#: .\templates\partials\legal_consent_component.html:18
+#: .\templates\partials\legal_consent_component.html:119
+#: .\templates\partials\legal_consent_component.html:155
+#: .\templates\userauths\sign-up.html:42
+msgid "Terms of Use"
+msgstr ""
+
+#: .\templates\partials\base.html:200 .\templates\partials\base.html:258
+#: .\templates\partials\legal_consent_component.html:30
+#: .\templates\partials\legal_consent_component.html:130
+#: .\templates\partials\legal_consent_component.html:158
+#: .\templates\userauths\sign-up.html:54
+msgid "Privacy Policy"
+msgstr ""
+
+#: .\templates\partials\base.html:209
+#: .\templates\partials\legal_consent_component.html:139
+msgid "I consent to"
+msgstr ""
+
+#: .\templates\partials\base.html:211
+#: .\templates\partials\legal_consent_component.html:141
+msgid "Data Processing"
+msgstr ""
+
+#: .\templates\partials\base.html:240
 msgid "Contacts"
 msgstr ""
 
-#: .\templates\partials\base.html:201
+#: .\templates\partials\base.html:242
 msgid "Phone:"
 msgstr ""
 
-#: .\templates\partials\base.html:202
+#: .\templates\partials\base.html:243
 msgid "E-mail:"
 msgstr ""
 
-#: .\templates\partials\base.html:203
+#: .\templates\partials\base.html:244
 msgid "Address:"
 msgstr ""
 
-#: .\templates\partials\base.html:204
+#: .\templates\partials\base.html:245
 msgid "BIN/IIN:"
+msgstr ""
+
+#: .\templates\partials\base.html:252
+#: .\templates\partials\legal_consent_component.html:151
+msgid "Legal Information"
+msgstr ""
+
+#: .\templates\partials\base.html:264
+#: .\templates\partials\legal_consent_component.html:164
+msgid "Booking Rules"
+msgstr ""
+
+#: .\templates\partials\base.html:267
+#: .\templates\partials\legal_consent_component.html:167
+msgid "Data Processing Consent"
+msgstr ""
+
+#: .\templates\partials\base.html:270
+#: .\templates\partials\legal_consent_component.html:170
+msgid "Payment Rules"
 msgstr ""
 
 #: .\templates\partials\dashboard_base.html:74
@@ -1131,6 +1266,47 @@ msgstr ""
 #: .\templates\user_dashboard\password-reset\change-password.html:14
 #: .\templates\user_dashboard\password-reset\change-password.html:28
 msgid "Change Password"
+msgstr ""
+
+#: .\templates\partials\legal_consent_component.html:20
+#: .\templates\userauths\sign-up.html:44
+msgid "of HMS Alakol"
+msgstr ""
+
+#: .\templates\partials\legal_consent_component.html:32
+#: .\templates\userauths\sign-up.html:56
+msgid "and understand how my data will be processed"
+msgstr ""
+
+#: .\templates\partials\legal_consent_component.html:40
+#: .\templates\userauths\sign-up.html:64
+msgid "I consent to the processing of my personal data as described in the"
+msgstr ""
+
+#: .\templates\partials\legal_consent_component.html:42
+#: .\templates\userauths\sign-up.html:66
+msgid "Personal Data Processing Consent"
+msgstr ""
+
+#: .\templates\partials\legal_consent_component.html:51
+#: .\templates\userauths\sign-up.html:75
+msgid ""
+"I agree to receive marketing communications about HMS Alakol services and "
+"special offers"
+msgstr ""
+
+#: .\templates\partials\legal_consent_component.html:52
+#: .\templates\userauths\sign-up.html:76
+msgid "optional"
+msgstr ""
+
+#: .\templates\partials\legal_consent_component.html:58
+#: .\templates\userauths\sign-up.html:82
+msgid "Please accept all required legal documents to continue."
+msgstr ""
+
+#: .\templates\partials\legal_consent_component.html:152
+msgid "Please review our legal documents:"
 msgstr ""
 
 #: .\templates\search\search_results.html:5

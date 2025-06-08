@@ -1,0 +1,174 @@
+<!-- Legal Consent Component for HMS Alakol -->
+<!-- Generated on 2025-05-31 04:53 AM +05 -->
+<!-- Usage: {% include 'partials/legal_consent_component.html' with consent_type='registration' %} -->
+
+{% load i18n %}
+
+{% if consent_type == 'registration' %}
+<!-- Registration Legal Consents -->
+<div class="legal-consent-section">
+    <h4>{% trans "Legal Agreements" %}</h4>
+    <div class="legal-checkbox-group">
+        <!-- Terms of Use - Required -->
+        <div class="legal-checkbox required">
+            <input type="checkbox" id="terms_consent" name="terms_consent" required>
+            <label for="terms_consent">
+                {% trans "I agree to the" %}
+                <a href="{% url 'legal:terms_of_use' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                    {% trans "Terms of Use" %}
+                </a>
+                {% trans "of HMS Alakol" %}
+            </label>
+        </div>
+        
+        <!-- Privacy Policy - Required -->
+        <div class="legal-checkbox required">
+            <input type="checkbox" id="privacy_consent" name="privacy_consent" required>
+            <label for="privacy_consent">
+                {% trans "I agree to the" %}
+                <a href="{% url 'legal:privacy_policy' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                    {% trans "Privacy Policy" %}
+                </a>
+                {% trans "and understand how my data will be processed" %}
+            </label>
+        </div>
+        
+        <!-- Personal Data Processing Consent - Required -->
+        <div class="legal-checkbox required">
+            <input type="checkbox" id="personal_data_consent" name="personal_data_consent" required>
+            <label for="personal_data_consent">
+                {% trans "I consent to the processing of my personal data as described in the" %}
+                <a href="{% url 'legal:personal_data_consent' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                    {% trans "Personal Data Processing Consent" %}
+                </a>
+            </label>
+        </div>
+        
+        <!-- Marketing Consent - Optional -->
+        <div class="legal-checkbox optional">
+            <input type="checkbox" id="marketing_consent" name="marketing_consent">
+            <label for="marketing_consent">
+                {% trans "I agree to receive marketing communications about HMS Alakol services and special offers" %}
+                <em>({% trans "optional" %})</em>
+            </label>
+        </div>
+    </div>
+    
+    <div class="legal-validation-error">
+        {% trans "Please accept all required legal documents to continue." %}
+    </div>
+</div>
+
+{% elif consent_type == 'booking' %}
+<!-- Booking Legal Consents -->
+<div class="legal-consent-section">
+    <h4>{% trans "Legal Agreements" %}</h4>
+    <div class="legal-checkbox-group">
+        <!-- Public Offer - Required -->
+        <div class="legal-checkbox required">
+            <input type="checkbox" id="public_offer_consent" name="public_offer_consent" required>
+            <label for="public_offer_consent">
+                {% trans "I accept the terms of the" %}
+                <a href="{% url 'legal:public_offer' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                    {% trans "Public Offer" %}
+                </a>
+                {% trans "for HMS Alakol booking services" %}
+            </label>
+        </div>
+        
+        <!-- Booking Rules - Required -->
+        <div class="legal-checkbox required">
+            <input type="checkbox" id="booking_rules_consent" name="booking_rules_consent" required>
+            <label for="booking_rules_consent">
+                {% trans "I agree to the" %}
+                <a href="{% url 'legal:booking_rules' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                    {% trans "Booking and Cancellation Rules" %}
+                </a>
+                {% trans "including cancellation policies" %}
+            </label>
+        </div>
+        
+        <!-- Payment Rules - Required -->
+        <div class="legal-checkbox required">
+            <input type="checkbox" id="payment_rules_consent" name="payment_rules_consent" required>
+            <label for="payment_rules_consent">
+                {% trans "I understand and accept the" %}
+                <a href="{% url 'legal:payment_rules' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                    {% trans "Payment and Refund Rules" %}
+                </a>
+                {% trans "including the 10% prepayment policy and non-refundable terms" %}
+            </label>
+        </div>
+    </div>
+    
+    <div class="legal-validation-error">
+        {% trans "Please accept all required legal documents to proceed with payment." %}
+    </div>
+</div>
+
+{% elif consent_type == 'modal' %}
+<!-- Modal Legal Consents (Compact) -->
+<div class="legal-consent-section" style="padding: 15px; margin: 15px 0; background: #f8f9fa; border-radius: 5px;">
+    <div class="legal-checkbox-group">
+        <!-- Terms of Use - Required -->
+        <div class="legal-checkbox required" style="margin-bottom: 8px;">
+            <input type="checkbox" id="modal_terms_consent" name="terms_consent" required style="margin-right: 8px;">
+            <label for="modal_terms_consent" style="font-size: 12px; line-height: 1.3;">
+                {% trans "I agree to" %}
+                <a href="{% url 'legal:terms_of_use' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                    {% trans "Terms of Use" %}
+                </a>
+            </label>
+        </div>
+        
+        <!-- Privacy Policy - Required -->
+        <div class="legal-checkbox required" style="margin-bottom: 8px;">
+            <input type="checkbox" id="modal_privacy_consent" name="privacy_consent" required style="margin-right: 8px;">
+            <label for="modal_privacy_consent" style="font-size: 12px; line-height: 1.3;">
+                {% trans "I agree to" %}
+                <a href="{% url 'legal:privacy_policy' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                    {% trans "Privacy Policy" %}
+                </a>
+            </label>
+        </div>
+        
+        <!-- Personal Data Consent - Required -->
+        <div class="legal-checkbox required" style="margin-bottom: 8px;">
+            <input type="checkbox" id="modal_personal_data_consent" name="personal_data_consent" required style="margin-right: 8px;">
+            <label for="modal_personal_data_consent" style="font-size: 12px; line-height: 1.3;">
+                {% trans "I consent to" %}
+                <a href="{% url 'legal:personal_data_consent' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                    {% trans "Data Processing" %}
+                </a>
+            </label>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- Default: All Legal Links -->
+<div class="legal-consent-section">
+    <h4>{% trans "Legal Information" %}</h4>
+    <p>{% trans "Please review our legal documents:" %}</p>
+    <div class="footer-legal-links">
+        <a href="{% url 'legal:terms_of_use' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+            {% trans "Terms of Use" %}
+        </a>
+        <a href="{% url 'legal:privacy_policy' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+            {% trans "Privacy Policy" %}
+        </a>
+        <a href="{% url 'legal:public_offer' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+            {% trans "Public Offer" %}
+        </a>
+        <a href="{% url 'legal:booking_rules' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+            {% trans "Booking Rules" %}
+        </a>
+        <a href="{% url 'legal:personal_data_consent' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+            {% trans "Data Processing Consent" %}
+        </a>
+        <a href="{% url 'legal:payment_rules' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+            {% trans "Payment Rules" %}
+        </a>
+    </div>
+</div>
+{% endif %} 
