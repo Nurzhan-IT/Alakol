@@ -1,3 +1,18 @@
+function bounceButton() {
+    const buttons = document.querySelectorAll('.selected-rooms-button');
+    console.log(buttons);
+    if (!buttons) {
+        return;
+    }
+
+    buttons.forEach(button => {
+        button.classList.add('bounce');
+        button.addEventListener('animationend', () => {
+            button.classList.remove('bounce');
+        }, { once: true });
+    });
+}
+
 $(document).ready(function(){
     
     // Add To Selection
@@ -103,7 +118,7 @@ $(document).ready(function(){
                                         timer: 1500,
                                         timerProgressBar: true,
                                     });
-                                    
+
                                     Toast.fire({
                                         icon: 'success',
                                         title: 'Корзина очищена и добавлен новый номер'
@@ -127,22 +142,26 @@ $(document).ready(function(){
                     button.html("<i class='fas fa-check-circle'></i> Added to selection ")
                 }
 
+                bounceButton();
+
                 console.log("Added Room To Selection!");
                 $(".room-count").text(response.total_selected_items)
+
+                ;
                 
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 1000,
-                    timerProgressBar: true,
-                })
-                    
-                Toast.fire({
-                    icon: 'success',
-                    title: buttonText === "Update" || buttonText === "Обновить" ? 
-                        'Room Updated Successfully!' : 'Added Room To Selection!'
-                })
+                // const Toast = Swal.mixin({
+                //     toast: true,
+                //     position: 'top-end',
+                //     showConfirmButton: false,
+                //     timer: 1000,
+                //     timerProgressBar: true,
+                // })
+                //
+                // Toast.fire({
+                //     icon: 'success',
+                //     title: buttonText === "Update" || buttonText === "Обновить" ?
+                //         'Room Updated Successfully!' : 'Added Room To Selection!'
+                // })
             }
         })
 
