@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
     <link rel="stylesheet" href="{% static 'css/mmenu.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" id="colors">
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
+    <link rel="stylesheet" href="{% static 'css/topbar.css' %}">
     {% comment %} <link href="{% static 'css/datedropper.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
 
     <!-- Icons, Font and assets -->
@@ -62,22 +64,8 @@
                                 </span>
                             </button>
                         </div>
-
-                        <div class="clearfix"></div>
-                    </div>
-                    
-                    <div class="utf_right_side">
-                        
-                        
-<style>
-    .header_widget .lang-code {
-        margin-right: 10px; /* Adjust the value as needed */
-    }
-    
-</style>
-                        <div class="header_widget "> 
-                            <div class='lang-code'>
-                                <form action="{% url 'set_language' %}" method="post">
+                        <div class='lang-code'>
+                            <form action="{% url 'set_language' %}" method="post">
                                 {% csrf_token %}
                                 <input name="next" type="hidden" value="{{ redirect_to }}">
                                 {% get_current_language as LANGUAGE_CODE %}
@@ -85,17 +73,43 @@
                                 {% get_language_info_list for LANGUAGES as languages %}
                                 {% for language in languages %}
                                 {% comment %} btn btn-outline-dark btn-sm {% endcomment %}
-                                    <button class="" name="language" value="{{ language.code }}" type="submit">
-                                        <img src="{% static 'images/flags/'|add:language.code|add:'.png' %}" alt="{{ language.code }}" width="20" height="15">
-                                    </button>
+                                <button class="lang-button-topbar" name="language" value="{{ language.code }}" type="submit">
+                                    <img src="{% static 'images/flags/'|add:language.code|add:'.png' %}" alt="{{ language.code }}" width="20" height="15">
+                                </button>
                                 {% endfor %}
-                                </form>
-                            </div>
+                            </form>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    
+                    <div class="utf_right_side">
+                        
+                        
+<style>
+
+
+</style>
+                        <div class="header_widget "> 
+<!--                            <div class='lang-code'>-->
+<!--                                <form action="{% url 'set_language' %}" method="post">-->
+<!--                                {% csrf_token %}-->
+<!--                                <input name="next" type="hidden" value="{{ redirect_to }}">-->
+<!--                                {% get_current_language as LANGUAGE_CODE %}-->
+<!--                                {% get_available_languages as LANGUAGES %}-->
+<!--                                {% get_language_info_list for LANGUAGES as languages %}-->
+<!--                                {% for language in languages %}-->
+<!--                                {% comment %} btn btn-outline-dark btn-sm {% endcomment %}-->
+<!--                                    <button class="lang-button-topbar" name="language" value="{{ language.code }}" type="submit">-->
+<!--                                        <img src="{% static 'images/flags/'|add:language.code|add:'.png' %}" alt="{{ language.code }}" width="20" height="15">-->
+<!--                                    </button>-->
+<!--                                {% endfor %}-->
+<!--                                </form>-->
+<!--                            </div>-->
                                
                             {% if request.user.is_authenticated %}
-                                <a href="{% url 'hotel:selected_rooms' %}" class="button border sign-in "><i class="fas fa-bed"></i><span class="room-count">{{ total_selected_items }}</span></a>
-                                <a href="{% url 'dashboard:dashboard' %}" class="button border sign-in "><i class="bi bi-grid"></i> <span class="sign-in-span">{% trans "Dashboard" %}</span></a>
-                                <a href="{% url 'userauths:sign-out' %}" class="button border with-icon"><i class="bi bi-power"></i> <span class="sign-up-span">{% trans "Sign Out" %}</span></a>
+                                <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button"><i class="fas fa-bed"></i><span class="room-count">{{ total_selected_items }}</span></a>
+                                <a href="{% url 'dashboard:dashboard' %}" class="sign-in-button"><i class="bi bi-grid"></i> <span class="sign-in-span">{% trans "Dashboard" %}</span></a>
+                                <a href="{% url 'userauths:sign-out' %}" class="sign-in-button"><i class="bi bi-power"></i> <span class="sign-up-span">{% trans "Sign Out" %}</span></a>
                             {% else %}
                                 <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button"><i class="fas fa-bed"></i><span class="room-count">{{ total_selected_items }}</span></a>
                                 <a href="{% url 'userauths:sign-in' %}" class="sign-in-button"><i class="fa fa-sign-in"></i><span class="sign-in-span">{% trans "Sign In" %}</span></a>
@@ -284,6 +298,17 @@
         $('#booking-date-search').on('hide.daterangepicker', function(ev, picker) {
             $('.daterangepicker').removeClass('calendar-visible');
             $('.daterangepicker').addClass('calendar-hidden');
+        });
+        $('#booking-date-search').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            $('#check_in_date').val(picker.startDate.format('YYYY-MM-DD'));
+            $('#check_out_date').val(picker.endDate.format('YYYY-MM-DD'));
+        });
+
+        $('#booking-date-search').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+            $('#check_in_date').val('');
+            $('#check_out_date').val('');
         });
 
         $(window).on('load', function() {
