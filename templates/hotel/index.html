@@ -4,6 +4,7 @@
 
 {% block special_header_links %}
     <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/indexsearchbar.css' %}">
 
 {% endblock special_header_links %}
 {% block content %}
@@ -26,14 +27,24 @@
                                         <input type="hidden" name="check_in_date" id="check_in_date">
                                         <input type="hidden" name="check_out_date" id="check_out_date">
                                     </div>
-                                    <div class="main_input_search_part_item intro-search-field">
-                                        <select name="guests" data-placeholder="{% trans 'Number of Guests' %}" class="selectpicker default" title="{% trans 'Guests' %}" data-live-search="true" data-selected-text-format="count" data-size="5">
-                                            <option value="1">{% trans "1 Guest" %}</option>
-                                            <option value="2">{% trans "2 Guests" %}</option>
-                                            <option value="3">{% trans "3 Guests" %}</option>
-                                            <option value="4">{% trans "4 Guests" %}</option>
-                                            <option value="5">{% trans "5+ Guests" %}</option>
-                                        </select>
+<!--                                    <div class="main_input_search_part_item intro-search-field">-->
+<!--                                        <select name="guests" data-placeholder="{% trans 'Number of Guests' %}" class="selectpicker default" title="{% trans 'Guests' %}" data-live-search="true" data-selected-text-format="count" data-size="5">-->
+<!--                                            <option value="1">{% trans "1 Guest" %}</option>-->
+<!--                                            <option value="2">{% trans "2 Guests" %}</option>-->
+<!--                                            <option value="3">{% trans "3 Guests" %}</option>-->
+<!--                                            <option value="4">{% trans "4 Guests" %}</option>-->
+<!--                                            <option value="5">{% trans "5+ Guests" %}</option>-->
+<!--                                        </select>-->
+<!--                                    </div>-->
+                                    <div class="main_input_search_part_item guests-count">
+                                        <div class="guest-stepper-base">
+                                            <span for="guests">{% trans 'Number of Guests' %}</span>
+                                            <div class="guest-stepper">
+                                                <button type="button" class="stepper-btn decrement">−</button>
+                                                <input class="guest-stepper-value" type="number" id="guests" name="guests" min="1" max="99" value="1" />
+                                                <button type="button" class="stepper-btn increment">+</button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <button class="button" type="submit">{% trans "Search" %}</button>
                                 </form>
@@ -95,19 +106,23 @@
 
         <div class="clearfix"></div>
 
-       
 
 
 
 
 
-        
 
-        
+
+
+<script src="{% static 'scripts/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'scripts/moment.min.js' %}"></script>
+<script src="{% static 'scripts/daterangepicker.js' %}"></script>
+<script src="{% static 'scripts/guest-stepper.js' %}"></script>
 
 {% endblock content %}
 
 {% block script %}
+
 <script>
     // Обработка выбора дат на главной странице
     $(document).ready(function() {
