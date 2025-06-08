@@ -15,3 +15,18 @@ def default(request):
         "total_selected_items": total_selected_items,
         "noti": noti,
     }
+
+def admin_russian_language(request):
+    """
+    Context processor для принудительной установки русского языка в админке
+    """
+    context = {}
+    
+    # Если это запрос к админке, принудительно устанавливаем русский язык
+    if request.path.startswith('/admin/'):
+        from django.utils import translation
+        translation.activate('ru')
+        context['LANGUAGE_CODE'] = 'ru'
+        context['ADMIN_FORCE_RUSSIAN'] = True
+    
+    return context

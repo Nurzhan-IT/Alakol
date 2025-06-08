@@ -11,6 +11,9 @@ urlpatterns = [
     path("payment_method_selection/", views.payment_method_selection, name="payment_method_selection"),
     path("invoice/<booking_id>/", views.invoice, name="invoice"),
     
+    # Session validation API
+    path('check-session-data/', views.check_session_data, name='check_session_data'),
+    
     # Robokassa Payment API
     path('api/robokassa-payment/', views.create_robokassa_payment, name='api_robokassa_payment'),
     path('api/robokassa-payment/<payment_key>/', views.create_robokassa_payment, name='api_robokassa_payment_with_key'),

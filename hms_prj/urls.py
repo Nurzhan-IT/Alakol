@@ -46,6 +46,7 @@ urlpatterns += i18n_patterns(
     path("user/", include("userauths.urls")),
     path("dashboard/", include("user_dashboard.urls")),
     path("search/", include("search.urls")),
+    path("legal/", include("legal.urls")),
 )
 
 if settings.DEBUG:

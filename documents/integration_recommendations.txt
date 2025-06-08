@@ -1,0 +1,576 @@
+РЕКОМЕНДАЦИИ ПО ИНТЕГРАЦИИ ЮРИДИЧЕСКИХ ДОКУМЕНТОВ
+В ВЕБ-ИНТЕРФЕЙС СИСТЕМЫ БРОНИРОВАНИЯ ОТЕЛЕЙ ALAKOL
+
+1. СТРУКТУРА HTML-СТРАНИЦ ДЛЯ ЮРИДИЧЕСКИХ ДОКУМЕНТОВ
+
+1.1. Рекомендуемая структура URL:
+```
+/legal/terms-of-use/          - Пользовательское соглашение
+/legal/privacy-policy/        - Политика конфиденциальности  
+/legal/public-offer/          - Публичная оферта
+/legal/booking-rules/         - Правила бронирования и отмены
+/legal/personal-data-consent/ - Согласие на обработку персональных данных
+/legal/payment-rules/         - Правила оплаты и возврата средств
+```
+
+1.2. Django views для юридических документов:
+```python
+# legal/views.py
+from django.shortcuts import render
+from django.views.generic import TemplateView
+
+class LegalDocumentView(TemplateView):
+    """Базовый класс для юридических документов"""
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'document_version': '1.0',
+            'last_updated': '2024-01-01',
+            'company_info': {
+                'name': '[НАИМЕНОВАНИЕ ОРГАНИЗАЦИИ]',
+                'bin': '[БИН/ИИН]',
+                'address': '[ЮРИДИЧЕСКИЙ АДРЕС]',
+                'phone': '[ТЕЛЕФОН]',
+                'email': '[EMAIL]'
+            }
+        })
+        return context
+
+class TermsOfUseView(LegalDocumentView):
+    template_name = 'legal/terms_of_use.html'
+
+class PrivacyPolicyView(LegalDocumentView):
+    template_name = 'legal/privacy_policy.html'
+
+class PublicOfferView(LegalDocumentView):
+    template_name = 'legal/public_offer.html'
+
+class BookingRulesView(LegalDocumentView):
+    template_name = 'legal/booking_rules.html'
+
+class PersonalDataConsentView(LegalDocumentView):
+    template_name = 'legal/personal_data_consent.html'
+
+class PaymentRulesView(LegalDocumentView):
+    template_name = 'legal/payment_rules.html'
+```
+
+1.3. URLs configuration:
+```python
+# legal/urls.py
+from django.urls import path
+from . import views
+
+app_name = 'legal'
+
+urlpatterns = [
+    path('terms-of-use/', views.TermsOfUseView.as_view(), name='terms_of_use'),
+    path('privacy-policy/', views.PrivacyPolicyView.as_view(), name='privacy_policy'),
+    path('public-offer/', views.PublicOfferView.as_view(), name='public_offer'),
+    path('booking-rules/', views.BookingRulesView.as_view(), name='booking_rules'),
+    path('personal-data-consent/', views.PersonalDataConsentView.as_view(), name='personal_data_consent'),
+    path('payment-rules/', views.PaymentRulesView.as_view(), name='payment_rules'),
+]
+```
+
+2. ИНТЕГРАЦИЯ В ПОЛЬЗОВАТЕЛЬСКИЙ ИНТЕРФЕЙС
+
+2.1. Добавление в футер сайта (templates/partials/base.html):
+```html
+<footer class="footer">
+    <div class="container">
+        <div class="footer-legal">
+            <div class="legal-links">
+                <h5>{% trans "Юридическая информация" %}</h5>
+                <ul>
+                    <li><a href="{% url 'legal:terms_of_use' %}">{% trans "Пользовательское соглашение" %}</a></li>
+                    <li><a href="{% url 'legal:privacy_policy' %}">{% trans "Политика конфиденциальности" %}</a></li>
+                    <li><a href="{% url 'legal:public_offer' %}">{% trans "Публичная оферта" %}</a></li>
+                    <li><a href="{% url 'legal:booking_rules' %}">{% trans "Правила бронирования" %}</a></li>
+                    <li><a href="{% url 'legal:payment_rules' %}">{% trans "Правила оплаты" %}</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+```
+
+2.2. Чекбоксы согласия при регистрации (templates/userauths/sign-up.html):
+```html
+<div class="consent-section">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="terms_agreement" name="terms_agreement" required>
+        <label class="form-check-label" for="terms_agreement">
+            {% trans "Я ознакомился и согласен с" %} 
+            <a href="{% url 'legal:terms_of_use' %}" target="_blank">{% trans "Пользовательским соглашением" %}</a>
+            {% trans "и" %} 
+            <a href="{% url 'legal:public_offer' %}" target="_blank">{% trans "Публичной офертой" %}</a>
+        </label>
+    </div>
+    
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="privacy_agreement" name="privacy_agreement" required>
+        <label class="form-check-label" for="privacy_agreement">
+            {% trans "Я ознакомился и согласен с" %} 
+            <a href="{% url 'legal:privacy_policy' %}" target="_blank">{% trans "Политикой конфиденциальности" %}</a>
+        </label>
+    </div>
+    
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="personal_data_consent" name="personal_data_consent" required>
+        <label class="form-check-label" for="personal_data_consent">
+            {% trans "Я даю согласие на" %} 
+            <a href="{% url 'legal:personal_data_consent' %}" target="_blank">{% trans "обработку персональных данных" %}</a>
+        </label>
+    </div>
+    
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="marketing_consent" name="marketing_consent">
+        <label class="form-check-label" for="marketing_consent">
+            {% trans "Я согласен получать маркетинговые сообщения (необязательно)" %}
+        </label>
+    </div>
+</div>
+```
+
+2.3. Чекбоксы согласия при оформлении бронирования (templates/hotel/checkout.html):
+```html
+<div class="booking-agreements">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="booking_terms" name="booking_terms" required>
+        <label class="form-check-label" for="booking_terms">
+            {% trans "Я ознакомился и согласен с" %} 
+            <a href="{% url 'legal:booking_rules' %}" target="_blank">{% trans "правилами бронирования и отмены" %}</a>
+        </label>
+    </div>
+    
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="payment_terms" name="payment_terms" required>
+        <label class="form-check-label" for="payment_terms">
+            {% trans "Я ознакомился и согласен с" %} 
+            <a href="{% url 'legal:payment_rules' %}" target="_blank">{% trans "правилами оплаты и возврата средств" %}</a>
+        </label>
+    </div>
+    
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="offer_agreement" name="offer_agreement" required>
+        <label class="form-check-label" for="offer_agreement">
+            {% trans "Я принимаю условия" %} 
+            <a href="{% url 'legal:public_offer' %}" target="_blank">{% trans "публичной оферты" %}</a>
+        </label>
+    </div>
+</div>
+```
+
+3. ДИЗАЙН И UX РЕКОМЕНДАЦИИ
+
+3.1. Стилизация страниц юридических документов:
+```css
+/* static/css/legal.css */
+.legal-document {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    font-family: 'Roboto', Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.legal-document h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.legal-document h2 {
+    color: #34495e;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-left: 4px solid #3498db;
+    padding-left: 15px;
+}
+
+.legal-document h3 {
+    color: #7f8c8d;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.legal-document .document-meta {
+    background: #ecf0f1;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+.legal-document .contact-info {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.consent-section {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.consent-section .form-check {
+    margin-bottom: 15px;
+}
+
+.consent-section .form-check-label {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.consent-section a {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.consent-section a:hover {
+    color: #0056b3;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .legal-document {
+        padding: 20px 15px;
+    }
+    
+    .legal-document h1 {
+        font-size: 24px;
+    }
+    
+    .legal-document h2 {
+        font-size: 20px;
+    }
+}
+```
+
+3.2. JavaScript для улучшения UX:
+```javascript
+// static/js/legal.js
+document.addEventListener('DOMContentLoaded', function() {
+    // Автоматическое открытие документов в новых вкладках
+    const legalLinks = document.querySelectorAll('a[href*="/legal/"]');
+    legalLinks.forEach(link => {
+        if (link.getAttribute('target') !== '_blank') {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+        }
+    });
+    
+    // Подсветка обязательных чекбоксов
+    const requiredCheckboxes = document.querySelectorAll('input[type="checkbox"][required]');
+    requiredCheckboxes.forEach(checkbox => {
+        const label = document.querySelector(`label[for="${checkbox.id}"]`);
+        if (label) {
+            label.innerHTML += ' <span class="text-danger">*</span>';
+        }
+    });
+    
+    // Валидация согласий перед отправкой формы
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const requiredConsents = form.querySelectorAll('input[type="checkbox"][required]');
+            let allChecked = true;
+            
+            requiredConsents.forEach(checkbox => {
+                if (!checkbox.checked) {
+                    allChecked = false;
+                    checkbox.closest('.form-check').style.border = '2px solid #dc3545';
+                }
+            });
+            
+            if (!allChecked) {
+                e.preventDefault();
+                alert('Пожалуйста, подтвердите все обязательные согласия');
+            }
+        });
+    });
+});
+```
+
+4. МОДЕЛЬ ДАННЫХ ДЛЯ ОТСЛЕЖИВАНИЯ СОГЛАСИЙ
+
+4.1. Модель для хранения согласий пользователей:
+```python
+# userauths/models.py (дополнение)
+class UserConsent(models.Model):
+    CONSENT_TYPES = (
+        ('terms_of_use', 'Пользовательское соглашение'),
+        ('privacy_policy', 'Политика конфиденциальности'),
+        ('personal_data', 'Обработка персональных данных'),
+        ('marketing', 'Маркетинговые сообщения'),
+        ('booking_terms', 'Правила бронирования'),
+        ('payment_terms', 'Правила оплаты'),
+    )
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    consent_type = models.CharField(max_length=50, choices=CONSENT_TYPES)
+    given_at = models.DateTimeField(auto_now_add=True)
+    ip_address = models.GenericIPAddressField()
+    user_agent = models.TextField()
+    document_version = models.CharField(max_length=10, default='1.0')
+    is_active = models.BooleanField(default=True)
+    withdrawn_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        unique_together = ['user', 'consent_type', 'document_version']
+        
+    def __str__(self):
+        return f"{self.user} - {self.consent_type} - {self.document_version}"
+```
+
+4.2. Функция для сохранения согласий:
+```python
+# userauths/utils.py
+def save_user_consent(user, consent_type, request, document_version='1.0'):
+    """Сохраняет согласие пользователя"""
+    UserConsent.objects.update_or_create(
+        user=user,
+        consent_type=consent_type,
+        document_version=document_version,
+        defaults={
+            'ip_address': get_client_ip(request),
+            'user_agent': request.META.get('HTTP_USER_AGENT', ''),
+            'is_active': True,
+            'withdrawn_at': None
+        }
+    )
+
+def get_client_ip(request):
+    """Получает IP-адрес клиента"""
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+```
+
+5. SEO И ДОСТУПНОСТЬ
+
+5.1. Meta-теги для юридических страниц:
+```html
+<!-- templates/legal/base_legal.html -->
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{% get_current_language %}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="{% block meta_description %}{% endblock %}">
+    <title>{% block title %}{% endblock %} | {% trans "Alakol - Бронирование отелей" %}</title>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "{% block page_name %}{% endblock %}",
+        "description": "{% block meta_description %}{% endblock %}",
+        "publisher": {
+            "@type": "Organization",
+            "name": "{{ company_info.name }}",
+            "address": "{{ company_info.address }}",
+            "telephone": "{{ company_info.phone }}"
+        }
+    }
+    </script>
+</head>
+```
+
+5.2. Доступность (ARIA):
+```html
+<!-- Пример для страницы с документом -->
+<main role="main" aria-labelledby="document-title">
+    <div class="legal-document">
+        <h1 id="document-title" tabindex="-1">
+            {% trans "Пользовательское соглашение" %}
+        </h1>
+        
+        <nav aria-label="{% trans 'Содержание документа' %}">
+            <ol>
+                <li><a href="#section-1">{% trans "Общие положения" %}</a></li>
+                <li><a href="#section-2">{% trans "Описание услуг" %}</a></li>
+                <!-- ... -->
+            </ol>
+        </nav>
+        
+        <section id="section-1" aria-labelledby="section-1-title">
+            <h2 id="section-1-title">{% trans "Общие положения" %}</h2>
+            <!-- Содержание раздела -->
+        </section>
+    </div>
+</main>
+```
+
+6. МУЛЬТИЯЗЫЧНОСТЬ
+
+
+
+6.2. Переключение языков для документов:
+```html
+<div class="language-switcher">
+    <label>{% trans "Язык документа:" %}</label>
+    <select onchange="switchDocumentLanguage(this.value)">
+        <option value="ru" {% if LANGUAGE_CODE == 'ru' %}selected{% endif %}>Русский</option>
+        <option value="kk" {% if LANGUAGE_CODE == 'kk' %}selected{% endif %}>Қазақша</option>
+        <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+    </select>
+</div>
+```
+
+7. УПРАВЛЕНИЕ ВЕРСИЯМИ ДОКУМЕНТОВ
+
+7.1. Модель для версионирования:
+```python
+# legal/models.py
+class LegalDocument(models.Model):
+    DOCUMENT_TYPES = (
+        ('terms_of_use', 'Пользовательское соглашение'),
+        ('privacy_policy', 'Политика конфиденциальности'),
+        ('public_offer', 'Публичная оферта'),
+        ('booking_rules', 'Правила бронирования'),
+        ('personal_data_consent', 'Согласие на обработку персональных данных'),
+        ('payment_rules', 'Правила оплаты'),
+    )
+    
+    document_type = models.CharField(max_length=50, choices=DOCUMENT_TYPES)
+    version = models.CharField(max_length=10)
+    content = models.TextField()
+    effective_date = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=False)
+    language = models.CharField(max_length=2, default='ru')
+    
+    class Meta:
+        unique_together = ['document_type', 'version', 'language']
+        
+    def save(self, *args, **kwargs):
+        if self.is_active:
+            # Деактивировать предыдущие версии
+            LegalDocument.objects.filter(
+                document_type=self.document_type,
+                language=self.language,
+                is_active=True
+            ).update(is_active=False)
+        super().save(*args, **kwargs)
+```
+
+8. АНАЛИТИКА И МОНИТОРИНГ
+
+8.1. Отслеживание просмотров документов:
+```python
+# legal/models.py
+class DocumentView(models.Model):
+    document_type = models.CharField(max_length=50)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    ip_address = models.GenericIPAddressField()
+    user_agent = models.TextField()
+    viewed_at = models.DateTimeField(auto_now_add=True)
+    
+# legal/views.py
+class LegalDocumentView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        # Записываем просмотр документа
+        DocumentView.objects.create(
+            document_type=self.document_type,
+            user=request.user if request.user.is_authenticated else None,
+            ip_address=get_client_ip(request),
+            user_agent=request.META.get('HTTP_USER_AGENT', '')
+        )
+        return super().get(request, *args, **kwargs)
+```
+
+9. БЕЗОПАСНОСТЬ И ПРОИЗВОДИТЕЛЬНОСТЬ
+
+9.1. Кэширование юридических документов:
+```python
+# legal/views.py
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+
+@method_decorator(cache_page(60 * 60 * 24), name='dispatch')  # Кэш на 24 часа
+class LegalDocumentView(TemplateView):
+    pass
+```
+
+9.2. CSP для юридических страниц:
+```python
+# settings.py
+CSP_DEFAULT_SRC = ["'self'"]
+CSP_SCRIPT_SRC = ["'self'", "'unsafe-inline'"]
+CSP_STYLE_SRC = ["'self'", "'unsafe-inline'"]
+```
+
+10. МОБИЛЬНАЯ АДАПТАЦИЯ
+
+10.1. Прогрессивное улучшение для мобильных устройств:
+```css
+/* Для мобильных устройств */
+@media (max-width: 576px) {
+    .legal-document {
+        font-size: 16px; /* Предотвращает зум в iOS */
+        padding: 15px 10px;
+    }
+    
+    .consent-section {
+        margin: 15px -10px;
+        border-radius: 0;
+    }
+    
+    .consent-section .form-check-label {
+        font-size: 16px; /* Предотвращает зум в iOS */
+    }
+}
+
+/* Для планшетов */
+@media (min-width: 577px) and (max-width: 768px) {
+    .legal-document {
+        padding: 30px 20px;
+    }
+}
+```
+
+10.2. Touch-friendly элементы:
+```css
+.form-check-input {
+    min-width: 20px;
+    min-height: 20px;
+    margin-right: 10px;
+}
+
+.legal-links a {
+    padding: 10px 0;
+    display: block;
+    border-bottom: 1px solid #eee;
+}
+```
+
+ЗАКЛЮЧЕНИЕ
+
+Эти рекомендации обеспечивают:
+- Полную юридическую защиту проекта
+- Соответствие требованиям UX/UI
+- Соблюдение стандартов доступности
+- SEO-оптимизацию
+- Мобильную адаптивность
+- Мультиязычность
+- Безопасность данных
+- Простоту управления и обновления
+
+Рекомендуется внедрять постепенно, начиная с основных документов и чекбоксов согласия, затем добавляя дополнительный функционал. 

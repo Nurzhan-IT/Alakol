@@ -30,56 +30,56 @@ ICON_CHOICES = [
 ]
 
 ROOM_TYPES = (
-    ('King', 'King'),
-    ('Luxury', 'Luxury'),
-    ('Normal', 'Normal'),
-    ('Economic', 'Economic'),
+    ('King', 'Королевский'),
+    ('Luxury', 'Люкс'),
+    ('Normal', 'Обычный'),
+    ('Economic', 'Эконом'),
 )
 
 
 SERVICES_TYPES = (
-    ('Food', 'Food'),
-    ('Cleaning', 'Cleaning'),
-    ('Technical', 'Technical'),
+    ('Food', 'Питание'),
+    ('Cleaning', 'Уборка'),
+    ('Technical', 'Техническое обслуживание'),
 )
 
 HOTEL_STATUS = (
-    ("Draft", "Draft"),
-    ("Disabled", "Disabled"),
-    ("Rejected", "Rejected"),
-    ("In Review", "In Review"),
-    ("Live", "Live"),
+    ("Draft", "Черновик"),
+    ("Disabled", "Отключен"),
+    ("Rejected", "Отклонен"),
+    ("In Review", "На проверке"),
+    ("Live", "Опубликован"),
 )
 
 GENDER = (
-    ("Male", "Male"),
-    ("Female", "Female"),
+    ("Male", "Мужской"),
+    ("Female", "Женский"),
 )
 
 
 DISCOUNT_TYPE = (
-    ("Percentage", "Percentage"),
-    ("Flat Rate", "Flat Rate"),
+    ("Percentage", "Процент"),
+    ("Flat Rate", "Фиксированная сумма"),
 )
 
 PAYMENT_STATUS = (
-    ("paid", "Paid"),
-    ("pending", "Pending"),
-    ("processing", "Processing"),
-    ("cancelled", "Cancelled"),
-    ("initiated", 'Initiated'),
-    ("failed", 'failed'),
-    ("refunding", 'refunding'),
-    ("refunded", 'refunded'),
-    ("unpaid", 'unpaid'),
-    ("expired", 'expired'),
+    ("paid", "Оплачено"),
+    ("pending", "Ожидает"),
+    ("processing", "Обрабатывается"),
+    ("cancelled", "Отменено"),
+    ("initiated", 'Инициировано'),
+    ("failed", 'Не удалось'),
+    ("refunding", 'Возвращается'),
+    ("refunded", 'Возвращено'),
+    ("unpaid", 'Не оплачено'),
+    ("expired", 'Истекло'),
 )
 
 
 
 NOTIFICATION_TYPE = (
-    ("Booking Confirmed", "Booking Confirmed"),
-    ("Booking Cancelled", "Booking Cancelled"),
+    ("Booking Confirmed", "Бронирование подтверждено"),
+    ("Booking Cancelled", "Бронирование отменено"),
 )
 
 
@@ -92,36 +92,36 @@ RATING = (
 )
 
 ROOM_TYPE_FEATURES_DETAILED = [
-    ('private_bathroom', 'In the private bathroom'),
-    ('view', 'View'),
-    ('services_amenities', 'Services and amenities'),
+    ('private_bathroom', 'В частной ванной'),
+    ('view', 'Вид'),
+    ('services_amenities', 'Услуги и удобства'),
 ]
 
 
 class Hotel(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100,blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    name = models.CharField(max_length=100, blank=True, verbose_name='Название')
     #description = CKEditor5Field(config_name='extends', null=True, blank=True)
-    description = models.TextField( null=True, blank=True)
-    image = models.FileField(upload_to="hotel_gallery")
-    address = models.CharField(max_length=200)
-    mobile = models.CharField(max_length=20)
-    email = models.CharField(max_length=20)
-    status = models.CharField(choices=HOTEL_STATUS, max_length=10, default="published", null=True, blank=True)
+    description = models.TextField(null=True, blank=True, verbose_name='Описание')
+    image = models.FileField(upload_to="hotel_gallery", verbose_name='Изображение')
+    address = models.CharField(max_length=200, verbose_name='Адрес')
+    mobile = models.CharField(max_length=20, verbose_name='Мобильный телефон')
+    email = models.CharField(max_length=20, verbose_name='Электронная почта')
+    status = models.CharField(choices=HOTEL_STATUS, max_length=10, default="published", null=True, blank=True, verbose_name='Статус')
 
-    check_in_time = models.TimeField(null=True, blank=True)
-    check_out_time = models.TimeField(null=True, blank=True)
+    check_in_time = models.TimeField(null=True, blank=True, verbose_name='Время заезда')
+    check_out_time = models.TimeField(null=True, blank=True, verbose_name='Время выезда')
     
     # Даты начала и окончания работы отеля
-    start_date = models.DateField(null=True, blank=True, help_text="Дата начала работы отеля")
-    end_date = models.DateField(null=True, blank=True, help_text="Дата окончания работы отеля")
+    start_date = models.DateField(null=True, blank=True, help_text="Дата начала работы отеля", verbose_name='Дата начала работы отеля')
+    end_date = models.DateField(null=True, blank=True, help_text="Дата окончания работы отеля", verbose_name='Дата окончания работы отеля')
 
     # tags = TaggableManager(blank=True)
-    views = models.PositiveIntegerField(default=0)
+    views = models.PositiveIntegerField(default=0, verbose_name='Просмотры')
     featured = models.BooleanField(default=False)
-    hid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
-    slug = models.SlugField(null=True, blank=True)
-    date = models.DateTimeField(auto_now_add=True)
+    hid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz", verbose_name='ID отеля')
+    slug = models.SlugField(null=True, blank=True, verbose_name='Слаг')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
 
     def __str__(self):
         return self.name
@@ -162,6 +162,8 @@ class Hotel(models.Model):
 
     def thumbnail(self):
         return mark_safe('<img src="%s" width="50" height="50" style="object-fit:cover; border-radius: 6px;" />' % (self.image.url))
+    
+    thumbnail.short_description = 'Миниатюра'
 
     def hotel_gallery(self):
         return HotelGallery.objects.filter(hotel=self)
@@ -186,9 +188,9 @@ class Hotel(models.Model):
 
 
 class HotelGallery(models.Model):
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    image = models.FileField(upload_to="hotel_gallery")
-    hgid = models.CharField(max_length=20,blank=True)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
+    image = models.FileField(upload_to="hotel_gallery", verbose_name='Изображение')
+    hgid = models.CharField(max_length=20, blank=True, verbose_name='ID галереи')
 
     def save(self, *args, **kwargs):
         # Генерация уникального hgid, если оно отсутствует
@@ -204,14 +206,14 @@ class HotelGallery(models.Model):
         return str(self.hotel)
 
     class Meta:
-        verbose_name_plural = "Hotel Gallery"
+        verbose_name_plural = "Галерея отеля"
 
 class HotelFeatures(models.Model):
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
     # icon_type = models.CharField(max_length=100, null=True, blank=True, choices=ICON_TPYE)
-    icon = models.CharField(max_length=100, null=True, blank=True)
-    name = models.CharField(max_length=35)
-    hfid = models.CharField(max_length=20,blank=True)
+    icon = models.CharField(max_length=100, null=True, blank=True, verbose_name='Иконка')
+    name = models.CharField(max_length=35, verbose_name='Название')
+    hfid = models.CharField(max_length=20, blank=True, verbose_name='ID особенности')
 
     def save(self, *args, **kwargs):
         # Генерация уникального hfid, если оно отсутствует
@@ -227,14 +229,14 @@ class HotelFeatures(models.Model):
         return str(self.hotel)
     
     class Meta:
-        verbose_name_plural = "Hotel Features"
+        verbose_name_plural = "Удобства отеля"
     
 class HotelFAQs(models.Model):
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    question = models.CharField(max_length=1000)
-    answer = models.TextField(null=True, blank=True)
-    date = models.DateTimeField(auto_now_add=True)
-    hfid = models.CharField(max_length=20,blank=True)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
+    question = models.CharField(max_length=1000, verbose_name='Вопрос')
+    answer = models.TextField(null=True, blank=True, verbose_name='Ответ')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    hfid = models.CharField(max_length=20, blank=True, verbose_name='ID FAQ')
 
     def save(self, *args, **kwargs):
         # Генерация уникального hfid, если оно отсутствует
@@ -251,19 +253,19 @@ class HotelFAQs(models.Model):
         return str(self.hotel)
     
     class Meta:
-        verbose_name_plural = "Hotel FAQs"
+        verbose_name_plural = "Вопрос/Ответ"
 
 class RoomType(models.Model):
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    type = models.CharField(max_length=120)
-    price = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
-    dynamic_pricing = models.JSONField(null=True, blank=True, default=dict)  # Используем default=dict для инициализации пустым словарем
-    number_of_beds = models.PositiveIntegerField(default=0)
-    room_capacity = models.PositiveIntegerField(default=0)
-    room_size = models.IntegerField(default=0, verbose_name="Room size (m²)")
-    rtid = models.CharField(max_length=20,blank=True)
-    slug = models.SlugField(null=True, blank=True,unique=True)
-    date = models.DateTimeField(auto_now_add=True)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
+    type = models.CharField(max_length=120, verbose_name='Тип')
+    price = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, verbose_name='Цена')
+    dynamic_pricing = models.JSONField(null=True, blank=True, default=dict, verbose_name='Динамические цены')  # Используем default=dict для инициализации пустым словарем
+    number_of_beds = models.PositiveIntegerField(default=0, verbose_name='Количество кроватей')
+    room_capacity = models.PositiveIntegerField(default=0, verbose_name='Вместимость')
+    room_size = models.IntegerField(default=0, verbose_name="Размер комнаты (м²)")
+    rtid = models.CharField(max_length=20, blank=True, verbose_name='ID типа номера')
+    slug = models.SlugField(null=True, blank=True, unique=True, verbose_name='Слаг')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     
     class Meta:
         verbose_name = 'Тип комнаты'
@@ -302,35 +304,35 @@ class RoomType(models.Model):
 
 
 class RoomTypeDescription(models.Model):
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_description')
-    description = models.TextField( null=True, blank=True)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
+    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_description', verbose_name='Тип номера')
+    description = models.TextField(null=True, blank=True, verbose_name='Описание')
 
     def __str__(self):
         return str(self.hotel)
     class Meta:
-        verbose_name_plural = "Room Type Description"
+        verbose_name_plural = "Описание типа номера"
         constraints = [
             models.UniqueConstraint(fields=['room_type'], name='unique_room_type_description')
         ]
 
 class RoomTypeGallery(models.Model):
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_gallery')
-    image = models.ImageField(upload_to='room_type_images/')
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
+    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_gallery', verbose_name='Тип номера')
+    image = models.ImageField(upload_to='room_type_images/', verbose_name='Изображение')
 
     def __str__(self):
         return str(self.room_type)
     
     class Meta:
-        verbose_name_plural = "Room Type Gallery"
+        verbose_name_plural = "Галерея типа номера"
 
 class RoomTypeFeatures(models.Model):
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_features')
-    icon = models.CharField(max_length=100, null=True, blank=True)
-    name = models.CharField(max_length=100)
-    hfid = models.CharField(max_length=20,blank=True)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
+    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_features', verbose_name='Тип номера')
+    icon = models.CharField(max_length=100, null=True, blank=True, verbose_name='Иконка')
+    name = models.CharField(max_length=100, verbose_name='Название')
+    hfid = models.CharField(max_length=20, blank=True, verbose_name='ID особенности')
 
     def save(self, *args, **kwargs):
         # Генерация уникального hfid, если оно отсутствует
@@ -347,14 +349,14 @@ class RoomTypeFeatures(models.Model):
         return str(self.hotel)
     
     class Meta:
-        verbose_name_plural = "Room Type Features"
+        verbose_name_plural = "Удобства типа номера"
 
 class RoomTypeFeaturesDetailed(models.Model):
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_features_detailed')
-    type_of_amenity = models.CharField(max_length=100, null=True, choices=ROOM_TYPE_FEATURES_DETAILED)
-    text = models.CharField(max_length=100)
-    hfid = models.CharField(max_length=20,blank=True)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
+    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_features_detailed', verbose_name='Тип номера')
+    type_of_amenity = models.CharField(max_length=100, null=True, choices=ROOM_TYPE_FEATURES_DETAILED, verbose_name='Тип удобства')
+    text = models.CharField(max_length=100, verbose_name='Текст')
+    hfid = models.CharField(max_length=20, blank=True, verbose_name='ID особенности')
 
     def save(self, *args, **kwargs):
         # Генерация уникального hfid, если оно отсутствует
@@ -371,15 +373,15 @@ class RoomTypeFeaturesDetailed(models.Model):
         return str(self.hotel)
     
     class Meta:
-        verbose_name_plural = "Room Type Features Detailed"
+        verbose_name_plural = "Удобства типа номера подробно"
 
 class Room(models.Model):
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
-    room_number = models.CharField(max_length=10)
-    is_available = models.BooleanField(default=True)
-    rid = models.CharField(max_length=20,blank=True)
-    date = models.DateTimeField(auto_now_add=True)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
+    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, verbose_name='Тип номера')
+    room_number = models.CharField(max_length=10, verbose_name='Номер комнаты')
+    is_available = models.BooleanField(default=True, verbose_name='Доступен')
+    rid = models.CharField(max_length=20, blank=True, verbose_name='ID номера')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
 
     def save(self, *args, **kwargs):
         # Генерация уникального rid, если оно отсутствует
@@ -401,46 +403,58 @@ class Room(models.Model):
     def number_of_beds(self):
         return self.room_type.number_of_beds
     
+    def room_capacity(self):
+        return self.room_type.room_capacity
+    
 
 
 class Booking(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    payment_status = models.CharField(max_length=100, choices=PAYMENT_STATUS, default="initiated")
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Пользователь')
+    payment_status = models.CharField(max_length=100, choices=PAYMENT_STATUS, default="initiated", verbose_name='Статус оплаты')
 
-    full_name = models.CharField(max_length=1000, null=True, blank=True)
-    email = models.EmailField(null=True, blank=True)
-    country_code = models.CharField(max_length=10, null=True, blank=True)
-    phone = models.CharField(max_length=1000, null=True, blank=True)
+    full_name = models.CharField(max_length=1000, null=True, blank=True, verbose_name='Полное имя')
+    email = models.EmailField(null=True, blank=True, verbose_name='Электронная почта')
+    country_code = models.CharField(max_length=10, null=True, blank=True, verbose_name='Код страны')
+    phone = models.CharField(max_length=1000, null=True, blank=True, verbose_name='Телефон')
     
-    hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True)
-    room_type = models.ForeignKey(RoomType, on_delete=models.SET_NULL, null=True)
-    room = models.ManyToManyField(Room)
-    selection_data = models.JSONField(null=True, blank=True, help_text="Данные о выбранных номерах из selection_data_obj")
-    before_discount = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
-    total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
-    saved = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
-    check_in_date = models.DateField()
-    check_out_date = models.DateField()
-    total_days = models.PositiveIntegerField(default=0)
-    num_adults = models.PositiveIntegerField(default=1)
-    num_children = models.PositiveIntegerField(default=0)
-    checked_in = models.BooleanField(default=False)
-    checked_out = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    checked_in_tracker = models.BooleanField(default=False, help_text="DO NOT CHECK THIS BOX")
-    checked_out_tracker = models.BooleanField(default=False, help_text="DO NOT CHECK THIS BOX")
-    date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    coupons = models.ManyToManyField("hotel.Coupon", blank=True)
-    booking_id = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
-    robokassa_inv_id = models.IntegerField(null=True, blank=True, help_text="InvId from Robokassa payment system")
+    hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True, verbose_name='Отель')
+    room_type = models.ForeignKey(RoomType, on_delete=models.SET_NULL, null=True, verbose_name='Тип номера')
+    room = models.ManyToManyField(Room, verbose_name='Номера')
+    selection_data = models.JSONField(null=True, blank=True, help_text="Данные о выбранных номерах из selection_data_obj", verbose_name='Данные выбора')
+    before_discount = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, verbose_name='До скидки')
+    total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, verbose_name='Итого')
+    saved = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, verbose_name='Сэкономлено')
+    prepayment = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, verbose_name='Предоплата (10%)', help_text='10% от общей суммы')
+    payment_for_hotel = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, verbose_name='К оплате отелю (90%)', help_text='90% от общей суммы')
+    check_in_date = models.DateField(verbose_name='Дата заезда')
+    check_out_date = models.DateField(verbose_name='Дата выезда')
+    total_days = models.PositiveIntegerField(default=0, verbose_name='Кол-во дней')
+    num_adults = models.PositiveIntegerField(default=1, verbose_name='Взрослые')
+    num_children = models.PositiveIntegerField(default=0, verbose_name='Дети')
+    checked_in = models.BooleanField(default=False, verbose_name='Заселен')
+    checked_out = models.BooleanField(default=False, verbose_name='Выселен')
+    is_active = models.BooleanField(default=True, verbose_name='Активно')
+    checked_in_tracker = models.BooleanField(default=False, help_text="DO NOT CHECK THIS BOX", verbose_name='Трекер заселения')
+    checked_out_tracker = models.BooleanField(default=False, help_text="DO NOT CHECK THIS BOX", verbose_name='Трекер выселения')
+    date = models.DateTimeField(auto_now_add=True, null=True, blank=True, verbose_name='Дата создания')
+    coupons = models.ManyToManyField("hotel.Coupon", blank=True, verbose_name='Купоны')
+    booking_id = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz", verbose_name='ID бронирования')
+    robokassa_inv_id = models.IntegerField(null=True, blank=True, help_text="InvId from Robokassa payment system", verbose_name='ID инвойса Robokassa')
 
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True, null=True, blank=True,)
-    expires_at = models.DateTimeField(null=True, blank=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True, null=True, blank=True, verbose_name='Создано в')
+    expires_at = models.DateTimeField(null=True, blank=True, db_index=True, verbose_name='Истекает в')
 
     def save(self, *args, **kwargs):
         # Устанавливаем expires_at при создании записи
         if not self.pk and not self.expires_at:  # Проверяем, что это новая запись
             self.expires_at = self.created_at + timedelta(minutes=10) if self.created_at else timezone.now() + timedelta(minutes=10)
+        
+        # Автоматически рассчитываем предоплату (10%) и платеж отелю (90%)
+        if self.total:
+            from decimal import Decimal
+            self.prepayment = self.total * Decimal('0.10')
+            self.payment_for_hotel = self.total * Decimal('0.90')
+        
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -448,6 +462,8 @@ class Booking(models.Model):
     
     def rooms(self):
         return self.room.all().count()
+    
+    rooms.short_description = 'Количество номеров'
     
     class Meta:
         indexes = [
@@ -474,16 +490,16 @@ class Booking(models.Model):
     
 
 class Coupon(models.Model):
-    code = models.CharField(max_length=1000)
-    type = models.CharField(max_length=100, choices=DISCOUNT_TYPE, default="Percentage")
-    discount = models.IntegerField(default=1, validators=[MinValueValidator(0), MaxValueValidator(100)])
-    redemption = models.IntegerField(default=0)
-    date = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=True)
-    make_public = models.BooleanField(default=False)
-    valid_from = models.DateField()
-    valid_to = models.DateField()
-    cid = ShortUUIDField(length=10, max_length=25, alphabet="abcdefghijklmnopqrstuvxyz")
+    code = models.CharField(max_length=1000, verbose_name='Код')
+    type = models.CharField(max_length=100, choices=DISCOUNT_TYPE, default="Percentage", verbose_name='Тип')
+    discount = models.IntegerField(default=1, validators=[MinValueValidator(0), MaxValueValidator(100)], verbose_name='Скидка')
+    redemption = models.IntegerField(default=0, verbose_name='Количество использований')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    active = models.BooleanField(default=True, verbose_name='Активен')
+    make_public = models.BooleanField(default=False, verbose_name='Сделать публичным')
+    valid_from = models.DateField(verbose_name='Действителен с')
+    valid_to = models.DateField(verbose_name='Действителен до')
+    cid = ShortUUIDField(length=10, max_length=25, alphabet="abcdefghijklmnopqrstuvxyz", verbose_name='ID купона')
 
     
     def __str__(self):
@@ -494,12 +510,12 @@ class Coupon(models.Model):
 
 
 class CouponUsers(models.Model):
-    coupon = models.ForeignKey(Coupon, on_delete=models.CASCADE)
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+    coupon = models.ForeignKey(Coupon, on_delete=models.CASCADE, verbose_name='Купон')
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, verbose_name='Бронирование')
     
-    full_name = models.CharField(max_length=1000)
-    email = models.CharField(max_length=1000)
-    mobile = models.CharField(max_length=1000)
+    full_name = models.CharField(max_length=1000, verbose_name='Полное имя')
+    email = models.CharField(max_length=1000, verbose_name='Электронная почта')
+    mobile = models.CharField(max_length=1000, verbose_name='Мобильный телефон')
 
     def __str__(self):
         return str(self.coupon.code)
@@ -509,22 +525,22 @@ class CouponUsers(models.Model):
 
 
 class RoomServices(models.Model):
-    booking = models.ForeignKey(Booking, null=True, on_delete=models.CASCADE)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
-    service_type = models.CharField(max_length=20, choices=SERVICES_TYPES)
-    price = models.DecimalField(decimal_places=2, max_digits=12, default=0.00)
+    booking = models.ForeignKey(Booking, null=True, on_delete=models.CASCADE, verbose_name='Бронирование')
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, verbose_name='Номер')
+    date = models.DateField(auto_now_add=True, verbose_name='Дата')
+    service_type = models.CharField(max_length=20, choices=SERVICES_TYPES, verbose_name='Тип услуги')
+    price = models.DecimalField(decimal_places=2, max_digits=12, default=0.00, verbose_name='Цена')
 
     def str(self):
         return str(self.booking) + " " + str(self.room) + " " + str(self.service_type)
 
 class Notification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="user")
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, null=True, blank=True)
-    type = models.CharField(max_length=100, default="new_order", choices=NOTIFICATION_TYPE)
-    seen = models.BooleanField(default=False)
-    nid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
-    date= models.DateField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="user", verbose_name='Пользователь')
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Бронирование')
+    type = models.CharField(max_length=100, default="new_order", choices=NOTIFICATION_TYPE, verbose_name='Тип')
+    seen = models.BooleanField(default=False, verbose_name='Просмотрено')
+    nid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz", verbose_name='ID уведомления')
+    date = models.DateField(auto_now_add=True, verbose_name='Дата')
     
     def __str__(self):
         if self.user:
@@ -539,10 +555,10 @@ class Notification(models.Model):
 
 
 class Bookmark(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True, blank=True)
-    bid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz")
-    date= models.DateField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Пользователь')
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Отель')
+    bid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvxyz", verbose_name='ID закладки')
+    date = models.DateField(auto_now_add=True, verbose_name='Дата')
     
     def __str__(self):
         if self.user:
@@ -558,14 +574,14 @@ class Bookmark(models.Model):
 
 
 class Review(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
-    hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, blank=True, null=True, related_name="reviews")
-    review = models.TextField(null=True, blank=True)
-    reply = models.CharField(null=True, blank=True, max_length=1000)
-    rating = models.IntegerField(choices=RATING, default=None)
-    active = models.BooleanField(default=False)
-    helpful = models.ManyToManyField(User, blank=True, related_name="helpful")
-    date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Пользователь')
+    hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, blank=True, null=True, related_name="reviews", verbose_name='Отель')
+    review = models.TextField(null=True, blank=True, verbose_name='Отзыв')
+    reply = models.CharField(null=True, blank=True, max_length=1000, verbose_name='Ответ')
+    rating = models.IntegerField(choices=RATING, default=None, verbose_name='Рейтинг')
+    active = models.BooleanField(default=False, verbose_name='Активен')
+    helpful = models.ManyToManyField(User, blank=True, related_name="helpful", verbose_name='Полезно')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата')
 
     class Meta:
         verbose_name_plural = "Reviews & Rating"
