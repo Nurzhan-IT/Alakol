@@ -263,7 +263,7 @@
                     </div>
                     <div class="with-forms">
                         <div class="col-lg-12 col-md-12">
-                            <a href="#">{% trans "Guests" %} <span class="qtyTotal" name="qtyTotal">1</span></a>
+                            <a href="#" style="display: none;"> <span class="qtyTotal" name="qtyTotal"></span></a>
                             <div class="panel-dropdown-content">
                                 <div class="qtyButtons">
                                     <div class="qtyTitle">{% trans "Adults" %}</div>
@@ -289,51 +289,10 @@
                     </div>
                     <button type="submit" class="utf_progress_button button fullwidth_block margin-top-5">{% trans "Check Availability" %}</button>
                 </form>
-                <button class="like-button add_to_wishlist"><span class="like-icon"></span> {% trans "Add to Wishlist" %}</button>
                 <div class="clearfix"></div>
             </div>
 
-            <div class="utf_box_widget listing-share margin-top-35 margin-bottom-40 no-border">
-                <h3><i class="fas fa-tag"></i> {% trans "Bookmark Listing" %}</h3>
-                <span>{{all_reviews.count}} {% trans "People Bookmarked This Hotel" %}</span>
-            </div>
-            <div class="utf_box_widget opening-hours review-avg-wrapper margin-top-35">
-                <h3><i class="fas fa-star"></i> {% trans "Rating Average" %}</h3>
-                <div class="box-inner">
-                    <div class="rating-avg-wrapper text-theme clearfix">
-                        {% if hotel.average_rating == None %}
-                        <div class="utf_counter_star_rating">{% trans "No Reviews Yet" %}</div>
-                        {% else %}
-                        <div class="rating-avg">{{hotel.average_rating}}</div>
-                        <div class="rating-after">
-                            <div class="rating-mode">/5 ({{hotel.rating_count}} {% trans "Reviews" %})</div>
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div class="ratings-avg-wrapper">
-                        <div class="ratings-avg-item">
-                            <div class="rating-label">{% trans "Quality" %}</div>
-                            <div class="rating-value text-theme">5.0</div>
-                        </div>
-                        <div class="ratings-avg-item">
-                            <div class="rating-label">{% trans "Location" %}</div>
-                            <div class="rating-value text-theme">4.5</div>
-                        </div>
-                        <div class="ratings-avg-item">
-                            <div class="rating-label">{% trans "Space" %}</div>
-                            <div class="rating-value text-theme">3.5</div>
-                        </div>
-                        <div class="ratings-avg-item">
-                            <div class="rating-label">{% trans "Service" %}</div>
-                            <div class="rating-value text-theme">4.0</div>
-                        </div>
-                        <div class="ratings-avg-item">
-                            <div class="rating-label">{% trans "Price" %}</div>
-                            <div class="rating-value text-theme">5.0</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 </div>

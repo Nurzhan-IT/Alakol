@@ -72,7 +72,7 @@ $(document).ready(function(){
             dataType: 'json',
             beforeSend: function(){
                 console.log("Adding room...");
-                button.html("<i class='fas fa-clock-rotate-left'></i> Adding room... ")
+                button.html("<i class='fas fa-clock-rotate-left'></i> " + gettext("Adding room...") + " ")
             },
             success: function(response){
                 // Проверяем, есть ли ошибка с отелем
@@ -108,7 +108,7 @@ $(document).ready(function(){
                                 },
                                 dataType: 'json',
                                 success: function(res) {
-                                    button.html("<i class='fas fa-check-circle'></i> Added to selection ");
+                                    button.html("<i class='fas fa-check-circle'></i> " + gettext("Added to selection") + " ");
                                     $(".room-count").text(res.total_selected_items);
                                     
                                     const Toast = Swal.mixin({
@@ -121,7 +121,7 @@ $(document).ready(function(){
 
                                     Toast.fire({
                                         icon: 'success',
-                                        title: 'Корзина очищена и добавлен новый номер'
+                                        title: gettext('Корзина очищена и добавлен новый номер')
                                     });
                                 }
                             });
@@ -136,10 +136,10 @@ $(document).ready(function(){
                 let buttonText = button.text().trim();
                 
                 // Определяем новый текст кнопки
-                if (buttonText === "Update" || buttonText === "Обновить") {
-                    button.html("<i class='fas fa-check-circle'></i> Updated ")
+                if (buttonText === gettext("Update") || buttonText === "Обновить") {
+                    button.html("<i class='fas fa-check-circle'></i> " + gettext("Updated") + " ")
                 } else {
-                    button.html("<i class='fas fa-check-circle'></i> Added to selection ")
+                    button.html("<i class='fas fa-check-circle'></i> " + gettext("Added to selection") + " ")
                 }
 
                 bounceButton();
