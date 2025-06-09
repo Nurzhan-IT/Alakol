@@ -1,0 +1,57 @@
+.guest-stepper {
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: fit-content;
+}
+
+.guest-stepper-value {
+    width: 50px !important;
+    text-align: center;
+    z-index: 100;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+input.guest-stepper-value::-webkit-inner-spin-button,
+input.guest-stepper-value::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input.guest-stepper-value {
+    -moz-appearance: textfield;
+}
+
+.guest-stepper-base {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: fit-content;
+    margin-left: 20px;
+}
+
+.stepper-btn {
+    background: transparent;
+    /*border: 1px solid rgb(132, 0, 255);*/
+    /*border-radius: 50%;*/
+    border: none;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 25px;
+    color: rgb(132, 0, 255);
+}
+
+.guests-count {
+    background-color: white;
+    border-radius: 4px;
+    font-weight: 600;
+}

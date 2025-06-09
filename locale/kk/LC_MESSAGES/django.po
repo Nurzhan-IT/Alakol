@@ -2452,3 +2452,20 @@ msgstr ""
 #: .\venv\Lib\site-packages\grappelli\templates\smuggler\load_data_form.html:53
 msgid "Load"
 msgstr ""
+
+# JavaScript переводы для кнопок
+#: static/scripts/custom.js
+msgid "Adding room..."
+msgstr "Бөлме қосуда..."
+
+#: static/scripts/custom.js
+msgid "Added to selection"
+msgstr "Таңдауға қосылды"
+
+#: static/scripts/custom.js
+msgid "Updated"
+msgstr "Жаңартылды"
+
+#: static/scripts/custom.js
+msgid "Update"
+msgstr "Жаңарту"

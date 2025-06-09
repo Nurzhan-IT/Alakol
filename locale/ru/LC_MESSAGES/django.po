@@ -2706,3 +2706,20 @@ msgstr "Загрузить"
 
 #~ msgid "Value-added tax"
 #~ msgstr "Налог на добавленную стоимость"
+
+# JavaScript переводы для кнопок
+#: static/scripts/custom.js
+msgid "Adding room..."
+msgstr "Добавляем номер..."
+
+#: static/scripts/custom.js
+msgid "Added to selection"
+msgstr "Добавлено в выборку"
+
+#: static/scripts/custom.js
+msgid "Updated"
+msgstr "Обновлено"
+
+#: static/scripts/custom.js
+msgid "Update"
+msgstr "Обновить"
