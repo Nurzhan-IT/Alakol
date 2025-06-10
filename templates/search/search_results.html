@@ -14,13 +14,25 @@
                     <h4>{% trans "Filters" %}</h4>
                 </div>
                 <div class="card-body">
-                    <form method="get" action="{% url 'search:search_results' %}">
+                    <form class="filters-form" method="get" action="{% url 'search:search_results' %}">
                         <!-- Hotel Name -->
                         <div class="mb-3">
                             <label for="name" class="form-label">{% trans "Hotel Name" %}</label>
                             <input type="text" class="form-control" id="name" name="name" value="{{ search_params.name }}">
                         </div>
-                        
+
+                        <div class="mb-3">
+                            <label for="min_rating" class="form-label">{% trans "Minimum Rating" %}</label>
+                            <select class="form-select" id="min_rating" name="min_rating">
+                                <option value="">{% trans "Any" %}</option>
+                                <option value="1" {% if search_params.min_rating == '1' %}selected{% endif %}>{% trans "1+ Star" %}</option>
+                                <option value="2" {% if search_params.min_rating == '2' %}selected{% endif %}>{% trans "2+ Stars" %}</option>
+                                <option value="3" {% if search_params.min_rating == '3' %}selected{% endif %}>{% trans "3+ Stars" %}</option>
+                                <option value="4" {% if search_params.min_rating == '4' %}selected{% endif %}>{% trans "4+ Stars" %}</option>
+                                <option value="5" {% if search_params.min_rating == '5' %}selected{% endif %}>{% trans "5 Stars" %}</option>
+                            </select>
+                        </div>
+
                         <!-- Check-in & Check-out Date -->
                         <div class="mb-3">
                             <label for="check_in_date" class="form-label">{% trans "Check-in Date" %}</label>
@@ -48,17 +60,17 @@
                         </div>
                         
                         <!-- Rating -->
-                        <div class="mb-3">
-                            <label for="min_rating" class="form-label">{% trans "Minimum Rating" %}</label>
-                            <select class="form-select" id="min_rating" name="min_rating">
-                                <option value="">{% trans "Any" %}</option>
-                                <option value="1" {% if search_params.min_rating == '1' %}selected{% endif %}>{% trans "1+ Star" %}</option>
-                                <option value="2" {% if search_params.min_rating == '2' %}selected{% endif %}>{% trans "2+ Stars" %}</option>
-                                <option value="3" {% if search_params.min_rating == '3' %}selected{% endif %}>{% trans "3+ Stars" %}</option>
-                                <option value="4" {% if search_params.min_rating == '4' %}selected{% endif %}>{% trans "4+ Stars" %}</option>
-                                <option value="5" {% if search_params.min_rating == '5' %}selected{% endif %}>{% trans "5 Stars" %}</option>
-                            </select>
-                        </div>
+<!--                        <div class="mb-3">-->
+<!--                            <label for="min_rating" class="form-label">{% trans "Minimum Rating" %}</label>-->
+<!--                            <select class="form-select" id="min_rating" name="min_rating">-->
+<!--                                <option value="">{% trans "Any" %}</option>-->
+<!--                                <option value="1" {% if search_params.min_rating == '1' %}selected{% endif %}>{% trans "1+ Star" %}</option>-->
+<!--                                <option value="2" {% if search_params.min_rating == '2' %}selected{% endif %}>{% trans "2+ Stars" %}</option>-->
+<!--                                <option value="3" {% if search_params.min_rating == '3' %}selected{% endif %}>{% trans "3+ Stars" %}</option>-->
+<!--                                <option value="4" {% if search_params.min_rating == '4' %}selected{% endif %}>{% trans "4+ Stars" %}</option>-->
+<!--                                <option value="5" {% if search_params.min_rating == '5' %}selected{% endif %}>{% trans "5 Stars" %}</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
                         
                         <!-- Room Type -->
                         {% comment %} <div class="mb-3">
@@ -143,11 +155,11 @@
                                 
                                 <p class="card-text"><i class="bi bi-geo-alt"></i> {{ hotel.address }}</p>
                                 
-                                <div class="mb-2">
+                                <div class="hotel-card-amenities mb-2">
                                     <strong>{% trans "Amenities:" %}</strong>
                                     <div class="mt-1">
                                         {% for feature in hotel.hotelfeatures_set.all|slice:":5" %}
-                                        <span class="badge bg-info text-dark me-1">{{ feature.name }}</span>
+                                        <span class="badge bg-info text-dark">{{ feature.name }}</span>
                                         {% empty %}
                                         <span class="text-muted">{% trans "No amenities listed" %}</span>
                                         {% endfor %}

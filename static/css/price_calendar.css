@@ -1,50 +1,98 @@
+.custom-calendar-wrapper {
+    /*position: absolute;*/
+    /*z-index: 1000;*/
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.hidden { display: none; }
 .custom-calendar {
-    width: 100%;
-    max-width: 600px;
-    margin: 20px auto;
-    font-family: sans-serif;
-    text-align: center;
-}
-.custom-calendar .calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.custom-calendar .calendar-header button {
-    padding: 10px 10px;
-}
-.custom-calendar .calendar-table {
-    width: 100%;
     border-collapse: collapse;
+    width: 100%;
+    max-width: 350px;
+    margin-top: 10px;
 }
-.custom-calendar .calendar-table th,
-.custom-calendar .calendar-table td {
+.custom-calendar th, .custom-calendar td {
     border: 1px solid #aaa;
-    width: 14.2%;
-    height: 80px;
+    text-align: center;
+    padding: 8px;
+    height: 60px;
     vertical-align: top;
-    padding: 3px;
+    cursor: pointer;
 }
-.custom-calendar .day-price {
+.custom-calendar th {
+    background-color: #f9f9f9;
+}
+.day-price {
     display: block;
     margin-top: 5px;
     font-weight: bold;
     color: green;
 }
-
-.prev-month {
-    border: none !important;
-    background-color: #8400ff;
-    color: white;
-    font-weight: bold;
-    border-radius: 5px;
+.calendar-controls {
+    text-align: center;
+    margin-bottom: 5px;
+}
+.calendar-controls button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
 }
 
-.next-month {
-    border: none !important;
-    background-color: #8400ff;
-    color: white;
+
+.selected {
+    background-color: #cde5ff;
     font-weight: bold;
-    border-radius: 5px;
+}
+
+.in-range {
+    background-color: #e8f4ff;
+}
+
+.checkin {
+    border: 2px solid #2196f3;
+}
+
+.checkout {
+    border: 2px solid #4caf50;
+
+}
+
+@media (max-width: 440px) {
+    .custom-calendar {
+        border-collapse: collapse;
+        width: 100%;
+        width: 300px;
+        margin-top: 10px;
+    }
+
+    .custom-calendar th, .custom-calendar td {
+        border: 1px solid #aaa;
+        text-align: center;
+        padding: 7px;
+        height: 60px;
+        vertical-align: top;
+        cursor: pointer;
+    }
+}
+
+@media (max-width: 415px) {
+    .custom-calendar {
+        border-collapse: collapse;
+        width: 100%;
+        width: 300px;
+        margin-top: 10px;
+    }
+
+    .custom-calendar th, .custom-calendar td {
+        border: 1px solid #aaa;
+        text-align: center;
+        padding: 5px;
+        height: 60px;
+        vertical-align: top;
+        cursor: pointer;
+    }
 }
