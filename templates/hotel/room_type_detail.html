@@ -111,37 +111,18 @@
           
         </div>  
         <div class="col-lg-4">
-            <div class="booking_widget_box" style="border: 1px dashed rgba(42, 1, 119, 0.61); padding: 14px; border-radius: 10px;">
+            <div class=" booking_widget_box" style="border: 1px dashed rgba(42, 1, 119, 0.61); padding: 14px; border-radius: 10px;">
               <h3><i class="fa fa-calendar"></i> {% trans "Booking" %}</h3>
               <form class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}">
                   {% csrf_token %}
                   <input type="hidden" value="{{hotel.id}}" name="hotel-id" id="">
                   <div class="col-lg-12 col-md-12 select_date_box">
                       <label for="">{% trans "Check-in Date" %}</label>
-<!--                      <input type="hidden" id="date-picker" value="{{checkin}}" name="checkin" placeholder="Select Date">-->
-<!--                      <div id="checkin-calendar" class="custom-calendar"></div>-->
-                      <input type="text" id="checkin-input" readonly placeholder="Check-in Date">
+                      <input type="date" id="date-picker" value="{{checkin}}" name="checkin" placeholder="Select Date">
                   </div>
                   <div class="col-lg-12 col-md-12 select_date_box">
                       <label for="">{% trans "Check-out Date" %}</label>
-<!--                      <input type="hidden" class="checkout_date" name="checkout" value="{{checkout}}"  placeholder="Select Date">-->
-<!--                      <div id="checkout-calendar" class="custom-calendar"></div>-->
-                      <input type="text" id="checkout-input" readonly placeholder="Check-out Date">
-                  </div>
-                  <div class="custom-calendar-wrapper hidden">
-                      <div class="calendar-controls">
-                          <button type="button" class="prev-month">&#8592;</button>
-                          <span class="calendar-title"></span>
-                          <button type="button" class="next-month">&#8594;</button>
-                      </div>
-                      <table class="custom-calendar">
-                          <thead>
-                          <tr>
-                              <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
-                          </tr>
-                          </thead>
-                          <tbody id="calendar-body"></tbody>
-                      </table>
+                      <input type="date" class="checkout_date" name="checkout" value="{{checkout}}"  placeholder="Select Date">
                   </div>
                   <div class="with-forms">
                       <div class="col-lg-12 col-md-12">
@@ -185,239 +166,90 @@
 
 <pre style="display: none" id="debug-json">{{ dynamic_price_json_data }}</pre>
 
-<!--  <script>-->
-<!--      $(document).ready(function () {-->
-<!--          let rawText = $("#debug-json").text();-->
-<!--          rawText = rawText.replace(/'/g, '"');-->
+  <script>
+      $(document).ready(function () {
+          let rawText = $("#debug-json").text();
+          rawText = rawText.replace(/'/g, '"');
 
-<!--          let priceData;-->
-<!--          try {-->
-<!--              priceData = JSON.parse(rawText);-->
-<!--          } catch (e) {-->
-<!--              console.error("Ошибка парсинга JSON:", e);-->
-<!--              priceData = {};-->
-<!--          }-->
+          let priceData;
+          try {
+              priceData = JSON.parse(rawText);
+          } catch (e) {
+              console.error("Ошибка парсинга JSON:", e);
+              priceData = {};
+          }
 
-<!--          let currentMonth = new Date().getMonth();-->
-<!--          let currentYear = new Date().getFullYear();-->
+          let currentMonth = new Date().getMonth();
+          let currentYear = new Date().getFullYear();
 
-<!--          function renderCalendar(month, year) {-->
-<!--              const $calendarBody = $(".custom-calendar .calendar-body");-->
-<!--              $calendarBody.empty();-->
+          function renderCalendar(month, year) {
+              const $calendarBody = $(".custom-calendar .calendar-body");
+              $calendarBody.empty();
 
-<!--              const firstDay = new Date(year, month, 1).getDay();-->
-<!--              const firstWeekday = (firstDay === 0) ? 6 : firstDay - 1;-->
-<!--              const daysInMonth = new Date(year, month + 1, 0).getDate();-->
+              const firstDay = new Date(year, month, 1).getDay();
+              const firstWeekday = (firstDay === 0) ? 6 : firstDay - 1;
+              const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-<!--              $(".custom-calendar .month-year").text(new Date(year, month).toLocaleString('ru-RU', { month: 'long', year: 'numeric' }));-->
+              $(".custom-calendar .month-year").text(new Date(year, month).toLocaleString('ru-RU', { month: 'long', year: 'numeric' }));
 
-<!--              let dateCounter = 1;-->
+              let dateCounter = 1;
 
-<!--              for (let i = 0; i < 6; i++) {-->
-<!--                  const $row = $("<tr></tr>");-->
+              for (let i = 0; i < 6; i++) {
+                  const $row = $("<tr></tr>");
 
-<!--                  for (let j = 0; j < 7; j++) {-->
-<!--                      const $cell = $("<td></td>");-->
+                  for (let j = 0; j < 7; j++) {
+                      const $cell = $("<td></td>");
 
-<!--                      if (i === 0 && j < firstWeekday) {-->
-<!--                          $cell.html("&nbsp;");-->
-<!--                      } else if (dateCounter > daysInMonth) {-->
-<!--                          $cell.html("&nbsp;");-->
-<!--                      } else {-->
-<!--                          const fullDate = new Date(year, month, dateCounter);-->
-<!--                          const dateStr = fullDate.toISOString().split("T")[0];-->
+                      if (i === 0 && j < firstWeekday) {
+                          $cell.html("&nbsp;");
+                      } else if (dateCounter > daysInMonth) {
+                          $cell.html("&nbsp;");
+                      } else {
+                          const fullDate = new Date(year, month, dateCounter);
+                          const dateStr = fullDate.toISOString().split("T")[0];
 
-<!--                          $cell.append(dateCounter);-->
+                          $cell.append(dateCounter);
 
-<!--                          if (priceData[dateStr]) {-->
-<!--                              $cell.append("<br>");-->
-<!--                              $("<span></span>")-->
-<!--                                  .addClass("day-price")-->
-<!--                                  .text(priceData[dateStr] + "₸")-->
-<!--                                  .appendTo($cell);-->
-<!--                          }-->
+                          if (priceData[dateStr]) {
+                              $cell.append("<br>");
+                              $("<span></span>")
+                                  .addClass("day-price")
+                                  .text(priceData[dateStr] + "₸")
+                                  .appendTo($cell);
+                          }
 
-<!--                          dateCounter++;-->
-<!--                      }-->
+                          dateCounter++;
+                      }
 
-<!--                      $row.append($cell);-->
-<!--                  }-->
+                      $row.append($cell);
+                  }
 
-<!--                  $calendarBody.append($row);-->
-<!--                  if (dateCounter > daysInMonth) break;-->
-<!--              }-->
-<!--          }-->
+                  $calendarBody.append($row);
+                  if (dateCounter > daysInMonth) break;
+              }
+          }
 
-<!--          $(".custom-calendar .prev-month").click(function () {-->
-<!--              currentMonth&#45;&#45;;-->
-<!--              if (currentMonth < 0) {-->
-<!--                  currentMonth = 11;-->
-<!--                  currentYear&#45;&#45;;-->
-<!--              }-->
-<!--              renderCalendar(currentMonth, currentYear);-->
-<!--          });-->
+          $(".custom-calendar .prev-month").click(function () {
+              currentMonth--;
+              if (currentMonth < 0) {
+                  currentMonth = 11;
+                  currentYear--;
+              }
+              renderCalendar(currentMonth, currentYear);
+          });
 
-<!--          $(".custom-calendar .next-month").click(function () {-->
-<!--              currentMonth++;-->
-<!--              if (currentMonth > 11) {-->
-<!--                  currentMonth = 0;-->
-<!--                  currentYear++;-->
-<!--              }-->
-<!--              renderCalendar(currentMonth, currentYear);-->
-<!--          });-->
+          $(".custom-calendar .next-month").click(function () {
+              currentMonth++;
+              if (currentMonth > 11) {
+                  currentMonth = 0;
+                  currentYear++;
+              }
+              renderCalendar(currentMonth, currentYear);
+          });
 
-<!--          renderCalendar(currentMonth, currentYear);-->
-<!--      });-->
-<!--  </script>-->
-    <script>
-        $(document).ready(function () {
-            let rawText = $("#debug-json").text().replace(/'/g, '"');
-            let priceData;
-            try {
-                priceData = JSON.parse(rawText);
-            } catch (e) {
-                console.error("Ошибка парсинга JSON:", e);
-                priceData = {};
-            }
-
-            let activeInput = null;
-            let currentDate = new Date();
-            currentDate.setHours(0, 0, 0, 0); // Обнуление времени
-            let currentMonth = currentDate.getMonth();
-            let currentYear = currentDate.getFullYear();
-
-            let checkinDate = null;
-            let checkoutDate = null;
-
-            function formatDateStr(date) {
-                return date.toISOString().split("T")[0];
-            }
-
-            function isDateBetween(dateStr) {
-                if (!checkinDate || !checkoutDate) return false;
-                return dateStr > formatDateStr(checkinDate) && dateStr < formatDateStr(checkoutDate);
-            }
-
-            function generateCalendar(month, year) {
-                const $calendarBody = $("#calendar-body");
-                $calendarBody.empty();
-
-                const firstDay = new Date(year, month, 1).getDay();
-                const firstWeekday = (firstDay === 0) ? 6 : firstDay - 1;
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-                $(".calendar-title").text(`${year}-${String(month + 1).padStart(2, '0')}`);
-
-                let dateCounter = 1;
-                for (let i = 0; i < 6; i++) {
-                    const $row = $("<tr></tr>");
-
-                    for (let j = 0; j < 7; j++) {
-                        const $cell = $("<td></td>");
-
-                        if (i === 0 && j < firstWeekday || dateCounter > daysInMonth) {
-                            $cell.html("&nbsp;");
-                        } else {
-                            const fullDate = new Date(year, month, dateCounter);
-                            fullDate.setHours(0, 0, 0, 0); // Без времени
-                            const dateStr = formatDateStr(fullDate);
-
-                            $cell.append(dateCounter);
-
-                            if (priceData[dateStr]) {
-                                $cell.append("<br>");
-                                $("<span></span>").addClass("day-price").text(priceData[dateStr] + "₽").appendTo($cell);
-                            }
-
-                            if (fullDate < currentDate) {
-                                $cell.css("color", "#ccc");
-                            } else {
-                                if (checkinDate && dateStr === formatDateStr(checkinDate)) {
-                                    $cell.addClass("selected checkin");
-                                } else if (checkoutDate && dateStr === formatDateStr(checkoutDate)) {
-                                    $cell.addClass("selected checkout");
-                                } else if (isDateBetween(dateStr)) {
-                                    $cell.addClass("in-range");
-                                }
-
-                                $cell.on("click", function () {
-                                    if (!activeInput) return;
-
-                                    if (activeInput.id === "checkin-input") {
-                                        checkinDate = fullDate;
-                                        checkoutDate = null;
-                                        $("#checkin-input").val(dateStr);
-                                        $("#checkout-input").val("");
-                                    } else {
-                                        if (!checkinDate) {
-                                            alert("Сначала выберите дату заезда.");
-                                            return;
-                                        }
-                                        if (fullDate <= checkinDate) {
-                                            alert("Дата выезда должна быть позже даты заезда.");
-                                            return;
-                                        }
-                                        checkoutDate = fullDate;
-                                        $("#checkout-input").val(dateStr);
-                                    }
-
-                                    $(".custom-calendar-wrapper").addClass("hidden");
-                                    generateCalendar(currentMonth, currentYear);
-                                });
-                            }
-
-                            dateCounter++;
-                        }
-
-                        $row.append($cell);
-                    }
-
-                    $calendarBody.append($row);
-                    if (dateCounter > daysInMonth) break;
-                }
-            }
-
-            function showCalendar(inputElem) {
-                activeInput = inputElem;
-                const offset = $(inputElem).offset();
-                $(".custom-calendar-wrapper")
-                    .css({ top: offset.top + $(inputElem).outerHeight() + 5, left: offset.left })
-                    .removeClass("hidden");
-                generateCalendar(currentMonth, currentYear);
-            }
-
-            $("#checkin-input, #checkout-input").on("focus click", function () {
-                showCalendar(this);
-            });
-
-            $(".prev-month").on("click", function () {
-                currentMonth--;
-                if (currentMonth < 0) {
-                    currentMonth = 11;
-                    currentYear--;
-                }
-                generateCalendar(currentMonth, currentYear);
-            });
-
-            $(".next-month").on("click", function () {
-                currentMonth++;
-                if (currentMonth > 11) {
-                    currentMonth = 0;
-                    currentYear++;
-                }
-                generateCalendar(currentMonth, currentYear);
-            });
-
-            $(document).on("click", function (e) {
-                if (!$(e.target).closest('.custom-calendar-wrapper, #checkin-input, #checkout-input').length) {
-                    $(".custom-calendar-wrapper").addClass("hidden");
-                }
-            });
-        });
-
-    </script>
-
-
+          renderCalendar(currentMonth, currentYear);
+      });
+  </script>
 
   <script>
     
