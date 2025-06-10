@@ -56,6 +56,7 @@
     align-items: center;
 }
 
+
 .filters-and-results {
     display: flex;
     flex-direction: row;
@@ -63,11 +64,9 @@
     min-height: 1500px;
 }
 
-.results-hotel-card-left-part {
-
-}
 
 .results-hotel-card-right-part {
+    width: 500px;
     padding: 20px;
     position: relative;
 }
@@ -99,3 +98,112 @@
     margin-left: 10px;
 }
 
+@media (max-width: 1100px) {
+    .results-hotel-card{
+        width: 700px;
+    }
+}
+
+
+@media (max-width: 900px) {
+    .results-hotel-card{
+        box-shadow: 2px 2px 12px 2px rgba(44, 44, 44, 0.144);
+        border-radius: 10px;
+        height: fit-content;
+        width: 500px;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+        padding-bottom: 30px;
+    }
+
+    .view-details-button {
+        color: #8400ff;
+        font-size: 20px;
+        position: absolute;
+        bottom: -20px;
+    }
+
+
+    .search-results-hotel-image {
+        object-fit: cover;
+        width: 500px;
+        height: 300px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 0px;
+    }
+
+    .filters-and-results {
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+        min-height: 1500px;
+    }
+
+    .filters-card {
+        border: 1px solid lightgrey;
+        padding: 10px;
+        border-radius: 10px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        margin-right: 10px;
+        width: fit-content;
+        height: fit-content;
+    }
+
+    .filters-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+    }
+
+    .submit-filters {
+        width: 100%;
+        background-color: #8400ff;
+        color: white;
+        border-radius: 4px;
+        margin-top: 28px;
+        border: none;
+        height: 50px;
+    }
+}
+
+@media (max-width: 520px) {
+    .results-hotel-card{
+        box-shadow: 2px 2px 12px 2px rgba(44, 44, 44, 0.144);
+        border-radius: 10px;
+        height: fit-content;
+        width: 95vw;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+        padding-bottom: 30px;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .filters-and-results {
+        justify-content: center;
+    }
+
+    .filters-form  {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .filters-card {
+        margin-left: 10px;
+        border: none;
+    }
+
+    .submit-filters {
+        width: 100%;
+        background-color: #8400ff;
+        color: white;
+        border-radius: 10px;
+        font-size: 20px;
+        border: none;
+        height: 50px;
+    }
+}
