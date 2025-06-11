@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # Redis для кэширования
+  redis:
+    image: redis:7-alpine
+    container_name: hms_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: >
+      redis-server 
+      --appendonly yes 
+      --maxmemory 512mb 
+      --maxmemory-policy allkeys-lru
+      --save 60 1000
+    networks:
+      - hms_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PostgreSQL база данных
+  postgres:
+    image: postgres:15-alpine
+    container_name: hms_postgres
+    environment:
+      POSTGRES_DB: alakol
+      POSTGRES_USER: ${DB_USER:-hms_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-hms_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - hms_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-hms_user}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  redis_data:
+  postgres_data:
+
+networks:
+  hms_network:
+    driver: bridge 
