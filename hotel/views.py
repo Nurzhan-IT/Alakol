@@ -3,16 +3,23 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_headers, vary_on_cookie
 from django.utils import timezone
 from django.conf import settings
 from django.urls import reverse
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.db.models import Q, Count, OuterRef
+from django.core.cache import cache
 import uuid
 
 from hotel.models import Coupon, CouponUsers, Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType, RoomTypeGallery, Notification, Bookmark, Review
 from booking.models import RoomUnavailability
+from hotel.cache_utils import (
+    CacheKeyGenerator, CacheInvalidator, cache_function, 
+    cache_queryset, CacheHelper
+)
 
 from datetime import datetime, timedelta
 from decimal import Decimal
@@ -25,37 +32,100 @@ from robokassa.robokassa import generate_payment_link, result_payment, check_suc
 
 from hotel.decorators import require_selection_data
 
+@cache_page(settings.CACHE_TTL['hotels_list'])
+@vary_on_headers('User-Agent', 'Accept-Language')
 def index(request):
-    hotel = Hotel.objects.filter(status="Live", featured=True)
+    """Главная страница с кэшированием списка рекомендуемых отелей."""
+    
+    # Используем кэш для получения списка отелей
+    cache_key = CacheKeyGenerator.hotel_list(featured=True, status="Live")
+    
+    def get_featured_hotels():
+        queryset = Hotel.objects.filter(
+            status="Live", 
+            featured=True
+        ).prefetch_related(
+            'hotelfeatures_set',
+            'roomtype_set',
+            'reviews'
+        ).select_related('user')
+        # Возвращаем список для совместимости с кэшем
+        return list(queryset)
+    
+    hotels = CacheHelper.get_or_set_complex(
+        cache_key, 
+        get_featured_hotels, 
+        timeout=settings.CACHE_TTL['hotels_list']
+    )
+    
+    # Передаем список отелей в шаблон (шаблон ожидает итерируемый объект)
     context = {
-        "hotel":hotel
+        "hotel": hotels  # Передаем весь список
     }
     return render(request, "hotel/index.html", context)
 
 
+@vary_on_cookie
 def hotel_detail(request, slug):
-    # Оптимизация: используем select_related и prefetch_related для загрузки связанных данных
-    hotel = get_object_or_404(
-        Hotel.objects.prefetch_related(
-            'roomtype_set',
-            'hotelgallery_set',
-            'hotelfeatures_set'
-        ), 
-        status="Live", 
-        slug=slug
+    """Детальная страница отеля с комплексным кэшированием."""
+    
+    # Кэшируем основную информацию об отеле
+    cache_key = CacheKeyGenerator.hotel_detail(slug)
+    
+    def get_hotel_data():
+        return get_object_or_404(
+            Hotel.objects.prefetch_related(
+                'roomtype_set',
+                'hotelgallery_set',
+                'hotelfeatures_set'
+            ), 
+            status="Live", 
+            slug=slug
+        )
+    
+    hotel = CacheHelper.get_or_set_complex(
+        cache_key,
+        get_hotel_data,
+        timeout=settings.CACHE_TTL['hotel_detail']
     )
     
-    # Оптимизация: загружаем все изображения типов номеров одним запросом
-    room_type_images = RoomTypeGallery.objects.select_related('hotel', 'room_type').filter(hotel=hotel)
+    # Кэшируем изображения типов номеров
+    gallery_cache_key = CacheKeyGenerator.hotel_gallery(hotel.id)
     
-    # Оптимизация: обработка отзывов
+    def get_room_type_images():
+        return RoomTypeGallery.objects.select_related('hotel', 'room_type').filter(hotel=hotel)
+    
+    room_type_images = CacheHelper.get_or_set_complex(
+        gallery_cache_key,
+        get_room_type_images,
+        timeout=settings.CACHE_TTL['features_and_amenities']
+    )
+    
+    # Кэшируем отзывы пользователя (если авторизован)
     if request.user.is_authenticated:
-        reviews = Review.objects.select_related('user', 'hotel').filter(user=request.user, hotel=hotel)
+        user_reviews_key = f"user_reviews:{request.user.id}:hotel_{hotel.id}"
+        def get_user_reviews():
+            return Review.objects.select_related('user', 'hotel').filter(user=request.user, hotel=hotel)
+        
+        reviews = CacheHelper.get_or_set_complex(
+            user_reviews_key,
+            get_user_reviews,
+            timeout=settings.CACHE_TTL['hotel_reviews']
+        )
     else:
         reviews = None
         
-    # Загружаем все отзывы одним запросом с предварительной загрузкой связанных пользователей
-    all_reviews = Review.objects.select_related('user', 'hotel').filter(hotel=hotel, active=True)
+    # Кэшируем все активные отзывы отеля
+    all_reviews_key = CacheKeyGenerator.hotel_reviews(hotel.id, active_only=True)
+    
+    def get_all_reviews():
+        return Review.objects.select_related('user', 'hotel').filter(hotel=hotel, active=True)
+    
+    all_reviews = CacheHelper.get_or_set_complex(
+        all_reviews_key,
+        get_all_reviews,
+        timeout=settings.CACHE_TTL['hotel_reviews']
+    )
     
     if request.user.is_authenticated:
         bookmark = Bookmark.objects.select_related('user', 'hotel').filter(user=request.user, hotel=hotel)
@@ -162,18 +232,36 @@ def hotel_detail(request, slug):
 
 
 def room_type_detail(request, slug, rt_slug):
-    # Оптимизация: используем select_related для загрузки связанных данных отеля и типа номера
-    hotel = get_object_or_404(
-        Hotel.objects.prefetch_related('roomtype_set'),
-        status="Live", 
-        slug=slug
+    """Детальная страница типа номера с кэшированием доступности."""
+    
+    # Кэшируем отель
+    hotel_cache_key = CacheKeyGenerator.hotel_detail(slug)
+    def get_hotel_data():
+        return get_object_or_404(
+            Hotel.objects.prefetch_related('roomtype_set'),
+            status="Live", 
+            slug=slug
+        )
+    
+    hotel = CacheHelper.get_or_set_complex(
+        hotel_cache_key,
+        get_hotel_data,
+        timeout=settings.CACHE_TTL['hotel_detail']
     )
     
-    # Получаем тип номера с предварительно загруженным отелем
-    room_type = get_object_or_404(
-        RoomType.objects.select_related('hotel'),
-        hotel=hotel, 
-        slug=rt_slug
+    # Кэшируем тип номера
+    room_type_cache_key = f"room_type_detail:{hotel.id}:{rt_slug}"
+    def get_room_type_data():
+        return get_object_or_404(
+            RoomType.objects.select_related('hotel'),
+            hotel=hotel, 
+            slug=rt_slug
+        )
+    
+    room_type = CacheHelper.get_or_set_complex(
+        room_type_cache_key,
+        get_room_type_data,
+        timeout=settings.CACHE_TTL['hotel_detail']
     )
     
     id = request.GET.get("hotel-id")
@@ -206,26 +294,48 @@ def room_type_detail(request, slug, rt_slug):
         messages.warning(request, "Отель не доступен для бронирования на выбранные даты.")
         return redirect("hotel:detail", hotel.slug)
     
-    # Оптимизация: получаем все номера с предварительно загруженными типами
-    rooms = Room.objects.select_related('room_type').filter(room_type=room_type, is_available=True)
-    
-    # Оптимизация: получаем ID забронированных номеров за один запрос
-    # Используем подзапрос для получения только нужных нам данных
-    booked_room_ids = Booking.objects.filter(
-        Q(check_in_date__lt=user_checkout_date, check_out_date__gt=user_checkin_date),
-        is_active=True,
-        payment_status__in=["paid", "processing", "pending"]
-    ).values_list('room__id', flat=True).distinct()
-
-    # Оптимизация: получаем ID недоступных номеров за один запрос
-    unavailable_room_ids = RoomUnavailability.objects.filter(
-        Q(start_date__lt=user_checkout_date, end_date__gt=user_checkin_date)
-    ).values_list('room__id', flat=True).distinct()
-    
-    # Оптимизация: исключаем забронированные и недоступные номера за один запрос
-    available_rooms = rooms.exclude(
-        id__in=list(set(list(booked_room_ids) + list(unavailable_room_ids)))
+    # Кэшируем доступность номеров для конкретных дат
+    availability_cache_key = CacheKeyGenerator.room_availability(
+        hotel.id, 
+        checkin, 
+        checkout
     )
+    
+    def get_room_availability():
+        # Получаем все номера с предварительно загруженными типами
+        rooms = Room.objects.select_related('room_type').filter(room_type=room_type, is_available=True)
+        
+        # Получаем ID забронированных номеров за один запрос
+        booked_room_ids = Booking.objects.filter(
+            Q(check_in_date__lt=user_checkout_date, check_out_date__gt=user_checkin_date),
+            is_active=True,
+            payment_status__in=["paid", "processing", "pending"]
+        ).values_list('room__id', flat=True).distinct()
+
+        # Получаем ID недоступных номеров за один запрос
+        unavailable_room_ids = RoomUnavailability.objects.filter(
+            Q(start_date__lt=user_checkout_date, end_date__gt=user_checkin_date)
+        ).values_list('room__id', flat=True).distinct()
+        
+        # Исключаем забронированные и недоступные номера
+        available_rooms = rooms.exclude(
+            id__in=list(set(list(booked_room_ids) + list(unavailable_room_ids)))
+        )
+        
+        return {
+            'available_rooms': list(available_rooms),
+            'booked_count': len(booked_room_ids),
+            'unavailable_count': len(unavailable_room_ids)
+        }
+    
+    # Для доступности номеров используем короткое время кэширования (3 минуты)
+    availability_data = CacheHelper.get_or_set_complex(
+        availability_cache_key,
+        get_room_availability,
+        timeout=settings.CACHE_TTL['room_availability']
+    )
+    
+    available_rooms = availability_data['available_rooms']
     
     # Рассчитываем стоимость с учетом динамических цен
     total_days = (user_checkout_date - user_checkin_date).days
