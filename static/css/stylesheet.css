@@ -1438,7 +1438,8 @@ body #utf_panel_menu li li li a {
 }
 
 .mmenu-trigger {
-    background-color: #8400ff;
+    /*background-color: #8400ff;*/
+    background-color: white;
 }
 
 /*==========
