@@ -277,6 +277,10 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.sidebar-search {
+  z-index: 0;
+}
+
 .utf_pricing_list_section li:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
