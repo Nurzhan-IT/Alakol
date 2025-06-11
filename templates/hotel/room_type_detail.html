@@ -768,7 +768,17 @@
             selectedDates.checkout = new Date(checkoutValue);
         }
 
+        // function formatPrice(price) {
+        //     return price + ' ₸';
+        // }
         function formatPrice(price) {
+            if (price >= 1000) {
+                let formatted = (price / 1000).toFixed(1);
+                if (formatted.endsWith('.0')) {
+                    formatted = formatted.slice(0, -2);
+                }
+                return formatted + 'k ₸';
+            }
             return price + ' ₸';
         }
 
