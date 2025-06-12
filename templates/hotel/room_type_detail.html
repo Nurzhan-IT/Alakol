@@ -138,9 +138,9 @@
 <!--                </div>-->
 
                 <!-- Price Calendar -->
-                <div class="booking_widget_box" style="border: 1px dashed rgba(42, 1, 119, 0.61); padding: 14px; border-radius: 10px; margin-bottom: 20px;">
+                <div class="booking_widget_box price-calendar-241" style="border: 1px dashed rgba(42, 1, 119, 0.61); padding: 14px; border-radius: 10px; margin-bottom: 20px;">
                     <div class="calendar-header-section">
-                        <h3><i class="fa fa-calendar"></i> {% trans "Prices & Availability" %}</h3>
+                        <h3><i class="fa fa-calendar"></i> {% trans "Prices & Calendar" %}</h3>
                         <button type="button" class="calendar-toggle" id="calendar-toggle">
                             <i class="fas fa-chevron-up"></i>
                         </button>
@@ -150,23 +150,14 @@
                             <button type="button" class="nav-btn prev-month" id="prev-month">
                                 <i class="fas fa-chevron-left"></i>
                             </button>
-                            <h4 class="month-year" id="month-year"></h4>
+                            <h4 class="month-year" id="month-year">January 2024</h4>
                             <button type="button" class="nav-btn next-month" id="next-month">
                                 <i class="fas fa-chevron-right"></i>
                             </button>
                         </div>
                         <div class="calendar-legend">
                             <div class="legend-item">
-                                <div class="legend-color available"></div>
-                                <span>{% trans "Available" %}</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color selected"></div>
-                                <span>{% trans "Selected" %}</span>
-                            </div>
-                            <div class="legend-item">
-                                <div class="legend-color past"></div>
-                                <span>{% trans "Past" %}</span>
+                                <span>{% trans "Approximate prices in tenge" %}</span>
                             </div>
                         </div>
                         <div class="calendar-grid">
@@ -727,6 +718,16 @@
                             border-right-width: 2px;
                         }
                     }
+
+                    /* Дополнительно фиксируем ширину виджета бронирования на мобилках */
+                    .price-calendar-241{
+                        width: 100% !important;    /* занимать всю ширину экрана */
+                        max-width: 100% !important; /* предотвращаем переполнение */
+                        box-sizing: border-box;     /* учитываем padding и border */
+                        overflow-x: auto;           /* безопасный скролл, если вдруг контент шире */
+                    }
+
+
                 </style>
             </div>
 
@@ -859,7 +860,12 @@
             // Get first day of week (Monday = 0)
             const firstWeekday = (firstDay.getDay() + 6) % 7;
 
-            $monthYear.text(firstDay.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' }));
+            // Используем window.getMonthNames() для перевода месяца
+            const monthNames = window.getMonthNames ? window.getMonthNames() : [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            $monthYear.text(monthNames[month] + ' ' + year);
 
             const today = new Date();
             today.setHours(0, 0, 0, 0);
