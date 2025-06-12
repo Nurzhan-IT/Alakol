@@ -36,6 +36,22 @@ const translations = {
     }
 };
 
+// Добавляем массивы месяцев для каждого языка
+const monthNames = {
+    'en': [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ],
+    'ru': [
+        'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+        'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+    ],
+    'kk': [
+        'Қаңтар', 'Ақпан', 'Наурыз', 'Сәуір', 'Мамыр', 'Маусым',
+        'Шілде', 'Тамыз', 'Қыркүйек', 'Қазан', 'Қараша', 'Желтоқсан'
+    ]
+};
+
 // Функция для получения перевода
 function gettext(text) {
     const currentLang = getCurrentLanguage();
@@ -45,5 +61,12 @@ function gettext(text) {
     return text; // возвращаем оригинальный текст, если перевод не найден
 }
 
+// Функция для получения массива месяцев на текущем языке
+function getMonthNames() {
+    const lang = getCurrentLanguage();
+    return monthNames[lang] || monthNames['en'];
+}
+
 // Псевдоним для более короткого использования
-window._ = gettext; 
+window._ = gettext;
+window.getMonthNames = getMonthNames; 
