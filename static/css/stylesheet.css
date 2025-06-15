@@ -17617,13 +17617,7 @@ input#date-picker:hover {
 }
 
 .booking_widget_box {
-    z-index: 1000;
-}
-
-@media (min-width: 1300px) {
-    .booking_widget_box {
-        width: 400px;
-    }
+    z-index: 100
 }
 
 .booking_widget_box .panel-dropdown .panel-dropdown-content {
