@@ -2,7 +2,7 @@ from django.utils import timezone
 from django.db.models import Q, Prefetch
 from hotel.models import Booking, Room
 
-def handle_bookings_payment_status_processing_to_cancelled():
+def handle_bookings_payment_status_processing_to_unpaid():
     """
     Находит и отменяет просроченные бронирования со статусом 'Processing'.
     Использует оптимизированные запросы для предотвращения проблемы N+1.
@@ -10,19 +10,18 @@ def handle_bookings_payment_status_processing_to_cancelled():
     try:
         # Используем один запрос для выборки и обновления
         expired_bookings = Booking.objects.filter(
-            payment_status='Processing',
+            payment_status='processing',
             expires_at__lt=timezone.now()
         )
-        
         # Получаем ID бронирований для логирования (при необходимости)
         booking_ids = list(expired_bookings.values_list('booking_id', flat=True)[:100])
         
         # Выполняем массовое обновление одним запросом
-        count = expired_bookings.update(payment_status='Cancelled')
+        count = expired_bookings.update(payment_status='unpaid')
         
         if count > 0:
-            print(f"Cancelled {count} expired bookings: {', '.join(booking_ids[:5])}{'...' if len(booking_ids) > 5 else ''}")
-        return f"Cancelled {count} expired bookings."
+            print(f"unpaid {count} expired bookings: {', '.join(booking_ids[:5])}{'...' if len(booking_ids) > 5 else ''}")
+        return f"unpaid {count} expired bookings."
     except Exception as e:
         print(f"Error cleaning expired bookings: {str(e)}")
         return f"Error: {str(e)}"

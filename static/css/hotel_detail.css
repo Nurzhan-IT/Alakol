@@ -397,7 +397,6 @@
   flex-direction: row;
   background: #fff;
   padding: 16px;
-  height: fit-content;
 }
 
 .custom-room-gallery {
@@ -527,6 +526,8 @@
   display: flex;
   justify-content: center;
   border-radius: 0 0 12px 12px;
+  position: absolute;
+  bottom: 0;
   width: 100%;
 }
 
@@ -563,9 +564,9 @@
     height: 50px;
   }
 
-  /*.custom-room-description {*/
-  /*  max-height: 350px;*/
-  /*}*/
+  .custom-room-description {
+    max-height: 350px;
+  }
 }
 
 @media (max-width: 767px) {
@@ -595,7 +596,7 @@
 
   .custom-room-description {
     font-size: 10px;
-    /*max-height: 250px;*/
+    max-height: 250px;
     padding: 12px;
   }
 
@@ -629,6 +630,7 @@
   }
 
   .custom-room-description {
+    max-height: 200px;
     font-size: 0.9rem;
   }
 
