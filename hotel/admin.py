@@ -584,7 +584,7 @@ class BookingAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         if is_manager(request.user) and not request.user.is_superuser:
-            # Удаляем поле 'selection_data' из формы
+            # Удаляем поля из формы для менеджеров
             if 'selection_data' in form.base_fields:
                 del form.base_fields['selection_data']
             if 'checked_in_tracker' in form.base_fields:
@@ -595,6 +595,9 @@ class BookingAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
                 del form.base_fields['expires_at']
             if 'is_active' in form.base_fields:
                 del form.base_fields['is_active']
+            # Скрываем legal_agreements от менеджеров согласно требованиям
+            if 'legal_agreements' in form.base_fields:
+                del form.base_fields['legal_agreements']
             # Делаем поля prepayment и payment_for_hotel только для чтения
             if 'prepayment' in form.base_fields:
                 form.base_fields['prepayment'].widget.attrs['readonly'] = True

@@ -443,6 +443,9 @@ class Booking(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, db_index=True, null=True, blank=True, verbose_name='Создано в')
     expires_at = models.DateTimeField(null=True, blank=True, db_index=True, verbose_name='Истекает в')
+    
+    # Поле для сохранения legal agreements при бронировании
+    legal_agreements = models.JSONField(null=True, blank=True, help_text="Согласия с юридическими документами при оплате", verbose_name='Юридические согласия')
 
     def save(self, *args, **kwargs):
         # Устанавливаем expires_at при создании записи
