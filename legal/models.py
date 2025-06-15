@@ -44,7 +44,6 @@ class DocumentView(models.Model):
     """Model for tracking document views"""
     document_type = models.CharField(max_length=50)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
-    ip_address = models.GenericIPAddressField()
     user_agent = models.TextField()
     viewed_at = models.DateTimeField(auto_now_add=True)
     
