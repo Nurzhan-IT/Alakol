@@ -1,5 +1,5 @@
 from django.contrib import admin
-from userauths.models import User, Profile
+from userauths.models import User, Profile, UserConsent
 from django.utils.html import mark_safe
 from hotel.admin import custom_admin_site, RussianModelAdminMixin
 
@@ -63,6 +63,31 @@ class ProfileAdmin(RussianModelAdminMixin, admin.ModelAdmin):
             return ['thumbnail', 'full_name']  # Ограничиваем список до минимума
         return self.list_display
 
+    def thumbnail(self, obj):
+        return mark_safe('<img src="/media/%s" width="50" height="50" style="object-fit: cover; border-radius: 6px;" />' % (obj.image))
+    thumbnail.short_description = 'Миниатюра'
 
+class UserConsentAdmin(RussianModelAdminMixin, admin.ModelAdmin):
+    """Админка для согласий пользователей"""
+    list_display = ['user', 'consent_type', 'document_version', 'given_at', 'is_active', 'withdrawn_at']
+    list_filter = ['consent_type', 'document_version', 'is_active', 'given_at']
+    search_fields = ['user__username', 'user__email', 'user__full_name']
+    readonly_fields = ['user_agent', 'given_at']
+    ordering = ['-given_at']
+    
+    def _setup_russian_verbose_names(self):
+        """Устанавливает русские названия для модели"""
+        self.model._meta.verbose_name = 'Согласие пользователя'
+        self.model._meta.verbose_name_plural = 'Согласия пользователей'
+    
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            # Менеджеры видят только свои согласия
+            queryset = queryset.filter(user=request.user)
+        return queryset
+
+# Регистрируем модели в админке
 custom_admin_site.register(User, UserAdmin)
 custom_admin_site.register(Profile, ProfileAdmin)
+custom_admin_site.register(UserConsent, UserConsentAdmin)
