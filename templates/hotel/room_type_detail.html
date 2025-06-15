@@ -12,21 +12,21 @@
 {% endblock special_header_links %}
 
 {% block content %}
-  
-  <div id="titlebar" class="gradient">
+
+<div id="titlebar" class="gradient">
     <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <h2>{{room_type.type}} {% trans "Room" %}</h2>
-          <nav id="breadcrumbs">
-            <ul>
-              <li><p>{{rooms.count}} {% trans "Available Rooms" %}</p></li>
-            </ul>
-          </nav>
+        <div class="row">
+            <div class="col-md-12">
+                <h2>{{room_type.type}} {% trans "Room" %}</h2>
+                <nav id="breadcrumbs">
+                    <ul>
+                        <li><p>{{rooms.count}} {% trans "Available Rooms" %}</p></li>
+                    </ul>
+                </nav>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 
 <!-- {{dynamic_price_json_data}}-->
 <!-- <div class="custom-calendar">
@@ -51,237 +51,1154 @@
     </table>
 </div> -->
 
-  <section class="fullwidth_block margin-top-0 padding-top-0 padding-bottom-50" data-background-color="#fff"> 
+<section class="fullwidth_block margin-top-0 padding-top-0 padding-bottom-50" data-background-color="#fff">
     <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <h3 class="headline_part centered margin-bottom-20">{% trans "All Available Rooms" %}<span>{% blocktrans with room_type=room_type.type rooms_count=rooms.count %}The {{ room_type }} room has {{ rooms_count }} available room(s){% endblocktrans %}</span></h3>
-        </div>
-      </div>
-      <div class="row">  
-        <div class="col-lg-8 "> 
-          
-          {% for r in rooms %}
-              <div class="plan featured col-md-4 col-sm-6 col-xs-12">
-              <div class="utf_price_plan">
-                  <h3>{% trans "Room No." %} {{ r.room_number }}</h3>
-                  <span class="value"> {{ dynamic_price|price_format }} {% trans "Tenge" %}<span>{% trans "For" %} {{ total_days }} {% trans "night(s)" %}</span></span> 
-              </div>
-              <div class="utf_price_plan_features">
-                  <ul>
-                  <li>{% trans "Beds" %}: {{r.room_type.number_of_beds}} </li>
-                  <li>{% trans "Room Capacity" %}: {{r.room_type.room_capacity}}</li>
-                  </ul>
-                  <input type="hidden" class="room_id_{{r.id}}" value="{{r.id}}" id="room_id">
-                  <input type="hidden" class="room_number_{{r.id}}" value="{{r.room_number}}" id="room_number">
-
-                  
-                  {% if room_statuses and room_statuses|get_item:r.id == "Added To Selection" %}
-                    <button class="button border add-to-selection" data-index="{{r.id}}">
-                    <i class="fas fa-check-circle"></i>
-                    {% trans "Added To Selection" %}
-                    </button>
-                  {% elif room_statuses and room_statuses|get_item:r.id == "Update" %}
-                    <button class="button border add-to-selection" data-index="{{r.id}}" style="">
-                    <i class="fas fa-refresh"></i>
-                    {% trans "Update" %}
-                    </button>
-                  {% else %}
-                    <button class="button border add-to-selection" data-index="{{r.id}}">
-                    <i class="fas fa-shopping-cart"></i>
-                    {% trans "Add To Selection" %}
-                    </button>
-                  {% endif %}
-
-              </div>
-              </div>
-          {% endfor %}
-          <input type="hidden" value="{{hotel.id}}" id="id">
-          <input type="hidden" value="{{hotel.name}}" id="hotel_name">
-          <input type="hidden" value="{{room_type.type}}" id="room_name">
-          <input type="hidden" value="{{dynamic_price}}" id="room_price">
-          <input type="hidden" value="{{room_type.number_of_beds}}" id="number_of_beds">
-          <input type="hidden" value="{{room_type.room_capacity}}" id="room_capacity">
-          <input type="hidden" value="{{room_type.id}}" id="room_type">
-          <input type="hidden" value="{{checkin}}" id="checkin">
-          <input type="hidden" value="{{checkout}}" id="checkout">
-          <input type="hidden" value="{{adult}}" id="adult">
-          <input type="hidden" value="{{children}}" id="children">
-
-          
-        </div>  
-        <div class="col-lg-4">
-            <div class=" booking_widget_box" style="border: 1px dashed rgba(42, 1, 119, 0.61); padding: 14px; border-radius: 10px;">
-              <h3><i class="fa fa-calendar"></i> {% trans "Booking" %}</h3>
-              <form class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}">
-                  {% csrf_token %}
-                  <input type="hidden" value="{{hotel.id}}" name="hotel-id" id="">
-                  <div class="col-lg-12 col-md-12 select_date_box">
-                      <label for="">{% trans "Check-in Date" %}</label>
-                      <input type="date" id="date-picker" value="{{checkin}}" name="checkin" placeholder="Select Date">
-                  </div>
-                  <div class="col-lg-12 col-md-12 select_date_box">
-                      <label for="">{% trans "Check-out Date" %}</label>
-                      <input type="date" class="checkout_date" name="checkout" value="{{checkout}}"  placeholder="Select Date">
-                  </div>
-                  <div class="with-forms">
-                      <div class="col-lg-12 col-md-12">
-                          <a href="#" style="display: none;">{% trans "Guests" %} <span class="qtyTotal" name="qtyTotal">1</span></a>
-                          <div class="panel-dropdown-content">
-                              <div class="qtyButtons">
-                                  <div class="qtyTitle">{% trans "Adults" %}</div>
-                                  <input type="text" name="adult" {% if adult == None %}value="1"{% else %}value="{{adult}}"{% endif %}>
-                              </div>
-                              <div class="qtyButtons">
-                                  <div class="qtyTitle">{% trans "Childrens" %}</div>
-                                  <input type="text" name="children" {% if children == None %}value="1"{% else %}value="{{children}}"{% endif %}>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-
-                  <div class="with-forms margin-top-30">
-                      <div class="col-lg-12 col-md-12 ">
-                          <a href="#">{% trans "Select Room Type" %}</a>
-                          <select name="room-type" class="utf_chosen_select_single" required>
-                              <option value="{{room_type.slug}}" selected>{{room_type.type}}</option>
-                              {% for r in hotel.hotel_room_types %}
-                                  {% if r.id != room_type.id %}
-                                      <option value="{{r.slug}}">{{r.type}}</option>
-                                  {% endif %}
-                              {% endfor %}
-                            </select>
-                      </div>
-                  </div>
-                
-                  <button type="submit" class="utf_progress_button button fullwidth_block margin-top-5">{% trans "Check Availability" %}</button>
-              </form>
-              <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="headline_part centered margin-bottom-20">{% trans "All Available Rooms" %}<span>{% blocktrans with room_type=room_type.type rooms_count=rooms.count %}The {{ room_type }} room has {{ rooms_count }} available room(s){% endblocktrans %}</span></h3>
             </div>
-        </div>      
-              
-      </div>      
-    </div>    
-  </section>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8 ">
+
+                {% for r in rooms %}
+                <div class="plan featured col-md-4 col-sm-6 col-xs-12">
+                    <div class="utf_price_plan">
+                        <h3>{% trans "Room No." %} {{ r.room_number }}</h3>
+                        <span class="value"> {{ dynamic_price|price_format }} {% trans "Tenge" %}<span>{% trans "For" %} {{ total_days }} {% trans "night(s)" %}</span></span>
+                    </div>
+                    <div class="utf_price_plan_features">
+                        <ul>
+                            <li>{% trans "Beds" %}: {{r.room_type.number_of_beds}} </li>
+                            <li>{% trans "Room Capacity" %}: {{r.room_type.room_capacity}}</li>
+                        </ul>
+                        <input type="hidden" class="room_id_{{r.id}}" value="{{r.id}}" id="room_id">
+                        <input type="hidden" class="room_number_{{r.id}}" value="{{r.room_number}}" id="room_number">
+
+
+                        {% if room_statuses and room_statuses|get_item:r.id == "Added To Selection" %}
+                        <button class="button border add-to-selection" data-index="{{r.id}}">
+                            <i class="fas fa-check-circle"></i>
+                            {% trans "Added To Selection" %}
+                        </button>
+                        {% elif room_statuses and room_statuses|get_item:r.id == "Update" %}
+                        <button class="button border add-to-selection" data-index="{{r.id}}" style="">
+                            <i class="fas fa-refresh"></i>
+                            {% trans "Update" %}
+                        </button>
+                        {% else %}
+                        <button class="button border add-to-selection" data-index="{{r.id}}">
+                            <i class="fas fa-shopping-cart"></i>
+                            {% trans "Add To Selection" %}
+                        </button>
+                        {% endif %}
+
+                    </div>
+                </div>
+                {% endfor %}
+                <input type="hidden" value="{{hotel.id}}" id="id">
+                <input type="hidden" value="{{hotel.name}}" id="hotel_name">
+                <input type="hidden" value="{{room_type.type}}" id="room_name">
+                <input type="hidden" value="{{dynamic_price}}" id="room_price">
+                <input type="hidden" value="{{room_type.number_of_beds}}" id="number_of_beds">
+                <input type="hidden" value="{{room_type.room_capacity}}" id="room_capacity">
+                <input type="hidden" value="{{room_type.id}}" id="room_type">
+                <input type="hidden" value="{{checkin}}" id="checkin">
+                <input type="hidden" value="{{checkout}}" id="checkout">
+                <input type="hidden" value="{{adult}}" id="adult">
+                <input type="hidden" value="{{children}}" id="children">
+
+
+            </div>
+            <div class="col-lg-4">
+                <!-- Date Range Selector -->
+<!--                <div class="booking_widget_box" style="border: 1px dashed rgba(42, 1, 119, 0.61); padding: 14px; border-radius: 10px; margin-bottom: 20px;">-->
+<!--                    <h3><i class="fa fa-calendar-check-o"></i> {% trans "Select Dates" %}</h3>-->
+<!--                    <div class="date-range-display">-->
+<!--                        <div class="date-range-box" id="date-range-box">-->
+<!--                            <div class="date-range-content">-->
+<!--                                <i class="fas fa-calendar-alt"></i>-->
+<!--                                <div class="date-range-text">-->
+<!--                                <span id="selected-date-range">-->
+<!--                                    {% if checkin and checkout %}-->
+<!--                                        {{ checkin|date:"d M Y" }} - {{ checkout|date:"d M Y" }}-->
+<!--                                    {% else %}-->
+<!--                                        {% trans "Select your dates" %}-->
+<!--                                    {% endif %}-->
+<!--                                </span>-->
+<!--                                    <small class="date-range-hint">{% trans "Click on calendar to select dates" %}</small>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="date-range-price" id="date-range-price" style="display: none;">-->
+<!--                                <span class="total-price">{{ dynamic_price|price_format }} ₸</span>-->
+<!--                                <small>{% trans "for" %} <span id="total-nights">{{ total_days }}</span> {% trans "nights" %}</small>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+                <!-- Price Calendar -->
+                <div class="booking_widget_box price-calendar-241" style="border: 1px dashed rgba(42, 1, 119, 0.61); padding: 14px; border-radius: 10px; margin-bottom: 20px;">
+                    <div class="calendar-header-section">
+                        <h3><i class="fa fa-calendar"></i> {% trans "Prices & Calendar" %}</h3>
+                        <button type="button" class="calendar-toggle" id="calendar-toggle">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                    </div>
+                    <div class="price-calendar" id="price-calendar">
+                        <div class="calendar-navigation">
+                            <button type="button" class="nav-btn prev-month" id="prev-month">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <h4 class="month-year" id="month-year">January 2024</h4>
+                            <button type="button" class="nav-btn next-month" id="next-month">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="calendar-legend">
+                            <div class="legend-item">
+                                <span>{% trans "Approximate prices in tenge" %}</span>
+                            </div>
+                        </div>
+                        <div class="calendar-grid">
+                            <div class="calendar-header">
+                                <div class="day-header">{% trans "Mo" %}</div>
+                                <div class="day-header">{% trans "Tu" %}</div>
+                                <div class="day-header">{% trans "We" %}</div>
+                                <div class="day-header">{% trans "Th" %}</div>
+                                <div class="day-header">{% trans "Fr" %}</div>
+                                <div class="day-header">{% trans "Sa" %}</div>
+                                <div class="day-header">{% trans "Su" %}</div>
+                            </div>
+                            <div class="calendar-days" id="calendar-days">
+                                <!-- Days will be generated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Form -->
+                <div class="booking_widget_box" style="border: 1px dashed rgba(42, 1, 119, 0.61); padding: 14px; border-radius: 10px;">
+                    <h3><i class="fa fa-calendar"></i> {% trans "Booking" %}</h3>
+                    <form class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{hotel.id}}" name="hotel-id" id="">
+                        <div class="col-lg-12 col-md-12 select_date_box" style="display: none;">
+                            <label for="">{% trans "Check-in Date" %}</label>
+                            <input type="date" id="date-picker" value="{{checkin}}" name="checkin" placeholder="Select Date">
+                        </div>
+                        <div class="col-lg-12 col-md-12 select_date_box" style="display: none;">
+                            <label for="">{% trans "Check-out Date" %}</label>
+                            <input type="date" class="checkout_date" name="checkout" value="{{checkout}}"  placeholder="Select Date">
+                        </div>
+                        <div class="with-forms">
+                            <div class="col-lg-12 col-md-12">
+                                <a href="#" style="display: none;">{% trans "Guests" %} <span class="qtyTotal" name="qtyTotal">1</span></a>
+                                <div class="panel-dropdown-content">
+                                    <div class="qtyButtons">
+                                        <div class="qtyTitle">{% trans "Adults" %}</div>
+                                        <input type="text" name="adult" {% if adult == None %}value="1"{% else %}value="{{adult}}"{% endif %}>
+                                    </div>
+                                    <div class="qtyButtons">
+                                        <div class="qtyTitle">{% trans "Childrens" %}</div>
+                                        <input type="text" name="children" {% if children == None %}value="1"{% else %}value="{{children}}"{% endif %}>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="with-forms margin-top-30">
+                            <div class="col-lg-12 col-md-12 ">
+                                <a href="#">{% trans "Select Room Type" %}</a>
+                                <select name="room-type" class="utf_chosen_select_single" required>
+                                    <option value="{{room_type.slug}}" selected>{{room_type.type}}</option>
+                                    {% for r in hotel.hotel_room_types %}
+                                    {% if r.id != room_type.id %}
+                                    <option value="{{r.slug}}">{{r.type}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="utf_progress_button button fullwidth_block margin-top-5">{% trans "Check Availability" %}</button>
+                    </form>
+                    <div class="clearfix"></div>
+                </div>
+
+                <!-- Calendar Styles -->
+                <style>
+                    .date-range-display {
+                        margin-bottom: 15px;
+                    }
+
+                    .date-range-box {
+                        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                        border: 2px solid #e9ecef;
+                        border-radius: 12px;
+                        padding: 16px 20px;
+                        transition: all 0.3s ease;
+                        cursor: pointer;
+                        position: relative;
+                        overflow: hidden;
+                    }
+
+                    .date-range-box:hover {
+                        border-color: #2a0177;
+                        background: linear-gradient(135deg, #f0f0ff 0%, #e6e6ff 100%);
+                        box-shadow: 0 4px 12px rgba(42, 1, 119, 0.15);
+                        transform: translateY(-2px);
+                    }
+
+                    .date-range-content {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        width: 100%;
+                    }
+
+                    .date-range-content i {
+                        color: #2a0177;
+                        font-size: 18px;
+                        flex-shrink: 0;
+                    }
+
+                    .date-range-text {
+                        flex: 1;
+                        display: flex;
+                        flex-direction: column;
+                    }
+
+                    .date-range-text span {
+                        font-weight: 600;
+                        color: #333;
+                        font-size: 15px;
+                        line-height: 1.2;
+                    }
+
+                    .date-range-hint {
+                        color: #666;
+                        font-size: 11px;
+                        margin-top: 2px;
+                        opacity: 0.8;
+                    }
+
+                    .date-range-price {
+                        text-align: right;
+                        padding-left: 10px;
+                        border-left: 1px solid #ddd;
+                        margin-left: 10px;
+                    }
+
+                    .total-price {
+                        font-weight: 700;
+                        color: #2a0177;
+                        font-size: 16px;
+                        display: block;
+                        line-height: 1.2;
+                    }
+
+                    .date-range-price small {
+                        color: #666;
+                        font-size: 11px;
+                        display: block;
+                        margin-top: 2px;
+                    }
+
+                    .calendar-header-section {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 15px;
+                    }
+
+                    .calendar-header-section h3 {
+                        margin: 0;
+                    }
+
+                    .calendar-toggle {
+                        background: none;
+                        border: none;
+                        color: #2a0177;
+                        font-size: 16px;
+                        cursor: pointer;
+                        padding: 5px;
+                        border-radius: 4px;
+                        transition: all 0.3s ease;
+                    }
+
+                    .calendar-toggle:hover {
+                        background: rgba(42, 1, 119, 0.1);
+                    }
+
+                    .calendar-toggle i {
+                        transition: transform 0.3s ease;
+                    }
+
+                    .calendar-toggle.collapsed i {
+                        transform: rotate(180deg);
+                    }
+
+                    .price-calendar {
+                        width: 100%;
+                        max-width: 100%;
+                        transition: all 0.3s ease;
+                        overflow: hidden;
+                        box-sizing: border-box;
+                    }
+
+                    .price-calendar.collapsed {
+                        max-height: 0;
+                        opacity: 0;
+                        margin: 0;
+                        padding: 0;
+                    }
+
+                    .calendar-navigation {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 15px;
+                        padding: 0 5px;
+                    }
+
+                    .calendar-legend {
+                        display: flex;
+                        justify-content: center;
+                        gap: 15px;
+                        margin-bottom: 15px;
+                        padding: 10px;
+                        background: #f8f9fa;
+                        border-radius: 6px;
+                    }
+
+                    .legend-item {
+                        display: flex;
+                        align-items: center;
+                        gap: 5px;
+                        font-size: 12px;
+                    }
+
+                    .legend-color {
+                        width: 12px;
+                        height: 12px;
+                        border-radius: 3px;
+                        border: 1px solid #ddd;
+                    }
+
+                    .legend-color.available {
+                        background: #fff;
+                    }
+
+                    .legend-color.selected {
+                        background: #2a0177;
+                    }
+
+                    .legend-color.past {
+                        background: #f8f9fa;
+                    }
+
+                    .nav-btn {
+                        background: #2a0177;
+                        color: white;
+                        border: none;
+                        width: 35px;
+                        height: 35px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        font-size: 14px;
+                    }
+
+                    .nav-btn:hover {
+                        background: #1a0155;
+                        transform: scale(1.1);
+                    }
+
+                    .month-year {
+                        font-size: 18px;
+                        font-weight: 600;
+                        color: #333;
+                        margin: 0;
+                        text-align: center;
+                        min-width: 150px;
+                    }
+
+                    .calendar-grid {
+                        width: 100%;
+                        max-width: 100%;
+                        overflow: hidden;
+                    }
+
+                    .calendar-header {
+                        display: grid;
+                        grid-template-columns: repeat(7, 1fr);
+                        gap: 2px;
+                        margin-bottom: 5px;
+                        width: 100%;
+                    }
+
+                    .day-header {
+                        background: #2a0177;
+                        color: white;
+                        padding: 8px 2px;
+                        text-align: center;
+                        font-size: 11px;
+                        font-weight: 600;
+                        border-radius: 4px;
+                        min-height: 32px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .calendar-days {
+                        display: grid;
+                        grid-template-columns: repeat(7, 1fr);
+                        gap: 2px;
+                        width: 100%;
+                    }
+
+                    .calendar-day {
+                        min-height: 55px;
+                        max-height: 70px;
+                        border: 1px solid #e9ecef;
+                        border-radius: 6px;
+                        padding: 3px 2px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        background: #fff;
+                        position: relative;
+                        overflow: hidden;
+                        word-break: break-word;
+                    }
+
+                    .calendar-day:hover {
+                        border-color: #2a0177;
+                        background: #f0f0ff;
+                        transform: translateY(-2px);
+                        box-shadow: 0 2px 8px rgba(42, 1, 119, 0.15);
+                    }
+
+                    .calendar-day.other-month {
+                        color: #aaa;
+                        background: #f8f9fa;
+                        border: 1px solid #e9ecef;
+                        opacity: 0.7;
+                    }
+
+                    .calendar-day.other-month:not(.past) {
+                        cursor: pointer;
+                    }
+
+                    .calendar-day.other-month:not(.past):hover {
+                        background: #e6e6ff;
+                        border-color: #2a0177;
+                        opacity: 1;
+                        color: #333;
+                    }
+
+                    .calendar-day.prev-month {
+                        background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+                        border-left: 3px solid #ddd;
+                    }
+
+                    .calendar-day.next-month {
+                        background: linear-gradient(135deg, #f8f8f8 0%, #e8e8e8 100%);
+                        border-right: 3px solid #ddd;
+                    }
+
+                    .calendar-day.other-month.selected {
+                        background: #2a0177 !important;
+                        color: white !important;
+                        border-color: #2a0177 !important;
+                        opacity: 1 !important;
+                    }
+
+                    .calendar-day.other-month.in-range {
+                        background: rgba(42, 1, 119, 0.2) !important;
+                        border-color: #2a0177 !important;
+                        opacity: 1 !important;
+                        color: #333 !important;
+                    }
+
+                    .calendar-day.selected {
+                        background: #2a0177;
+                        color: white;
+                        border-color: #2a0177;
+                    }
+
+                    .calendar-day.selected:hover {
+                        background: #1a0155;
+                        transform: none;
+                    }
+
+                    .calendar-day.in-range {
+                        background: rgba(42, 1, 119, 0.1);
+                        border-color: #2a0177;
+                    }
+
+                    .calendar-day.past {
+                        background: #f8f9fa;
+                        color: #ccc;
+                        cursor: not-allowed;
+                    }
+
+                    .day-number {
+                        font-size: 13px;
+                        font-weight: 600;
+                        margin-bottom: 1px;
+                        line-height: 1;
+                    }
+
+                    .day-price {
+                        font-size: 9px;
+                        font-weight: 500;
+                        color: #2a0177;
+                        background: rgba(42, 1, 119, 0.1);
+                        padding: 1px 3px;
+                        border-radius: 2px;
+                        white-space: nowrap;
+                        line-height: 1;
+                        max-width: 100%;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .calendar-day.selected .day-price {
+                        color: white;
+                        background: rgba(255, 255, 255, 0.2);
+                    }
+
+                    .calendar-day.other-month .day-price,
+                    .calendar-day.past .day-price {
+                        opacity: 0.5;
+                    }
+
+                    /* Animations */
+                    @keyframes fadeInUp {
+                        from {
+                            opacity: 0;
+                            transform: translateY(20px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+
+                    @keyframes pulse {
+                        0% {
+                            box-shadow: 0 0 0 0 rgba(42, 1, 119, 0.4);
+                        }
+                        70% {
+                            box-shadow: 0 0 0 10px rgba(42, 1, 119, 0);
+                        }
+                        100% {
+                            box-shadow: 0 0 0 0 rgba(42, 1, 119, 0);
+                        }
+                    }
+
+                    .calendar-days {
+                        animation: fadeInUp 0.5s ease;
+                    }
+
+                    .calendar-day.selected {
+                        animation: pulse 1.5s infinite;
+                    }
+
+                    .date-range-price {
+                        animation: fadeInUp 0.3s ease;
+                    }
+
+                    /* Loading state */
+                    .calendar-loading {
+                        position: relative;
+                        pointer-events: none;
+                    }
+
+                    .calendar-loading::after {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background: rgba(255, 255, 255, 0.8);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    /* Responsive adjustments */
+                    @media (max-width: 768px) {
+                        .calendar-day {
+                            min-height: 45px;
+                            max-height: 55px;
+                            padding: 2px 1px;
+                        }
+
+                        .day-number {
+                            font-size: 11px;
+                        }
+
+                        .day-price {
+                            font-size: 8px;
+                            padding: 1px 2px;
+                        }
+
+                        .day-header {
+                            padding: 6px 1px;
+                            font-size: 10px;
+                            min-height: 28px;
+                        }
+
+                        .nav-btn {
+                            width: 30px;
+                            height: 30px;
+                            font-size: 12px;
+                        }
+
+                        .month-year {
+                            font-size: 16px;
+                            min-width: 120px;
+                        }
+
+                        .date-range-content {
+                            flex-direction: column;
+                            align-items: flex-start;
+                            gap: 8px;
+                        }
+
+                        .date-range-price {
+                            border-left: none;
+                            border-top: 1px solid #ddd;
+                            margin-left: 0;
+                            padding-left: 0;
+                            padding-top: 10px;
+                            margin-top: 10px;
+                            text-align: left;
+                            width: 100%;
+                        }
+
+                        .calendar-legend {
+                            flex-wrap: wrap;
+                            gap: 10px;
+                            padding: 8px;
+                        }
+
+                        .legend-item {
+                            font-size: 11px;
+                        }
+
+                        .calendar-grid {
+                            gap: 1px;
+                        }
+
+                        .calendar-header {
+                            gap: 1px;
+                        }
+
+                        .calendar-days {
+                            gap: 1px;
+                        }
+
+                        .calendar-day.prev-month {
+                            border-left-width: 2px;
+                        }
+
+                        .calendar-day.next-month {
+                            border-right-width: 2px;
+                        }
+                    }
+
+                    /* Дополнительно фиксируем ширину виджета бронирования на мобилках */
+                    .price-calendar-241{
+                        width: 100% !important;    /* занимать всю ширину экрана */
+                        max-width: 100% !important; /* предотвращаем переполнение */
+                        box-sizing: border-box;     /* учитываем padding и border */
+                        overflow-x: auto;           /* безопасный скролл, если вдруг контент шире */
+                    }
+
+
+                </style>
+            </div>
+
+        </div>
+    </div>
+</section>
 
 <pre style="display: none" id="debug-json">{{ dynamic_price_json_data }}</pre>
 
-  <script>
-      $(document).ready(function () {
-          let rawText = $("#debug-json").text();
-          rawText = rawText.replace(/'/g, '"');
+<script>
+    $(document).ready(function () {
+        // Parse price data
+        let rawText = $("#debug-json").text();
+        rawText = rawText.replace(/'/g, '"');
 
-          let priceData;
-          try {
-              priceData = JSON.parse(rawText);
-          } catch (e) {
-              console.error("Ошибка парсинга JSON:", e);
-              priceData = {};
-          }
+        let priceData;
+        try {
+            priceData = JSON.parse(rawText);
+        } catch (e) {
+            console.error("Ошибка парсинга JSON:", e);
+            priceData = {};
+        }
 
-          let currentMonth = new Date().getMonth();
-          let currentYear = new Date().getFullYear();
+        // Calendar functionality
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let selectedDates = {
+            checkin: null,
+            checkout: null
+        };
 
-          function renderCalendar(month, year) {
-              const $calendarBody = $(".custom-calendar .calendar-body");
-              $calendarBody.empty();
+        // Initialize selected dates from form values
+        const checkinValue = $('#date-picker').val();
+        const checkoutValue = $('.checkout_date').val();
+        if (checkinValue) {
+            selectedDates.checkin = new Date(checkinValue);
+        }
+        if (checkoutValue) {
+            selectedDates.checkout = new Date(checkoutValue);
+        }
 
-              const firstDay = new Date(year, month, 1).getDay();
-              const firstWeekday = (firstDay === 0) ? 6 : firstDay - 1;
-              const daysInMonth = new Date(year, month + 1, 0).getDate();
+        // function formatPrice(price) {
+        //     return price + ' ₸';
+        // }
+        function formatPrice(price) {
+            if (price >= 1000) {
+                let formatted = (price / 1000).toFixed(1);
+                if (formatted.endsWith('.0')) {
+                    formatted = formatted.slice(0, -2);
+                }
+                return formatted + 'k ₸';
+            }
+            return price + ' ₸';
+        }
 
-              $(".custom-calendar .month-year").text(new Date(year, month).toLocaleString('ru-RU', { month: 'long', year: 'numeric' }));
+        function formatDate(date) {
+            const options = { day: 'numeric', month: 'short', year: 'numeric' };
+            return date.toLocaleDateString('ru-RU', options);
+        }
 
-              let dateCounter = 1;
+        // Функция для правильного форматирования даты в формат YYYY-MM-DD без сдвига часовых поясов
+        function formatDateForInput(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
 
-              for (let i = 0; i < 6; i++) {
-                  const $row = $("<tr></tr>");
+        function updateDateRangeDisplay() {
+            const rangeElement = $('#selected-date-range');
+            const priceElement = $('#date-range-price');
+            const totalNightsElement = $('#total-nights');
 
-                  for (let j = 0; j < 7; j++) {
-                      const $cell = $("<td></td>");
+            if (selectedDates.checkin && selectedDates.checkout) {
+                rangeElement.text(formatDate(selectedDates.checkin) + ' - ' + formatDate(selectedDates.checkout));
 
-                      if (i === 0 && j < firstWeekday) {
-                          $cell.html("&nbsp;");
-                      } else if (dateCounter > daysInMonth) {
-                          $cell.html("&nbsp;");
-                      } else {
-                          const fullDate = new Date(year, month, dateCounter);
-                          const dateStr = fullDate.toISOString().split("T")[0];
+                // Calculate total nights and price
+                const nights = Math.ceil((selectedDates.checkout - selectedDates.checkin) / (1000 * 60 * 60 * 24));
+                let totalPrice = 0;
 
-                          $cell.append(dateCounter);
+                // Calculate price for each day INCLUDING the start date but EXCLUDING the end date
+                // This is standard for hotel bookings - you pay for nights, not days
+                let currentDate = new Date(selectedDates.checkin);
+                while (currentDate < selectedDates.checkout) {
+                    const dateStr = formatDateForInput(currentDate);
+                    if (priceData[dateStr]) {
+                        totalPrice += parseFloat(priceData[dateStr]);
+                    } else {
+                        // Use default price if no dynamic price available
+                        const defaultPrice = parseFloat('{{ room_type.price|default:0 }}');
+                        totalPrice += defaultPrice;
+                    }
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
 
-                          if (priceData[dateStr]) {
-                              $cell.append("<br>");
-                              $("<span></span>")
-                                  .addClass("day-price")
-                                  .text(priceData[dateStr] + "₸")
-                                  .appendTo($cell);
-                          }
+                totalNightsElement.text(nights);
+                $('#date-range-price .total-price').text(formatPrice(totalPrice));
+                priceElement.show();
 
-                          dateCounter++;
-                      }
+            } else if (selectedDates.checkin) {
+                rangeElement.text(formatDate(selectedDates.checkin) + ' - {% trans "Select checkout" %}');
+                priceElement.hide();
+            } else {
+                rangeElement.text('{% trans "Select your dates" %}');
+                priceElement.hide();
+            }
+        }
 
-                      $row.append($cell);
-                  }
+        function isDateInRange(date) {
+            if (!selectedDates.checkin || !selectedDates.checkout) return false;
+            return date > selectedDates.checkin && date < selectedDates.checkout;
+        }
 
-                  $calendarBody.append($row);
-                  if (dateCounter > daysInMonth) break;
-              }
-          }
+        function isDateSelected(date) {
+            if (selectedDates.checkin && date.toDateString() === selectedDates.checkin.toDateString()) return true;
+            if (selectedDates.checkout && date.toDateString() === selectedDates.checkout.toDateString()) return true;
+            return false;
+        }
 
-          $(".custom-calendar .prev-month").click(function () {
-              currentMonth--;
-              if (currentMonth < 0) {
-                  currentMonth = 11;
-                  currentYear--;
-              }
-              renderCalendar(currentMonth, currentYear);
-          });
+        function renderCalendar(month, year) {
+            const $calendarDays = $("#calendar-days");
+            const $monthYear = $("#month-year");
 
-          $(".custom-calendar .next-month").click(function () {
-              currentMonth++;
-              if (currentMonth > 11) {
-                  currentMonth = 0;
-                  currentYear++;
-              }
-              renderCalendar(currentMonth, currentYear);
-          });
+            $calendarDays.empty();
 
-          renderCalendar(currentMonth, currentYear);
-      });
-  </script>
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
 
-  <script>
-    
+            // Get first day of week (Monday = 0)
+            const firstWeekday = (firstDay.getDay() + 6) % 7;
 
-    
+            // Используем window.getMonthNames() для перевода месяца
+            const monthNames = window.getMonthNames ? window.getMonthNames() : [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            $monthYear.text(monthNames[month] + ' ' + year);
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // Add empty cells for days from previous month
+            for (let i = 0; i < firstWeekday; i++) {
+                const prevMonthDay = new Date(year, month, -firstWeekday + i + 1);
+                const dateStr = formatDateForInput(prevMonthDay);
+                const dayElement = $('<div class="calendar-day other-month prev-month"></div>');
+
+                // Add day number
+                dayElement.append('<div class="day-number">' + prevMonthDay.getDate() + '</div>');
+
+                // Add price if available
+                if (priceData[dateStr]) {
+                    dayElement.append('<div class="day-price">' + formatPrice(priceData[dateStr]) + '</div>');
+                }
+
+                // Add classes based on date state
+                if (prevMonthDay < today) {
+                    dayElement.addClass('past');
+                } else if (isDateSelected(prevMonthDay)) {
+                    dayElement.addClass('selected');
+                } else if (isDateInRange(prevMonthDay)) {
+                    dayElement.addClass('in-range');
+                }
+
+                // Add click handler for previous month days if not in past
+                if (prevMonthDay >= today) {
+                    dayElement.data('date', prevMonthDay);
+                    dayElement.click(function() {
+                        const clickedDate = $(this).data('date');
+
+                        console.log('Clicked date:', formatDateForInput(clickedDate));
+                        console.log('Current checkin:', selectedDates.checkin ? formatDateForInput(selectedDates.checkin) : 'null');
+                        console.log('Current checkout:', selectedDates.checkout ? formatDateForInput(selectedDates.checkout) : 'null');
+
+                        if (!selectedDates.checkin || (selectedDates.checkin && selectedDates.checkout)) {
+                            // Start new selection
+                            selectedDates.checkin = clickedDate;
+                            selectedDates.checkout = null;
+                            console.log('Set new checkin:', formatDateForInput(selectedDates.checkin));
+                        } else if (clickedDate > selectedDates.checkin) {
+                            // Set checkout date
+                            selectedDates.checkout = clickedDate;
+                            console.log('Set checkout:', formatDateForInput(selectedDates.checkout));
+                        } else if (clickedDate.getTime() === selectedDates.checkin.getTime()) {
+                            // If clicking the same date as checkin, clear selection
+                            selectedDates.checkin = null;
+                            selectedDates.checkout = null;
+                            console.log('Cleared selection');
+                        } else {
+                            // Reset if clicked date is before checkin
+                            selectedDates.checkin = clickedDate;
+                            selectedDates.checkout = null;
+                            console.log('Reset checkin:', formatDateForInput(selectedDates.checkin));
+                        }
+
+                        // Update form inputs
+                        if (selectedDates.checkin) {
+                            $('#date-picker').val(formatDateForInput(selectedDates.checkin));
+                            console.log('Updated form checkin:', formatDateForInput(selectedDates.checkin));
+                        } else {
+                            $('#date-picker').val('');
+                        }
+                        if (selectedDates.checkout) {
+                            $('.checkout_date').val(formatDateForInput(selectedDates.checkout));
+                            console.log('Updated form checkout:', formatDateForInput(selectedDates.checkout));
+                        } else {
+                            $('.checkout_date').val('');
+                        }
+
+                        updateDateRangeDisplay();
+                        renderCalendar(currentMonth, currentYear);
+                    });
+                }
+
+                $calendarDays.append(dayElement);
+            }
+
+            // Add days of current month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const currentDate = new Date(year, month, day);
+                const dateStr = formatDateForInput(currentDate);
+                const dayElement = $('<div class="calendar-day"></div>');
+
+                // Add day number
+                dayElement.append('<div class="day-number">' + day + '</div>');
+
+                // Add price if available
+                if (priceData[dateStr]) {
+                    dayElement.append('<div class="day-price">' + formatPrice(priceData[dateStr]) + '</div>');
+                }
+
+                // Add classes based on date state
+                if (currentDate < today) {
+                    dayElement.addClass('past');
+                } else if (isDateSelected(currentDate)) {
+                    dayElement.addClass('selected');
+                } else if (isDateInRange(currentDate)) {
+                    dayElement.addClass('in-range');
+                }
+
+                // Add click handler
+                dayElement.data('date', currentDate);
+                dayElement.click(function() {
+                    if ($(this).hasClass('past')) {
+                        return;
+                    }
+
+                    const clickedDate = $(this).data('date');
+
+                    console.log('Clicked date:', formatDateForInput(clickedDate));
+                    console.log('Current checkin:', selectedDates.checkin ? formatDateForInput(selectedDates.checkin) : 'null');
+                    console.log('Current checkout:', selectedDates.checkout ? formatDateForInput(selectedDates.checkout) : 'null');
+
+                    if (!selectedDates.checkin || (selectedDates.checkin && selectedDates.checkout)) {
+                        // Start new selection
+                        selectedDates.checkin = clickedDate;
+                        selectedDates.checkout = null;
+                        console.log('Set new checkin:', formatDateForInput(selectedDates.checkin));
+                    } else if (clickedDate > selectedDates.checkin) {
+                        // Set checkout date
+                        selectedDates.checkout = clickedDate;
+                        console.log('Set checkout:', formatDateForInput(selectedDates.checkout));
+                    } else if (clickedDate.getTime() === selectedDates.checkin.getTime()) {
+                        // If clicking the same date as checkin, clear selection
+                        selectedDates.checkin = null;
+                        selectedDates.checkout = null;
+                        console.log('Cleared selection');
+                    } else {
+                        // Reset if clicked date is before checkin
+                        selectedDates.checkin = clickedDate;
+                        selectedDates.checkout = null;
+                        console.log('Reset checkin:', formatDateForInput(selectedDates.checkin));
+                    }
+
+                    // Update form inputs
+                    if (selectedDates.checkin) {
+                        $('#date-picker').val(formatDateForInput(selectedDates.checkin));
+                        console.log('Updated form checkin:', formatDateForInput(selectedDates.checkin));
+                    } else {
+                        $('#date-picker').val('');
+                    }
+                    if (selectedDates.checkout) {
+                        $('.checkout_date').val(formatDateForInput(selectedDates.checkout));
+                        console.log('Updated form checkout:', formatDateForInput(selectedDates.checkout));
+                    } else {
+                        $('.checkout_date').val('');
+                    }
+
+                    updateDateRangeDisplay();
+                    renderCalendar(currentMonth, currentYear);
+                });
+
+                $calendarDays.append(dayElement);
+            }
+
+            // Fill remaining cells with next month days
+            const totalCells = $calendarDays.children().length;
+            const remainingCells = 42 - totalCells; // 6 weeks * 7 days
+
+            for (let i = 1; i <= remainingCells && totalCells < 42; i++) {
+                const nextMonthDay = new Date(year, month + 1, i);
+                const dateStr = formatDateForInput(nextMonthDay);
+                const dayElement = $('<div class="calendar-day other-month next-month"></div>');
+
+                // Add day number
+                dayElement.append('<div class="day-number">' + nextMonthDay.getDate() + '</div>');
+
+                // Add price if available
+                if (priceData[dateStr]) {
+                    dayElement.append('<div class="day-price">' + formatPrice(priceData[dateStr]) + '</div>');
+                }
+
+                // Add classes based on date state
+                if (nextMonthDay < today) {
+                    dayElement.addClass('past');
+                } else if (isDateSelected(nextMonthDay)) {
+                    dayElement.addClass('selected');
+                } else if (isDateInRange(nextMonthDay)) {
+                    dayElement.addClass('in-range');
+                }
+
+                // Add click handler for next month days
+                dayElement.data('date', nextMonthDay);
+                dayElement.click(function() {
+                    if ($(this).hasClass('past')) {
+                        return;
+                    }
+
+                    const clickedDate = $(this).data('date');
+
+                    console.log('Clicked date:', formatDateForInput(clickedDate));
+                    console.log('Current checkin:', selectedDates.checkin ? formatDateForInput(selectedDates.checkin) : 'null');
+                    console.log('Current checkout:', selectedDates.checkout ? formatDateForInput(selectedDates.checkout) : 'null');
+
+                    if (!selectedDates.checkin || (selectedDates.checkin && selectedDates.checkout)) {
+                        // Start new selection
+                        selectedDates.checkin = clickedDate;
+                        selectedDates.checkout = null;
+                        console.log('Set new checkin:', formatDateForInput(selectedDates.checkin));
+                    } else if (clickedDate > selectedDates.checkin) {
+                        // Set checkout date
+                        selectedDates.checkout = clickedDate;
+                        console.log('Set checkout:', formatDateForInput(selectedDates.checkout));
+                    } else if (clickedDate.getTime() === selectedDates.checkin.getTime()) {
+                        // If clicking the same date as checkin, clear selection
+                        selectedDates.checkin = null;
+                        selectedDates.checkout = null;
+                        console.log('Cleared selection');
+                    } else {
+                        // Reset if clicked date is before checkin
+                        selectedDates.checkin = clickedDate;
+                        selectedDates.checkout = null;
+                        console.log('Reset checkin:', formatDateForInput(selectedDates.checkin));
+                    }
+
+                    // Update form inputs
+                    if (selectedDates.checkin) {
+                        $('#date-picker').val(formatDateForInput(selectedDates.checkin));
+                        console.log('Updated form checkin:', formatDateForInput(selectedDates.checkin));
+                    } else {
+                        $('#date-picker').val('');
+                    }
+                    if (selectedDates.checkout) {
+                        $('.checkout_date').val(formatDateForInput(selectedDates.checkout));
+                        console.log('Updated form checkout:', formatDateForInput(selectedDates.checkout));
+                    } else {
+                        $('.checkout_date').val('');
+                    }
+
+                    updateDateRangeDisplay();
+                    renderCalendar(currentMonth, currentYear);
+                });
+
+                $calendarDays.append(dayElement);
+            }
+        }
+
+        // Navigation event handlers
+        $("#prev-month").click(function () {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar(currentMonth, currentYear);
+        });
+
+        $("#next-month").click(function () {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar(currentMonth, currentYear);
+        });
+
+        // Calendar toggle functionality
+        $('#calendar-toggle').click(function() {
+            const $calendar = $('#price-calendar');
+            const $toggle = $(this);
+
+            if ($calendar.hasClass('collapsed')) {
+                $calendar.removeClass('collapsed');
+                $toggle.removeClass('collapsed');
+            } else {
+                $calendar.addClass('collapsed');
+                $toggle.addClass('collapsed');
+            }
+        });
+
+        // Initialize calendar
+        updateDateRangeDisplay();
+        renderCalendar(currentMonth, currentYear);
+
+        // Handle date input changes
+        $('#date-picker').change(function() {
+            const newDate = new Date($(this).val());
+            if (!isNaN(newDate)) {
+                selectedDates.checkin = newDate;
+                if (selectedDates.checkout && selectedDates.checkout <= selectedDates.checkin) {
+                    selectedDates.checkout = null;
+                    $('.checkout_date').val('');
+                }
+                updateDateRangeDisplay();
+                renderCalendar(currentMonth, currentYear);
+            }
+        });
+
+        $('.checkout_date').change(function() {
+            const newDate = new Date($(this).val());
+            if (!isNaN(newDate)) {
+                selectedDates.checkout = newDate;
+                updateDateRangeDisplay();
+                renderCalendar(currentMonth, currentYear);
+            }
+        });
+    });
+</script>
+
+<script>
+
+
     $(document).ready(function(){
         const checkinInput = document.querySelector('input[name="checkin"]');
         const checkoutInput = document.querySelector('input[name="checkout"]');
-        
+
         // Устанавливаем минимальную дату для check-in как сегодня
         const today = new Date();
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
         const minDate = `${year}-${month}-${day}`;
-        
+
         checkinInput.min = minDate;
-        
+
         // Устанавливаем значение check-in только если оно не задано
         if (!checkinInput.value) {
             checkinInput.value = minDate;
         }
-        
+
         // Устанавливаем минимальную дату для check-out
         let minCheckoutDate;
-        
+
         // Если дата заезда установлена, то минимальная дата выезда - следующий день после заезда
         if (checkinInput.value) {
             const checkinDate = new Date(checkinInput.value);
             const nextDay = new Date(checkinDate);
             nextDay.setDate(nextDay.getDate() + 1);
-            
+
             const nextDayYear = nextDay.getFullYear();
             const nextDayMonth = String(nextDay.getMonth() + 1).padStart(2, '0');
             const nextDayDay = String(nextDay.getDate()).padStart(2, '0');
@@ -295,33 +1212,33 @@
             const tomorrowDay = String(tomorrow.getDate()).padStart(2, '0');
             minCheckoutDate = `${tomorrowYear}-${tomorrowMonth}-${tomorrowDay}`;
         }
-        
+
         checkoutInput.min = minCheckoutDate;
-        
+
         // Устанавливаем значение check-out только если оно не задано
         if (!checkoutInput.value) {
             checkoutInput.value = minCheckoutDate;
         }
-        
+
         // Обработчик изменения даты check-in
         checkinInput.addEventListener('change', function() {
             const checkinDate = new Date(this.value);
             const nextDay = new Date(checkinDate);
             nextDay.setDate(nextDay.getDate() + 1);
-            
+
             const nextDayYear = nextDay.getFullYear();
             const nextDayMonth = String(nextDay.getMonth() + 1).padStart(2, '0');
             const nextDayDay = String(nextDay.getDate()).padStart(2, '0');
             const nextDayFormatted = `${nextDayYear}-${nextDayMonth}-${nextDayDay}`;
-            
+
             checkoutInput.min = nextDayFormatted;
-            
+
             // Если текущая дата check-out раньше новой минимальной даты
             if (new Date(checkoutInput.value) < nextDay) {
                 checkoutInput.value = nextDayFormatted;
             }
         });
     });
-  </script>
-  
+</script>
+
 {% endblock content %}
