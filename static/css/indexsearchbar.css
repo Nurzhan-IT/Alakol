@@ -47,7 +47,7 @@ input.guest-stepper-value {
     justify-content: center;
     font-weight: bold;
     font-size: 25px;
-    color: rgb(132, 0, 255);
+    color: #00cceb;
 }
 
 .guests-count {

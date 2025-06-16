@@ -4,7 +4,7 @@
 
 .submit-filters {
     width: 100%;
-    background-color: #8400ff;
+    background-color: #00cceb;
     color: white;
     border-radius: 4px;
     border: none;
@@ -73,19 +73,19 @@
 }
 
 .found-label {
-    color: #8400ff;
+    color: #00cceb;
     margin-bottom: 20px;
 }
 
 .view-details-button {
-    color: #8400ff;
+    color: #00cceb;
     font-size: 20px;
     position: absolute;
     bottom: 10px;
 }
 
 .view-details-button:hover {
-    border-bottom: 1px solid #8400ff;
+    border-bottom: 1px solid #00cceb;
 }
 
 .search-results-container {
