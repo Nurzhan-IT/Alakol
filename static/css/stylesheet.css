@@ -11211,7 +11211,7 @@ span.like-icon {
     position: relative;
     padding-top: 60px;
     padding-bottom: 60px;
-    background-image: url(../images/page-title.jpg);
+    background-image: url(../images/lake_sunset_wave.jpg);
     background-position: center;
     background-size: cover;
     background-attachment: fixed;
@@ -11973,10 +11973,6 @@ a.utf_dashboard_nav_responsive {
     border-radius: 50%;
     text-align: center;
     vertical-align: middle;
-}
-
-.utf_dashboard_list_box h4.gray {
-    background-color: #424242;
 }
 
 .utf_dashboard_list_box ul {
@@ -21945,4 +21941,106 @@ select.selectpicker {
 
 .d-none{
     display: none;
+}
+
+/* Cookie Notice Styles */
+.cookie-notice {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 20px;
+    z-index: 9999;
+    display: none;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.cookie-notice-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.cookie-notice-text {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.5;
+    min-width: 300px;
+}
+
+.cookie-notice-text a {
+    color: #4CAF50;
+    text-decoration: underline;
+}
+
+.cookie-notice-text a:hover {
+    color: #66BB6A;
+}
+
+.cookie-notice-buttons {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.cookie-notice-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.cookie-accept-btn {
+    background: #4CAF50;
+    color: white;
+}
+
+.cookie-accept-btn:hover {
+    background: #45a049;
+}
+
+.cookie-decline-btn {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+}
+
+.cookie-decline-btn:hover {
+    background: white;
+    color: black;
+}
+
+@media (max-width: 768px) {
+    .cookie-notice {
+        padding: 15px;
+    }
+    
+    .cookie-notice-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .cookie-notice-text {
+        min-width: auto;
+        margin-bottom: 10px;
+    }
+    
+    .cookie-notice-buttons {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .cookie-notice-btn {
+        flex: 1;
+        max-width: 150px;
+    }
 }
