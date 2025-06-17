@@ -184,6 +184,15 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
 )
 
+# Настройки для языкового cookie
+LANGUAGE_COOKIE_NAME = 'django_language'
+LANGUAGE_COOKIE_AGE = None  # Действует до закрытия браузера
+LANGUAGE_COOKIE_DOMAIN = None
+LANGUAGE_COOKIE_PATH = '/'
+LANGUAGE_COOKIE_SECURE = False
+LANGUAGE_COOKIE_HTTPONLY = False
+LANGUAGE_COOKIE_SAMESITE = None
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -236,7 +245,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 JAZZMIN_SETTINGS = {
     'site_header': "Alakol",
-    'site_brand': "Ваша №1 площадка для коллекционирования.",
+    'site_brand': ".",
     'site_logo': "/images/logo.png",
     'copyright':  "Все права защищены 2025",
     "welcome_sign": "Добро пожаловать в Alakol HMS, войдите сейчас.",
