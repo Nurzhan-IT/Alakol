@@ -98,9 +98,9 @@
                                 <div class="utf_user_name"><span><img src="{{request.user.profile.image.url}}" alt=""></span>{% trans "Hi" %}, {{request.user.username|title}}!</div>
                                 <ul>
                                     <li><a href="{% url 'dashboard:dashboard' %}">{% trans "Dashboard" %}</a></li>
-                                    <li><a href="{% url 'dashboard:dashboard' %}"> {% trans "My Profile" %}</a></li>
-                                    <li><a href="{% url 'dashboard:bookings' %}">{% trans "Booking" %}</a></li>
-                                    <li><a href="{% url 'dashboard:wallet' %}">{% trans "Wallet" %}</a></li>
+                                    <li><a href="{% url 'dashboard:profile' %}"> {% trans "My Profile" %}</a></li>
+                                    <!-- <li><a href="{% url 'dashboard:bookings' %}">{% trans "Booking" %}</a></li> -->
+                                    <!-- <li><a href="{% url 'dashboard:wallet' %}">{% trans "Wallet" %}</a></li> -->
                                     <li><a href="{% url 'dashboard:bookmark' %}">{% trans "Bookmarks" %}</a></li>
                                     <li><a href="{% url 'dashboard:notifications' %}">{% trans "Notifications" %}</a></li>
                                     <li><a href="{% url 'userauths:sign-out' %}">{% trans "Logout" %}</a></li>
