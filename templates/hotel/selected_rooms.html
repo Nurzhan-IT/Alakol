@@ -311,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const roomTypeIdValue = formData.get('room-type-id');
             
             if (!roomTypeValue && !roomTypeIdValue) {
-                console.error("ОШИБКА: Отсутствуют обязательные поля room-type и room-type-id!");
+                // Removed console.error for missing required fields - error handling preserved
                 alert("Ошибка: Не удалось получить информацию о типе номера. Пожалуйста, обновите страницу и попробуйте снова.");
                 return; // Прерываем отправку формы
             }

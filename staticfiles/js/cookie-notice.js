@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function disableNonEssentialCookies() {
         // Здесь можно добавить логику для отключения аналитических
         // и рекламных cookie, если они используются
-        console.log('Non-essential cookies disabled');
+        // Removed console.log for non-essential cookies disabled notification
     }
     
     // Функция для отправки события согласия на сервер (опционально)
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 userAgent: navigator.userAgent
             })
         }).catch(function(error) {
-            console.log('Cookie consent tracking failed:', error);
+            // Removed console.log for cookie consent tracking error - error handling preserved
         });
     }
 }); 
