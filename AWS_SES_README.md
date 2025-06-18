@@ -13,7 +13,7 @@
 
 1. Зарегистрируйтесь в AWS Console: https://aws.amazon.com/
 2. Перейдите в сервис **Amazon SES**
-3. Выберите регион (ap-southeast-1 - Сингапур поддерживает AWS SES)
+3. Выберите регион (ap-south-1 - Мумбаи поддерживает AWS SES)
 4. Подтвердите ваш домен или email адрес в разделе "Verified identities"
 
 ### 2. Получение AWS credentials
@@ -32,7 +32,7 @@
 # AWS SES Configuration
 AWS_ACCESS_KEY_ID=your_aws_access_key_id
 AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
-AWS_REGION=ap-southeast-1
+AWS_REGION=ap-south-1
 ```
 
 **Важно**: Замените значения на ваши реальные AWS credentials.
