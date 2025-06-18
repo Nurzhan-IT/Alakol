@@ -236,7 +236,7 @@ ANYMAIL = {
 # AWS SES Configuration
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-AWS_REGION = os.getenv("AWS_REGION", "ap-southeast-1")
+AWS_REGION = os.getenv("AWS_REGION", "ap-south-1")
 AWS_SES_REGION_NAME = AWS_REGION
 AWS_SES_REGION_ENDPOINT = f'email.{AWS_REGION}.amazonaws.com'
 
