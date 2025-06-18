@@ -45,6 +45,8 @@ ICON_CHOICES = [
     ('parking.svg','Парковка'),
     ('pets.svg','Разрешены животные'),
     ('playground.svg','Детская площадка'),
+    ('entertainment.svg','Развлечения'),
+    ('beach.svg','Пляж'),
     ('pool.svg','Бассейн'),
     ('restaurant.svg','Ресторан'),
     ('safe.svg','Сейф'),
@@ -54,6 +56,7 @@ ICON_CHOICES = [
     ('spa.svg','Спа'),
     ('tv.svg','Телевизор'),
     ('wifi.svg','Wi-Fi'),
+
 ]
 
 ROOM_TYPES = (
