@@ -89,7 +89,7 @@
                             {% trans "Added To Selection" %}
                         </button>
                         {% elif room_statuses and room_statuses|get_item:r.id == "Update" %}
-                        <button class="button border add-to-selection" data-index="{{r.id}}" style="">
+                        <button class="button border add-to-selection" data-index="{{r.id}}" >
                             <i class="fas fa-refresh"></i>
                             {% trans "Update" %}
                         </button>
