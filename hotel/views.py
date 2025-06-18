@@ -1094,26 +1094,48 @@ def robokassa_result(request):
                         noti.user = request.user
                         noti.save()
                     
-                    # Отправляем электронное письмо клиенту - с обработкой ошибок
+                    # Отправляем электронные письма через AWS SES
                     try:
-                        merge_data = {
-                            'booking': booking, 
-                            'booking_rooms': booking.room.all(), 
-                            'full_name': booking.full_name, 
-                            'subject': f"Booking Completed - Invoice & Summary - ID: #{booking.booking_id}", 
-                        }
-                        subject = f"Booking Completed - Invoice & Summary - ID: #{booking.booking_id}"
-                        text_body = render_to_string("email/booking_completed.txt", merge_data)
-                        html_body = render_to_string("email/booking_completed.html", merge_data)
+                        from hotel.aws_ses import AWSSESEmailSender
                         
-                        msg = EmailMultiAlternatives(
-                            subject=subject, 
-                            from_email=settings.DEFAULT_FROM_EMAIL,
-                            to=[booking.email], 
-                            body=text_body
-                        )
-                        msg.attach_alternative(html_body, "text/html")
-                        msg.send(fail_silently=True)  # fail_silently=True для игнорирования ошибок отправки
+                        # Проверяем, что настройки AWS SES заданы
+                        if all([settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY, settings.AWS_REGION]):
+                            ses_sender = AWSSESEmailSender()
+                            email_results = ses_sender.send_booking_confirmation_emails(booking)
+                            
+                            # Логируем результаты отправки
+                            if email_results.get('user_email', {}).get('success'):
+                                logger.info(f"Успешно отправлен email пользователю для бронирования {booking.booking_id}")
+                            else:
+                                logger.error(f"Ошибка отправки email пользователю: {email_results.get('user_email', {}).get('error_message', 'Unknown error')}")
+                            
+                            if email_results.get('hotel_email', {}).get('success'):
+                                logger.info(f"Успешно отправлен email отелю для бронирования {booking.booking_id}")
+                            else:
+                                logger.error(f"Ошибка отправки email отелю: {email_results.get('hotel_email', {}).get('error_message', 'Unknown error')}")
+                        else:
+                            logger.warning("AWS SES credentials не настроены, email не отправлены")
+                            
+                            # Fallback на старый способ отправки email
+                            merge_data = {
+                                'booking': booking, 
+                                'booking_rooms': booking.room.all(), 
+                                'full_name': booking.full_name, 
+                                'subject': f"Booking Completed - Invoice & Summary - ID: #{booking.booking_id}", 
+                            }
+                            subject = f"Booking Completed - Invoice & Summary - ID: #{booking.booking_id}"
+                            text_body = render_to_string("email/booking_completed.txt", merge_data)
+                            html_body = render_to_string("email/booking_completed.html", merge_data)
+                            
+                            msg = EmailMultiAlternatives(
+                                subject=subject, 
+                                from_email=settings.DEFAULT_FROM_EMAIL,
+                                to=[booking.email], 
+                                body=text_body
+                            )
+                            msg.attach_alternative(html_body, "text/html")
+                            msg.send(fail_silently=True)
+                            
                     except Exception as email_error:
                         # Логируем ошибку, но не отменяем успешную обработку платежа
                         logger.error(f"Ошибка при отправке email: {str(email_error)}")
