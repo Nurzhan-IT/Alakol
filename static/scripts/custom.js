@@ -1,6 +1,6 @@
 function bounceButton() {
     const buttons = document.querySelectorAll('.selected-rooms-button');
-    console.log(buttons);
+    // Removed console.log for buttons debugging
     if (!buttons) {
         return;
     }
@@ -35,20 +35,9 @@ $(document).ready(function(){
         let adult = $("#adult").val()
         let children = $("#children").val()
 
-        console.log(`${id} Added To Selection`);
-        console.log(`hotel_id: ${hotel_id}`);
-        console.log(`room_number: ${room_number}`);
-        console.log(`room_id: ${room_id}`);
-        console.log(`hotel_name: ${hotel_name}`);
-        console.log(`room_name: ${room_name}`);
-        console.log(`room_price: ${room_price}`);
-        console.log(`number_of_beds: ${number_of_beds}`);
-        console.log(`room_type: ${room_type}`);
-        console.log(`room_capacity: ${room_capacity}`);
-        console.log(`checkin: ${checkin}`);
-        console.log(`checkout: ${checkout}`);
-        console.log(`adult: ${adult}`);
-        console.log(`children: ${children}`);
+        // Removed console.log statements for booking data debugging (security improvement)
+        // Previously logged: id, hotel_id, room_number, room_id, hotel_name, room_name, 
+        // room_price, number_of_beds, room_type, room_capacity, checkin, checkout, adult, children
 
 
         $.ajax({
@@ -71,7 +60,7 @@ $(document).ready(function(){
             },
             dataType: 'json',
             beforeSend: function(){
-                console.log("Adding room...");
+                // Removed console.log for "Adding room..." status
                 button.html("<i class='fas fa-clock-rotate-left'></i> " + gettext("Adding room...") + " ")
             },
             success: function(response){
@@ -144,7 +133,7 @@ $(document).ready(function(){
 
                 bounceButton();
 
-                console.log("Added Room To Selection!");
+                // Removed console.log for "Added Room To Selection!" status
                 $(".room-count").text(response.total_selected_items)
 
                 ;
@@ -206,13 +195,13 @@ $(document).ready(function(){
         $.ajax({
             url:"/dashboard/notification_filter/",
             beforeSend: function(){
-                console.log("Sending Data...");
+                // Removed console.log for "Sending Data..." status
             },
             data: {
                 "query": query
             },
             success: function(res){
-                console.log(res.data);
+                // Removed console.log for res.data debugging
 				$(".noti-div-main").html(res.data);
 
             }
@@ -223,11 +212,11 @@ $(document).ready(function(){
     $(document).on('click', '.mark-noti-as-seen', function(){
         let button = $(this)
         let id = button.attr("data-index")
-        console.log(id);
+        // Removed console.log for id debugging
         $.ajax({
             url:"/dashboard/notification_mark_as_seen/",
             beforeSend: function(){
-                console.log("Sending Data...");
+                // Removed console.log for "Sending Data..." status
             },
             data: {
                 "id": id
@@ -254,7 +243,7 @@ $(document).ready(function(){
     $(document).on('click', '#add-to-bookmark', function(){
         let button = $(this)
         let id = button.attr("data-hotel")
-        console.log(id);
+        // Removed console.log for id debugging
 
         $.ajax({
             url:"/dashboard/add_to_bookmark/",
@@ -298,7 +287,7 @@ $(document).ready(function(){
         let id = button.attr("data-hotel")
         let review = $("#review-input").val()
         let rating = $("#rating-input").val()
-        console.log(rating);
+        // Removed console.log for rating debugging
 
         $.ajax({
             url:"/dashboard/add_review/",

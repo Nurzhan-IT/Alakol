@@ -671,7 +671,7 @@
                             doc.save(fileName);
                             
                         } catch (error) {
-                            console.error('Ошибка при создании PDF:', error);
+                            // Removed console.error for PDF creation error - user feedback preserved
                             alert('Произошла ошибка при создании PDF файла. Попробуйте еще раз.');
                         } finally {
                             // Восстанавливаем кнопку
@@ -679,7 +679,7 @@
                             this.disabled = false;
                         }
                     }).catch(error => {
-                        console.error('Ошибка html2canvas:', error);
+                        // Removed console.error for html2canvas error - user feedback preserved
                         alert('Произошла ошибка при генерации PDF. Попробуйте еще раз.');
                         // Восстанавливаем кнопку
                         this.innerHTML = originalText;
