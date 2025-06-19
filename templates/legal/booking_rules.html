@@ -1,228 +1,232 @@
 {% extends 'legal/base_legal.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Правила бронирования и отмены" %}{% endblock %}
+{% block title %}{% trans "Booking and Cancellation Rules" %}{% endblock %}
 
 {% block content %}
-<h1>{% trans "ПРАВИЛА БРОНИРОВАНИЯ И ОТМЕНЫ БРОНИРОВАНИЯ" %}</h1>
-<h2>{% trans "СИСТЕМЫ БРОНИРОВАНИЯ ОТЕЛЕЙ eKol" %}</h2>
+<h1>{% trans "HOTEL BOOKING AND CANCELLATION RULES" %}</h1>
+<h2>{% trans "eKol HOTEL BOOKING SYSTEM" %}</h2>
 
 <div class="document-meta">
-    <strong>{% trans "Дата вступления в силу:" %}</strong> 19.06.2025<br>
-    <strong>{% trans "Версия документа:" %}</strong> 1.0
+    <strong>{% trans "Effective Date:" %}</strong> {% trans "June 19, 2025" %}<br>
+    <strong>{% trans "Document Version:" %}</strong> 1.0
 </div>
 
-<h2>{% trans "1. ОБЩИЕ ПОЛОЖЕНИЯ" %}</h2>
-<p><strong>1.1.</strong> {% trans "Настоящие Правила определяют условия и порядок бронирования номеров в отелях, а также условия изменения и отмены бронирования через веб-сайт [АДРЕС САЙТА]." %}</p>
+<h2>{% trans "1. GENERAL PROVISIONS" %}</h2>
+<p><strong>1.1.</strong> {% trans "These Rules determine the terms and conditions for booking hotel rooms, as well as the conditions for changing and canceling bookings through the website [WEBSITE ADDRESS]." %}</p>
 
-<p><strong>1.2.</strong> {% trans "Правила действуют для всех пользователей системы бронирования и являются неотъемлемой частью Публичной оферты на оказание услуг бронирования отелей." %}</p>
+<p><strong>1.2.</strong> {% trans "The Rules apply to all users of the booking system and are an integral part of the Public Offer for hotel booking services." %}</p>
 
-<p><strong>1.3.</strong> {% trans "Принимая условия бронирования, Пользователь соглашается с настоящими Правилами в полном объеме." %}</p>
+<p><strong>1.3.</strong> {% trans "By accepting the booking terms, the User agrees to these Rules in full." %}</p>
 
-<h2>{% trans "2. УСЛОВИЯ БРОНИРОВАНИЯ" %}</h2>
-<h3>{% trans "2.1. Минимальные требования для бронирования:" %}</h3>
+<h2>{% trans "2. BOOKING CONDITIONS" %}</h2>
+<h3>{% trans "2.1. Minimum requirements for booking:" %}</h3>
 <ul>
-    <li>{% trans "Регистрация на сайте или указание контактных данных" %}</li>
-    <li>{% trans "Выбор отеля, типа номера и дат проживания" %}</li>
-    <li>{% trans "Согласие с условиями отеля и настоящими Правилами" %}</li>
-    <li>{% trans "Внесение предоплаты в размере, установленном отелем" %}</li>
+    <li>{% trans "Registration on the website or providing contact information" %}</li>
+    <li>{% trans "Selection of hotel, room type, and accommodation dates" %}</li>
+    <li>{% trans "Agreement to hotel terms and these Rules" %}</li>
+    <li>{% trans "Payment of prepayment in the amount established by the hotel" %}</li>
 </ul>
 
-<h3>{% trans "2.2. Размер предоплаты:" %}</h3>
+<h3>{% trans "2.2. Prepayment amount:" %}</h3>
 <ul>
-    <li>{% trans "Размер предоплаты определяется каждым отелем самостоятельно" %}</li>
-    <li>{% trans "Предоплата может составлять 10%, 30%, 50%, 70% или 100% от общей стоимости" %}</li>
-    <li>{% trans "Оставшаяся сумма доплачивается в отеле при заселении" %}</li>
-    <li>{% trans "При 100% предоплате доплата в отеле не требуется" %}</li>
+    <li>{% trans "The prepayment amount is determined by each hotel independently" %}</li>
+    <li>{% trans "Prepayment can be 10%, 30%, 50%, 70%, or 100% of the total cost" %}</li>
+    <li>{% trans "The remaining amount is paid at the hotel upon check-in" %}</li>
+    <li>{% trans "With 100% prepayment, no additional payment at the hotel is required" %}</li>
 </ul>
 
-<h3>{% trans "2.3. Подтверждение бронирования:" %}</h3>
+<h3>{% trans "2.3. Booking confirmation:" %}</h3>
 <ul>
-    <li>{% trans "Бронирование считается подтвержденным после успешной оплаты предоплаты" %}</li>
-    <li>{% trans "Подтверждение направляется на указанный email в течение 15 минут" %}</li>
-    <li>{% trans "В подтверждении указываются все детали бронирования и контакты отеля" %}</li>
+    <li>{% trans "Booking is considered confirmed after successful prepayment" %}</li>
+    <li>{% trans "Confirmation is sent to the specified email within 15 minutes" %}</li>
+    <li>{% trans "The confirmation includes all booking details and hotel contacts" %}</li>
 </ul>
 
-<h2>{% trans "3. УСЛОВИЯ ОТМЕНЫ БРОНИРОВАНИЯ" %}</h2>
+<h2>{% trans "3. CANCELLATION CONDITIONS" %}</h2>
 
 <div class="alert alert-warning">
-    <strong>{% trans "ВАЖНО:" %}</strong> {% trans "Условия отмены зависят от размера внесенной предоплаты и времени до заезда." %}
+    <strong>{% trans "IMPORTANT:" %}</strong> {% trans "Cancellation terms depend on the amount of prepayment made and time until check-in." %}
 </div>
 
-<h3>{% trans "3.1. Общие принципы отмены:" %}</h3>
+<h3>{% trans "3.1. General cancellation principles:" %}</h3>
 <ul>
-    <li>{% trans "Первые 10% предоплаты являются гарантийным депозитом и не возвращаются при отмене по инициативе клиента" %}</li>
-    <li>{% trans "Остальная часть предоплаты может быть возвращена в зависимости от времени отмены" %}</li>
-    <li>{% trans "При форс-мажорных обстоятельствах предоплата возвращается полностью" %}</li>
+    <li>{% trans "The first 10% of prepayment is a guarantee deposit and is non-refundable when canceled by the client" %}</li>
+    <li>{% trans "The remaining part of the prepayment may be refunded depending on cancellation timing" %}</li>
+    <li>{% trans "In force majeure circumstances, the prepayment is refunded in full" %}</li>
 </ul>
 
-<h3>{% trans "3.2. Условия отмены по размеру предоплаты:" %}</h3>
+<h3>{% trans "3.2. Cancellation conditions by prepayment amount:" %}</h3>
 
-<h4>{% trans "При предоплате 10%:" %}</h4>
+<h4>{% trans "With 10% prepayment:" %}</h4>
 <ul>
-    <li>{% trans "Отмена в любое время: возврат 0% (вся сумма остается в качестве гарантийного депозита)" %}</li>
-    <li>{% trans "Неявка (No-show): возврат 0%" %}</li>
+    <li>{% trans "Cancellation at any time: 0% refund (entire amount remains as guarantee deposit)" %}</li>
+    <li>{% trans "No-show: 0% refund" %}</li>
 </ul>
 
-<h4>{% trans "При предоплате 30%:" %}</h4>
+<h4>{% trans "With 30% prepayment:" %}</h4>
 <ul>
-    <li>{% trans "Отмена за 15+ дней до заезда: возврат 20%" %}</li>
-    <li>{% trans "Отмена за 10-14 дней до заезда: возврат 0%" %}</li>
-    <li>{% trans "Отмена менее чем за 10 дней: возврат 0%" %}</li>
-    <li>{% trans "Неявка (No-show): возврат 0%" %}</li>
+    <li>{% trans "Cancellation 15+ days before check-in: 20% refund" %}</li>
+    <li>{% trans "Cancellation 10-14 days before check-in: 0% refund" %}</li>
+    <li>{% trans "Cancellation 7-9 days before check-in: 0% refund" %}</li>
+    <li>{% trans "Cancellation 36+ hours before check-in: 0% refund" %}</li>
+    <li>{% trans "Cancellation less than 36 hours before check-in: 0% refund" %}</li>
+    <li>{% trans "No-show: 0% refund" %}</li>
 </ul>
 
-<h4>{% trans "При предоплате 50%:" %}</h4>
+<h4>{% trans "With 50% prepayment:" %}</h4>
 <ul>
-    <li>{% trans "Отмена за 15+ дней до заезда: возврат 40%" %}</li>
-    <li>{% trans "Отмена за 10-14 дней до заезда: возврат 20%" %}</li>
-    <li>{% trans "Отмена за 7-9 дней до заезда: возврат 0%" %}</li>
-    <li>{% trans "Отмена менее чем за 7 дней: возврат 0%" %}</li>
-    <li>{% trans "Неявка (No-show): возврат 0%" %}</li>
+    <li>{% trans "Cancellation 15+ days before check-in: 40% refund" %}</li>
+    <li>{% trans "Cancellation 10-14 days before check-in: 20% refund" %}</li>
+    <li>{% trans "Cancellation 7-9 days before check-in: 0% refund" %}</li>
+    <li>{% trans "Cancellation 36+ hours before check-in: 0% refund" %}</li>
+    <li>{% trans "Cancellation less than 36 hours before check-in: 0% refund" %}</li>
+    <li>{% trans "No-show: 0% refund" %}</li>
 </ul>
 
-<h4>{% trans "При предоплате 70%:" %}</h4>
+<h4>{% trans "With 70% prepayment:" %}</h4>
 <ul>
-    <li>{% trans "Отмена за 15+ дней до заезда: возврат 60%" %}</li>
-    <li>{% trans "Отмена за 10-14 дней до заезда: возврат 40%" %}</li>
-    <li>{% trans "Отмена за 7-9 дней до заезда: возврат 10%" %}</li>
-    <li>{% trans "Отмена менее чем за 36 часов: возврат 0%" %}</li>
-    <li>{% trans "Неявка (No-show): возврат 0%" %}</li>
+    <li>{% trans "Cancellation 15+ days before check-in: 60% refund" %}</li>
+    <li>{% trans "Cancellation 10-14 days before check-in: 40% refund" %}</li>
+    <li>{% trans "Cancellation 7-9 days before check-in: 10% refund" %}</li>
+    <li>{% trans "Cancellation 36+ hours before check-in: 0% refund" %}</li>
+    <li>{% trans "Cancellation less than 36 hours before check-in: 0% refund" %}</li>
+    <li>{% trans "No-show: 0% refund" %}</li>
 </ul>
 
-<h4>{% trans "При предоплате 100%:" %}</h4>
+<h4>{% trans "With 100% prepayment:" %}</h4>
 <ul>
-    <li>{% trans "Отмена за 15+ дней до заезда: возврат 90%" %}</li>
-    <li>{% trans "Отмена за 10-14 дней до заезда: возврат 70%" %}</li>
-    <li>{% trans "Отмена за 7-9 дней до заезда: возврат 40%" %}</li>
-    <li>{% trans "Отмена за 36+ часов до заезда: возврат 20%" %}</li>
-    <li>{% trans "Отмена менее чем за 36 часов: возврат 0%" %}</li>
-    <li>{% trans "Неявка (No-show): возврат 0%" %}</li>
+    <li>{% trans "Cancellation 15+ days before check-in: 90% refund" %}</li>
+    <li>{% trans "Cancellation 10-14 days before check-in: 70% refund" %}</li>
+    <li>{% trans "Cancellation 7-9 days before check-in: 40% refund" %}</li>
+    <li>{% trans "Cancellation 36+ hours before check-in: 20% refund" %}</li>
+    <li>{% trans "Cancellation less than 36 hours before check-in: 0% refund" %}</li>
+    <li>{% trans "No-show: 0% refund" %}</li>
 </ul>
 
-<h3>{% trans "3.3. Форс-мажорные обстоятельства:" %}</h3>
+<h3>{% trans "3.3. Force majeure circumstances:" %}</h3>
 <ul>
-    <li>{% trans "Стихийные бедствия" %}</li>
-    <li>{% trans "Военные действия или террористические акты" %}</li>
-    <li>{% trans "Эпидемии и пандемии с введением ограничений на передвижение" %}</li>
-    <li>{% trans "Закрытие отеля по решению государственных органов" %}</li>
-    <li>{% trans "Другие чрезвычайные ситуации, признанные форс-мажорными" %}</li>
+    <li>{% trans "Natural disasters" %}</li>
+    <li>{% trans "Military actions or terrorist acts" %}</li>
+    <li>{% trans "Epidemics and pandemics with movement restrictions" %}</li>
+    <li>{% trans "Hotel closure by government authorities" %}</li>
+    <li>{% trans "Other emergencies recognized as force majeure" %}</li>
 </ul>
 
-<p>{% trans "При форс-мажорных обстоятельствах предоплата возвращается в полном объеме независимо от времени отмены." %}</p>
+<p>{% trans "In force majeure circumstances, prepayment is refunded in full regardless of cancellation timing." %}</p>
 
-<h2>{% trans "4. ПРОЦЕДУРА ОТМЕНЫ" %}</h2>
+<h2>{% trans "4. CANCELLATION PROCEDURE" %}</h2>
 
-<h3>{% trans "4.1. Подача заявления на отмену:" %}</h3>
+<h3>{% trans "4.1. Submitting cancellation request:" %}</h3>
 <ul>
-    <li>{% trans "Заявление подается через личный кабинет на сайте" %}</li>
-    <li>{% trans "Или по email с указанием номера бронирования" %}</li>
-    <li>{% trans "Или по телефону службы поддержки" %}</li>
+    <li>{% trans "Request is submitted through personal account on the website" %}</li>
+    <li>{% trans "Or by email with booking number specified" %}</li>
+    <li>{% trans "Or by phone to customer support" %}</li>
 </ul>
 
-<h3>{% trans "4.2. Обработка заявления:" %}</h3>
+<h3>{% trans "4.2. Request processing:" %}</h3>
 <ul>
-    <li>{% trans "Заявления обрабатываются в течение 1-2 рабочих дней" %}</li>
-    <li>{% trans "Клиент получает подтверждение отмены на email" %}</li>
-    <li>{% trans "В подтверждении указывается сумма к возврату" %}</li>
+    <li>{% trans "Requests are processed within 1-2 business days" %}</li>
+    <li>{% trans "Client receives cancellation confirmation by email" %}</li>
+    <li>{% trans "Confirmation specifies the refund amount" %}</li>
 </ul>
 
-<h3>{% trans "4.3. Возврат средств:" %}</h3>
+<h3>{% trans "4.3. Refund:" %}</h3>
 <ul>
-    <li>{% trans "Возврат осуществляется тем же способом, которым была внесена оплата" %}</li>
-    <li>{% trans "Срок возврата: 5-10 рабочих дней" %}</li>
-    <li>{% trans "Комиссии платежных систем не возвращаются" %}</li>
+    <li>{% trans "Refund is made using the same method as the original payment" %}</li>
+    <li>{% trans "Refund timeframe: 5-10 business days" %}</li>
+    <li>{% trans "Payment system fees are non-refundable" %}</li>
 </ul>
 
-<h2>{% trans "5. ИЗМЕНЕНИЕ БРОНИРОВАНИЯ" %}</h2>
+<h2>{% trans "5. BOOKING CHANGES" %}</h2>
 
-<h3>{% trans "5.1. Возможные изменения:" %}</h3>
+<h3>{% trans "5.1. Possible changes:" %}</h3>
 <ul>
-    <li>{% trans "Изменение дат проживания (при наличии свободных номеров)" %}</li>
-    <li>{% trans "Изменение типа номера" %}</li>
-    <li>{% trans "Изменение количества гостей" %}</li>
+    <li>{% trans "Change of accommodation dates (subject to room availability)" %}</li>
+    <li>{% trans "Change of room type" %}</li>
+    <li>{% trans "Change in number of guests" %}</li>
 </ul>
 
-<h3>{% trans "5.2. Условия изменения:" %}</h3>
+<h3>{% trans "5.2. Change conditions:" %}</h3>
 <ul>
-    <li>{% trans "Изменения принимаются не позднее чем за 15 дней до заезда" %}</li>
-    <li>{% trans "При увеличении стоимости доплачивается разница" %}</li>
-    <li>{% trans "При уменьшении стоимости разница не возвращается" %}</li>
-    <li>{% trans "За изменение бронирования может взиматься административный сбор" %}</li>
+    <li>{% trans "Changes are accepted no later than 15 days before check-in" %}</li>
+    <li>{% trans "If cost increases, the difference must be paid" %}</li>
+    <li>{% trans "If cost decreases, the difference is not refunded" %}</li>
+    <li>{% trans "Administrative fee may be charged for booking changes" %}</li>
 </ul>
 
-<h2>{% trans "6. ОСОБЫЕ УСЛОВИЯ" %}</h2>
+<h2>{% trans "6. SPECIAL CONDITIONS" %}</h2>
 
-<h3>{% trans "6.1. Групповые бронирования:" %}</h3>
+<h3>{% trans "6.1. Group bookings:" %}</h3>
 <ul>
-    <li>{% trans "Бронирования от 5 номеров считаются групповыми" %}</li>
-    <li>{% trans "Для групповых бронирований могут действовать особые условия отмены" %}</li>
-    <li>{% trans "Условия согласовываются индивидуально с отелем" %}</li>
+    <li>{% trans "Bookings of 5 or more rooms are considered group bookings" %}</li>
+    <li>{% trans "Special cancellation terms may apply to group bookings" %}</li>
+    <li>{% trans "Terms are individually agreed with the hotel" %}</li>
 </ul>
 
-<h3>{% trans "6.2. Праздничные даты:" %}</h3>
+<h3>{% trans "6.2. Holiday dates:" %}</h3>
 <ul>
-    <li>{% trans "В праздничные и пиковые периоды могут действовать особые условия" %}</li>
-    <li>{% trans "Отели могут устанавливать более жесткие условия отмены" %}</li>
-    <li>{% trans "Особые условия указываются при бронировании" %}</li>
+    <li>{% trans "Special terms may apply during holidays and peak periods" %}</li>
+    <li>{% trans "Hotels may set stricter cancellation terms" %}</li>
+    <li>{% trans "Special terms are indicated when booking" %}</li>
 </ul>
 
-<h2>{% trans "7. ОТВЕТСТВЕННОСТЬ СТОРОН" %}</h2>
+<h2>{% trans "7. RESPONSIBILITIES OF PARTIES" %}</h2>
 
-<h3>{% trans "7.1. Ответственность системы бронирования:" %}</h3>
+<h3>{% trans "7.1. Booking system responsibility:" %}</h3>
 <ul>
-    <li>{% trans "Обеспечение работы платформы бронирования" %}</li>
-    <li>{% trans "Корректная передача информации отелям" %}</li>
-    <li>{% trans "Обработка платежей и возвратов" %}</li>
-    <li>{% trans "Техническая поддержка пользователей" %}</li>
+    <li>{% trans "Ensuring booking platform functionality" %}</li>
+    <li>{% trans "Correct information transmission to hotels" %}</li>
+    <li>{% trans "Payment and refund processing" %}</li>
+    <li>{% trans "Technical user support" %}</li>
 </ul>
 
-<h3>{% trans "7.2. Ответственность отелей:" %}</h3>
+<h3>{% trans "7.2. Hotel responsibility:" %}</h3>
 <ul>
-    <li>{% trans "Предоставление забронированных номеров" %}</li>
-    <li>{% trans "Соблюдение заявленных условий размещения" %}</li>
-    <li>{% trans "Качество предоставляемых услуг" %}</li>
-    <li>{% trans "Соблюдение условий отмены и возврата" %}</li>
+    <li>{% trans "Providing booked rooms" %}</li>
+    <li>{% trans "Compliance with stated accommodation conditions" %}</li>
+    <li>{% trans "Quality of provided services" %}</li>
+    <li>{% trans "Compliance with cancellation and refund terms" %}</li>
 </ul>
 
-<h3>{% trans "7.3. Ответственность клиентов:" %}</h3>
+<h3>{% trans "7.3. Client responsibility:" %}</h3>
 <ul>
-    <li>{% trans "Предоставление корректной информации при бронировании" %}</li>
-    <li>{% trans "Своевременная оплата предоплаты" %}</li>
-    <li>{% trans "Соблюдение правил отеля" %}</li>
-    <li>{% trans "Уведомление об отмене в установленные сроки" %}</li>
+    <li>{% trans "Providing accurate information when booking" %}</li>
+    <li>{% trans "Timely prepayment" %}</li>
+    <li>{% trans "Compliance with hotel rules" %}</li>
+    <li>{% trans "Notification of cancellation within established timeframes" %}</li>
 </ul>
 
-<h2>{% trans "8. РАЗРЕШЕНИЕ СПОРОВ" %}</h2>
+<h2>{% trans "8. DISPUTE RESOLUTION" %}</h2>
 
-<h3>{% trans "8.1. Досудебное урегулирование:" %}</h3>
+<h3>{% trans "8.1. Pre-trial settlement:" %}</h3>
 <ul>
-    <li>{% trans "Все споры решаются путем переговоров" %}</li>
-    <li>{% trans "Претензии рассматриваются в течение 10 рабочих дней" %}</li>
-    <li>{% trans "Ответ направляется в письменном виде" %}</li>
+    <li>{% trans "All disputes are resolved through negotiations" %}</li>
+    <li>{% trans "Claims are reviewed within 10 business days" %}</li>
+    <li>{% trans "Response is provided in writing" %}</li>
 </ul>
 
-<h3>{% trans "8.2. Судебное разрешение:" %}</h3>
+<h3>{% trans "8.2. Court resolution:" %}</h3>
 <ul>
-    <li>{% trans "При невозможности досудебного урегулирования споры передаются в суд" %}</li>
-    <li>{% trans "Применимое право: законодательство Республики Казахстан" %}</li>
-    <li>{% trans "Подсудность: суды г. Алматы" %}</li>
+    <li>{% trans "If pre-trial settlement is impossible, disputes are transferred to court" %}</li>
+    <li>{% trans "Applicable law: legislation of the Republic of Kazakhstan" %}</li>
+    <li>{% trans "Jurisdiction: courts of Almaty" %}</li>
 </ul>
 
-<h2>{% trans "9. КОНТАКТНАЯ ИНФОРМАЦИЯ" %}</h2>
+<h2>{% trans "9. CONTACT INFORMATION" %}</h2>
 
 <div class="contact-info">
-    <h3>{% trans "Служба поддержки:" %}</h3>
+    <h3>{% trans "Customer Support:" %}</h3>
     <ul>
         <li><strong>Email:</strong> support@alakol-booking.kz</li>
-        <li><strong>{% trans "Телефон:" %}</strong> +7 (727) XXX-XX-XX</li>
-        <li><strong>{% trans "Время работы:" %}</strong> {% trans "ПН-ВС 9:00-21:00" %}</li>
-        <li><strong>{% trans "Адрес:" %}</strong> {% trans "г. Алматы, Республика Казахстан" %}</li>
+        <li><strong>{% trans "Phone:" %}</strong> +7 (727) XXX-XX-XX</li>
+        <li><strong>{% trans "Working hours:" %}</strong> {% trans "MON-SUN 9:00-21:00" %}</li>
+        <li><strong>{% trans "Address:" %}</strong> {% trans "Almaty, Republic of Kazakhstan" %}</li>
     </ul>
 </div>
 
 <div class="alert alert-info">
-    <strong>{% trans "Важно:" %}</strong> {% trans "Настоящие Правила могут изменяться. Актуальная версия всегда доступна на сайте. Изменения вступают в силу с момента публикации." %}
+    <strong>{% trans "Important:" %}</strong> {% trans "These Rules may be changed. The current version is always available on the website. Changes take effect from the moment of publication." %}
 </div>
 
 {% endblock %} 
