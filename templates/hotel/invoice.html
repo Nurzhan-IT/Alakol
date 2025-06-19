@@ -17,7 +17,45 @@
             body {
                 background: #eee;
                 margin-top: 20px;
+                font-family: 'Arial', sans-serif;
             }
+            
+            /* Адаптивность для всех размеров экранов */
+            @media (max-width: 768px) {
+                body {
+                    margin-top: 10px;
+                }
+                .receipt-main {
+                    margin: 20px 10px !important;
+                    padding: 20px 15px !important;
+                }
+                .col-mobile-12 {
+                    width: 100% !important;
+                    margin-bottom: 15px;
+                }
+                .mobile-text-center {
+                    text-align: center !important;
+                }
+                .mobile-mt-3 {
+                    margin-top: 1rem !important;
+                }
+            }
+            
+            @media (max-width: 576px) {
+                .receipt-main {
+                    padding: 15px 10px !important;
+                }
+                .table-responsive {
+                    font-size: 12px;
+                }
+                .receipt-right h5 {
+                    font-size: 14px !important;
+                }
+                .receipt-right p {
+                    font-size: 11px !important;
+                }
+            }
+            
             .text-danger strong {
                 color: #18389f;
             }
@@ -25,17 +63,17 @@
                 background: #ffffff none repeat scroll 0 0;
                 border-bottom: 12px solid #333333;
                 border-top: 12px solid #18389f;
-                margin-top: 50px;
-                margin-bottom: 50px;
+                margin: 50px auto;
+                max-width: 800px;
                 padding: 40px 30px !important;
                 position: relative;
                 box-shadow: 0 1px 21px #acacac;
                 color: #333333;
-                font-family: 'Open Sans', sans-serif;
+                font-family: 'Arial', sans-serif;
             }
             .receipt-main p {
                 color: #333333;
-                font-family: 'Open Sans', sans-serif;
+                font-family: 'Arial', sans-serif;
                 line-height: 1.42857;
             }
             .receipt-footer h1 {
@@ -113,44 +151,125 @@
             .receipt-container.active {
                 display: block;
             }
+            
+            /* Стили для логотипа */
+            .logo-container {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+            }
+            
+            .company-logo {
+                max-width: 80px;
+                max-height: 80px;
+                width: auto;
+                height: auto;
+                border-radius: 50%;
+                object-fit: contain;
+                border: 2px solid #f0f0f0;
+            }
+            
+            @media (max-width: 768px) {
+                .company-logo {
+                    max-width: 60px;
+                    max-height: 60px;
+                }
+                .logo-container {
+                    justify-content: center;
+                    margin-bottom: 15px;
+                }
+            }
+            
+            @media (max-width: 576px) {
+                .company-logo {
+                    max-width: 50px;
+                    max-height: 50px;
+                }
+            }
+            
+            /* Улучшения для PDF генерации */
+            .pdf-optimize {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            /* Оптимизация таблицы для мобильных */
+            @media (max-width: 768px) {
+                .table-responsive {
+                    border: 0;
+                }
+                .table-responsive table,
+                .table-responsive thead,
+                .table-responsive tbody,
+                .table-responsive th,
+                .table-responsive td,
+                .table-responsive tr {
+                    display: block;
+                }
+                .table-responsive thead tr {
+                    position: absolute;
+                    top: -9999px;
+                    left: -9999px;
+                }
+                .table-responsive tr {
+                    border: 1px solid #ccc;
+                    margin-bottom: 10px;
+                    padding: 10px;
+                }
+                .table-responsive td {
+                    border: none;
+                    border-bottom: 1px solid #eee;
+                    position: relative;
+                    padding-left: 50% !important;
+                    text-align: left !important;
+                }
+                .table-responsive td:before {
+                    content: attr(data-label) ": ";
+                    position: absolute;
+                    left: 6px;
+                    width: 45%;
+                    padding-right: 10px;
+                    white-space: nowrap;
+                    font-weight: bold;
+                }
+            }
         </style>
     </head>
     <body>
-        <div class="row d-flex justify-content-center p-2">
-            <div class="col-xs-12 col-sm-12 col-md-6">
-                <select id="languageSelect" class="form-control mb-3">
-                    <option value="kazakh">Қазақша</option>
-                    <option value="russian">Русский</option>
-                    <option value="english">English</option>
-                </select>
+        <div class="container-fluid">
+            <div class="row justify-content-center p-2">
+                <div class="col-12 col-md-6">
+                    <select id="languageSelect" class="form-control mb-3">
+                        <option value="kazakh">Қазақша</option>
+                        <option value="russian">Русский</option>
+                        <option value="english">English</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <!-- Kazakh Receipt -->
-        <div class="receipt-container kazakh active">
-            <div class="row d-flex justify-content-center p-2">
-                <div class="receipt-main col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
-                    <div class="d-flex justify-content-between">
-                        <div class="row">
-                            <div class="receipt-header">
-                                <div class="col-xs-6 col-sm-6 col-md-6">
-                                    <div class="receipt-left">
-                                        <img class="img-responsive" alt="iamgurdeeposahan" src="https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg" style="width: 71px; border-radius: 43px;" />
+            <!-- Kazakh Receipt -->
+            <div class="receipt-container kazakh active">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-lg-8">
+                        <div class="receipt-main pdf-optimize">
+                            <div class="row">
+                                <div class="col-12 col-md-6 col-mobile-12">
+                                    <div class="logo-container">
+                                        <img class="company-logo" alt="Alakol Logo" src="{% static 'images/logo.png' %}" />
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 text-left">
+                                <div class="col-12 col-md-6 col-mobile-12 mobile-text-center mobile-mt-3">
                                     <div class="receipt-right">
-                                        <h5 class="margin-top-10">Алакөл<span class="text-warning"></span></h5>
+                                        <h5>Алакөл</h5>
                                         <p><i class="fa fa-phone"></i> +1 3649-6589</p>
                                         <p><i class="fa fa-envelope"></i> company@gmail.com</p>
                                         <p><i class="fa fa-location-arrow"></i> Басты көше, 123</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="receipt-header receipt-header-mid">
-                                <div class="col-xs-12 col-sm-12 col-md-12 text-left">
+                            
+                            <div class="row mt-4">
+                                <div class="col-12 col-md-6 col-mobile-12">
                                     <div class="receipt-right">
                                         <h5>Тапсырыс берушінің мәліметтері</h5>
                                         <p><b><i class="fa fa-user"></i> </b> {{booking.full_name}}</p>
@@ -158,111 +277,110 @@
                                         <p><b><i class="fa fa-phone"></i> </b> {{booking.phone}}</p>
                                     </div>
                                 </div>
-                                <br />
-                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="col-12 col-md-6 col-mobile-12 mobile-text-center mobile-mt-3">
                                     <div class="receipt-left">
                                         <h6>БРОНЬ ID #{{booking.booking_id}}</h6>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Бөлме атауы</th>
-                                    <th>Бөлме нөмірі</th>
-                                    <th>Бағасы</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for room_data in rooms_with_prices %}
-                                    <tr>
-                                        <td class="col-md-">{{ room_data.room.room_type.type }}</td>
-                                        <td class="col-md-">{{ room_data.room.room_number }}</td>
-                                        <td class="col-md-3">
-                                            <i class="fa fa-inr"></i> {{ room_data.price|price_format }} Теңге
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 d-flex justify-content-start">
-                                <div class="receipt-right">
-                                    <h5>Қонақ үй мәліметтері</h5>
-                                    <p class="mb-2"><b>Атауы: </b>{{booking.hotel.name}}</p>
-                                    <p class="mb-2"><b>Мекенжайы: </b>{{booking.hotel.address}}</p>
-                                    <hr />
-                                    <p class="mb-2"><b>Email: </b> {{booking.hotel.email}}</p>
-                                    <p class="mb-2"><b>Телефон номері: </b> {{booking.hotel.mobile}}</p>
-                                </div>
+
+                            <div class="table-responsive mt-4">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Бөлме атауы</th>
+                                            <th>Бөлме нөмірі</th>
+                                            <th>Бағасы</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for room_data in rooms_with_prices %}
+                                            <tr>
+                                                <td data-label="Бөлме атауы">{{ room_data.room.room_type.type }}</td>
+                                                <td data-label="Бөлме нөмірі">{{ room_data.room.room_number }}</td>
+                                                <td data-label="Бағасы">
+                                                    <i class="fa fa-tenge"></i> {{ room_data.price|price_format }} Теңге
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 d-flex justify-content-end">
-                                <div class="receipt-right">
-                                    <div class="summary-block text-right">
-                                        <h5 class="mb-3">Қорытынды</h5>
-                                        <p class="mb-2"><b>Келу күні: </b>{{booking.check_in_date|date:"d.m.Y"}}</p>
-                                        <p class="mb-2"><b>Кету күні: </b>{{booking.check_out_date|date:"d.m.Y"}}</p>
-                                        <p class="mb-2"><b>Жалпы күндер саны: </b>{{booking.total_days}} Күн</p>
-                                        <p class="mb-2"><b>Ересектер: </b>{{booking.num_adults}} Ересек</p>
-                                        <p class="mb-2"><b>Балалар: </b>{{booking.num_children}} Бала</p>
-                                        <hr class="my-3" />
-                                    </div>
-                                    <div class="summary-block text-right">
-                                        <p class="mb-2 font-weight-bold text-dark">
-                                            Жиынтық: {{booking.total|price_format}} Теңге
-                                        </p>
-                                        <p class="mb-2 font-weight-bold text-dark">
-                                            Төленген алдын ала төлем (10%): {{booking.total|div:10|price_format}} Теңге
-                                        </p>
-                                        {% with prepayment=booking.total|div:10 %}
-                                        <p class="mb-2 font-weight-bold text-dark">
-                                            Сомасының қалдығы (90%): {{booking.total|sub:prepayment|price_format}} Теңге
-                                        </p>
-                                        {% endwith %}
-                                        <p class="mb-0 text-muted small">
-                                            Қалған 90% қонақ үйге кіру кезінде төленеді.
-                                        </p>
+                            
+                            <div class="row mt-4">
+                                <div class="col-12 col-lg-6 col-mobile-12">
+                                    <div class="receipt-right">
+                                        <h5>Қонақ үй мәліметтері</h5>
+                                        <p class="mb-2"><b>Атауы: </b>{{booking.hotel.name}}</p>
+                                        <p class="mb-2"><b>Мекенжайы: </b>{{booking.hotel.address}}</p>
+                                        <hr />
+                                        <p class="mb-2"><b>Email: </b> {{booking.hotel.email}}</p>
+                                        <p class="mb-2"><b>Телефон номері: </b> {{booking.hotel.mobile}}</p>
                                     </div>
                                 </div>
+                                <div class="col-12 col-lg-6 col-mobile-12 mobile-mt-3">
+                                    <div class="receipt-right">
+                                        <div class="summary-block text-right mobile-text-center">
+                                            <h5 class="mb-3">Қорытынды</h5>
+                                            <p class="mb-2"><b>Келу күні: </b>{{booking.check_in_date|date:"d.m.Y"}}</p>
+                                            <p class="mb-2"><b>Кету күні: </b>{{booking.check_out_date|date:"d.m.Y"}}</p>
+                                            <p class="mb-2"><b>Жалпы күндер саны: </b>{{booking.total_days}} Күн</p>
+                                            <p class="mb-2"><b>Ересектер: </b>{{booking.num_adults}} Ересек</p>
+                                            <p class="mb-2"><b>Балалар: </b>{{booking.num_children}} Бала</p>
+                                            <hr class="my-3" />
+                                        </div>
+                                        <div class="summary-block text-right mobile-text-center">
+                                            <p class="mb-2 font-weight-bold text-dark">
+                                                Жиынтық: {{booking.total|price_format}} Теңге
+                                            </p>
+                                            <p class="mb-2 font-weight-bold text-dark">
+                                                Төленген алдын ала төлем (10%): {{booking.total|div:10|price_format}} Теңге
+                                            </p>
+                                            {% with prepayment=booking.total|div:10 %}
+                                            <p class="mb-2 font-weight-bold text-dark">
+                                                Сомасының қалдығы (90%): {{booking.total|sub:prepayment|price_format}} Теңге
+                                            </p>
+                                            {% endwith %}
+                                            <p class="mb-0 text-muted small">
+                                                Қалған 90% қонақ үйге кіру кезінде төленеді.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <hr />
+                            <div class="text-center">
+                                <button class="downloadButton btn btn-dark btn-lg">Жүктеу <i class="fas fa-download"></i></button>
                             </div>
                         </div>
-                    </div>
-                    <hr />
-                    <div class="d-flex justify-content-center align-items-center">
-                        <button id="downloadButton" class="btn btn-dark">Жүктеу <i class="fas fa-download"></i></button>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Russian Receipt -->
-        <div class="receipt-container russian">
-            <div class="row d-flex justify-content-center p-2">
-                <div class="receipt-main col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
-                    <div class="d-flex justify-content-between">
-                        <div class="row">
-                            <div class="receipt-header">
-                                <div class="col-xs-6 col-sm-6 col-md-6">
-                                    <div class="receipt-left">
-                                        <img class="img-responsive" alt="iamgurdeeposahan" src="https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg" style="width: 71px; border-radius: 43px;" />
+            <!-- Russian Receipt -->
+            <div class="receipt-container russian">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-lg-8">
+                        <div class="receipt-main pdf-optimize">
+                            <div class="row">
+                                <div class="col-12 col-md-6 col-mobile-12">
+                                    <div class="logo-container">
+                                        <img class="company-logo" alt="Alakol Logo" src="{% static 'images/logo.png' %}" />
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 text-left">
+                                <div class="col-12 col-md-6 col-mobile-12 mobile-text-center mobile-mt-3">
                                     <div class="receipt-right">
-                                        <h5 class="margin-top-10">Алаколь<span class="text-warning"></span></h5>
+                                        <h5>Алаколь</h5>
                                         <p><i class="fa fa-phone"></i> +1 3649-6589</p>
                                         <p><i class="fa fa-envelope"></i> company@gmail.com</p>
                                         <p><i class="fa fa-location-arrow"></i> Главная улица, 123</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="receipt-header receipt-header-mid">
-                                <div class="col-xs-12 col-sm-12 col-md-12 text-left">
+                            
+                            <div class="row mt-4">
+                                <div class="col-12 col-md-6 col-mobile-12">
                                     <div class="receipt-right">
                                         <h5>Данные клиента</h5>
                                         <p><b><i class="fa fa-user"></i> </b> {{booking.full_name}}</p>
@@ -270,111 +388,110 @@
                                         <p><b><i class="fa fa-phone"></i> </b> {{booking.phone}}</p>
                                     </div>
                                 </div>
-                                <br />
-                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="col-12 col-md-6 col-mobile-12 mobile-text-center mobile-mt-3">
                                     <div class="receipt-left">
                                         <h6>БРОНЬ ID #{{booking.booking_id}}</h6>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Название номера</th>
-                                    <th>Номер комнаты</th>
-                                    <th>Цена</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for room_data in rooms_with_prices %}
-                                    <tr>
-                                        <td class="col-md-">{{ room_data.room.room_type.type }}</td>
-                                        <td class="col-md-">{{ room_data.room.room_number }}</td>
-                                        <td class="col-md-3">
-                                            <i class="fa fa-inr"></i> {{ room_data.price|price_format }} Тенге
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 d-flex justify-content-start">
-                                <div class="receipt-right">
-                                    <h5>Данные отеля</h5>
-                                    <p class="mb-2"><b>Название: </b>{{booking.hotel.name}}</p>
-                                    <p class="mb-2"><b>Адрес: </b>{{booking.hotel.address}}</p>
-                                    <hr />
-                                    <p class="mb-2"><b>Email: </b> {{booking.hotel.email}}</p>
-                                    <p class="mb-2"><b>Номер телефона: </b> {{booking.hotel.mobile}}</p>
-                                </div>
+
+                            <div class="table-responsive mt-4">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Название номера</th>
+                                            <th>Номер комнаты</th>
+                                            <th>Цена</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for room_data in rooms_with_prices %}
+                                            <tr>
+                                                <td data-label="Название номера">{{ room_data.room.room_type.type }}</td>
+                                                <td data-label="Номер комнаты">{{ room_data.room.room_number }}</td>
+                                                <td data-label="Цена">
+                                                    <i class="fa fa-tenge"></i> {{ room_data.price|price_format }} Тенге
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 d-flex justify-content-end">
-                                <div class="receipt-right">
-                                    <div class="summary-block text-right">
-                                        <h5 class="mb-3">Краткое описание</h5>
-                                        <p class="mb-2"><b>Дата заезда: </b>{{booking.check_in_date|date:"d.m.Y"}}</p>
-                                        <p class="mb-2"><b>Дата выезда: </b>{{booking.check_out_date|date:"d.m.Y"}}</p>
-                                        <p class="mb-2"><b>Общее количество дней: </b>{{booking.total_days}} Дней</p>
-                                        <p class="mb-2"><b>Взрослые: </b>{{booking.num_adults}} Взрослый</p>
-                                        <p class="mb-2"><b>Дети: </b>{{booking.num_children}} Детей</p>
-                                        <hr class="my-3" />
-                                    </div>
-                                    <div class="summary-block text-right">
-                                        <p class="mb-2 font-weight-bold text-dark">
-                                            Итого: {{booking.total|price_format}} Тенге
-                                        </p>
-                                        <p class="mb-2 font-weight-bold text-dark">
-                                            Оплаченный аванс (10%): {{booking.total|div:10|price_format}} Тенге
-                                        </p>
-                                        {% with prepayment=booking.total|div:10 %}
-                                        <p class="mb-2 font-weight-bold text-dark">
-                                            Остаток (90%): {{booking.total|sub:prepayment|price_format}} Тенге
-                                        </p>
-                                        {% endwith %}
-                                        <p class="mb-0 text-muted small">
-                                            Оставшиеся 90% будут оплачены при заселении в отель.
-                                        </p>
+                            
+                            <div class="row mt-4">
+                                <div class="col-12 col-lg-6 col-mobile-12">
+                                    <div class="receipt-right">
+                                        <h5>Данные отеля</h5>
+                                        <p class="mb-2"><b>Название: </b>{{booking.hotel.name}}</p>
+                                        <p class="mb-2"><b>Адрес: </b>{{booking.hotel.address}}</p>
+                                        <hr />
+                                        <p class="mb-2"><b>Email: </b> {{booking.hotel.email}}</p>
+                                        <p class="mb-2"><b>Номер телефона: </b> {{booking.hotel.mobile}}</p>
                                     </div>
                                 </div>
+                                <div class="col-12 col-lg-6 col-mobile-12 mobile-mt-3">
+                                    <div class="receipt-right">
+                                        <div class="summary-block text-right mobile-text-center">
+                                            <h5 class="mb-3">Краткое описание</h5>
+                                            <p class="mb-2"><b>Дата заезда: </b>{{booking.check_in_date|date:"d.m.Y"}}</p>
+                                            <p class="mb-2"><b>Дата выезда: </b>{{booking.check_out_date|date:"d.m.Y"}}</p>
+                                            <p class="mb-2"><b>Общее количество дней: </b>{{booking.total_days}} Дней</p>
+                                            <p class="mb-2"><b>Взрослые: </b>{{booking.num_adults}} Взрослый</p>
+                                            <p class="mb-2"><b>Дети: </b>{{booking.num_children}} Детей</p>
+                                            <hr class="my-3" />
+                                        </div>
+                                        <div class="summary-block text-right mobile-text-center">
+                                            <p class="mb-2 font-weight-bold text-dark">
+                                                Итого: {{booking.total|price_format}} Тенге
+                                            </p>
+                                            <p class="mb-2 font-weight-bold text-dark">
+                                                Оплаченный аванс (10%): {{booking.total|div:10|price_format}} Тенге
+                                            </p>
+                                            {% with prepayment=booking.total|div:10 %}
+                                            <p class="mb-2 font-weight-bold text-dark">
+                                                Остаток (90%): {{booking.total|sub:prepayment|price_format}} Тенге
+                                            </p>
+                                            {% endwith %}
+                                            <p class="mb-0 text-muted small">
+                                                Оставшиеся 90% будут оплачены при заселении в отель.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <hr />
+                            <div class="text-center">
+                                <button class="downloadButton btn btn-dark btn-lg">Скачать <i class="fas fa-download"></i></button>
                             </div>
                         </div>
-                    </div>
-                    <hr />
-                    <div class="d-flex justify-content-center align-items-center">
-                        <button id="downloadButton" class="btn btn-dark">Скачать <i class="fas fa-download"></i></button>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- English Receipt -->
-        <div class="receipt-container english">
-            <div class="row d-flex justify-content-center p-2">
-                <div class="receipt-main col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
-                    <div class="d-flex justify-content-between">
-                        <div class="row">
-                            <div class="receipt-header">
-                                <div class="col-xs-6 col-sm-6 col-md-6">
-                                    <div class="receipt-left">
-                                        <img class="img-responsive" alt="iamgurdeeposahan" src="https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg" style="width: 71px; border-radius: 43px;" />
+            <!-- English Receipt -->
+            <div class="receipt-container english">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-lg-8">
+                        <div class="receipt-main pdf-optimize">
+                            <div class="row">
+                                <div class="col-12 col-md-6 col-mobile-12">
+                                    <div class="logo-container">
+                                        <img class="company-logo" alt="Alakol Logo" src="{% static 'images/logo.png' %}" />
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 text-left">
+                                <div class="col-12 col-md-6 col-mobile-12 mobile-text-center mobile-mt-3">
                                     <div class="receipt-right">
-                                        <h5 class="margin-top-10">Alakol<span class="text-warning"></span></h5>
+                                        <h5>eKol</h5>
                                         <p><i class="fa fa-phone"></i> +1 3649-6589</p>
                                         <p><i class="fa fa-envelope"></i> company@gmail.com</p>
                                         <p><i class="fa fa-location-arrow"></i> 123 Main Street</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="receipt-header receipt-header-mid">
-                                <div class="col-xs-12 col-sm-12 col-md-12 text-left">
+                            
+                            <div class="row mt-4">
+                                <div class="col-12 col-md-6 col-mobile-12">
                                     <div class="receipt-right">
                                         <h5>Customer Details</h5>
                                         <p><b><i class="fa fa-user"></i> </b> {{booking.full_name}}</p>
@@ -382,81 +499,83 @@
                                         <p><b><i class="fa fa-phone"></i> </b> {{booking.phone}}</p>
                                     </div>
                                 </div>
-                                <br />
-                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="col-12 col-md-6 col-mobile-12 mobile-text-center mobile-mt-3">
                                     <div class="receipt-left">
                                         <h6>BOOKING ID #{{booking.booking_id}}</h6>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Room Name</th>
-                                    <th>Room Number</th>
-                                    <th>Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for room_data in rooms_with_prices %}
-                                    <tr>
-                                        <td class="col-md-">{{ room_data.room.room_type.type }}</td>
-                                        <td class="col-md-">{{ room_data.room.room_number }}</td>
-                                        <td class="col-md-3">
-                                            <i class="fa fa-inr"></i> {{ room_data.price|price_format }} Tenge
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 d-flex justify-content-start">
-                                <div class="receipt-right">
-                                    <h5>Hotel Details</h5>
-                                    <p class="mb-2"><b>Name: </b>{{booking.hotel.name}}</p>
-                                    <p class="mb-2"><b>Address: </b>{{booking.hotel.address}}</p>
-                                    <hr />
-                                    <p class="mb-2"><b>Email: </b> {{booking.hotel.email}}</p>
-                                    <p class="mb-2"><b>Mobile: </b> {{booking.hotel.mobile}}</p>
-                                </div>
+
+                            <div class="table-responsive mt-4">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Room Name</th>
+                                            <th>Room Number</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for room_data in rooms_with_prices %}
+                                            <tr>
+                                                <td data-label="Room Name">{{ room_data.room.room_type.type }}</td>
+                                                <td data-label="Room Number">{{ room_data.room.room_number }}</td>
+                                                <td data-label="Price">
+                                                    <i class="fa fa-tenge"></i> {{ room_data.price|price_format }} Tenge
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 d-flex justify-content-end">
-                                <div class="receipt-right">
-                                    <div class="summary-block text-right">
-                                        <h5 class="mb-3">Summary</h5>
-                                        <p class="mb-2"><b>Check-in: </b>{{booking.check_in_date|date:"d.m.Y"}}</p>
-                                        <p class="mb-2"><b>Check-out: </b>{{booking.check_out_date|date:"d.m.Y"}}</p>
-                                        <p class="mb-2"><b>Total Days: </b>{{booking.total_days}} Days</p>
-                                        <p class="mb-2"><b>Adults: </b>{{booking.num_adults}} Adult</p>
-                                        <p class="mb-2"><b>Children: </b>{{booking.num_children}} Children</p>
-                                        <hr class="my-3" />
-                                    </div>
-                                    <div class="summary-block text-right">
-                                        <p class="mb-2 font-weight-bold text-dark">
-                                            Total: {{booking.total|price_format}} Tenge
-                                        </p>
-                                        <p class="mb-2 font-weight-bold text-dark">
-                                            Paid repayment (10%): {{booking.total|div:10|price_format}} Tenge
-                                        </p>
-                                        {% with prepayment=booking.total|div:10 %}
-                                        <p class="mb-2 font-weight-bold text-dark">
-                                            Remaining (90%): {{booking.total|sub:prepayment|price_format}} Tenge
-                                        </p>
-                                        {% endwith %}
-                                        <p class="mb-0 text-muted small">
-                                            The remaining 90% will be paid upon check-in at the hotel.
-                                        </p>
+                            
+                            <div class="row mt-4">
+                                <div class="col-12 col-lg-6 col-mobile-12">
+                                    <div class="receipt-right">
+                                        <h5>Hotel Details</h5>
+                                        <p class="mb-2"><b>Name: </b>{{booking.hotel.name}}</p>
+                                        <p class="mb-2"><b>Address: </b>{{booking.hotel.address}}</p>
+                                        <hr />
+                                        <p class="mb-2"><b>Email: </b> {{booking.hotel.email}}</p>
+                                        <p class="mb-2"><b>Mobile: </b> {{booking.hotel.mobile}}</p>
                                     </div>
                                 </div>
+                                <div class="col-12 col-lg-6 col-mobile-12 mobile-mt-3">
+                                    <div class="receipt-right">
+                                        <div class="summary-block text-right mobile-text-center">
+                                            <h5 class="mb-3">Summary</h5>
+                                            <p class="mb-2"><b>Check-in: </b>{{booking.check_in_date|date:"d.m.Y"}}</p>
+                                            <p class="mb-2"><b>Check-out: </b>{{booking.check_out_date|date:"d.m.Y"}}</p>
+                                            <p class="mb-2"><b>Total Days: </b>{{booking.total_days}} Days</p>
+                                            <p class="mb-2"><b>Adults: </b>{{booking.num_adults}} Adult</p>
+                                            <p class="mb-2"><b>Children: </b>{{booking.num_children}} Children</p>
+                                            <hr class="my-3" />
+                                        </div>
+                                        <div class="summary-block text-right mobile-text-center">
+                                            <p class="mb-2 font-weight-bold text-dark">
+                                                Total: {{booking.total|price_format}} Tenge
+                                            </p>
+                                            <p class="mb-2 font-weight-bold text-dark">
+                                                Paid Prepayment (10%): {{booking.total|div:10|price_format}} Tenge
+                                            </p>
+                                            {% with prepayment=booking.total|div:10 %}
+                                            <p class="mb-2 font-weight-bold text-dark">
+                                                Remaining (90%): {{booking.total|sub:prepayment|price_format}} Tenge
+                                            </p>
+                                            {% endwith %}
+                                            <p class="mb-0 text-muted small">
+                                                The remaining 90% will be paid upon check-in at the hotel.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <hr />
+                            <div class="text-center">
+                                <button class="downloadButton btn btn-dark btn-lg">Download <i class="fas fa-download"></i></button>
                             </div>
                         </div>
-                    </div>
-                    <hr />
-                    <div class="d-flex justify-content-center align-items-center">
-                        <button id="downloadButton" class="btn btn-dark">Download <i class="fas fa-download"></i></button>
                     </div>
                 </div>
             </div>
@@ -477,23 +596,101 @@
                 });
             });
 
-            // Download PDF
-            document.querySelectorAll('#downloadButton').forEach(button => {
+            // Optimized PDF Download with better compression
+            document.querySelectorAll('.downloadButton').forEach(button => {
                 button.addEventListener('click', function() {
                     const { jsPDF } = window.jspdf;
-                    const doc = new jsPDF();
                     const receipt = this.closest('.receipt-main');
-                    html2canvas(receipt, { scale: 2 }).then(canvas => {
-                        const imgData = canvas.toDataURL('image/png');
-                        const imgProps = doc.getImageProperties(imgData);
-                        const pdfWidth = doc.internal.pageSize.getWidth();
-                        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-                        doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                        const lang = document.getElementById('languageSelect').value;
-                        doc.save(`receipt_${lang}.pdf`);
+                    
+                    // Показываем индикатор загрузки
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Генерация PDF...';
+                    this.disabled = true;
+                    
+                    // Оптимизированные настройки для html2canvas
+                    const options = {
+                        scale: 1.2, // Уменьшили с 2 до 1.2 для уменьшения размера файла
+                        useCORS: true,
+                        allowTaint: true,
+                        backgroundColor: '#ffffff',
+                        width: receipt.offsetWidth,
+                        height: receipt.offsetHeight,
+                        scrollX: 0,
+                        scrollY: 0,
+                        windowWidth: receipt.offsetWidth,
+                        windowHeight: receipt.offsetHeight,
+                        removeContainer: true,
+                        imageTimeout: 0,
+                        logging: false // Отключаем логирование для производительности
+                    };
+                    
+                    html2canvas(receipt, options).then(canvas => {
+                        try {
+                            // Сжимаем изображение для уменьшения размера PDF
+                            const imgData = canvas.toDataURL('image/jpeg', 0.8); // JPEG с качеством 80%
+                            
+                            // Создаем PDF с оптимальными размерами
+                            const doc = new jsPDF({
+                                orientation: 'portrait',
+                                unit: 'mm',
+                                format: 'a4',
+                                compress: true // Включаем сжатие PDF
+                            });
+                            
+                            const imgProps = doc.getImageProperties(imgData);
+                            const pdfWidth = doc.internal.pageSize.getWidth();
+                            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                            
+                            // Если изображение слишком высокое, масштабируем
+                            const pageHeight = doc.internal.pageSize.getHeight();
+                            let finalWidth = pdfWidth;
+                            let finalHeight = pdfHeight;
+                            
+                            if (pdfHeight > pageHeight) {
+                                finalHeight = pageHeight - 20; // Оставляем отступы
+                                finalWidth = (imgProps.width * finalHeight) / imgProps.height;
+                                
+                                // Центрируем по горизонтали
+                                const xOffset = (pdfWidth - finalWidth) / 2;
+                                doc.addImage(imgData, 'JPEG', xOffset, 10, finalWidth, finalHeight);
+                            } else {
+                                // Центрируем по вертикали
+                                const yOffset = (pageHeight - finalHeight) / 2;
+                                doc.addImage(imgData, 'JPEG', 0, yOffset, finalWidth, finalHeight);
+                            }
+                            
+                            // Получаем текущий язык для имени файла
+                            const lang = document.getElementById('languageSelect').value;
+                            const langMap = {
+                                'kazakh': 'kz',
+                                'russian': 'ru', 
+                                'english': 'en'
+                            };
+                            
+                            const fileName = `receipt_{{booking.booking_id}}_${langMap[lang] || 'ru'}.pdf`;
+                            doc.save(fileName);
+                            
+                        } catch (error) {
+                            console.error('Ошибка при создании PDF:', error);
+                            alert('Произошла ошибка при создании PDF файла. Попробуйте еще раз.');
+                        } finally {
+                            // Восстанавливаем кнопку
+                            this.innerHTML = originalText;
+                            this.disabled = false;
+                        }
+                    }).catch(error => {
+                        console.error('Ошибка html2canvas:', error);
+                        alert('Произошла ошибка при генерации PDF. Попробуйте еще раз.');
+                        // Восстанавливаем кнопку
+                        this.innerHTML = originalText;
+                        this.disabled = false;
                     });
                 });
             });
+            
+            // Предварительная загрузка логотипа для улучшения производительности
+            const logoImg = new Image();
+            logoImg.src = "{% static 'images/logo.png' %}";
         </script>
     </body>
 </html>

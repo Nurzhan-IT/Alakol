@@ -23,6 +23,12 @@
                         <li><p>{{rooms.count}} {% trans "Available Rooms" %}</p></li>
                     </ul>
                 </nav>
+                <nav id="breadcrumbs">
+                    <ul>
+                      <li><a>{% trans "Hotel" %}</a></li>
+                      <li>{% trans "Rooms" %}</li>
+                    </ul>
+                  </nav>
             </div>
         </div>
     </div>
@@ -83,7 +89,7 @@
                             {% trans "Added To Selection" %}
                         </button>
                         {% elif room_statuses and room_statuses|get_item:r.id == "Update" %}
-                        <button class="button border add-to-selection" data-index="{{r.id}}" style="">
+                        <button class="button border add-to-selection" data-index="{{r.id}}" >
                             <i class="fas fa-refresh"></i>
                             {% trans "Update" %}
                         </button>
@@ -209,8 +215,8 @@
                         </div>
 
                         <div class="with-forms margin-top-30">
-                            <div class="col-lg-12 col-md-12 ">
-                                <a href="#">{% trans "Select Room Type" %}</a>
+                            <div class="col-lg-12 col-md-12 margin-top-10 ">
+                                <!-- <a href="#">{% trans "Select Room Type" %}</a> -->
                                 <select name="room-type" class="utf_chosen_select_single" required>
                                     <option value="{{room_type.slug}}" selected>{{room_type.type}}</option>
                                     {% for r in hotel.hotel_room_types %}
