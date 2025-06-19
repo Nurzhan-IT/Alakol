@@ -1,167 +1,203 @@
 {% extends 'legal/base_legal.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Пользовательское соглашение" %}{% endblock %}
+{% block title %}{% trans "User Agreement" %}{% endblock %}
 
 {% block content %}
-<h1>{% trans "ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ" %}</h1>
-<h2>{% trans "СИСТЕМЫ БРОНИРОВАНИЯ ОТЕЛЕЙ ALAKOL" %}</h2>
+<h1>{% trans "USER AGREEMENT" %}</h1>
+<h2>{% trans "ALAKOL HOTEL BOOKING SYSTEM" %}</h2>
 
 <div class="document-meta">
-    <strong>{% trans "Дата вступления в силу:" %}</strong> 19.06.2025<br>
-    <strong>{% trans "Версия документа:" %}</strong> 1.0<br><br>
-    <strong>{% trans "Система:" %}</strong> eKol - Система управления отелями<br>
-    <strong>{% trans "Платежная система:" %}</strong> Robokassa (официальная интеграция)<br>
-    <strong>{% trans "Регион:" %}</strong> Алаколь, Республика Казахстан<br>
-    <strong>{% trans "Временная зона:" %}</strong> Kazakhstan/Astana (UTC+5)
+    <strong>{% trans "Effective Date:" %}</strong> {% trans "June 19, 2025" %}<br>
+    <strong>{% trans "Document Version:" %}</strong> 1.0<br><br>
+    <strong>{% trans "System:" %}</strong> {% trans "eKol - Hotel Management System" %}<br>
+    <strong>{% trans "Payment System:" %}</strong> {% trans "Robokassa (official integration)" %}<br>
+    <strong>{% trans "Region:" %}</strong> {% trans "Alakol, Republic of Kazakhstan" %}<br>
+    <strong>{% trans "Time Zone:" %}</strong> {% trans "Kazakhstan/Astana (UTC+5)" %}
 </div>
 
-<h2>{% trans "1. ОБЩИЕ ПОЛОЖЕНИЯ" %}</h2>
-<p><strong>1.1.</strong> {% trans "Настоящее Пользовательское соглашение (далее - \"Соглашение\") регулирует отношения между ТОО \"Alakol Booking Ltd\" (далее - \"Администрация\", \"мы\") и пользователями (далее - \"Пользователь\", \"вы\") веб-платформы бронирования отелей Alakol." %}</p>
+<h2>{% trans "1. GENERAL PROVISIONS" %}</h2>
+<p><strong>1.1.</strong> {% trans "This User Agreement (hereinafter - \"Agreement\") regulates relations between \"Alakol Booking Ltd\" LLP (hereinafter - \"Administration\", \"we\") and users (hereinafter - \"User\", \"you\") of the Alakol hotel booking web platform." %}</p>
 
-<p><strong>1.2.</strong> {% trans "Соглашение является публичным договором в соответствии с законодательством Республики Казахстан." %}</p>
+<p><strong>1.2.</strong> {% trans "The Agreement is a public contract in accordance with the legislation of the Republic of Kazakhstan." %}</p>
 
-<p><strong>1.3.</strong> {% trans "Использование платформы означает полное и безоговорочное принятие условий настоящего Соглашения." %}</p>
+<p><strong>1.3.</strong> {% trans "Use of the platform means full and unconditional acceptance of the terms of this Agreement." %}</p>
 
-<p>1.4. Настоящее Соглашение может быть изменено Компанией в любое время без предварительного уведомления. Новая версия Соглашения вступает в силу с момента ее размещения на Сайте.</p>
+<p>{% trans "1.4. This Agreement may be modified by the Company at any time without prior notice. The new version of the Agreement comes into effect from the moment of its placement on the Website." %}</p>
 
-<p>1.5. Система eKol состоит из следующих основных модулей:</p>
+<p>{% trans "1.5. The eKol system consists of the following main modules:" %}</p>
 <ul>
-    <li><strong>hotel</strong> - управление отелями, номерами, бронированиями</li>
-    <li><strong>booking</strong> - функциональность бронирования с 6 этапами процесса</li>
-    <li><strong>userauths</strong> - аутентификация и управление пользователями с системой OTP</li>
-    <li><strong>user_dashboard</strong> - личный кабинет пользователя</li>
-    <li><strong>robokassa</strong> - интеграция платежной системы</li>
-    <li><strong>search</strong> - поиск и фильтрация отелей</li>
-    <li><strong>addon</strong> - дополнительные функции</li>
+    <li><strong>hotel</strong> - {% trans "hotel, room, booking management" %}</li>
+    <li><strong>booking</strong> - {% trans "booking functionality with 6-stage process" %}</li>
+    <li><strong>userauths</strong> - {% trans "authentication and user management with OTP system" %}</li>
+    <li><strong>user_dashboard</strong> - {% trans "user personal account" %}</li>
+    <li><strong>robokassa</strong> - {% trans "payment system integration" %}</li>
+    <li><strong>search</strong> - {% trans "hotel search and filtering" %}</li>
+    <li><strong>addon</strong> - {% trans "additional functions" %}</li>
 </ul>
 
-<h2>{% trans "2. ОПИСАНИЕ УСЛУГ" %}</h2>
-<p>2.1. Компания предоставляет Пользователям информационные услуги по поиску и бронированию номеров в гостиницах на территории региона Алаколь, Республики Казахстан через систему eKol.</p>
+<h2>{% trans "2. SERVICE DESCRIPTION" %}</h2>
+<p>{% trans "2.1. The Company provides Users with information services for searching and booking hotel rooms in the Alakol region of the Republic of Kazakhstan through the eKol system." %}</p>
 
-<p>2.2. Бронирование осуществляется на основе публичной оферты, размещенной на Сайте.</p>
+<p>{% trans "2.2. Booking is carried out based on the public offer posted on the Website." %}</p>
 
-<p>2.3. Компания выступает посредником между Пользователем и гостиницами (отелями) и не является поставщиком гостиничных услуг.</p>
+<p>{% trans "2.3. The Company acts as an intermediary between the User and hotels and is not a provider of hotel services." %}</p>
 
-<p>2.4. Система eKol предоставляет следующие основные функции:</p>
+<p>{% trans "2.4. The eKol system provides the following main functions:" %}</p>
 <ul>
-    <li>Регистрацию и аутентификацию пользователей с системой OTP для верификации</li>
-    <li>Поиск и фильтрацию отелей по различным критериям</li>
-    <li>Просмотр детальной информации об отелях и номерах</li>
-    <li>Систему бронирования номеров с проверкой доступности</li>
-    <li>Интегрированную систему оплаты через Robokassa</li>
-    <li>Управление бронированиями через личный кабинет</li>
-    <li>Систему уведомлений по email или SMS</li>
-    <li>Мультиязычный интерфейс (казахский, русский, английский языки)</li>
+    <li>{% trans "User registration and authentication with OTP system for verification" %}</li>
+    <li>{% trans "Hotel search and filtering by various criteria" %}</li>
+    <li>{% trans "Viewing detailed information about hotels and rooms" %}</li>
+    <li>{% trans "Room booking system with availability check" %}</li>
+    <li>{% trans "Integrated payment system through Robokassa" %}</li>
+    <li>{% trans "Booking management through personal account" %}</li>
+    <li>{% trans "Email or SMS notification system" %}</li>
+    <li>{% trans "Multilingual interface (Kazakh, Russian, English languages)" %}</li>
 </ul>
 
-<h2>{% trans "3. РЕГИСТРАЦИЯ И УЧЕТНАЯ ЗАПИСЬ" %}</h2>
-<p>3.1. Для получения полного доступа к функциям Сайта необходимо пройти регистрацию в системе eKol.</p>
+<h2>{% trans "3. REGISTRATION AND ACCOUNT" %}</h2>
+<p>{% trans "3.1. To get full access to Website functions, registration in the eKol system is required." %}</p>
 
-<p>3.2. При регистрации Пользователь обязуется предоставить следующие обязательные данные:</p>
+<p>{% trans "3.2. During registration, the User must provide the following mandatory data:" %}</p>
 <ul>
-    <li>Email (используется как username, уникальный)</li>
-    <li>Пароль</li>
-    <li>Имя пользователя (username)</li>
+    <li>{% trans "Email (used as username, unique)" %}</li>
+    <li>{% trans "Password" %}</li>
+    <li>{% trans "Username" %}</li>
 </ul>
 
-<p>3.3. Дополнительные данные профиля включают:</p>
+<p>{% trans "3.3. Additional profile data includes:" %}</p>
 <ul>
-    <li>Полное имя (full_name)</li>
-    <li>Номер телефона (phone)</li>
-    <li>Пол (gender) - мужской/женский</li>
-    <li>Страна проживания (country)</li>
-    <li>Город проживания (city)</li>
-    <li>Адрес (address)</li>
-    <li>Фотография профиля (image)</li>
+    <li>{% trans "Full name (full_name)" %}</li>
+    <li>{% trans "Phone number (phone)" %}</li>
+    <li>{% trans "Gender (gender) - male/female" %}</li>
+    <li>{% trans "Country of residence (country)" %}</li>
+    <li>{% trans "City of residence (city)" %}</li>
+    <li>{% trans "Address (address)" %}</li>
+    <li>{% trans "Profile photo (image)" %}</li>
 </ul>
 
-<h2>{% trans "4. ПОРЯДОК БРОНИРОВАНИЯ" %}</h2>
-<p>4.1. Процесс бронирования в системе eKol включает 6 этапов:</p>
+<h2>{% trans "4. BOOKING PROCEDURE" %}</h2>
+<p>{% trans "4.1. The booking process in the eKol system includes 6 stages:" %}</p>
 <ol>
-    <li><strong>Поиск отелей</strong> по датам заезда/выезда, количеству гостей</li>
-    <li><strong>Выбор номера</strong> с просмотром доступных типов номеров и цен</li>
-    <li><strong>Проверка доступности</strong> с автоматической проверкой свободных номеров</li>
-    <li><strong>Заполнение данных</strong> с контактной информацией гостя</li>
-    <li><strong>Оплата предоплаты N%</strong> через Robokassa</li>
-    <li><strong>Подтверждение</strong> с отправкой данных в отель и клиенту</li>
+    <li><strong>{% trans "Hotel search" %}</strong> {% trans "by check-in/check-out dates, number of guests" %}</li>
+    <li><strong>{% trans "Room selection" %}</strong> {% trans "with viewing available room types and prices" %}</li>
+    <li><strong>{% trans "Availability check" %}</strong> {% trans "with automatic verification of available rooms" %}</li>
+    <li><strong>{% trans "Data filling" %}</strong> {% trans "with guest contact information" %}</li>
+    <li><strong>{% trans "N% prepayment" %}</strong> {% trans "through Robokassa" %}</li>
+    <li><strong>{% trans "Confirmation" %}</strong> {% trans "with data sending to hotel and client" %}</li>
 </ol>
 
-<p>4.2. Бронирование считается подтвержденным после успешной оплаты согласно условиям публичной оферты.</p>
+<p>{% trans "4.2. Booking is considered confirmed after successful payment according to public offer terms." %}</p>
 
-<p>4.3. Пользователь получает подтверждение бронирования на указанный email в течение 24 часов.</p>
+<p>{% trans "4.3. User receives booking confirmation at specified email within 24 hours." %}</p>
 
-<p>4.4. Неоплаченные бронирования автоматически истекают через 10 минут после создания для завершения оплаты.</p>
+<p>{% trans "4.4. Unpaid bookings automatically expire 10 minutes after creation to complete payment." %}</p>
 
-<h2>{% trans "5. ОПЛАТА И ЦЕНООБРАЗОВАНИЕ" %}</h2>
-<p>5.1. Оплата производится через платежную систему Robokassa согласно тарифам, указанным на Сайте.</p>
+<h2>{% trans "5. PAYMENT AND PRICING" %}</h2>
+<p>{% trans "5.1. Payment is made through Robokassa payment system according to rates indicated on the Website." %}</p>
 
-<p>5.2. В рамках гибкой схемы оплаты eKol:</p>
+<p>{% trans "5.2. Within the eKol flexible payment scheme:" %}</p>
 <ul>
-    <li>при бронировании взимается предоплата в размере N% от общей стоимости, где N может составлять 10%, 30%, 50%, 70% или 100% в зависимости от политики конкретного отеля</li>
-    <li>оставшиеся (100% - N%) оплачиваются при заселении в отель</li>
-    <li>при N = 100% доплата в отеле не требуется</li>
-    <li>в состав предоплаты включена комиссия платформы eKol</li>
+    <li>{% trans "when booking, prepayment of N% of total cost is charged, where N can be 10%, 30%, 50%, 70% or 100% depending on specific hotel policy" %}</li>
+    <li>{% trans "remaining (100% - N%) is paid upon hotel check-in" %}</li>
+    <li>{% trans "when N = 100%, no hotel balance payment is required" %}</li>
+    <li>{% trans "eKol platform commission is included in prepayment" %}</li>
 </ul>
 
-<p>5.3. Цены на Сайте могут изменяться в зависимости от сезонности, загруженности отеля и других факторов с применением динамического ценообразования.</p>
+<p>{% trans "5.3. Prices on the Website may change depending on seasonality, hotel occupancy and other factors using dynamic pricing." %}</p>
 
-<p>5.4. Все платежи осуществляются в тенге (KZT) или других валютах согласно курсу Национального Банка РК.</p>
+<p>{% trans "5.4. All payments are made in tenge (KZT) or other currencies according to the National Bank of RK exchange rate." %}</p>
 
 <div class="alert alert-warning">
-    <strong>{% trans "5.5. ВАЖНОЕ УВЕДОМЛЕНИЕ О ОКРУГЛЕНИЯХ:" %}</strong> {% trans "В связи с процентными вычислениями при расчете предоплаты, доплаты и возвратов средств, все денежные суммы могут округляться с погрешностью до 1 (одного) тенге в большую или меньшую сторону." %}
+    <strong>{% trans "5.5. IMPORTANT ROUNDING NOTICE:" %}</strong> {% trans "Due to percentage calculations when computing prepayment, balance payment, and refunds, all monetary amounts may be rounded with an accuracy of up to 1 (one) tenge up or down." %}
 </div>
 
-<h2>{% trans "6. ОТМЕНА БРОНИРОВАНИЯ И ВОЗВРАТ СРЕДСТВ" %}</h2>
-<p>6.1. Условия отмены бронирования определяются политикой конкретного отеля и указываются при бронировании. Заявка на изменение бронирования возможна только за 15 дней до заезда.</p>
+<h2>{% trans "6. BOOKING CANCELLATION AND REFUNDS" %}</h2>
+<p>{% trans "6.1. Booking cancellation conditions are determined by specific hotel policy and indicated when booking. Booking modification request is possible only 15 days before check-in." %}</p>
 
-<p>6.2. В случае отмены бронирования по инициативе Пользователя в зависимости от размера предоплаты применяются следующие условия возврата средств:</p>
+<p>{% trans "6.2. In case of booking cancellation by User initiative, depending on prepayment amount, the following refund conditions apply:" %}</p>
 
-<h3>{% trans "При предоплате N = 10%:" %}</h3>
+<h3>{% trans "When prepayment N = 10%:" %}</h3>
 <ul>
-    <li>{% trans "Первые 10% предоплаты не возвращаются при НЕ форс-мажоре (гарантийный депозит)" %}</li>
-    <li>{% trans "Аннуляция в любое время до заезда: возврат 0%" %}</li>
+    <li>{% trans "First 10% of prepayment is non-refundable for non-force majeure (guarantee deposit)" %}</li>
+    <li>{% trans "Cancellation at any time before check-in: 0% refund" %}</li>
 </ul>
 
-<h3>{% trans "При предоплате N = 30%:" %}</h3>
+<h3>{% trans "When prepayment N = 30%:" %}</h3>
 <ul>
-    <li>{% trans "Первые 10% предоплаты не возвращаются при НЕ форс-мажоре (гарантийный депозит)" %}</li>
-    <li>{% trans "Возврат до 20% от (30% - 10%) = 20%" %}</li>
-    <li>{% trans "Аннуляция бронирования за 15 суток до заезда: возврат 20%" %}</li>
-    <li>{% trans "Аннуляция бронирования менее чем за 15 суток до заезда: возврат 0%" %}</li>
+    <li>{% trans "First 10% of prepayment is non-refundable for non-force majeure (guarantee deposit)" %}</li>
+    <li>{% trans "Refund up to 20% of (30% - 10%) = 20%" %}</li>
+    <li>{% trans "Booking cancellation 15+ days before check-in: 20% refund" %}</li>
+    <li>{% trans "Booking cancellation 10-14 days before check-in: 0% refund" %}</li>
+    <li>{% trans "Booking cancellation 7-9 days before check-in: 0% refund" %}</li>
+    <li>{% trans "Booking cancellation 36+ hours before check-in: 0% refund" %}</li>
+    <li>{% trans "Booking cancellation less than 36 hours before check-in: 0% refund" %}</li>
 </ul>
 
-<h2>{% trans "7. ПРАВА И ОБЯЗАННОСТИ СТОРОН" %}</h2>
-<p>7.1. Компания обязуется:</p>
+<h3>{% trans "When prepayment N = 50%:" %}</h3>
 <ul>
-    <li>{% trans "обеспечивать работоспособность системы eKol;" %}</li>
-    <li>{% trans "защищать персональные данные Пользователей в защищенной базе данных;" %}</li>
-    <li>{% trans "предоставлять актуальную информацию об отелях;" %}</li>
-    <li>{% trans "обеспечивать техническую поддержку на казахском, русском и английском языках." %}</li>
+    <li>{% trans "First 10% of prepayment is non-refundable for non-force majeure (guarantee deposit)" %}</li>
+    <li>{% trans "Refund up to 40% of (50% - 10%) = 40%" %}</li>
+    <li>{% trans "Booking cancellation 15+ days before check-in: 40% refund" %}</li>
+    <li>{% trans "Booking cancellation 10-14 days before check-in: 20% refund" %}</li>
+    <li>{% trans "Booking cancellation 7-9 days before check-in: 0% refund" %}</li>
+    <li>{% trans "Booking cancellation 36+ hours before check-in: 0% refund" %}</li>
+    <li>{% trans "Booking cancellation less than 36 hours before check-in: 0% refund" %}</li>
 </ul>
 
-<p>7.2. Пользователь обязуется:</p>
+<h3>{% trans "When prepayment N = 70%:" %}</h3>
 <ul>
-    <li>{% trans "предоставлять достоверную информацию;" %}</li>
-    <li>{% trans "соблюдать правила пользования системой eKol;" %}</li>
-    <li>{% trans "своевременно производить оплату;" %}</li>
-    <li>{% trans "соблюдать правила проживания в отеле." %}</li>
+    <li>{% trans "First 10% of prepayment is non-refundable for non-force majeure (guarantee deposit)" %}</li>
+    <li>{% trans "Refund up to 60% of (70% - 10%) = 60%" %}</li>
+    <li>{% trans "Booking cancellation 15+ days before check-in: 60% refund" %}</li>
+    <li>{% trans "Booking cancellation 10-14 days before check-in: 40% refund" %}</li>
+    <li>{% trans "Booking cancellation 7-9 days before check-in: 10% refund" %}</li>
+    <li>{% trans "Booking cancellation 36+ hours before check-in: 0% refund" %}</li>
+    <li>{% trans "Booking cancellation less than 36 hours before check-in: 0% refund" %}</li>
+</ul>
+
+<h3>{% trans "When prepayment N = 100%:" %}</h3>
+<ul>
+    <li>{% trans "First 10% of prepayment is non-refundable for non-force majeure (guarantee deposit)" %}</li>
+    <li>{% trans "Refund up to 90% of (100% - 10%) = 90%" %}</li>
+    <li>{% trans "Booking cancellation 15+ days before check-in: 90% refund" %}</li>
+    <li>{% trans "Booking cancellation 10-14 days before check-in: 70% refund" %}</li>
+    <li>{% trans "Booking cancellation 7-9 days before check-in: 40% refund" %}</li>
+    <li>{% trans "Booking cancellation 36+ hours before check-in: 20% refund" %}</li>
+    <li>{% trans "Booking cancellation less than 36 hours before check-in: 0% refund" %}</li>
+</ul>
+
+<h2>{% trans "7. RIGHTS AND OBLIGATIONS OF PARTIES" %}</h2>
+<p>{% trans "7.1. The Company undertakes to:" %}</p>
+<ul>
+    <li>{% trans "ensure eKol system functionality;" %}</li>
+    <li>{% trans "protect Users' personal data in protected database;" %}</li>
+    <li>{% trans "provide current hotel information;" %}</li>
+    <li>{% trans "provide technical support in Kazakh, Russian and English languages." %}</li>
+</ul>
+
+<p>{% trans "7.2. The User undertakes to:" %}</p>
+<ul>
+    <li>{% trans "provide accurate information;" %}</li>
+    <li>{% trans "comply with eKol system usage rules;" %}</li>
+    <li>{% trans "make timely payment;" %}</li>
+    <li>{% trans "comply with hotel accommodation rules." %}</li>
 </ul>
 
 <div class="contact-info">
-    <h2>{% trans "КОНТАКТНАЯ ИНФОРМАЦИЯ" %}</h2>
-    <p><strong>{% trans "Компания:" %}</strong> [НАИМЕНОВАНИЕ ЮРИДИЧЕСКОГО ЛИЦА/ИП]<br>
-    <strong>{% trans "БИН/ИИН:" %}</strong> [БИН/ИИН]<br>
-    <strong>{% trans "Юридический адрес:" %}</strong> [АДРЕС]<br>
-    <strong>{% trans "Телефон:" %}</strong> [ТЕЛЕФОН]<br>
-    <strong>{% trans "Email:" %}</strong> [EMAIL]</p>
+    <h2>{% trans "CONTACT INFORMATION" %}</h2>
+    <p><strong>{% trans "Company:" %}</strong> {% trans "[LEGAL ENTITY/IE NAME]" %}<br>
+    <strong>{% trans "BIN/IIN:" %}</strong> {% trans "[BIN/IIN]" %}<br>
+    <strong>{% trans "Legal address:" %}</strong> {% trans "[ADDRESS]" %}<br>
+    <strong>{% trans "Phone:" %}</strong> {% trans "[PHONE]" %}<br>
+    <strong>{% trans "Email:" %}</strong> {% trans "[EMAIL]" %}</p>
 </div>
 
 <div class="document-meta">
-    <h2>{% trans "ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ" %}</h2>
-    <p>{% trans "Настоящее Соглашение составлено на казахском, русском и английском языках. Все вопросы, не урегулированные настоящим Соглашением, разрешаются в соответствии с действующим законодательством Республики Казахстан." %}</p>
+    <h2>{% trans "FINAL PROVISIONS" %}</h2>
+    <p>{% trans "This Agreement is written in Kazakh, Russian and English languages. All issues not regulated by this Agreement are resolved in accordance with the current legislation of the Republic of Kazakhstan." %}</p>
     
-    <p><strong>{% trans "Система работает в временной зоне:" %}</strong> Kazakhstan/Astana (UTC+5)<br>
-    <strong>{% trans "Платежная система:" %}</strong> Robokassa с поддержкой стандартов PCI DSS</p>
+    <p><strong>{% trans "System operates in time zone:" %}</strong> {% trans "Kazakhstan/Astana (UTC+5)" %}<br>
+    <strong>{% trans "Payment system:" %}</strong> {% trans "Robokassa with PCI DSS standards support" %}</p>
 </div>
 {% endblock %} 
