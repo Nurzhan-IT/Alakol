@@ -1,260 +1,254 @@
 {% extends 'legal/base_legal.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Payment and Refund Rules" %}{% endblock %}
+{% block title %}{% trans "Правила оплаты и возврата средств" %}{% endblock %}
 
 {% block content %}
-<h1>{% trans "PAYMENT AND REFUND RULES" %}</h1>
-<h2>{% trans "ALAKOL HOTEL BOOKING SYSTEM" %}</h2>
+<h1>{% trans "ПРАВИЛА ОПЛАТЫ И ВОЗВРАТА СРЕДСТВ" %}</h1>
+<h2>{% trans "СИСТЕМЫ БРОНИРОВАНИЯ ОТЕЛЕЙ ALAKOL" %}</h2>
 
 <div class="document-meta">
-    <strong>{% trans "Effective Date:" %}</strong> {% trans "June 19, 2025" %}<br>
-    <strong>{% trans "Document Version:" %}</strong> 1.0
+    <strong>{% trans "Дата вступления в силу:" %}</strong> 19.06.2025<br>
+    <strong>{% trans "Версия документа:" %}</strong> 1.0
 </div>
 
-<h2>{% trans "1. GENERAL PROVISIONS" %}</h2>
-<p><strong>1.1.</strong> {% trans "These Rules regulate the procedure for payment of booking services and refunds in the Alakol hotel booking system." %}</p>
+<h2>{% trans "1. ОБЩИЕ ПОЛОЖЕНИЯ" %}</h2>
+<p><strong>1.1.</strong> {% trans "Настоящие Правила регулируют порядок оплаты услуг бронирования и возврата средств в системе бронирования отелей Alakol." %}</p>
 
-<p><strong>1.2.</strong> {% trans "The Rules are an integral part of the User Agreement and are mandatory for all system users." %}</p>
+<p><strong>1.2.</strong> {% trans "Правила являются неотъемлемой частью Пользовательского соглашения и обязательны для всех пользователей системы." %}</p>
 
-<p><strong>1.3.</strong> {% trans "By making a payment, the user confirms agreement with these Rules." %}</p>
+<p><strong>1.3.</strong> {% trans "Совершая платеж, пользователь подтверждает согласие с настоящими Правилами." %}</p>
 
-<p>{% trans "1.4. The eKol system supports multilingual functionality (Kazakh, Russian, English languages) and operates in the Kazakhstan/Astana (UTC+5) time zone." %}</p>
+<p>1.4. Система eKol поддерживает мультиязычность (казахский, русский, английский языки) и работает в временной зоне Kazakhstan/Astana (UTC+5).</p>
 
-<h2>{% trans "2. PAYMENT METHODS" %}</h2>
+<h2>{% trans "2. СПОСОБЫ ОПЛАТЫ" %}</h2>
 
-<h3>{% trans "2.1. Available payment methods:" %}</h3>
+<h3>{% trans "2.1. Доступные способы оплаты:" %}</h3>
 <ul>
-    <li>{% trans "Bank cards (Visa, MasterCard, MIR)" %}</li>
-    <li>{% trans "Electronic wallets" %}</li>
-    <li>{% trans "Bank transfers" %}</li>
-    <li>{% trans "Mobile payments" %}</li>
-    <li>{% trans "Other methods supported by Robokassa payment system" %}</li>
+    <li>{% trans "Банковские карты (Visa, MasterCard, МИР)" %}</li>
+    <li>{% trans "Электронные кошельки" %}</li>
+    <li>{% trans "Банковские переводы" %}</li>
+    <li>{% trans "Мобильные платежи" %}</li>
+    <li>{% trans "Другие способы, поддерживаемые платежной системой Robokassa" %}</li>
 </ul>
 
-<h3>{% trans "2.2. Payment currency:" %}</h3>
+<h3>{% trans "2.2. Валюта платежей:" %}</h3>
 <ul>
-    <li>{% trans "Main currency: Kazakhstani tenge (KZT)" %}</li>
-    <li>{% trans "Supported: Russian ruble (RUB), US dollar (USD), Euro (EUR)" %}</li>
-    <li>{% trans "Conversion is performed at the payment system rate at the time of transaction" %}</li>
+    <li>{% trans "Основная валюта: казахстанский тенге (KZT)" %}</li>
+    <li>{% trans "Поддерживаются: российский рубль (RUB), доллар США (USD), евро (EUR)" %}</li>
+    <li>{% trans "Конвертация осуществляется по курсу платежной системы на момент операции" %}</li>
 </ul>
 
-<h3>{% trans "2.3. Payment security:" %}</h3>
+<h3>{% trans "2.3. Безопасность платежей:" %}</h3>
 <ul>
-    <li>{% trans "All payments are processed through certified Robokassa system" %}</li>
-    <li>{% trans "Compliance with PCI DSS security standards" %}</li>
-    <li>{% trans "Data encryption via SSL protocol" %}</li>
-    <li>{% trans "The system does not store bank card data" %}</li>
+    <li>{% trans "Все платежи обрабатываются через сертифицированную систему Robokassa" %}</li>
+    <li>{% trans "Соблюдение стандартов безопасности PCI DSS" %}</li>
+    <li>{% trans "Шифрование данных по протоколу SSL" %}</li>
+    <li>{% trans "Система не хранит данные банковских карт" %}</li>
 </ul>
 
-<h2>{% trans "3. PAYMENT STRUCTURE" %}</h2>
+<h2>{% trans "3. СТРУКТУРА ОПЛАТЫ" %}</h2>
 
-<h3>{% trans "3.1. Flexible prepayment system:" %}</h3>
+<h3>{% trans "3.1. Гибкая система предоплаты:" %}</h3>
 <div class="alert alert-info">
-    <p>{% trans "The prepayment amount is determined by each hotel's policy and can be:" %}</p>
+    <p>{% trans "Размер предоплаты определяется политикой каждого отеля и может составлять:" %}</p>
     <ul>
-        <li><strong>10%</strong> {% trans "of the total accommodation cost" %}</li>
-        <li><strong>30%</strong> {% trans "of the total accommodation cost" %}</li>
-        <li><strong>50%</strong> {% trans "of the total accommodation cost" %}</li>
-        <li><strong>70%</strong> {% trans "of the total accommodation cost" %}</li>
-        <li><strong>100%</strong> {% trans "of the total accommodation cost (full prepayment)" %}</li>
+        <li><strong>10%</strong> {% trans "от общей стоимости проживания" %}</li>
+        <li><strong>30%</strong> {% trans "от общей стоимости проживания" %}</li>
+        <li><strong>50%</strong> {% trans "от общей стоимости проживания" %}</li>
+        <li><strong>70%</strong> {% trans "от общей стоимости проживания" %}</li>
+        <li><strong>100%</strong> {% trans "от общей стоимости проживания (полная предоплата)" %}</li>
     </ul>
 </div>
 
-<h3>{% trans "3.2. Hotel balance payment:" %}</h3>
+<h3>{% trans "3.2. Доплата в отеле:" %}</h3>
 <ul>
-    <li>{% trans "Balance payment amount is (100% - N%), where N is the prepayment size" %}</li>
-    <li>{% trans "When N = 100%, no hotel balance payment is required" %}</li>
-    <li>{% trans "Balance payment is made directly at the hotel upon check-in" %}</li>
-    <li>{% trans "Balance payment methods are determined by hotel policy" %}</li>
+    <li>{% trans "Размер доплаты составляет (100% - N%), где N - размер предоплаты" %}</li>
+    <li>{% trans "При N = 100% доплата в отеле не требуется" %}</li>
+    <li>{% trans "Доплата производится непосредственно в отеле при заселении" %}</li>
+    <li>{% trans "Способы доплаты определяются политикой отеля" %}</li>
 </ul>
 
-<h3>{% trans "3.3. Platform commission:" %}</h3>
+<h3>{% trans "3.3. Комиссия платформы:" %}</h3>
 <ul>
-    <li>{% trans "Commission size: 10% of total booking cost" %}</li>
-    <li>{% trans "Commission is included in the N% prepayment" %}</li>
-    <li>{% trans "Commission is charged on full booking cost" %}</li>
+    <li>{% trans "Размер комиссии: 10% от общей стоимости бронирования" %}</li>
+    <li>{% trans "Комиссия включена в предоплату N%" %}</li>
+    <li>{% trans "Комиссия не возвращается при отмене бронирования" %}</li>
 </ul>
 
 <div class="alert alert-warning">
-    <strong>{% trans "IMPORTANT ROUNDING NOTICE:" %}</strong> {% trans "Due to percentage calculations when computing prepayment, balance payment, and commissions, all monetary amounts may be rounded with an accuracy of up to 1 (one) tenge up or down." %}
+    <strong>{% trans "ВАЖНОЕ УВЕДОМЛЕНИЕ О ОКРУГЛЕНИЯХ:" %}</strong> {% trans "В связи с процентными вычислениями при расчете предоплаты, доплаты и комиссий, все денежные суммы могут округляться с погрешностью до 1 (одного) тенге в большую или меньшую сторону." %}
 </div>
 
-<h2>{% trans "4. PAYMENT PROCEDURE" %}</h2>
+<h2>{% trans "4. ПРОЦЕДУРА ОПЛАТЫ" %}</h2>
 
-<h3>{% trans "4.1. Payment stages:" %}</h3>
+<h3>{% trans "4.1. Этапы оплаты:" %}</h3>
 <ol>
-    <li>{% trans "Hotel selection and booking parameters" %}</li>
-    <li>{% trans "Review of payment and cancellation terms" %}</li>
-    <li>{% trans "Filling booking data" %}</li>
-    <li>{% trans "Redirect to Robokassa payment system" %}</li>
-    <li>{% trans "Payment method selection and payment data entry" %}</li>
-    <li>{% trans "Payment confirmation" %}</li>
-    <li>{% trans "Booking confirmation receipt" %}</li>
+    <li>{% trans "Выбор отеля и параметров бронирования" %}</li>
+    <li>{% trans "Ознакомление с условиями оплаты и отмены" %}</li>
+    <li>{% trans "Заполнение данных для бронирования" %}</li>
+    <li>{% trans "Переход в платежную систему Robokassa" %}</li>
+    <li>{% trans "Выбор способа оплаты и введение платежных данных" %}</li>
+    <li>{% trans "Подтверждение платежа" %}</li>
+    <li>{% trans "Получение подтверждения бронирования" %}</li>
 </ol>
 
-<h3>{% trans "4.2. Payment confirmation:" %}</h3>
+<h3>{% trans "4.2. Подтверждение оплаты:" %}</h3>
 <ul>
-    <li>{% trans "Successful payment is confirmed instantly" %}</li>
-    <li>{% trans "Confirmation is sent to the specified email" %}</li>
-    <li>{% trans "Confirmation includes booking number and payment details" %}</li>
-    <li>{% trans "For unsuccessful payment, funds are not charged" %}</li>
+    <li>{% trans "Успешная оплата подтверждается мгновенно" %}</li>
+    <li>{% trans "Подтверждение направляется на указанный email" %}</li>
+    <li>{% trans "В подтверждении указывается номер бронирования и детали платежа" %}</li>
+    <li>{% trans "При неуспешной оплате средства не списываются" %}</li>
 </ul>
 
-<h3>{% trans "4.3. Payment receipt:" %}</h3>
+<h3>{% trans "4.3. Чек об оплате:" %}</h3>
 <ul>
-    <li>{% trans "Electronic receipt is sent to email within 24 hours" %}</li>
-    <li>{% trans "Receipt contains all necessary details for reporting" %}</li>
-    <li>{% trans "Receipt duplicate can be requested from customer support" %}</li>
+    <li>{% trans "Электронный чек направляется на email в течение 24 часов" %}</li>
+    <li>{% trans "Чек содержит все необходимые реквизиты для отчетности" %}</li>
+    <li>{% trans "Дубликат чека можно запросить в службе поддержки" %}</li>
 </ul>
 
-<h2>{% trans "5. REFUNDS" %}</h2>
+<h2>{% trans "5. ВОЗВРАТ СРЕДСТВ" %}</h2>
 
-<h3>{% trans "5.1. Refund grounds:" %}</h3>
+<h3>{% trans "5.1. Основания для возврата:" %}</h3>
 <ul>
-    <li>{% trans "Booking cancellation by client initiative (partial refund)" %}</li>
-    <li>{% trans "Booking cancellation due to force majeure circumstances (full refund)" %}</li>
-    <li>{% trans "Hotel inability to provide services (full refund)" %}</li>
-    <li>{% trans "Technical error during payment (full refund)" %}</li>
+    <li>{% trans "Отмена бронирования по инициативе клиента (частичный возврат)" %}</li>
+    <li>{% trans "Отмена бронирования по форс-мажорным обстоятельствам (полный возврат)" %}</li>
+    <li>{% trans "Невозможность предоставления услуг отелем (полный возврат)" %}</li>
+    <li>{% trans "Техническая ошибка при оплате (полный возврат)" %}</li>
 </ul>
 
-<h3>{% trans "5.2. Refund conditions upon cancellation:" %}</h3>
+<h3>{% trans "5.2. Условия возврата при отмене:" %}</h3>
 
-<h4>{% trans "With 10% prepayment:" %}</h4>
+<h4>{% trans "При предоплате 10%:" %}</h4>
 <ul>
-    <li>{% trans "Refund for any cancellation: 0%" %}</li>
-    <li>{% trans "Entire amount remains as guarantee deposit" %}</li>
+    <li>{% trans "Возврат при любой отмене: 0%" %}</li>
+    <li>{% trans "Вся сумма остается в качестве гарантийного депозита" %}</li>
 </ul>
 
-<h4>{% trans "With 30% prepayment:" %}</h4>
+<h4>{% trans "При предоплате 30%:" %}</h4>
 <ul>
-    <li>{% trans "Cancellation 15+ days before check-in: 20% refund" %}</li>
-    <li>{% trans "Cancellation 10-14 days before check-in: 0% refund" %}</li>
-    <li>{% trans "Cancellation 7-9 days before check-in: 0% refund" %}</li>
-    <li>{% trans "Cancellation 36+ hours before check-in: 0% refund" %}</li>
-    <li>{% trans "Cancellation less than 36 hours before check-in: 0% refund" %}</li>
+    <li>{% trans "Отмена за 15+ дней: возврат 20%" %}</li>
+    <li>{% trans "Отмена менее чем за 15 дней: возврат 0%" %}</li>
 </ul>
 
-<h4>{% trans "With 50% prepayment:" %}</h4>
+<h4>{% trans "При предоплате 50%:" %}</h4>
 <ul>
-    <li>{% trans "Cancellation 15+ days before check-in: 40% refund" %}</li>
-    <li>{% trans "Cancellation 10-14 days before check-in: 20% refund" %}</li>
-    <li>{% trans "Cancellation 7-9 days before check-in: 0% refund" %}</li>
-    <li>{% trans "Cancellation 36+ hours before check-in: 0% refund" %}</li>
-    <li>{% trans "Cancellation less than 36 hours before check-in: 0% refund" %}</li>
+    <li>{% trans "Отмена за 15+ дней: возврат 40%" %}</li>
+    <li>{% trans "Отмена за 10-14 дней: возврат 20%" %}</li>
+    <li>{% trans "Отмена менее чем за 10 дней: возврат 0%" %}</li>
 </ul>
 
-<h4>{% trans "With 70% prepayment:" %}</h4>
+<h4>{% trans "При предоплате 70%:" %}</h4>
 <ul>
-    <li>{% trans "Cancellation 15+ days before check-in: 60% refund" %}</li>
-    <li>{% trans "Cancellation 10-14 days before check-in: 40% refund" %}</li>
-    <li>{% trans "Cancellation 7-9 days before check-in: 10% refund" %}</li>
-    <li>{% trans "Cancellation 36+ hours before check-in: 0% refund" %}</li>
-    <li>{% trans "Cancellation less than 36 hours before check-in: 0% refund" %}</li>
+    <li>{% trans "Отмена за 15+ дней: возврат 60%" %}</li>
+    <li>{% trans "Отмена за 10-14 дней: возврат 40%" %}</li>
+    <li>{% trans "Отмена за 7-9 дней: возврат 10%" %}</li>
+    <li>{% trans "Отмена менее чем за 36 часов: возврат 0%" %}</li>
 </ul>
 
-<h4>{% trans "With 100% prepayment:" %}</h4>
+<h4>{% trans "При предоплате 100%:" %}</h4>
 <ul>
-    <li>{% trans "Cancellation 15+ days before check-in: 90% refund" %}</li>
-    <li>{% trans "Cancellation 10-14 days before check-in: 70% refund" %}</li>
-    <li>{% trans "Cancellation 7-9 days before check-in: 40% refund" %}</li>
-    <li>{% trans "Cancellation 36+ hours before check-in: 20% refund" %}</li>
-    <li>{% trans "Cancellation less than 36 hours before check-in: 0% refund" %}</li>
+    <li>{% trans "Отмена за 15+ дней: возврат 90%" %}</li>
+    <li>{% trans "Отмена за 10-14 дней: возврат 70%" %}</li>
+    <li>{% trans "Отмена за 7-9 дней: возврат 40%" %}</li>
+    <li>{% trans "Отмена за 36+ часов: возврат 20%" %}</li>
+    <li>{% trans "Отмена менее чем за 36 часов: возврат 0%" %}</li>
 </ul>
 
-<h3>{% trans "5.3. Refund procedure:" %}</h3>
+<h3>{% trans "5.3. Процедура возврата:" %}</h3>
 <ol>
-    <li>{% trans "Submit refund request through system or customer support" %}</li>
-    <li>{% trans "Request review within 3 business days" %}</li>
-    <li>{% trans "Refund decision and client notification" %}</li>
-    <li>{% trans "Refund initiation through payment system" %}</li>
-    <li>{% trans "Funds credited to client account" %}</li>
+    <li>{% trans "Подача заявления на возврат через систему или службу поддержки" %}</li>
+    <li>{% trans "Рассмотрение заявления в течение 3 рабочих дней" %}</li>
+    <li>{% trans "Принятие решения о возврате и уведомление клиента" %}</li>
+    <li>{% trans "Инициация возврата через платежную систему" %}</li>
+    <li>{% trans "Зачисление средств на счет клиента" %}</li>
 </ol>
 
-<h3>{% trans "5.4. Refund timeframes:" %}</h3>
+<h3>{% trans "5.4. Сроки возврата:" %}</h3>
 <ul>
-    <li>{% trans "To bank card: 5-10 business days" %}</li>
-    <li>{% trans "To electronic wallet: 1-3 business days" %}</li>
-    <li>{% trans "By bank transfer: 3-7 business days" %}</li>
-    <li>{% trans "Timeframes may increase depending on issuing bank" %}</li>
+    <li>{% trans "На банковскую карту: 5-10 рабочих дней" %}</li>
+    <li>{% trans "На электронный кошелек: 1-3 рабочих дня" %}</li>
+    <li>{% trans "Банковским переводом: 3-7 рабочих дней" %}</li>
+    <li>{% trans "Сроки могут увеличиваться в зависимости от банка-эмитента" %}</li>
 </ul>
 
-<h2>{% trans "6. DISPUTE SITUATIONS" %}</h2>
+<h2>{% trans "6. СПОРНЫЕ СИТУАЦИИ" %}</h2>
 
-<h3>{% trans "6.1. Unsuccessful payments:" %}</h3>
+<h3>{% trans "6.1. Неуспешные платежи:" %}</h3>
 <ul>
-    <li>{% trans "During technical failures, funds are not charged" %}</li>
-    <li>{% trans "If funds were charged but booking not created - automatic refund" %}</li>
-    <li>{% trans "Automatic refund timeframe: 1-3 business days" %}</li>
+    <li>{% trans "При технических сбоях средства не списываются" %}</li>
+    <li>{% trans "Если средства списались, но бронирование не создалось - автоматический возврат" %}</li>
+    <li>{% trans "Срок автоматического возврата: 1-3 рабочих дня" %}</li>
 </ul>
 
-<h3>{% trans "6.2. Double charges:" %}</h3>
+<h3>{% trans "6.2. Двойные списания:" %}</h3>
 <ul>
-    <li>{% trans "For double charges, one transaction is automatically cancelled" %}</li>
-    <li>{% trans "If automatic cancellation didn't occur - contact customer support" %}</li>
-    <li>{% trans "Duplicate payment refund within 5 business days" %}</li>
+    <li>{% trans "При двойном списании одна операция автоматически отменяется" %}</li>
+    <li>{% trans "Если автоматическая отмена не произошла - обращение в службу поддержки" %}</li>
+    <li>{% trans "Возврат дублирующего платежа в течение 5 рабочих дней" %}</li>
 </ul>
 
-<h3>{% trans "6.3. Payment disputes:" %}</h3>
+<h3>{% trans "6.3. Оспаривание платежей:" %}</h3>
 <ul>
-    <li>{% trans "All disputes are reviewed in pre-trial procedure" %}</li>
-    <li>{% trans "Claim review timeframe: 10 business days" %}</li>
-    <li>{% trans "Decisions are made based on documents and system data" %}</li>
+    <li>{% trans "Все споры рассматриваются в досудебном порядке" %}</li>
+    <li>{% trans "Срок рассмотрения претензий: 10 рабочих дней" %}</li>
+    <li>{% trans "Решения принимаются на основании документов и данных системы" %}</li>
 </ul>
 
-<h2>{% trans "7. COMMISSIONS AND ADDITIONAL EXPENSES" %}</h2>
+<h2>{% trans "7. КОМИССИИ И ДОПОЛНИТЕЛЬНЫЕ РАСХОДЫ" %}</h2>
 
-<h3>{% trans "7.1. Payment system commissions:" %}</h3>
+<h3>{% trans "7.1. Комиссии платежных систем:" %}</h3>
 <ul>
-    <li>{% trans "Payment acceptance commissions are included in the cost" %}</li>
-    <li>{% trans "Additional issuing bank commissions are paid by the client" %}</li>
-    <li>{% trans "Commissions are non-refundable upon refund" %}</li>
+    <li>{% trans "Комиссии за прием платежей включены в стоимость" %}</li>
+    <li>{% trans "Дополнительные комиссии банков-эмитентов оплачиваются клиентом" %}</li>
+    <li>{% trans "При возврате комиссии не возвращаются" %}</li>
 </ul>
 
-<h3>{% trans "7.2. Currency conversion:" %}</h3>
+<h3>{% trans "7.2. Конвертация валют:" %}</h3>
 <ul>
-    <li>{% trans "Conversion is performed at payment system rate" %}</li>
-    <li>{% trans "Rate is fixed at the time of transaction" %}</li>
-    <li>{% trans "Exchange rate difference upon refund is not compensated" %}</li>
+    <li>{% trans "Конвертация производится по курсу платежной системы" %}</li>
+    <li>{% trans "Курс фиксируется на момент совершения операции" %}</li>
+    <li>{% trans "Разница курсов при возврате не компенсируется" %}</li>
 </ul>
 
-<h2>{% trans "8. SECURITY AND DATA PROTECTION" %}</h2>
+<h2>{% trans "8. БЕЗОПАСНОСТЬ И ЗАЩИТА ДАННЫХ" %}</h2>
 
-<h3>{% trans "8.1. Payment data protection:" %}</h3>
+<h3>{% trans "8.1. Защита платежных данных:" %}</h3>
 <ul>
-    <li>{% trans "System does not store bank card data" %}</li>
-    <li>{% trans "All operations pass through secure connection" %}</li>
-    <li>{% trans "Compliance with international security standards" %}</li>
+    <li>{% trans "Система не хранит данные банковских карт" %}</li>
+    <li>{% trans "Все операции проходят через защищенное соединение" %}</li>
+    <li>{% trans "Соблюдение международных стандартов безопасности" %}</li>
 </ul>
 
-<h3>{% trans "8.2. Transaction monitoring:" %}</h3>
+<h3>{% trans "8.2. Мониторинг операций:" %}</h3>
 <ul>
-    <li>{% trans "Automatic monitoring of suspicious transactions" %}</li>
-    <li>{% trans "Additional verification when necessary" %}</li>
-    <li>{% trans "Blocking fraudulent transactions" %}</li>
+    <li>{% trans "Автоматический контроль подозрительных операций" %}</li>
+    <li>{% trans "Дополнительная верификация при необходимости" %}</li>
+    <li>{% trans "Блокировка мошеннических транзакций" %}</li>
 </ul>
 
-<h2>{% trans "9. CONTACT INFORMATION" %}</h2>
+<h2>{% trans "9. КОНТАКТНАЯ ИНФОРМАЦИЯ" %}</h2>
 
 <div class="contact-info">
-    <h3>{% trans "For payment and refund inquiries:" %}</h3>
+    <h3>{% trans "По вопросам оплаты и возврата:" %}</h3>
     <ul>
         <li><strong>Email:</strong> payments@alakol-booking.kz</li>
-        <li><strong>{% trans "Phone:" %}</strong> +7 (727) XXX-XX-XX</li>
-        <li><strong>{% trans "Working hours:" %}</strong> {% trans "MON-FRI 9:00-18:00" %}</li>
-        <li><strong>{% trans "Customer support:" %}</strong> support@alakol-booking.kz</li>
+        <li><strong>{% trans "Телефон:" %}</strong> +7 (727) XXX-XX-XX</li>
+        <li><strong>{% trans "Время работы:" %}</strong> {% trans "ПН-ПТ 9:00-18:00" %}</li>
+        <li><strong>{% trans "Служба поддержки:" %}</strong> support@alakol-booking.kz</li>
     </ul>
 </div>
 
 <div class="alert alert-info">
-    <strong>{% trans "Important:" %}</strong> {% trans "For payment or refund issues, contact customer support with booking number and transaction details." %}
+    <strong>{% trans "Важно:" %}</strong> {% trans "При возникновении проблем с оплатой или возвратом средств обращайтесь в службу поддержки с указанием номера бронирования и деталей операции." %}
 </div>
 
 <div class="document-meta">
-    <h2>{% trans "FINAL PROVISIONS" %}</h2>
-    <p>{% trans "These Rules are an integral part of the User Agreement and Public Offer. All disputes are resolved in accordance with the legislation of the Republic of Kazakhstan." %}</p>
+    <h2>{% trans "ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ" %}</h2>
+    <p>Настоящие Правила являются неотъемлемой частью Пользовательского соглашения и Публичной оферты. Все споры разрешаются в соответствии с законодательством Республики Казахстан.</p>
     
-    <p><strong>{% trans "System operates in time zone:" %}</strong> {% trans "Kazakhstan/Astana (UTC+5)" %}<br>
-    <strong>{% trans "Payment system:" %}</strong> {% trans "Robokassa with PCI DSS standards support" %}</p>
+    <p><strong>{% trans "Система работает в временной зоне:" %}</strong> Kazakhstan/Astana (UTC+5)<br>
+    <strong>{% trans "Платежная система:" %}</strong> Robokassa с поддержкой стандартов PCI DSS</p>
 </div>
 {% endblock %} 
