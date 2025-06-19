@@ -754,7 +754,7 @@
         try {
             priceData = JSON.parse(rawText);
         } catch (e) {
-            console.error("Ошибка парсинга JSON:", e);
+            // Removed console.error for JSON parsing error - fallback to empty object
             priceData = {};
         }
 
@@ -906,41 +906,39 @@
                     dayElement.click(function() {
                         const clickedDate = $(this).data('date');
 
-                        console.log('Clicked date:', formatDateForInput(clickedDate));
-                        console.log('Current checkin:', selectedDates.checkin ? formatDateForInput(selectedDates.checkin) : 'null');
-                        console.log('Current checkout:', selectedDates.checkout ? formatDateForInput(selectedDates.checkout) : 'null');
+                        // Removed console.log for clicked date and current checkin/checkout debugging
 
                         if (!selectedDates.checkin || (selectedDates.checkin && selectedDates.checkout)) {
                             // Start new selection
                             selectedDates.checkin = clickedDate;
                             selectedDates.checkout = null;
-                            console.log('Set new checkin:', formatDateForInput(selectedDates.checkin));
+                            // Removed console.log for set new checkin
                         } else if (clickedDate > selectedDates.checkin) {
                             // Set checkout date
                             selectedDates.checkout = clickedDate;
-                            console.log('Set checkout:', formatDateForInput(selectedDates.checkout));
+                            // Removed console.log for set checkout
                         } else if (clickedDate.getTime() === selectedDates.checkin.getTime()) {
                             // If clicking the same date as checkin, clear selection
                             selectedDates.checkin = null;
                             selectedDates.checkout = null;
-                            console.log('Cleared selection');
+                            // Removed console.log for cleared selection
                         } else {
                             // Reset if clicked date is before checkin
                             selectedDates.checkin = clickedDate;
                             selectedDates.checkout = null;
-                            console.log('Reset checkin:', formatDateForInput(selectedDates.checkin));
+                            // Removed console.log for reset checkin
                         }
 
                         // Update form inputs
                         if (selectedDates.checkin) {
                             $('#date-picker').val(formatDateForInput(selectedDates.checkin));
-                            console.log('Updated form checkin:', formatDateForInput(selectedDates.checkin));
+                            // Removed console.log for updated form checkin
                         } else {
                             $('#date-picker').val('');
                         }
                         if (selectedDates.checkout) {
                             $('.checkout_date').val(formatDateForInput(selectedDates.checkout));
-                            console.log('Updated form checkout:', formatDateForInput(selectedDates.checkout));
+                            // Removed console.log for updated form checkout
                         } else {
                             $('.checkout_date').val('');
                         }
@@ -985,41 +983,39 @@
 
                     const clickedDate = $(this).data('date');
 
-                    console.log('Clicked date:', formatDateForInput(clickedDate));
-                    console.log('Current checkin:', selectedDates.checkin ? formatDateForInput(selectedDates.checkin) : 'null');
-                    console.log('Current checkout:', selectedDates.checkout ? formatDateForInput(selectedDates.checkout) : 'null');
+                    // Removed console.log for clicked date and current checkin/checkout debugging
 
                     if (!selectedDates.checkin || (selectedDates.checkin && selectedDates.checkout)) {
                         // Start new selection
                         selectedDates.checkin = clickedDate;
                         selectedDates.checkout = null;
-                        console.log('Set new checkin:', formatDateForInput(selectedDates.checkin));
+                        // Removed console.log for set new checkin
                     } else if (clickedDate > selectedDates.checkin) {
                         // Set checkout date
                         selectedDates.checkout = clickedDate;
-                        console.log('Set checkout:', formatDateForInput(selectedDates.checkout));
+                        // Removed console.log for set checkout
                     } else if (clickedDate.getTime() === selectedDates.checkin.getTime()) {
                         // If clicking the same date as checkin, clear selection
                         selectedDates.checkin = null;
                         selectedDates.checkout = null;
-                        console.log('Cleared selection');
+                        // Removed console.log for cleared selection
                     } else {
                         // Reset if clicked date is before checkin
                         selectedDates.checkin = clickedDate;
                         selectedDates.checkout = null;
-                        console.log('Reset checkin:', formatDateForInput(selectedDates.checkin));
+                        // Removed console.log for reset checkin
                     }
 
                     // Update form inputs
                     if (selectedDates.checkin) {
                         $('#date-picker').val(formatDateForInput(selectedDates.checkin));
-                        console.log('Updated form checkin:', formatDateForInput(selectedDates.checkin));
+                        // Removed console.log for updated form checkin
                     } else {
                         $('#date-picker').val('');
                     }
                     if (selectedDates.checkout) {
                         $('.checkout_date').val(formatDateForInput(selectedDates.checkout));
-                        console.log('Updated form checkout:', formatDateForInput(selectedDates.checkout));
+                        // Removed console.log for updated form checkout
                     } else {
                         $('.checkout_date').val('');
                     }
@@ -1066,41 +1062,39 @@
 
                     const clickedDate = $(this).data('date');
 
-                    console.log('Clicked date:', formatDateForInput(clickedDate));
-                    console.log('Current checkin:', selectedDates.checkin ? formatDateForInput(selectedDates.checkin) : 'null');
-                    console.log('Current checkout:', selectedDates.checkout ? formatDateForInput(selectedDates.checkout) : 'null');
+                    // Removed console.log for clicked date and current checkin/checkout debugging
 
                     if (!selectedDates.checkin || (selectedDates.checkin && selectedDates.checkout)) {
                         // Start new selection
                         selectedDates.checkin = clickedDate;
                         selectedDates.checkout = null;
-                        console.log('Set new checkin:', formatDateForInput(selectedDates.checkin));
+                        // Removed console.log for set new checkin
                     } else if (clickedDate > selectedDates.checkin) {
                         // Set checkout date
                         selectedDates.checkout = clickedDate;
-                        console.log('Set checkout:', formatDateForInput(selectedDates.checkout));
+                        // Removed console.log for set checkout
                     } else if (clickedDate.getTime() === selectedDates.checkin.getTime()) {
                         // If clicking the same date as checkin, clear selection
                         selectedDates.checkin = null;
                         selectedDates.checkout = null;
-                        console.log('Cleared selection');
+                        // Removed console.log for cleared selection
                     } else {
                         // Reset if clicked date is before checkin
                         selectedDates.checkin = clickedDate;
                         selectedDates.checkout = null;
-                        console.log('Reset checkin:', formatDateForInput(selectedDates.checkin));
+                        // Removed console.log for reset checkin
                     }
 
                     // Update form inputs
                     if (selectedDates.checkin) {
                         $('#date-picker').val(formatDateForInput(selectedDates.checkin));
-                        console.log('Updated form checkin:', formatDateForInput(selectedDates.checkin));
+                        // Removed console.log for updated form checkin
                     } else {
                         $('#date-picker').val('');
                     }
                     if (selectedDates.checkout) {
                         $('.checkout_date').val(formatDateForInput(selectedDates.checkout));
-                        console.log('Updated form checkout:', formatDateForInput(selectedDates.checkout));
+                        // Removed console.log for updated form checkout
                     } else {
                         $('.checkout_date').val('');
                     }
