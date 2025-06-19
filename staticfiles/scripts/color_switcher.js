@@ -40,7 +40,7 @@ jQuery(document).ready(function($) {
     $("#color_switcher_preview h2 a").click(function(e) {
         e.preventDefault();
         var div = $("#color_switcher_preview");
-        console.log(div.css("right"));
+        // Removed console.log for div.css("right") debugging
         if (div.css("right") === "-210px") {
             $("#color_switcher_preview").animate({
                 right: "0px"

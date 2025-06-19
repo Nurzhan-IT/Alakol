@@ -343,6 +343,9 @@
     <!-- Legal Validation JavaScript - Generated on 2025-05-31 04:53 AM +05 -->
     <script src="{% static 'js/legal_validation.js' %}"></script>
     
+    <!-- Cookie Notice JavaScript -->
+    <script src="{% static 'js/cookie-notice.js' %}"></script>
+    
     {% block script_links %}
     {% endblock script_links %}
 
@@ -395,6 +398,20 @@
 
     
     </script>
+
+    <!-- Cookie Notice -->
+    <div id="cookie-notice" class="cookie-notice" style="opacity: 0; transition: opacity 0.3s ease;">
+        <div class="cookie-notice-content">
+            <div class="cookie-notice-text">
+                {% trans "By continuing to use this site, you acknowledge that you consent to the collection and use of data stored in cookies. This helps us to improve the site and provide you with a better service." %}
+                <a href="{% url 'legal:privacy_policy' %}" target="_blank">{% trans "Read more about our privacy policy" %}</a>
+            </div>
+            <div class="cookie-notice-buttons">
+                <button id="cookie-decline" class="cookie-notice-btn cookie-decline-btn">{% trans "Reject" %}</button>
+                <button id="cookie-accept" class="cookie-notice-btn cookie-accept-btn">{% trans "Accept" %}</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
