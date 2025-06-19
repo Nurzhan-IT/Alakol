@@ -15,9 +15,9 @@
           <h2>{% trans "Payment Method Selection" %}</h2>
           <nav id="breadcrumbs">
             <ul>
-              <li><a>{% trans "Home" %}</a></li>
               <li><a>{% trans "Hotel" %}</a></li>
               <li><a>{% trans "Rooms" %}</a></li>
+              <li><a>{% trans "My selected rooms" %}</a></li>
               <li>{% trans "Payment Method" %}</li>
             </ul>
           </nav>
@@ -71,7 +71,7 @@
                                 <a href="{% url 'legal:public_offer' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
                                     {% trans "Public Offer" %}
                                 </a>
-                                {% trans "for HMS Alakol booking services" %}
+                                {% trans "for eKol booking services" %}
                             </label>
                         </div>
                         
@@ -318,7 +318,7 @@
 <script>
 // Ждем полной загрузки всех ресурсов, включая external JS
 window.addEventListener('load', function() {
-  console.log('Window loaded, initializing payment validation...');
+  // Removed console.log for window load and payment validation initialization
   
   // Небольшая задержка для уверенности что все DOM элементы готовы
   setTimeout(function() {
@@ -327,7 +327,7 @@ window.addEventListener('load', function() {
 });
 
 function initializePaymentValidation() {
-  console.log('Initializing payment validation...');
+  // Removed console.log for payment validation initialization
   
   const paymentButton = document.getElementById('robokassa-button');
   // Изменяем селектор чтобы проверять только конкретные чекбоксы для оплаты
@@ -339,25 +339,22 @@ function initializePaymentValidation() {
   
   const helpText = document.getElementById('robokassa-help-text');
   
-  console.log('Payment button found:', paymentButton);
-  console.log('Required checkboxes found:', requiredCheckboxes.length);
-  console.log('Help text found:', helpText);
+  // Removed console.log for payment button, checkboxes and help text found status
   
   if (!paymentButton) {
-    console.error('Payment button not found!');
+    // Removed console.error for payment button not found - function returns gracefully
     return;
   }
   
   if (requiredCheckboxes.length !== 3) {
-    console.error('Not all payment checkboxes found! Expected 3, found:', requiredCheckboxes.length);
+    // Removed console.error for insufficient checkboxes - function returns gracefully
     return;
   }
   
   // Функция проверки состояния чекбоксов
   function updatePaymentButtonState() {
     const allChecked = requiredCheckboxes.every(checkbox => checkbox && checkbox.checked);
-    console.log('All payment checkboxes checked:', allChecked);
-    console.log('Checkbox states:', requiredCheckboxes.map(cb => ({ id: cb.id, checked: cb.checked })));
+    // Removed console.log for checkbox states debugging
     
     if (allChecked) {
       // Активируем кнопку - ПРИНУДИТЕЛЬНО убираем все блокировки
@@ -372,7 +369,7 @@ function initializePaymentValidation() {
       paymentButton.style.backgroundColor = '#007bff';
       
       if (helpText) helpText.style.display = 'none';
-      console.log('✅ Button ENABLED');
+      // Removed console.log for button enabled status
     } else {
       // Блокируем кнопку
       paymentButton.disabled = true;
@@ -386,19 +383,19 @@ function initializePaymentValidation() {
       paymentButton.style.backgroundColor = '#6c757d';
       
       if (helpText) helpText.style.display = 'block';
-      console.log('❌ Button DISABLED');
+      // Removed console.log for button disabled status
     }
   }
   
   // Привязываем событие изменения к каждому чекбоксу
   requiredCheckboxes.forEach((checkbox, index) => {
     if (checkbox) {
-      console.log('Binding payment checkbox', index, checkbox.id);
+      // Removed console.log for binding payment checkbox
       
       // Используем несколько типов событий для надежности
       ['change', 'click', 'input'].forEach(eventType => {
         checkbox.addEventListener(eventType, function() {
-          console.log('Payment checkbox event:', eventType, checkbox.id, checkbox.checked);
+          // Removed console.log for payment checkbox event
           // Небольшая задержка для обработки состояния
           setTimeout(updatePaymentButtonState, 10);
         });
@@ -411,21 +408,18 @@ function initializePaymentValidation() {
   
   // Кнопка оплаты через Робокассу
   paymentButton.addEventListener('click', function(e) {
-    console.log('💳 Payment button clicked');
+    // Removed console.log for payment button clicked
     e.preventDefault();
     e.stopPropagation();
     
     // Дополнительная проверка перед отправкой
     if (paymentButton.disabled || paymentButton.classList.contains('disabled')) {
-      console.log('Button is disabled, showing alert');
+      // Removed console.log for disabled button alert
       alert('{% trans "Please accept all legal agreements before proceeding with payment." %}');
       return false;
     }
     
-    console.log('🚀 Processing payment...');
-    
-    // Логируем данные сессии для отладки
-    console.log('🔍 Проверяем данные перед оплатой...');
+    // Removed console.log for processing payment status
     
     // Проверим данные через AJAX перед переходом на оплату
     fetch('/check-session-data/', {
@@ -437,21 +431,21 @@ function initializePaymentValidation() {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('📊 Session data check result:', data);
+      // Removed console.log for session data check result
       
       if (!data.success) {
-        console.error('❌ Session data validation failed:', data.error);
+        // Removed console.error for session validation failure - alert provides user feedback
         alert('Ошибка: ' + data.error + '. Пожалуйста, начните процесс бронирования заново.');
         window.location.href = '/';
         return;
       }
       
       // Если данные корректны, продолжаем с оплатой
-      console.log('✅ Session data validated, proceeding to payment...');
+      // Removed console.log for session data validation success
       proceedToPayment();
     })
     .catch(error => {
-      console.error('💥 Session validation error:', error);
+      // Removed console.error for session validation error - fallback behavior preserved
       // Если проверка не удалась, всё равно пробуем перейти к оплате
       proceedToPayment();
     });
@@ -463,7 +457,7 @@ function initializePaymentValidation() {
       
       // Простое перенаправление на URL вместо сложного fetch запроса
       setTimeout(function() {
-        console.log('🔗 Redirecting to payment URL...');
+        // Removed console.log for payment URL redirection
         window.location.href = '{% url "hotel:api_robokassa_payment" %}';
       }, 500); // Небольшая задержка для показа индикатора загрузки
     }
@@ -471,7 +465,7 @@ function initializePaymentValidation() {
     return false;
   });
   
-  console.log('✅ Payment validation initialized successfully');
+  // Removed console.log for payment validation initialization success
 }
 </script>
 {% endblock script_links %} 

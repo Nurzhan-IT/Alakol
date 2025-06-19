@@ -286,5 +286,5 @@ document.addEventListener('DOMContentLoaded', function() {
         trackLegalDocumentView(documentType);
     }
     
-    console.log('Legal documents JavaScript initialized - HMS Alakol', new Date());
+    // Removed console.log for legal documents initialization
 }); 

@@ -1,5 +1,6 @@
 from django.utils import translation
 from django.utils.deprecation import MiddlewareMixin
+from django.conf import settings
 
 
 class AdminRussianLanguageMiddleware(MiddlewareMixin):
@@ -28,6 +29,18 @@ class AdminRussianLanguageMiddleware(MiddlewareMixin):
         if hasattr(request, 'is_admin_request') and request.is_admin_request:
             # Устанавливаем заголовки для принудительного русского языка
             response['Content-Language'] = 'ru'
+            
+            # Устанавливаем cookie django_language=ru для админки
+            response.set_cookie(
+                settings.LANGUAGE_COOKIE_NAME,
+                'ru',
+                max_age=settings.LANGUAGE_COOKIE_AGE,
+                path=settings.LANGUAGE_COOKIE_PATH,
+                domain=settings.LANGUAGE_COOKIE_DOMAIN,
+                secure=settings.LANGUAGE_COOKIE_SECURE,
+                httponly=settings.LANGUAGE_COOKIE_HTTPONLY,
+                samesite=settings.LANGUAGE_COOKIE_SAMESITE,
+            )
             
             # Можно добавить JavaScript для принудительной замены текстов
             if response.get('Content-Type', '').startswith('text/html'):
