@@ -16,8 +16,8 @@ class LegalDocumentView(TemplateView):
         context = super().get_context_data(**kwargs)
         context.update({
             'document_version': '1.0',
-            'last_updated': '2025-05-31',
-            'generation_time': '2025-05-31 02:59 AM +05',
+            'last_updated': '2025-06-19',
+            'generation_time': '2025-06-19 04:45 AM +05',
             'company_info': {
                 'name': '[ORGANIZATION NAME]',
                 'bin': '[BIN/IIN]',
@@ -55,8 +55,8 @@ class TermsOfUseView(TemplateView):
         context = super().get_context_data(**kwargs)
         context.update({
             'document_version': '1.0',
-            'last_updated': '2025-05-31',
-            'generation_time': '2025-05-31 02:59 AM +05',
+            'last_updated': '2025-06-19',
+            'generation_time': '2025-06-19 04:45 AM +05',
         })
         return context
 
@@ -83,34 +83,6 @@ class PaymentRulesView(TemplateView):
 
 # ===== HOTEL OWNER DOCUMENTS =====
 
-class HotelTaxObligationsView(TemplateView):
-    """Налоговые обязательства владельцев отелей"""
-    template_name = 'legal/hotel_owner_docs/hotel_tax_obligations.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'document_version': '1.0',
-            'last_updated': '2025-06-03',
-            'generation_time': '2025-06-03 06:24 PM +05',
-        })
-        return context
-
-
-class HotelIntegrationRequirementsView(TemplateView):
-    """Технические требования для интеграции отелей"""
-    template_name = 'legal/hotel_owner_docs/hotel_integration_requirements.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'document_version': '1.0',
-            'last_updated': '2025-06-03',
-            'generation_time': '2025-06-03 06:24 PM +05',
-        })
-        return context
-
-
 class HotelOwnerAgreementView(TemplateView):
     """Соглашение с владельцами отелей"""
     template_name = 'legal/hotel_owner_docs/hotel_owner_agreement.html'
@@ -119,7 +91,7 @@ class HotelOwnerAgreementView(TemplateView):
         context = super().get_context_data(**kwargs)
         context.update({
             'document_version': '1.0',
-            'last_updated': '2025-06-03',
-            'generation_time': '2025-06-03 06:24 PM +05',
+            'last_updated': '2025-06-19',
+            'generation_time': '2025-06-19 04:45 AM +05',
         })
         return context
