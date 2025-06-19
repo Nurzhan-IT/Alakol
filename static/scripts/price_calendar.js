@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const priceData = JSON.parse('{{ dynamic_price_json_data|safe|escapejs }}');
-    console.log(priceData);
+    // Removed console.log for priceData debugging (security improvement)
     const calendarBody = document.getElementById("calendar-body");
 
     // Получаем текущий месяц и год
