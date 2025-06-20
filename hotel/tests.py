@@ -14,7 +14,7 @@ from hotel.models import (
     Booking, Hotel, HotelFeatures, HotelGallery, Room, RoomType, 
     RoomTypeGallery, RoomTypeFeatures, Review, Coupon
 )
-from hotel.services import handle_bookings_payment_status_processing_to_cancelled
+from hotel.services import handle_bookings_payment_status_processing_to_unpaid
 from hotel.forms import RoomTypeAdminForm
 from hotel.views import hotel_detail, index  # Импортируем тестируемые представления
 
@@ -24,7 +24,7 @@ class BookingTestCase(TestCase):
     def test_handle_expired_bookings(self):
         # Создаём просроченное бронирование
         booking = Booking.objects.create(
-            payment_status='Processing',
+            payment_status='processing',
             created_at=timezone.now() - timedelta(minutes=15),
             expires_at=timezone.now() - timedelta(minutes=5),
             check_in_date=date.today(),
@@ -36,10 +36,10 @@ class BookingTestCase(TestCase):
             total_days=1
         )
         # Выполняем очистку
-        result = handle_bookings_payment_status_processing_to_cancelled()
+        result = handle_bookings_payment_status_processing_to_unpaid()
         booking.refresh_from_db()
-        self.assertEqual(booking.payment_status, 'Cancelled')
-        self.assertEqual(result, 'Cancelled 1 expired bookings.')
+        self.assertEqual(booking.payment_status, 'unpaid')
+        self.assertEqual(result, 'unpaid 1 expired bookings.')
 
 
 class HotelModelTestCase(TestCase):
@@ -278,7 +278,7 @@ class BookingModelTestCase(TestCase):
         
         self.booking = Booking.objects.create(
             user=self.user,
-            payment_status='Processing',
+            payment_status='processing',
             full_name='Test User',
             email='test@example.com',
             hotel=self.hotel,
@@ -299,7 +299,7 @@ class BookingModelTestCase(TestCase):
     def test_booking_creation(self):
         """Тест создания бронирования"""
         self.assertEqual(self.booking.full_name, 'Test User')
-        self.assertEqual(self.booking.payment_status, 'Processing')
+        self.assertEqual(self.booking.payment_status, 'processing')
         self.assertEqual(self.booking.hotel, self.hotel)
         self.assertEqual(self.booking.room_type, self.room_type)
         self.assertEqual(self.booking.total_days, 1)
@@ -559,7 +559,7 @@ class BookingServiceTestCase(TestCase):
     def setUp(self):
         # Создаём действительное бронирование с expires_at в будущем
         self.active_booking = Booking.objects.create(
-            payment_status='Processing',
+            payment_status='processing',
             created_at=timezone.now() - timedelta(minutes=15),
             expires_at=timezone.now() + timedelta(minutes=15),
             check_in_date=date.today(),
@@ -573,7 +573,7 @@ class BookingServiceTestCase(TestCase):
         
         # Создаём просроченное бронирование
         self.expired_booking = Booking.objects.create(
-            payment_status='Processing',
+            payment_status='processing',
             created_at=timezone.now() - timedelta(minutes=30),
             expires_at=timezone.now() - timedelta(minutes=5),
             check_in_date=date.today(),
@@ -587,12 +587,12 @@ class BookingServiceTestCase(TestCase):
         
     def test_handle_expired_bookings(self):
         """Тест обработки просроченных бронирований"""
-        result = handle_bookings_payment_status_processing_to_cancelled()
+        result = handle_bookings_payment_status_processing_to_unpaid()
         
         # Проверяем, что только просроченное бронирование было отменено
         self.expired_booking.refresh_from_db()
         self.active_booking.refresh_from_db()
         
-        self.assertEqual(self.expired_booking.payment_status, 'Cancelled')
-        self.assertEqual(self.active_booking.payment_status, 'Processing')
-        self.assertEqual(result, 'Cancelled 1 expired bookings.')
+        self.assertEqual(self.expired_booking.payment_status, 'unpaid')
+        self.assertEqual(self.active_booking.payment_status, 'processing')
+        self.assertEqual(result, 'unpaid 1 expired bookings.')
