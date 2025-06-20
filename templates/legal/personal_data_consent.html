@@ -1,268 +1,269 @@
 {% extends 'legal/base_legal.html' %}
+{% load i18n %}
 
-{% block title %}Personal Data Processing Consent{% endblock %}
+{% block title %}{% trans "Согласие на обработку персональных данных" %}{% endblock %}
 
 {% block content %}
-<h1>PERSONAL DATA PROCESSING CONSENT</h1>
-<h2>ALAKOL HOTEL BOOKING SYSTEM</h2>
+<h1>{% trans "СОГЛАСИЕ НА ОБРАБОТКУ ПЕРСОНАЛЬНЫХ ДАННЫХ" %}</h1>
+<h2>{% trans "СИСТЕМА БРОНИРОВАНИЯ ОТЕЛЕЙ ALAKOL" %}</h2>
 
 <div class="document-meta">
-    <strong>Effective Date:</strong> from the moment of acceptance by the user<br>
-    <strong>Document Version:</strong> 1.0
+    <strong>{% trans "Дата вступления в силу:" %}</strong> {% trans "с момента принятия пользователем" %}<br>
+    <strong>{% trans "Версия документа:" %}</strong> 1.0
 </div>
 
-<h2>1. GENERAL PROVISIONS</h2>
-<p><strong>1.1.</strong> This Consent is given in accordance with the requirements of the Law of the Republic of Kazakhstan "On Personal Data and their Protection" dated May 21, 2013 No. 94-V.</p>
+<h2>{% trans "1. ОБЩИЕ ПОЛОЖЕНИЯ" %}</h2>
+<p><strong>1.1.</strong> {% trans "Настоящее Согласие дается в соответствии с требованиями Закона Республики Казахстан \"О персональных данных и их защите\" от 21 мая 2013 года № 94-V." %}</p>
 
-<p><strong>1.2.</strong> Consent is given to the personal data operator - IP [IP Name], BIN: [BIN] (hereinafter - "Operator").</p>
+<p><strong>1.2.</strong> {% trans "Согласие дается оператору персональных данных - ТОО \"Alakol Booking Ltd\" (далее - \"Оператор\")." %}</p>
 
-<p><strong>1.3.</strong> The consent applies to the processing of personal data when using the Alakol hotel booking system.</p>
+<p><strong>1.3.</strong> {% trans "Согласие распространяется на обработку персональных данных при использовании системы бронирования отелей Alakol." %}</p>
 
-<h2>2. OPERATOR DETAILS</h2>
+<h2>{% trans "2. РЕКВИЗИТЫ ОПЕРАТОРА" %}</h2>
 <ul>
-    <li><strong>Name:</strong> IP [IP Name]</li>
-    <li><strong>BIN:</strong> [BIN]</li>
-    <li><strong>Legal address:</strong> Almaty, Republic of Kazakhstan</li>
+    <li><strong>{% trans "Наименование:" %}</strong> ТОО "Alakol Booking Ltd"</li>
+    <li><strong>{% trans "БИН:" %}</strong> 123456789012 ({% trans "предполагаемый" %})</li>
+    <li><strong>{% trans "Юридический адрес:" %}</strong> {% trans "г. Алматы, Республика Казахстан" %}</li>
     <li><strong>Email:</strong> legal@alakol-booking.kz</li>
-    <li><strong>Phone:</strong> +7 (727) XXX-XX-XX</li>
+    <li><strong>{% trans "Телефон:" %}</strong> +7 (727) XXX-XX-XX</li>
 </ul>
 
-<h2>3. PURPOSES OF PERSONAL DATA PROCESSING</h2>
-<p>Personal data is processed for the following purposes:</p>
+<h2>{% trans "3. ЦЕЛИ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ" %}</h2>
+<p>{% trans "Персональные данные обрабатываются в следующих целях:" %}</p>
 <ul>
-    <li>Registration of users in the booking system</li>
-    <li>Processing and confirmation of bookings</li>
-    <li>Communication with clients regarding booking matters</li>
-    <li>Ensuring security of payment operations</li>
-    <li>Providing technical support</li>
-    <li>Fulfillment of contractual obligations</li>
-    <li>Compliance with RK legislation requirements</li>
-    <li>Improving the quality of services provided</li>
-    <li>Conducting marketing research (with subject's consent)</li>
+    <li>{% trans "Регистрация пользователей в системе бронирования" %}</li>
+    <li>{% trans "Обработка и подтверждение бронирований" %}</li>
+    <li>{% trans "Связь с клиентами по вопросам бронирования" %}</li>
+    <li>{% trans "Обеспечение безопасности платежных операций" %}</li>
+    <li>{% trans "Предоставление технической поддержки" %}</li>
+    <li>{% trans "Исполнение договорных обязательств" %}</li>
+    <li>{% trans "Соблюдение требований законодательства РК" %}</li>
+    <li>{% trans "Улучшение качества предоставляемых услуг" %}</li>
+    <li>{% trans "Проведение маркетинговых исследований (с согласия субъекта)" %}</li>
 </ul>
 
-<h2>4. CATEGORIES OF PERSONAL DATA</h2>
-<p>The following categories of personal data are subject to processing:</p>
+<h2>{% trans "4. КАТЕГОРИИ ПЕРСОНАЛЬНЫХ ДАННЫХ" %}</h2>
+<p>{% trans "Обработке подлежат следующие категории персональных данных:" %}</p>
 
-<h3>4.1. Mandatory data:</h3>
+<h3>{% trans "4.1. Обязательные данные:" %}</h3>
 <ul>
-    <li>Last name, first name, patronymic</li>
-    <li>Phone number</li>
-    <li>Email address</li>
-    <li>Identity document data (when necessary)</li>
+    <li>{% trans "Фамилия, имя, отчество" %}</li>
+    <li>{% trans "Номер телефона" %}</li>
+    <li>{% trans "Адрес электронной почты" %}</li>
+    <li>{% trans "Данные документа, удостоверяющего личность (при необходимости)" %}</li>
 </ul>
 
-<h3>4.2. Additional data:</h3>
+<h3>{% trans "4.2. Дополнительные данные:" %}</h3>
 <ul>
-    <li>Date of birth</li>
-    <li>Gender</li>
-    <li>Residential address</li>
-    <li>Accommodation preferences</li>
-    <li>Booking history</li>
+    <li>{% trans "Дата рождения" %}</li>
+    <li>{% trans "Пол" %}</li>
+    <li>{% trans "Адрес проживания" %}</li>
+    <li>{% trans "Предпочтения по размещению" %}</li>
+    <li>{% trans "История бронирований" %}</li>
 </ul>
 
-<h3>4.3. Technical data:</h3>
+<h3>{% trans "4.3. Технические данные:" %}</h3>
 <ul>
-    <li>IP address</li>
-    <li>Browser and device data</li>
-    <li>Cookie files</li>
-    <li>Information about actions on the website</li>
+    <li>{% trans "IP-адрес" %}</li>
+    <li>{% trans "Данные браузера и устройства" %}</li>
+    <li>{% trans "Файлы cookie" %}</li>
+    <li>{% trans "Информация о действиях на сайте" %}</li>
 </ul>
 
-<h2>5. METHODS OF PERSONAL DATA PROCESSING</h2>
-<p>Personal data processing is carried out in the following ways:</p>
+<h2>{% trans "5. СПОСОБЫ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ" %}</h2>
+<p>{% trans "Обработка персональных данных осуществляется следующими способами:" %}</p>
 <ul>
-    <li>Collection, recording, systematization</li>
-    <li>Accumulation, storage</li>
-    <li>Clarification (updating, modification)</li>
-    <li>Extraction, use</li>
-    <li>Transfer (distribution, provision, access)</li>
-    <li>Anonymization, blocking</li>
-    <li>Deletion, destruction</li>
+    <li>{% trans "Сбор, запись, систематизация" %}</li>
+    <li>{% trans "Накопление, хранение" %}</li>
+    <li>{% trans "Уточнение (обновление, изменение)" %}</li>
+    <li>{% trans "Извлечение, использование" %}</li>
+    <li>{% trans "Передача (распространение, предоставление, доступ)" %}</li>
+    <li>{% trans "Обезличивание, блокирование" %}</li>
+    <li>{% trans "Удаление, уничтожение" %}</li>
 </ul>
 
-<h2>6. CONDITIONS FOR PERSONAL DATA PROCESSING</h2>
+<h2>{% trans "6. УСЛОВИЯ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ" %}</h2>
 
-<h3>6.1. Legal grounds:</h3>
+<h3>{% trans "6.1. Правовые основания:" %}</h3>
 <ul>
-    <li>Consent of the personal data subject</li>
-    <li>Performance of a contract to which the subject is a party</li>
-    <li>Compliance with the operator's legal obligations</li>
-    <li>Protection of vital interests of the subject</li>
+    <li>{% trans "Согласие субъекта персональных данных" %}</li>
+    <li>{% trans "Исполнение договора, стороной которого является субъект" %}</li>
+    <li>{% trans "Соблюдение правовых обязательств оператора" %}</li>
+    <li>{% trans "Защита жизненно важных интересов субъекта" %}</li>
 </ul>
 
-<h3>6.2. Processing principles:</h3>
+<h3>{% trans "6.2. Принципы обработки:" %}</h3>
 <ul>
-    <li>Legality and fairness</li>
-    <li>Limitation to specific purposes</li>
-    <li>Compliance with processing purposes</li>
-    <li>Accuracy and relevance</li>
-    <li>Storage time limitation</li>
-    <li>Confidentiality and security</li>
+    <li>{% trans "Законность и справедливость" %}</li>
+    <li>{% trans "Ограничение конкретными целями" %}</li>
+    <li>{% trans "Соответствие целям обработки" %}</li>
+    <li>{% trans "Точность и актуальность" %}</li>
+    <li>{% trans "Ограничение времени хранения" %}</li>
+    <li>{% trans "Конфиденциальность и безопасность" %}</li>
 </ul>
 
-<h2>7. TRANSFER OF PERSONAL DATA TO THIRD PARTIES</h2>
+<h2>{% trans "7. ПЕРЕДАЧА ПЕРСОНАЛЬНЫХ ДАННЫХ ТРЕТЬИМ ЛИЦАМ" %}</h2>
 
-<h3>7.1. Data transfer is carried out to:</h3>
+<h3>{% trans "7.1. Передача данных осуществляется:" %}</h3>
 <ul>
-    <li>Partner hotels to ensure booking</li>
-    <li>Payment systems for payment processing</li>
-    <li>Courier services for document delivery</li>
-    <li>Government agencies as required by law</li>
-    <li>Technical partners to ensure system operation</li>
+    <li>{% trans "Отелям-партнерам для обеспечения бронирования" %}</li>
+    <li>{% trans "Платежным системам для обработки платежей" %}</li>
+    <li>{% trans "Курьерским службам для доставки документов" %}</li>
+    <li>{% trans "Государственным органам по требованию законодательства" %}</li>
+    <li>{% trans "Техническим партнерам для обеспечения работы системы" %}</li>
 </ul>
 
-<h3>7.2. Transfer conditions:</h3>
+<h3>{% trans "7.2. Условия передачи:" %}</h3>
 <ul>
-    <li>Only to the extent necessary to achieve the purpose</li>
-    <li>With ensuring data confidentiality</li>
-    <li>With conclusion of appropriate agreements</li>
-    <li>In compliance with legislation requirements</li>
+    <li>{% trans "Только в объеме, необходимом для достижения цели" %}</li>
+    <li>{% trans "С обеспечением конфиденциальности данных" %}</li>
+    <li>{% trans "С заключением соответствующих соглашений" %}</li>
+    <li>{% trans "С соблюдением требований законодательства" %}</li>
 </ul>
 
-<h2>8. PROCESSING AND STORAGE TERMS</h2>
+<h2>{% trans "8. СРОКИ ОБРАБОТКИ И ХРАНЕНИЯ" %}</h2>
 
-<h3>8.1. Storage terms:</h3>
+<h3>{% trans "8.1. Сроки хранения:" %}</h3>
 <ul>
-    <li>Active user data: during account validity</li>
-    <li>Inactive user data: 3 years from last activity</li>
-    <li>Booking history: 5 years for tax accounting</li>
-    <li>Technical logs: 1 year</li>
-    <li>Marketing data: until consent withdrawal</li>
+    <li>{% trans "Данные активных пользователей: в течение действия аккаунта" %}</li>
+    <li>{% trans "Данные неактивных пользователей: 3 года с последней активности" %}</li>
+    <li>{% trans "История бронирований: 5 лет для налогового учета" %}</li>
+    <li>{% trans "Технические логи: 1 год" %}</li>
+    <li>{% trans "Данные для маркетинга: до отзыва согласия" %}</li>
 </ul>
 
-<h3>8.2. Extension conditions:</h3>
+<h3>{% trans "8.2. Условия продления:" %}</h3>
 <ul>
-    <li>When continuing to use the service</li>
-    <li>When there are unfulfilled obligations</li>
-    <li>As required by legislation</li>
+    <li>{% trans "При продолжении использования сервиса" %}</li>
+    <li>{% trans "При наличии неисполненных обязательств" %}</li>
+    <li>{% trans "По требованию законодательства" %}</li>
 </ul>
 
-<h2>9. PERSONAL DATA PROTECTION MEASURES</h2>
+<h2>{% trans "9. МЕРЫ ЗАЩИТЫ ПЕРСОНАЛЬНЫХ ДАННЫХ" %}</h2>
 
-<h3>9.1. Technical measures:</h3>
+<h3>{% trans "9.1. Технические меры:" %}</h3>
 <ul>
-    <li>Data encryption during transmission and storage</li>
-    <li>Use of secure communication protocols (SSL/TLS)</li>
-    <li>Regular backup</li>
-    <li>Antivirus protection of servers</li>
-    <li>Monitoring unauthorized access</li>
+    <li>{% trans "Шифрование данных при передаче и хранении" %}</li>
+    <li>{% trans "Использование защищенных протоколов связи (SSL/TLS)" %}</li>
+    <li>{% trans "Регулярное резервное копирование" %}</li>
+    <li>{% trans "Антивирусная защита серверов" %}</li>
+    <li>{% trans "Мониторинг несанкционированного доступа" %}</li>
 </ul>
 
-<h3>9.2. Organizational measures:</h3>
+<h3>{% trans "9.2. Организационные меры:" %}</h3>
 <ul>
-    <li>Appointment of a data protection officer</li>
-    <li>Training personnel on data handling rules</li>
-    <li>Restricting access to personal data</li>
-    <li>Maintaining data access logs</li>
-    <li>Regular security system audit</li>
+    <li>{% trans "Назначение ответственного за защиту данных" %}</li>
+    <li>{% trans "Обучение персонала правилам работы с данными" %}</li>
+    <li>{% trans "Ограничение доступа к персональным данным" %}</li>
+    <li>{% trans "Ведение журналов доступа к данным" %}</li>
+    <li>{% trans "Регулярный аудит системы защиты" %}</li>
 </ul>
 
-<h2>10. PERSONAL DATA SUBJECT RIGHTS</h2>
+<h2>{% trans "10. ПРАВА СУБЪЕКТА ПЕРСОНАЛЬНЫХ ДАННЫХ" %}</h2>
 
-<p>The personal data subject has the right to:</p>
+<p>{% trans "Субъект персональных данных имеет право:" %}</p>
 <ul>
-    <li>Receive information about processing of their data</li>
-    <li>Request clarification, blocking, or destruction of data</li>
-    <li>Withdraw consent for data processing</li>
-    <li>Appeal the operator's actions to the authorized body</li>
-    <li>Request compensation for damages in case of rights violation</li>
-    <li>Receive a copy of their personal data</li>
-    <li>Request transfer of data to another operator</li>
+    <li>{% trans "Получать информацию об обработке своих данных" %}</li>
+    <li>{% trans "Требовать уточнения, блокирования или уничтожения данных" %}</li>
+    <li>{% trans "Отзывать согласие на обработку данных" %}</li>
+    <li>{% trans "Обжаловать действия оператора в уполномоченном органе" %}</li>
+    <li>{% trans "Требовать возмещения ущерба при нарушении прав" %}</li>
+    <li>{% trans "Получать копию своих персональных данных" %}</li>
+    <li>{% trans "Требовать передачи данных другому оператору" %}</li>
 </ul>
 
-<h2>11. PROCEDURE FOR EXERCISING RIGHTS</h2>
+<h2>{% trans "11. ПОРЯДОК РЕАЛИЗАЦИИ ПРАВ" %}</h2>
 
-<h3>11.1. Submitting requests:</h3>
+<h3>{% trans "11.1. Подача запросов:" %}</h3>
 <ul>
-    <li>Through personal account on the website</li>
-    <li>By email: privacy@alakol-booking.kz</li>
-    <li>In writing to the legal address</li>
-    <li>In person at the operator's office</li>
+    <li>{% trans "Через личный кабинет на сайте" %}</li>
+    <li>{% trans "По электронной почте: privacy@alakol-booking.kz" %}</li>
+    <li>{% trans "Письменно по юридическому адресу" %}</li>
+    <li>{% trans "Лично в офисе оператора" %}</li>
 </ul>
 
-<h3>11.2. Processing deadlines:</h3>
+<h3>{% trans "11.2. Сроки рассмотрения:" %}</h3>
 <ul>
-    <li>Data access request: 10 business days</li>
-    <li>Data correction request: 5 business days</li>
-    <li>Data deletion request: 10 business days</li>
-    <li>Consent withdrawal: immediately</li>
+    <li>{% trans "Запрос на доступ к данным: 10 рабочих дней" %}</li>
+    <li>{% trans "Запрос на исправление данных: 5 рабочих дней" %}</li>
+    <li>{% trans "Запрос на удаление данных: 10 рабочих дней" %}</li>
+    <li>{% trans "Отзыв согласия: немедленно" %}</li>
 </ul>
 
-<h2>12. CONSENT WITHDRAWAL</h2>
+<h2>{% trans "12. ОТЗЫВ СОГЛАСИЯ" %}</h2>
 
-<h3>12.1. Withdrawal methods:</h3>
+<h3>{% trans "12.1. Способы отзыва:" %}</h3>
 <ul>
-    <li>Through personal account settings</li>
-    <li>Written statement by email</li>
-    <li>Contact customer support</li>
+    <li>{% trans "Через настройки личного кабинета" %}</li>
+    <li>{% trans "Письменное заявление на email" %}</li>
+    <li>{% trans "Обращение в службу поддержки" %}</li>
 </ul>
 
-<h3>12.2. Withdrawal consequences:</h3>
+<h3>{% trans "12.2. Последствия отзыва:" %}</h3>
 <ul>
-    <li>Cessation of data processing for marketing purposes</li>
-    <li>Data retention for contractual obligations fulfillment</li>
-    <li>Possible service functionality limitations</li>
+    <li>{% trans "Прекращение обработки данных для маркетинговых целей" %}</li>
+    <li>{% trans "Сохранение данных для исполнения договорных обязательств" %}</li>
+    <li>{% trans "Возможное ограничение функциональности сервиса" %}</li>
 </ul>
 
-<h2>13. USE OF COOKIE FILES</h2>
+<h2>{% trans "13. ИСПОЛЬЗОВАНИЕ ФАЙЛОВ COOKIE" %}</h2>
 
-<h3>13.1. Types of cookies used:</h3>
+<h3>{% trans "13.1. Типы используемых cookie:" %}</h3>
 <ul>
-    <li>Necessary for website operation</li>
-    <li>Functional for improving performance</li>
-    <li>Analytical for usage analysis</li>
-    <li>Marketing for advertising personalization</li>
+    <li>{% trans "Необходимые для работы сайта" %}</li>
+    <li>{% trans "Функциональные для улучшения работы" %}</li>
+    <li>{% trans "Аналитические для анализа использования" %}</li>
+    <li>{% trans "Маркетинговые для персонализации рекламы" %}</li>
 </ul>
 
-<h3>13.2. Cookie management:</h3>
+<h3>{% trans "13.2. Управление cookie:" %}</h3>
 <ul>
-    <li>Configuration through user's browser</li>
-    <li>Using website settings</li>
-    <li>Disabling through cookie control panel</li>
+    <li>{% trans "Настройка через браузер пользователя" %}</li>
+    <li>{% trans "Использование настроек сайта" %}</li>
+    <li>{% trans "Отключение через панель управления cookie" %}</li>
 </ul>
 
-<h2>14. INTERNATIONAL DATA TRANSFER</h2>
+<h2>{% trans "14. МЕЖДУНАРОДНАЯ ПЕРЕДАЧА ДАННЫХ" %}</h2>
 
-<h3>14.1. Transfer conditions:</h3>
+<h3>{% trans "14.1. Условия передачи:" %}</h3>
 <ul>
-    <li>Only to countries with adequate level of protection</li>
-    <li>With application of additional protection guarantees</li>
-    <li>With consent of the personal data subject</li>
-    <li>In accordance with RK legislation requirements</li>
+    <li>{% trans "Только в страны с адекватным уровнем защиты" %}</li>
+    <li>{% trans "С применением дополнительных гарантий защиты" %}</li>
+    <li>{% trans "С согласия субъекта персональных данных" %}</li>
+    <li>{% trans "В соответствии с требованиями законодательства РК" %}</li>
 </ul>
 
-<h2>15. CONSENT MODIFICATION</h2>
+<h2>{% trans "15. ИЗМЕНЕНИЕ СОГЛАСИЯ" %}</h2>
 
-<p><strong>15.1.</strong> The Operator has the right to modify this Consent.</p>
+<p><strong>15.1.</strong> {% trans "Оператор имеет право изменять настоящее Согласие." %}</p>
 
-<p><strong>15.2.</strong> Changes take effect from the moment of publication on the website.</p>
+<p><strong>15.2.</strong> {% trans "Изменения вступают в силу с момента публикации на сайте." %}</p>
 
-<p><strong>15.3.</strong> Users are notified of changes by email.</p>
+<p><strong>15.3.</strong> {% trans "Пользователи уведомляются об изменениях по электронной почте." %}</p>
 
-<p><strong>15.4.</strong> Continued use of the service means agreement with the changes.</p>
+<p><strong>15.4.</strong> {% trans "Продолжение использования сервиса означает согласие с изменениями." %}</p>
 
-<h2>16. CONTACT INFORMATION</h2>
+<h2>{% trans "16. КОНТАКТНАЯ ИНФОРМАЦИЯ" %}</h2>
 
 <div class="contact-info">
-    <h3>For communication on personal data protection matters:</h3>
+    <h3>{% trans "Для связи по вопросам защиты персональных данных:" %}</h3>
     <ul>
         <li><strong>Email:</strong> privacy@alakol-booking.kz</li>
-        <li><strong>Data Protection Officer:</strong> [FULL NAME]</li>
-        <li><strong>Phone:</strong> +7 (727) XXX-XX-XX</li>
-        <li><strong>Address:</strong> Almaty, Republic of Kazakhstan</li>
+        <li><strong>{% trans "Ответственный за защиту данных:" %}</strong> [{% trans "ФИО" %}]</li>
+        <li><strong>{% trans "Телефон:" %}</strong> +7 (727) XXX-XX-XX</li>
+        <li><strong>{% trans "Адрес:" %}</strong> {% trans "г. Алматы, Республика Казахстан" %}</li>
     </ul>
 </div>
 
 <div class="alert alert-info">
-    <h4>CONSENT CONFIRMATION</h4>
-    <p>By registering on the website or using our services, you confirm that you:</p>
+    <h4>{% trans "ПОДТВЕРЖДЕНИЕ СОГЛАСИЯ" %}</h4>
+    <p>{% trans "Регистрируясь на сайте или используя наши услуги, вы подтверждаете, что:" %}</p>
     <ul>
-        <li>Have read this Consent</li>
-        <li>Understand the purposes and methods of processing your data</li>
-        <li>Give voluntary consent to personal data processing</li>
-        <li>Understand your rights and ways to exercise them</li>
+        <li>{% trans "Ознакомились с настоящим Согласием" %}</li>
+        <li>{% trans "Понимаете цели и способы обработки ваших данных" %}</li>
+        <li>{% trans "Даете добровольное согласие на обработку персональных данных" %}</li>
+        <li>{% trans "Понимаете свои права и способы их реализации" %}</li>
     </ul>
 </div>
 
-{% endblock %}
+{% endblock %} 
