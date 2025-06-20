@@ -171,9 +171,7 @@ class LegalValidation {
 
     logDocumentView(documentType) {
         // Логирование просмотра документа (можно отправлять на сервер)
-        if (window.console) {
-            console.log(`Legal document viewed: ${documentType} at ${new Date().toISOString()}`);
-        }
+        // Removed console.log for legal document view tracking
 
         // Опционально: отправка данных на сервер для аналитики
         if (typeof gtag !== 'undefined') {
@@ -246,7 +244,7 @@ class LegalValidation {
                     }
                 });
             } catch (e) {
-                console.warn('Failed to restore legal consents:', e);
+                // Removed console.warn for failed legal consents restoration - error handling preserved
             }
         }
     }

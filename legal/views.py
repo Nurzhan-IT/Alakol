@@ -7,16 +7,6 @@ from .models import DocumentView
 from django.http import HttpResponse
 
 
-def get_client_ip(request):
-    """Get client IP address"""
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
-
-
 @method_decorator(cache_page(60 * 60 * 24), name='dispatch')  # Cache for 24 hours
 class LegalDocumentView(TemplateView):
     """Base class for legal documents"""
@@ -45,7 +35,6 @@ class LegalDocumentView(TemplateView):
                 DocumentView.objects.create(
                     document_type=self.document_type,
                     user=request.user if request.user.is_authenticated else None,
-                    ip_address=get_client_ip(request),
                     user_agent=request.META.get('HTTP_USER_AGENT', '')
                 )
             except Exception as e:

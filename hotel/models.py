@@ -24,9 +24,36 @@ ICON_TPYE = (
 
 ICON_CHOICES = [
     ('---','---'),
-    ('wifi.png','wifi'),
-    ('fan.png','fan'), 
-    ('house-solid.svg','house'), 
+    ('air-conditioner.svg','Кондиционер'),
+    ('balcony.svg','Балкон'),
+    ('bar.svg','Бар'),
+    ('bathrobe.svg','Халат'),
+    ('bathtub.svg','Ванна'),
+    ('cleaning.svg','Уборка'),
+    ('coffee.svg','Кофеварка'),
+    ('concierge.svg','Консьерж'),
+    ('fridge.svg','Холодильник'),
+    ('garden.svg','Беседка'),
+    ('gym.svg','Спортзал'),
+    ('hairdryer.svg','Фен'),
+    ('iron.svg','Утюг'),
+    ('laundry.svg','Прачечная'),
+    ('microwave.svg','Микроволновка'),
+    ('minibar.svg','Мини-бар'),
+    ('no-smoking.svg','Для некурящих'),
+    ('ocean-view.svg','Вид на море'),
+    ('parking.svg','Парковка'),
+    ('pets.svg','Разрешены животные'),
+    ('playground.svg','Детская площадка'),
+    ('pool.svg','Бассейн'),
+    ('restaurant.svg','Ресторан'),
+    ('safe.svg','Сейф'),
+    ('shower.svg','Душ'),
+    ('shuttle.svg','Трансфер'),
+    ('slippers.svg','Тапочки'),
+    ('spa.svg','Спа'),
+    ('tv.svg','Телевизор'),
+    ('wifi.svg','Wi-Fi'),
 ]
 
 ROOM_TYPES = (
@@ -443,6 +470,9 @@ class Booking(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, db_index=True, null=True, blank=True, verbose_name='Создано в')
     expires_at = models.DateTimeField(null=True, blank=True, db_index=True, verbose_name='Истекает в')
+    
+    # Поле для сохранения legal agreements при бронировании
+    legal_agreements = models.JSONField(null=True, blank=True, help_text="Согласия с юридическими документами при оплате", verbose_name='Юридические согласия')
 
     def save(self, *args, **kwargs):
         # Устанавливаем expires_at при создании записи

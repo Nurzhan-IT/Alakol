@@ -8,6 +8,7 @@ from django.db import transaction
 
 from userauths.models import User, Profile
 from userauths.forms import UserRegisterForm
+from userauths.utils import save_registration_consents
 
 # Create your views here.
 
@@ -36,6 +37,15 @@ def RegisterView(request, *args, **kwargs):
             profile.full_name = full_name
             profile.phone = phone
             profile.save(update_fields=['full_name', 'phone'])
+
+            # Сохраняем согласия пользователя при регистрации
+            consent_data = {
+                'terms_consent': request.POST.get('terms_consent'),
+                'privacy_consent': request.POST.get('privacy_consent'),
+                'personal_data_consent': request.POST.get('personal_data_consent'),
+                'marketing_consent': request.POST.get('marketing_consent'),
+            }
+            save_registration_consents(user, request, consent_data)
 
         return redirect('hotel:index')
     

@@ -1,251 +1,272 @@
-<!-- Generated on 2025-06-03 06:24 PM +05 -->
-{% extends 'legal/base_legal.html' %}
+{% extends "legal/base_legal.html" %}
+{% load i18n %}
 
-{% block title %}Hotel Owners Tax Obligations{% endblock %}
-{% block page_name %}Hotel Owners Tax Obligations{% endblock %}
-{% block meta_description %}Tax obligations and reporting guidelines for partners of Alakol Booking System platform. Kazakhstan tax legislation requirements for hospitality business.{% endblock %}
-{% block breadcrumb_current %}Tax Obligations{% endblock %}
+{% block title %}{% trans "Налоговые обязательства для владельцев отелей" %}{% endblock %}
 
 {% block content %}
-<h1 id="document-title" tabindex="-1">Tax Obligations and Reporting for Hotel Owners</h1>
-<p class="subtitle">Guidelines for "Alakol Booking System" platform partners</p>
+<div class="generation-info">
+    {% trans "Документ создан:" %} 19 июня 2025 года, 4:45 UTC+5 | HMS Alakol Booking System
+</div>
+
+<h1>{% trans "Руководство по налоговым обязательствам и отчетности для партнеров платформы" %} "ALAKOL BOOKING SYSTEM"</h1>
 
 <div class="document-meta">
-    <strong>Creation Date:</strong> June 3, 2025<br>
-    <strong>Document Version:</strong> 1.0<br>
-    <strong>Legal Basis:</strong> Tax Code of the Republic of Kazakhstan<br>
-    <strong>Platform:</strong> Alakol Booking System<br>
-    <strong>Region:</strong> Republic of Kazakhstan<br>
-    <strong>Time Zone:</strong> Kazakhstan/Almaty (UTC+6)
+    <strong>{% trans "Версия документа:" %}</strong> 1.0<br>
+    <strong>{% trans "Дата создания:" %}</strong> 19 июня 2025 года<br>
+    <strong>{% trans "Основание:" %}</strong> {% trans "Налоговый кодекс Республики Казахстан" %}
 </div>
 
+<div class="alert alert-danger">
+    <h4>{% trans "ВАЖНОЕ ПРЕДУПРЕЖДЕНИЕ:" %}</h4>
+    <p>{% trans "В 2024 году были выявлены существенные расхождения между прогнозируемыми (1,6 млрд тенге) и фактически уплаченными (200 млн тенге) налогами в сфере туризма и гостиничного бизнеса. В связи с этим налоговые органы усилили контроль за данной отраслью." %}</p>
+</div>
 
+<h2>{% trans "1. Общие налоговые требования" %}</h2>
 
-<nav class="navigation-toc" aria-label="Document Contents">
-    <h3>Contents</h3>
-    <ol>
-        <li><a href="#section-1">General Tax Requirements</a></li>
-        <li><a href="#section-2">Taxation of Booking Revenue</a></li>
-        <li><a href="#section-3">Documentation and Accounting</a></li>
-        <li><a href="#section-4">Income Declaration</a></li>
-        <li><a href="#section-5">Platform Interaction on Tax Matters</a></li>
-        <li><a href="#section-6">Tax Control and Inspections</a></li>
-        <li><a href="#section-7">VAT and Threshold Values</a></li>
-        <li><a href="#section-8">Social Contributions and Labor Relations</a></li>
-        <li><a href="#section-9">Penalties and Liability</a></li>
-        <li><a href="#section-10">Tax Planning</a></li>
-    </ol>
-</nav>
+<h3>{% trans "1.1. Применимое законодательство:" %}</h3>
+<ul>
+    <li>{% trans "Налоговый кодекс Республики Казахстан" %}</li>
+    <li>{% trans "Закон РК \"О туристской деятельности в Республике Казахстан\"" %}</li>
+    <li>{% trans "Закон РК \"О государственном регулировании развития туризма в Республике Казахстан\"" %}</li>
+    <li>{% trans "Постановления Правительства РК по вопросам налогообложения" %}</li>
+</ul>
 
-<section id="section-1" aria-labelledby="section-1-title">
-    <h2 id="section-1-title">1. General Tax Requirements</h2>
-    
-    <h3>1.1. Applicable Legislation:</h3>
+<h3>{% trans "1.2. Налоговый статус владельцев отелей:" %}</h3>
+<div class="alert alert-warning">
     <ul>
-        <li>Tax Code of the Republic of Kazakhstan (Code "On taxes and other obligatory payments to the budget")</li>
-        <li>Law of the Republic of Kazakhstan "On tourist activities in the Republic of Kazakhstan"</li>
-        <li>Law of the Republic of Kazakhstan "On state regulation of tourism development in the Republic of Kazakhstan"</li>
-        <li>Government Resolutions of the Republic of Kazakhstan on taxation issues</li>
+        <li>{% trans "Все владельцы отелей обязаны быть зарегистрированы в качестве налогоплательщиков" %}</li>
+        <li>{% trans "Ведение деятельности без регистрации является нарушением налогового законодательства" %}</li>
+        <li>{% trans "Обязательная подача налоговых деклараций в установленные сроки" %}</li>
     </ul>
-    
-    <h3>1.2. Tax Status of Hotel Owners:</h3>
-    <ul>
-        <li>All hotel owners must be registered as taxpayers</li>
-        <li>Conducting business without registration is a violation of tax legislation</li>
-        <li>Mandatory filing of tax returns within established deadlines</li>
-    </ul>
-    
-    <h3>1.3. Types of Applicable Tax Regimes:</h3>
-    <ul>
-        <li>General taxation (income tax 20%)</li>
-        <li>Simplified declaration (subject to compliance with conditions)</li>
-        <li>VAT (when exceeding threshold values)</li>
-        <li>Social tax on payroll</li>
-    </ul>
-</section>
+</div>
 
-<section id="section-2" aria-labelledby="section-2-title">
-    <h2 id="section-2-title">2. Taxation of Booking Revenue</h2>
-    
-    <h3>2.1. Hotel Revenue Structure:</h3>
-    <ul>
-        <li>10% prepayment goes to Platform account (commission agent)</li>
-        <li>90% additional payment goes directly to the hotel</li>
-        <li>Platform commission is deducted from the total amount</li>
-    </ul>
-    
-    <h3>2.2. Hotel Taxable Base:</h3>
-    <ul>
-        <li>Full cost of accommodation services (100%) is subject to taxation</li>
-        <li>Platform commission reduces the taxable base as an expense</li>
-        <li>Prepayment through Platform is included in hotel income</li>
-    </ul>
-    
-    <h3>2.3. Tax Calculation Example:</h3>
-    <div class="code-example">
-        <pre>
-Accommodation cost: 100,000 tenge
-Prepayment (10%): 10,000 tenge (through Platform)
-Additional payment (90%): 90,000 tenge (at hotel)
-Platform commission (10%): 10,000 tenge
+<h2>{% trans "2. Налогообложение доходов от бронирований" %}</h2>
 
-Hotel income: 100,000 tenge
-Hotel expenses: 10,000 tenge (commission)
-Taxable base: 90,000 tenge
-Income tax (20%): 18,000 tenge
-        </pre>
+<h3>{% trans "2.1. Гибкая структура доходов отеля:" %}</h3>
+<ul>
+    <li>{% trans "Предоплата N% поступает на счет Платформы (комиссионер), где N может составлять 10%, 30%, 50%, 70% или 100%" %}</li>
+    <li>{% trans "Доплата (100% - N%) поступает непосредственно отелю" %}</li>
+    <li>{% trans "При N = 100% доплата в отеле отсутствует" %}</li>
+    <li>{% trans "Комиссия Платформы удерживается из предоплаты N%" %}</li>
+</ul>
+
+<div class="alert alert-info">
+    <strong>{% trans "ВАЖНОЕ УВЕДОМЛЕНИЕ О ОКРУГЛЕНИЯХ:" %}</strong> {% trans "В связи с процентными вычислениями при расчете предоплаты, доплаты, комиссий и налогооблагаемых сумм, все денежные суммы могут округляться с погрешностью до 1 (одного) тенге в большую или меньшую сторону." %}
+</div>
+
+<h3>{% trans "2.2. Налогооблагаемая база отеля:" %}</h3>
+<ul>
+    <li>{% trans "К налогообложению подлежит полная стоимость услуг размещения (100%)" %}</li>
+    <li>{% trans "Комиссия Платформы уменьшает налогооблагаемую базу как расход" %}</li>
+    <li>{% trans "Предоплата через Платформу включается в доходы отеля независимо от размера N%" %}</li>
+</ul>
+
+<h3>{% trans "2.3. Примеры расчета налогов для разных схем:" %}</h3>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5>{% trans "Пример 1 (N = 30%)" %}</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr><td>{% trans "Стоимость проживания:" %}</td><td>100,000 {% trans "тенге" %}</td></tr>
+                    <tr><td>{% trans "Предоплата (30%):" %}</td><td>30,000 {% trans "тенге" %}</td></tr>
+                    <tr><td>{% trans "Доплата (70%):" %}</td><td>70,000 {% trans "тенге" %}</td></tr>
+                    <tr><td>{% trans "Комиссия Платформы:" %}</td><td>10,000 {% trans "тенге" %}</td></tr>
+                    <tr class="table-success"><td><strong>{% trans "Доходы отеля:" %}</strong></td><td><strong>100,000 {% trans "тенге" %}</strong></td></tr>
+                    <tr class="table-danger"><td><strong>{% trans "Расходы отеля:" %}</strong></td><td><strong>10,000 {% trans "тенге" %}</strong></td></tr>
+                    <tr class="table-warning"><td><strong>{% trans "Налогооблагаемая база:" %}</strong></td><td><strong>90,000 {% trans "тенге" %}</strong></td></tr>
+                    <tr class="table-info"><td><strong>{% trans "Подоходный налог (20%):" %}</strong></td><td><strong>18,000 {% trans "тенге" %}</strong></td></tr>
+                </table>
+            </div>
+        </div>
     </div>
-</section>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5>{% trans "Пример 2 (N = 100%)" %}</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr><td>{% trans "Стоимость проживания:" %}</td><td>100,000 {% trans "тенге" %}</td></tr>
+                    <tr><td>{% trans "Предоплата (100%):" %}</td><td>100,000 {% trans "тенге" %}</td></tr>
+                    <tr><td>{% trans "Доплата (0%):" %}</td><td>0 {% trans "тенге" %}</td></tr>
+                    <tr><td>{% trans "Комиссия Платформы:" %}</td><td>10,000 {% trans "тенге" %}</td></tr>
+                    <tr class="table-success"><td><strong>{% trans "Доходы отеля:" %}</strong></td><td><strong>100,000 {% trans "тенге" %}</strong></td></tr>
+                    <tr class="table-danger"><td><strong>{% trans "Расходы отеля:" %}</strong></td><td><strong>10,000 {% trans "тенге" %}</strong></td></tr>
+                    <tr class="table-warning"><td><strong>{% trans "Налогооблагаемая база:" %}</strong></td><td><strong>90,000 {% trans "тенге" %}</strong></td></tr>
+                    <tr class="table-info"><td><strong>{% trans "Подоходный налог (20%):" %}</strong></td><td><strong>18,000 {% trans "тенге" %}</strong></td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
-<section id="section-3" aria-labelledby="section-3-title">
-    <h2 id="section-3-title">3. Documentation and Accounting</h2>
-    
-    <h3>3.1. Mandatory Documents for Accounting:</h3>
-    <ul>
-        <li>Accommodation service contracts</li>
-        <li>Fiscal receipts when receiving additional payments</li>
-        <li>Statements from Platform about transferred funds</li>
-        <li>Reconciliation acts with Platform</li>
-    </ul>
-    
-    <h3>3.2. Platform Revenue Accounting:</h3>
-    <ul>
-        <li>Maintaining booking register with amount specifications</li>
-        <li>Reconciling Platform data with internal accounting</li>
-        <li>Monthly reconciliation of settlements with Platform</li>
-        <li>Documentation of all financial transactions</li>
-    </ul>
-</section>
+<h2>{% trans "3. Документооборот и учет" %}</h2>
 
-<section id="section-4" aria-labelledby="section-4-title">
-    <h2 id="section-4-title">4. Income Declaration</h2>
-    
-    <h3>4.1. Declaration Filing Deadlines:</h3>
-    <ul>
-        <li>Monthly declarations: by the 15th of the following month</li>
-        <li>Annual declaration: by March 31st of the following year</li>
-        <li>Quarterly social tax reports: by the 15th</li>
-    </ul>
-    
-    <h3>4.2. Declaration Content:</h3>
-    <ul>
-        <li>All income from accommodation services</li>
-        <li>Expenses related to service provision</li>
-        <li>Commissions paid to Platform</li>
-        <li>Social contributions on employee salaries</li>
-    </ul>
-</section>
+<h3>{% trans "3.1. Обязательные документы для учета:" %}</h3>
+<ul>
+    <li>{% trans "Договоры на оказание услуг размещения" %}</li>
+    <li>{% trans "Фискальные чеки при получении доплаты" %}</li>
+    <li>{% trans "Справки от Платформы о переведенных средствах" %}</li>
+    <li>{% trans "Акты сверки с Платформой" %}</li>
+</ul>
 
-<section id="section-5" aria-labelledby="section-5-title">
-    <h2 id="section-5-title">5. Platform Interaction on Tax Matters</h2>
-    
-    <h3>5.1. Platform Obligations:</h3>
+<h3>{% trans "3.2. Учет доходов от Платформы:" %}</h3>
+<div class="alert alert-info">
     <ul>
-        <li>Providing statements about transferred funds</li>
-        <li>Maintaining detailed records of all transactions</li>
-        <li>Providing documents to tax authorities upon request</li>
-        <li>Notification of changes in tax accounting</li>
+        <li>{% trans "Ведение реестра бронирований с указанием сумм" %}</li>
+        <li>{% trans "Обработка изменений бронирований (заявки принимаются только за 15 дней до заезда)" %}</li>
+        <li>{% trans "Сопоставление данных Платформы с внутренним учетом" %}</li>
+        <li>{% trans "Ежемесячная сверка расчетов с Платформой" %}</li>
+        <li>{% trans "Документирование всех финансовых операций" %}</li>
     </ul>
-    
-    <h3>5.2. Hotel Obligations:</h3>
-    <ul>
-        <li>Correct reflection of all income in accounting</li>
-        <li>Timely filing of declarations</li>
-        <li>Providing documents to tax authorities</li>
-        <li>Notifying Platform of tax inspections</li>
-    </ul>
-</section>
+</div>
 
-<section id="section-6" aria-labelledby="section-6-title">
-    <h2 id="section-6-title">6. Tax Control and Inspections</h2>
-    
-    <h3>6.1. Preparation for Tax Inspections:</h3>
-    <ul>
-        <li>Maintaining complete documentation</li>
-        <li>Regular data reconciliation with Platform</li>
-        <li>Timely elimination of identified violations</li>
-        <li>Consultations with tax consultants</li>
-    </ul>
-</section>
+<h2>{% trans "4. Декларирование доходов" %}</h2>
 
-<section id="section-7" aria-labelledby="section-7-title">
-    <h2 id="section-7-title">7. VAT and Threshold Values</h2>
-    
-    <h3>7.1. VAT Application Conditions:</h3>
-    <ul>
-        <li>When exceeding turnover of 30,000 MCI per year (for 2025)</li>
-        <li>Mandatory VAT payer registration</li>
-        <li>VAT rate: 12% (standard rate)</li>
-    </ul>
-</section>
+<h3>{% trans "4.1. Сроки подачи деклараций:" %}</h3>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card border-primary">
+            <div class="card-body text-center">
+                <h5 class="card-title">{% trans "Ежемесячные декларации" %}</h5>
+                <p class="card-text">{% trans "до 15 числа следующего месяца" %}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-success">
+            <div class="card-body text-center">
+                <h5 class="card-title">{% trans "Годовая декларация" %}</h5>
+                <p class="card-text">{% trans "до 31 марта следующего года" %}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-warning">
+            <div class="card-body text-center">
+                <h5 class="card-title">{% trans "Квартальные отчеты по социальному налогу" %}</h5>
+                <p class="card-text">{% trans "до 15 числа" %}</p>
+            </div>
+        </div>
+    </div>
+</div>
 
-<section id="section-8" aria-labelledby="section-8-title">
-    <h2 id="section-8-title">8. Social Contributions and Labor Relations</h2>
-    
-    <h3>8.1. Social Tax on Payroll:</h3>
-    <ul>
-        <li>Rate: 9.5% on payroll</li>
-        <li>Mandatory pension contributions: 10%</li>
-        <li>Mandatory social contributions: 3.5%</li>
-        <li>Mandatory health insurance contributions</li>
-    </ul>
-</section>
+<h2>{% trans "5. НДС и пороговые значения" %}</h2>
 
-<section id="section-9" aria-labelledby="section-9-title">
-    <h2 id="section-9-title">9. Penalties and Liability</h2>
-    
-    <h3>9.1. Administrative Penalties:</h3>
+<h3>{% trans "5.1. Условия применения НДС:" %}</h3>
+<div class="alert alert-warning">
     <ul>
-        <li>Late declaration filing: 10 MCI</li>
-        <li>Incomplete income reflection: 50% of additional assessment</li>
-        <li>Conducting business without registration: 100 MCI</li>
-        <li>Non-compliance with tax payment deadlines: penalty 1.25% per month</li>
+        <li>{% trans "При превышении оборота 30 000 МРП в год (на 2025 год)" %}</li>
+        <li>{% trans "Обязательная регистрация плательщиком НДС" %}</li>
+        <li>{% trans "Ставка НДС: 12% (стандартная ставка)" %}</li>
     </ul>
-</section>
+</div>
 
-<section id="section-10" aria-labelledby="section-10-title">
-    <h2 id="section-10-title">10. Tax Planning</h2>
-    
-    <h3>10.1. Tax Payment Optimization:</h3>
+<h2>{% trans "6. Налоговый контроль и проверки" %}</h2>
+
+<h3>{% trans "6.1. Повышенное внимание налоговых органов:" %}</h3>
+<div class="alert alert-danger">
     <ul>
-        <li>Choosing optimal tax regime</li>
-        <li>Planning expenses to reduce taxable base</li>
-        <li>Using tax benefits (when available)</li>
-        <li>Correct application of depreciation deductions</li>
+        <li>{% trans "В связи с выявленными в 2024 году расхождениями усилен контроль" %}</li>
+        <li>{% trans "Возможны внеплановые проверки гостиничного бизнеса" %}</li>
+        <li>{% trans "Особое внимание к полноте отражения доходов" %}</li>
+        <li>{% trans "Проверка соответствия декларированных и фактических оборотов" %}</li>
     </ul>
+</div>
+
+<h3>{% trans "6.2. Типичные нарушения в гостиничном бизнесе:" %}</h3>
+<ul class="list-group">
+    <li class="list-group-item list-group-item-danger">{% trans "Неполное отражение доходов от размещения" %}</li>
+    <li class="list-group-item list-group-item-warning">{% trans "Неправильный учет комиссионных расходов" %}</li>
+    <li class="list-group-item list-group-item-info">{% trans "Нарушение сроков подачи деклараций" %}</li>
+    <li class="list-group-item list-group-item-secondary">{% trans "Несоответствие фактических и декларированных оборотов" %}</li>
+</ul>
+
+<h2>{% trans "7. Штрафы и ответственность" %}</h2>
+
+<h3>{% trans "7.1. Административные штрафы:" %}</h3>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>{% trans "Нарушение" %}</th>
+                <th>{% trans "Размер штрафа" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{% trans "Несвоевременная подача декларации" %}</td>
+                <td>10 {% trans "МРП" %}</td>
+            </tr>
+            <tr>
+                <td>{% trans "Неполное отражение доходов" %}</td>
+                <td>50% {% trans "от доначисленной суммы" %}</td>
+            </tr>
+            <tr>
+                <td>{% trans "Ведение деятельности без регистрации" %}</td>
+                <td>100 {% trans "МРП" %}</td>
+            </tr>
+            <tr>
+                <td>{% trans "Несоблюдение сроков уплаты налогов" %}</td>
+                <td>{% trans "Пеня" %} 1.25% {% trans "в месяц" %}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h2>{% trans "8. Рекомендации по ведению налогового учета" %}</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5>✅ {% trans "Рекомендуется" %}</h5>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li>{% trans "Ведите полный документооборот" %}</li>
+                    <li>{% trans "Регулярно сверяйтесь с Платформой" %}</li>
+                    <li>{% trans "Консультируйтесь с налоговыми консультантами" %}</li>
+                    <li>{% trans "Подавайте декларации своевременно" %}</li>
+                    <li>{% trans "Ведите детальный учет всех доходов" %}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
     
-    <h3>10.2. Business Seasonality Accounting:</h3>
-    <ul>
-        <li>Planning income and expenses by months</li>
-        <li>Creating reserves for tax payments during high season</li>
-        <li>Optimizing tax payments considering seasonality</li>
-    </ul>
-</section>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h5>❌ {% trans "Не рекомендуется" %}</h5>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li>{% trans "Скрывать доходы от налогообложения" %}</li>
+                    <li>{% trans "Нарушать сроки подачи деклараций" %}</li>
+                    <li>{% trans "Игнорировать требования налоговых органов" %}</li>
+                    <li>{% trans "Вести деятельность без регистрации" %}</li>
+                    <li>{% trans "Занижать налогооблагаемую базу" %}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="contact-info">
-    <h3>💼 Contact Information</h3>
-    
-    <div class="row">
-        <div class="col-md-6">
-            <h4>Tax Support:</h4>
-            <p>
-                <strong>Email:</strong> tax-support@alakol-booking.kz<br>
-                <strong>Phone:</strong> +7 (727) XXX-XX-XX<br>
-                <strong>Working Hours:</strong> Mon-Fri 9:00-18:00
-            </p>
-        </div>
-        <div class="col-md-6">
-            <h4>Technical Support:</h4>
-            <p>
-                <strong>Email:</strong> support@alakol-booking.kz<br>
-                <strong>Phone:</strong> +7 (727) XXX-XX-XX<br>
-                <strong>Working Hours:</strong> 24/7
-            </p>
-        </div>
-    </div>
+    <h3>{% trans "Контакты для налоговых консультаций" %}</h3>
+    <p><strong>Email:</strong> tax-support@alakol-booking.kz</p>
+    <p><strong>{% trans "Телефон:" %}</strong> +7 (727) XXX-XX-XX</p>
+    <p><strong>{% trans "Время работы:" %}</strong> {% trans "ПН-ПТ 9:00-18:00" %}</p>
 </div>
 
-<div class="generation-info">
-    <p><em>Document generated: June 3, 2025, 18:24 UTC+5</em></p>
+<div class="alert alert-info mt-4">
+    <h4>{% trans "Важное примечание" %}</h4>
+    <p>{% trans "Данный документ носит информационный характер и не заменяет профессиональные налоговые консультации. Рекомендуется обращаться к квалифицированным налоговым консультантам для получения персональных рекомендаций по налогообложению." %}</p>
 </div>
+
 {% endblock %} 
