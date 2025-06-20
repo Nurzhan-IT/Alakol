@@ -1,0 +1,4 @@
+Test Legal Page
+
+Terms of Use - Test
+This is a simple test page for legal documents.

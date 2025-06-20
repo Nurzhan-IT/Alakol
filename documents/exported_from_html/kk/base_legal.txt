@@ -1,0 +1,6 @@
+eKol
+
+Legal Document
+This is the base template for legal documents.
+
+© 2025 eKol. All rights reserved.
