@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-18 10:31+0500\n"
+"POT-Creation-Date: 2025-06-21 02:30+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,8 +34,8 @@ msgid "Select Booking Data"
 msgstr "Заполните данные для бронирования"
 
 #: .\templates\booking\booking_data.html:22
-#: .\templates\hotel\hotel_detail.html:45
-#: .\templates\hotel\hotel_detail.html:264
+#: .\templates\hotel\hotel_detail.html:35
+#: .\templates\hotel\hotel_detail.html:254
 #: .\templates\hotel\room_type_detail.html:189
 #: .\templates\partials\dashboard_base.html:102
 #: .\templates\partials\dashboard_base.html:148
@@ -44,10 +44,10 @@ msgid "Booking"
 msgstr "Бронирование"
 
 #: .\templates\booking\booking_data.html:27
-#: .\templates\hotel\hotel_detail.html:269
+#: .\templates\hotel\hotel_detail.html:259
 #: .\templates\hotel\payment_method_selection.html:150
 #: .\templates\hotel\room_type_detail.html:194
-#: .\templates\search\search_results.html:26
+#: .\templates\search\search_results.html:107
 msgid "Check-in Date"
 msgstr "Дата заезда"
 
@@ -57,10 +57,10 @@ msgid "Select Date"
 msgstr "Выбрать дату"
 
 #: .\templates\booking\booking_data.html:31
-#: .\templates\hotel\hotel_detail.html:273
+#: .\templates\hotel\hotel_detail.html:263
 #: .\templates\hotel\payment_method_selection.html:151
 #: .\templates\hotel\room_type_detail.html:198
-#: .\templates\search\search_results.html:30
+#: .\templates\search\search_results.html:111
 msgid "Check-out Date"
 msgstr "Дата выезда"
 
@@ -72,7 +72,7 @@ msgstr "Гости"
 #: .\templates\booking\booking_data.html:39
 #: .\templates\email\booking_completed.html:519
 #: .\templates\hotel\async\selected_rooms.html:162
-#: .\templates\hotel\checkout.html:93 .\templates\hotel\hotel_detail.html:281
+#: .\templates\hotel\checkout.html:93 .\templates\hotel\hotel_detail.html:271
 #: .\templates\hotel\payment_method_selection.html:153
 #: .\templates\hotel\room_type_detail.html:206
 #: .\templates\hotel\selected_rooms.html:153
@@ -86,24 +86,24 @@ msgid "Adults"
 msgstr "Взрослые"
 
 #: .\templates\booking\booking_data.html:43
-#: .\templates\hotel\hotel_detail.html:285
+#: .\templates\hotel\hotel_detail.html:275
 #: .\templates\hotel\room_type_detail.html:210
 msgid "Childrens"
 msgstr "Дети"
 
 #: .\templates\booking\booking_data.html:52
-#: .\templates\hotel\hotel_detail.html:293
+#: .\templates\hotel\hotel_detail.html:283
 #: .\templates\hotel\room_type_detail.html:219
 msgid "Select Room Type"
 msgstr "Выберите тип номера"
 
 #: .\templates\booking\booking_data.html:54
-#: .\templates\hotel\hotel_detail.html:295
+#: .\templates\hotel\hotel_detail.html:285
 msgid "Select Room"
 msgstr "Выберите номер"
 
 #: .\templates\booking\booking_data.html:62
-#: .\templates\hotel\hotel_detail.html:302
+#: .\templates\hotel\hotel_detail.html:292
 #: .\templates\hotel\room_type_detail.html:231
 msgid "Check Availability"
 msgstr "Проверить свободные номера"
@@ -181,7 +181,7 @@ msgid "Hotel Details"
 msgstr "Информация об отеле"
 
 #: .\templates\email\booking_completed.html:668
-#: .\templates\search\search_results.html:92
+#: .\templates\search\search_results.html:173
 #: .\venv\Lib\site-packages\grappelli\templates\admin\constance\includes\results_list.html:8
 msgid "Name"
 msgstr "Имя"
@@ -286,7 +286,7 @@ msgid "Hotel"
 msgstr "Отель"
 
 #: .\templates\hotel\async\selected_rooms.html:43
-#: .\templates\hotel\checkout.html:17 .\templates\hotel\hotel_detail.html:172
+#: .\templates\hotel\checkout.html:17 .\templates\hotel\hotel_detail.html:162
 #: .\templates\hotel\payment_method_selection.html:19
 #: .\templates\hotel\room_type_detail.html:29
 #: .\templates\hotel\selected_rooms.html:27
@@ -306,7 +306,7 @@ msgid "Selected Rooms"
 msgstr "Выбранные Номера"
 
 #: .\templates\hotel\async\selected_rooms.html:64
-#: .\templates\hotel\checkout.html:41 .\templates\hotel\hotel_detail.html:172
+#: .\templates\hotel\checkout.html:41 .\templates\hotel\hotel_detail.html:162
 #: .\templates\hotel\room_type_detail.html:79
 #: .\templates\hotel\selected_rooms.html:50
 msgid "Beds"
@@ -321,7 +321,7 @@ msgstr "Вместимость Номера"
 #: .\templates\hotel\async\selected_rooms.html:165
 #: .\templates\hotel\async\selected_rooms.html:172
 #: .\templates\hotel\checkout.html:42 .\templates\hotel\checkout.html:99
-#: .\templates\hotel\checkout.html:105 .\templates\hotel\hotel_detail.html:176
+#: .\templates\hotel\checkout.html:105 .\templates\hotel\hotel_detail.html:166
 #: .\templates\hotel\payment_failed.html:38
 #: .\templates\hotel\payment_method_selection.html:53
 #: .\templates\hotel\payment_method_selection.html:57
@@ -390,9 +390,9 @@ msgid "Continue to checkout"
 msgstr "Оформить бронирование"
 
 #: .\templates\hotel\async\selected_rooms.html:151
-#: .\templates\hotel\hotel_detail.html:36
-#: .\templates\hotel\hotel_detail.html:104
-#: .\templates\hotel\hotel_detail.html:217
+#: .\templates\hotel\hotel_detail.html:25
+#: .\templates\hotel\hotel_detail.html:94
+#: .\templates\hotel\hotel_detail.html:207
 #: .\templates\hotel\selected_rooms.html:142
 msgid "Reviews"
 msgstr "Отзывы"
@@ -486,91 +486,83 @@ msgstr "Номер"
 msgid "Continue to Payment"
 msgstr "К оплате"
 
-#: .\templates\hotel\hotel_detail.html:34
-#: .\templates\hotel\hotel_detail.html:102
-#: .\templates\hotel\hotel_detail.html:252
+#: .\templates\hotel\hotel_detail.html:23
+#: .\templates\hotel\hotel_detail.html:92
+#: .\templates\hotel\hotel_detail.html:242
 msgid "No Reviews Yet"
 msgstr "Отзывов пока нет"
 
-#: .\templates\hotel\hotel_detail.html:42
-msgid "Book Now"
-msgstr "Забронировать!"
-
-#: .\templates\hotel\hotel_detail.html:56
-#: .\templates\hotel\hotel_detail.html:116
+#: .\templates\hotel\hotel_detail.html:46
+#: .\templates\hotel\hotel_detail.html:106
 msgid "Add Review"
 msgstr "Добавить Отзыв"
 
-#: .\templates\hotel\hotel_detail.html:59
-#: .\templates\hotel\hotel_detail.html:119
+#: .\templates\hotel\hotel_detail.html:49
+#: .\templates\hotel\hotel_detail.html:109
 msgid "Write a review"
 msgstr "Написать отзыв"
 
-#: .\templates\hotel\hotel_detail.html:62
-#: .\templates\hotel\hotel_detail.html:122
+#: .\templates\hotel\hotel_detail.html:52
+#: .\templates\hotel\hotel_detail.html:112
 msgid "Your Message..."
 msgstr "Ваше сообщение..."
 
-#: .\templates\hotel\hotel_detail.html:70
-#: .\templates\hotel\hotel_detail.html:130
+#: .\templates\hotel\hotel_detail.html:60
+#: .\templates\hotel\hotel_detail.html:120
 msgid "Reply Message"
 msgstr "Отправить сообщение"
 
-#: .\templates\hotel\hotel_detail.html:75
-#: .\templates\hotel\hotel_detail.html:135
+#: .\templates\hotel\hotel_detail.html:65
+#: .\templates\hotel\hotel_detail.html:125
 msgid "Login to Write Review"
 msgstr "Войдите в систему, чтобы написать отзыв"
 
-#: .\templates\hotel\hotel_detail.html:77
-#: .\templates\hotel\hotel_detail.html:137
+#: .\templates\hotel\hotel_detail.html:67
+#: .\templates\hotel\hotel_detail.html:127
 msgid "Share"
 msgstr "Поделиться"
 
-#: .\templates\hotel\hotel_detail.html:142
+#: .\templates\hotel\hotel_detail.html:132
 msgid "Description"
 msgstr "Описание"
 
-#: .\templates\hotel\hotel_detail.html:146
+#: .\templates\hotel\hotel_detail.html:136
 msgid "Check-in Time"
 msgstr "Время заезда"
 
-#: .\templates\hotel\hotel_detail.html:147
+#: .\templates\hotel\hotel_detail.html:137
 msgid "Check-out Time"
 msgstr "Время выезда"
 
-#: .\templates\hotel\hotel_detail.html:163
+#: .\templates\hotel\hotel_detail.html:153
 msgid "Pricing"
 msgstr "Цены"
 
-#: .\templates\hotel\hotel_detail.html:166
+#: .\templates\hotel\hotel_detail.html:156
 msgid "Room Types"
 msgstr "Типы номеров"
 
-#: .\templates\hotel\hotel_detail.html:174
+#: .\templates\hotel\hotel_detail.html:164
 msgid "Photo"
 msgstr "Фото"
 
-#: .\templates\hotel\hotel_detail.html:176
-msgid "from"
-msgstr "от"
-
-#: .\templates\hotel\hotel_detail.html:189
+#: .\templates\hotel\hotel_detail.html:179
 msgid "Amenities"
 msgstr "Удобства"
 
-#: .\templates\hotel\hotel_detail.html:202
+#: .\templates\hotel\hotel_detail.html:192
 msgid "FAQ's"
 msgstr "Часто задаваемые вопросы"
 
-#: .\templates\hotel\hotel_detail.html:224
+#: .\templates\hotel\hotel_detail.html:214
 msgid "Not Rated Yet"
 msgstr "Еще не оценен"
 
-#: .\templates\hotel\hotel_detail.html:342
+#: .\templates\hotel\hotel_detail.html:332
 msgid "Room size"
 msgstr "Площадь номера"
 
-#: .\templates\hotel\hotel_detail.html:368
+#: .\templates\hotel\hotel_detail.html:358
 msgid "Close"
 msgstr "Закрыть"
 
@@ -591,7 +583,7 @@ msgid "Select Booking Date"
 msgstr "Выберите даты бронирования"
 
 #: .\templates\hotel\index.html:31 .\templates\hotel\index.html:41
-#: .\templates\search\search_results.html:46
+#: .\templates\search\search_results.html:127
 msgid "Number of Guests"
 msgstr "Количество гостей"
 
@@ -616,7 +608,7 @@ msgid "5+ Guests"
 msgstr "5+ гостей"
 
 #: .\templates\hotel\index.html:49 .\templates\hotel\index_translated.html:31
-#: .\templates\search\search_results.html:100
+#: .\templates\search\search_results.html:181
 msgid "Search"
 msgstr "Поиск"
 
@@ -652,7 +644,7 @@ msgstr "Применить"
 msgid "Cancel"
 msgstr "Отменить"
 
-#: .\templates\hotel\index.html:140 .\templates\search\search_results.html:172
+#: .\templates\hotel\index.html:140 .\templates\search\search_results.html:253
 msgid "From"
 msgstr "От"
 
@@ -960,12 +952,12 @@ msgstr "ФИО"
 msgid "Country Code"
 msgstr "Код страны"
 
-#: .\templates\hotel\payment_method_selection.html:422
+#: .\templates\hotel\payment_method_selection.html:419
 msgid "Please accept all legal agreements before proceeding with payment."
 msgstr ""
 "Пожалуйста, примите все юридические соглашения перед совершением оплаты."
 
-#: .\templates\hotel\payment_method_selection.html:462
+#: .\templates\hotel\payment_method_selection.html:456
 msgid "Processing..."
 msgstr "В процессе..."
 
@@ -1361,77 +1353,77 @@ msgstr "Ознакомьтесь с пользовательскими согл�
 msgid "Hotel Search Results"
 msgstr "Результаты поиска"
 
-#: .\templates\search\search_results.html:14
+#: .\templates\search\search_results.html:95
 msgid "Filters"
 msgstr "Фильтры"
 
-#: .\templates\search\search_results.html:20
+#: .\templates\search\search_results.html:101
 #: .\templates\user_dashboard\booking_detail.html:25
 #: .\templates\user_dashboard\dashboard.html:54
 msgid "Hotel Name"
 msgstr "Название отеля"
 
-#: .\templates\search\search_results.html:36
+#: .\templates\search\search_results.html:117
 msgid "Min Price"
 msgstr "Мин. цена"
 
-#: .\templates\search\search_results.html:40
+#: .\templates\search\search_results.html:121
 msgid "Max Price"
 msgstr "Макс. цена"
 
-#: .\templates\search\search_results.html:52
+#: .\templates\search\search_results.html:133
 msgid "Minimum Rating"
 msgstr "Минимальный рейтинг"
 
-#: .\templates\search\search_results.html:54
+#: .\templates\search\search_results.html:135
 msgid "Any"
 msgstr "Любой"
 
-#: .\templates\search\search_results.html:55
+#: .\templates\search\search_results.html:136
 msgid "1+ Star"
 msgstr "1+ Звезд"
 
-#: .\templates\search\search_results.html:56
+#: .\templates\search\search_results.html:137
 msgid "2+ Stars"
 msgstr "2+ Звезды"
 
-#: .\templates\search\search_results.html:57
+#: .\templates\search\search_results.html:138
 msgid "3+ Stars"
 msgstr "3+ Звезды"
 
-#: .\templates\search\search_results.html:58
+#: .\templates\search\search_results.html:139
 msgid "4+ Stars"
 msgstr "4+ Звезды"
 
-#: .\templates\search\search_results.html:59
+#: .\templates\search\search_results.html:140
 msgid "5 Stars"
 msgstr "5 Звезд"
 
-#: .\templates\search\search_results.html:90
+#: .\templates\search\search_results.html:171
 msgid "Sort By"
 msgstr "Сортировать по"
 
-#: .\templates\search\search_results.html:93
+#: .\templates\search\search_results.html:174
 msgid "Price: Low to High"
 msgstr "Цена: от низкой к высокой"
 
-#: .\templates\search\search_results.html:94
+#: .\templates\search\search_results.html:175
 msgid "Price: High to Low"
 msgstr "Цена: от высокой к низкой"
 
-#: .\templates\search\search_results.html:95
+#: .\templates\search\search_results.html:176
 msgid "Rating"
 msgstr "Рейтинг"
 
-#: .\templates\search\search_results.html:96
+#: .\templates\search\search_results.html:177
 msgid "Popularity"
 msgstr "Популярность"
 
-#: .\templates\search\search_results.html:109
+#: .\templates\search\search_results.html:190
 msgid "Search Results"
 msgstr "Результаты поиска"
 
-#: .\templates\search\search_results.html:111
+#: .\templates\search\search_results.html:192
 #, python-format
 msgid "Found %(count)s hotel"
 msgid_plural "Found %(count)s hotels"
@@ -1440,63 +1432,63 @@ msgstr[1] "Найдено %(count)s отеля"
 msgstr[2] "Найдено %(count)s отелей"
 msgstr[3] "Найдено %(count)s отелей"
 
-#: .\templates\search\search_results.html:127
+#: .\templates\search\search_results.html:208
 msgid "No Image"
 msgstr "Нет изображения"
 
-#: .\templates\search\search_results.html:141
+#: .\templates\search\search_results.html:222
 msgid "No ratings"
 msgstr "Нет отзывов"
 
-#: .\templates\search\search_results.html:149
+#: .\templates\search\search_results.html:230
 msgid "Amenities:"
 msgstr "Удобства"
 
-#: .\templates\search\search_results.html:154
+#: .\templates\search\search_results.html:235
 msgid "No amenities listed"
 msgstr "Удобства не указаны"
 
-#: .\templates\search\search_results.html:157
+#: .\templates\search\search_results.html:238
 msgid "more"
 msgstr "ещё"
 
-#: .\templates\search\search_results.html:163
+#: .\templates\search\search_results.html:244
 msgid "Available Rooms:"
 msgstr "Доступные номера:"
 
-#: .\templates\search\search_results.html:168
+#: .\templates\search\search_results.html:249
 msgid "views"
 msgstr "просмотров"
 
-#: .\templates\search\search_results.html:172
+#: .\templates\search\search_results.html:253
 msgid "per night"
 msgstr "за ночь"
 
-#: .\templates\search\search_results.html:174
+#: .\templates\search\search_results.html:255
 msgid "Price not available"
 msgstr "Цена недоступна"
 
-#: .\templates\search\search_results.html:176
+#: .\templates\search\search_results.html:257
 msgid "View Details"
 msgstr "Подробнее"
 
-#: .\templates\search\search_results.html:191
+#: .\templates\search\search_results.html:272
 msgid "First"
 msgstr "1"
 
-#: .\templates\search\search_results.html:194
+#: .\templates\search\search_results.html:275
 msgid "Previous"
 msgstr "Предыдущая"
 
-#: .\templates\search\search_results.html:210
+#: .\templates\search\search_results.html:291
 msgid "Next"
 msgstr "Следующая"
 
-#: .\templates\search\search_results.html:213
+#: .\templates\search\search_results.html:294
 msgid "Last"
 msgstr "Последняя"
 
-#: .\templates\search\search_results.html:222
+#: .\templates\search\search_results.html:303
 msgid ""
 "No hotels found matching your search criteria. Try adjusting your filters."
 msgstr ""
@@ -2591,10 +2583,14 @@ msgstr ""
 msgid "Load"
 msgstr "Загрузить"
 
+#~ msgid "Book Now"
+#~ msgstr "Забронировать!"
+
+#~ msgid "from"
+#~ msgstr "от"
 
 #~ msgid "HMS Team"
 #~ msgstr "Команда системы управления отелем"
-
 
 #~ msgctxt "admin"
 #~ msgid "Check-In Date"

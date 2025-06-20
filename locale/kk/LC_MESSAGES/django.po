@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-18 11:50+0500\n"
+"POT-Creation-Date: 2025-06-21 02:30+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,8 +34,8 @@ msgid "Select Booking Data"
 msgstr "Бронь күнің таңдау"
 
 #: .\templates\booking\booking_data.html:22
-#: .\templates\hotel\hotel_detail.html:45
-#: .\templates\hotel\hotel_detail.html:264
+#: .\templates\hotel\hotel_detail.html:35
+#: .\templates\hotel\hotel_detail.html:254
 #: .\templates\hotel\room_type_detail.html:189
 #: .\templates\partials\dashboard_base.html:102
 #: .\templates\partials\dashboard_base.html:148
@@ -44,10 +44,10 @@ msgid "Booking"
 msgstr "Бронь"
 
 #: .\templates\booking\booking_data.html:27
-#: .\templates\hotel\hotel_detail.html:269
+#: .\templates\hotel\hotel_detail.html:259
 #: .\templates\hotel\payment_method_selection.html:150
 #: .\templates\hotel\room_type_detail.html:194
-#: .\templates\search\search_results.html:26
+#: .\templates\search\search_results.html:107
 msgid "Check-in Date"
 msgstr "Қоңақ үйге кіру күні"
 
@@ -59,10 +59,10 @@ msgid "Select Date"
 msgstr "Бронь күнің таңдау"
 
 #: .\templates\booking\booking_data.html:31
-#: .\templates\hotel\hotel_detail.html:273
+#: .\templates\hotel\hotel_detail.html:263
 #: .\templates\hotel\payment_method_selection.html:151
 #: .\templates\hotel\room_type_detail.html:198
-#: .\templates\search\search_results.html:30
+#: .\templates\search\search_results.html:111
 msgid "Check-out Date"
 msgstr "Қоңақ үйден шығу күні"
 
@@ -74,7 +74,7 @@ msgstr "Қонақтар"
 #: .\templates\booking\booking_data.html:39
 #: .\templates\email\booking_completed.html:519
 #: .\templates\hotel\async\selected_rooms.html:162
-#: .\templates\hotel\checkout.html:93 .\templates\hotel\hotel_detail.html:281
+#: .\templates\hotel\checkout.html:93 .\templates\hotel\hotel_detail.html:271
 #: .\templates\hotel\payment_method_selection.html:153
 #: .\templates\hotel\room_type_detail.html:206
 #: .\templates\hotel\selected_rooms.html:153
@@ -88,24 +88,24 @@ msgid "Adults"
 msgstr "Ересектер"
 
 #: .\templates\booking\booking_data.html:43
-#: .\templates\hotel\hotel_detail.html:285
+#: .\templates\hotel\hotel_detail.html:275
 #: .\templates\hotel\room_type_detail.html:210
 msgid "Childrens"
 msgstr "Балалар"
 
 #: .\templates\booking\booking_data.html:52
-#: .\templates\hotel\hotel_detail.html:293
+#: .\templates\hotel\hotel_detail.html:283
 #: .\templates\hotel\room_type_detail.html:219
 msgid "Select Room Type"
 msgstr "Бөлме түрін таңдау"
 
 #: .\templates\booking\booking_data.html:54
-#: .\templates\hotel\hotel_detail.html:295
+#: .\templates\hotel\hotel_detail.html:285
 msgid "Select Room"
 msgstr "Бөлме таңдау"
 
 #: .\templates\booking\booking_data.html:62
-#: .\templates\hotel\hotel_detail.html:302
+#: .\templates\hotel\hotel_detail.html:292
 #: .\templates\hotel\room_type_detail.html:231
 msgid "Check Availability"
 msgstr "Бөлменің қолжетімділігін тексеру"
@@ -183,7 +183,7 @@ msgid "Hotel Details"
 msgstr "Қоңақ үй детальдары"
 
 #: .\templates\email\booking_completed.html:668
-#: .\templates\search\search_results.html:92
+#: .\templates\search\search_results.html:173
 #: .\venv\Lib\site-packages\grappelli\templates\admin\constance\includes\results_list.html:8
 msgid "Name"
 msgstr "Атауы"
@@ -287,7 +287,7 @@ msgid "Hotel"
 msgstr "Қонақ үй"
 
 #: .\templates\hotel\async\selected_rooms.html:43
-#: .\templates\hotel\checkout.html:17 .\templates\hotel\hotel_detail.html:172
+#: .\templates\hotel\checkout.html:17 .\templates\hotel\hotel_detail.html:162
 #: .\templates\hotel\payment_method_selection.html:19
 #: .\templates\hotel\room_type_detail.html:29
 #: .\templates\hotel\selected_rooms.html:27
@@ -307,7 +307,7 @@ msgid "Selected Rooms"
 msgstr "Таңдалған бөлмелер"
 
 #: .\templates\hotel\async\selected_rooms.html:64
-#: .\templates\hotel\checkout.html:41 .\templates\hotel\hotel_detail.html:172
+#: .\templates\hotel\checkout.html:41 .\templates\hotel\hotel_detail.html:162
 #: .\templates\hotel\room_type_detail.html:79
 #: .\templates\hotel\selected_rooms.html:50
 msgid "Beds"
@@ -324,7 +324,7 @@ msgstr "Бөлменің сыйымдылығы"
 #: .\templates\hotel\async\selected_rooms.html:165
 #: .\templates\hotel\async\selected_rooms.html:172
 #: .\templates\hotel\checkout.html:42 .\templates\hotel\checkout.html:99
-#: .\templates\hotel\checkout.html:105 .\templates\hotel\hotel_detail.html:176
+#: .\templates\hotel\checkout.html:105 .\templates\hotel\hotel_detail.html:166
 #: .\templates\hotel\payment_failed.html:38
 #: .\templates\hotel\payment_method_selection.html:53
 #: .\templates\hotel\payment_method_selection.html:57
@@ -393,9 +393,9 @@ msgid "Continue to checkout"
 msgstr "Шығуды"
 
 #: .\templates\hotel\async\selected_rooms.html:151
-#: .\templates\hotel\hotel_detail.html:36
-#: .\templates\hotel\hotel_detail.html:104
-#: .\templates\hotel\hotel_detail.html:217
+#: .\templates\hotel\hotel_detail.html:25
+#: .\templates\hotel\hotel_detail.html:94
+#: .\templates\hotel\hotel_detail.html:207
 #: .\templates\hotel\selected_rooms.html:142
 msgid "Reviews"
 msgstr "Пікірлер"
@@ -493,99 +493,89 @@ msgstr "Бөлме"
 msgid "Continue to Payment"
 msgstr "Шығуды"
 
-#: .\templates\hotel\hotel_detail.html:34
-#: .\templates\hotel\hotel_detail.html:102
-#: .\templates\hotel\hotel_detail.html:252
+#: .\templates\hotel\hotel_detail.html:23
+#: .\templates\hotel\hotel_detail.html:92
+#: .\templates\hotel\hotel_detail.html:242
 msgid "No Reviews Yet"
 msgstr "Пікір қалдырмады"
 
-#: .\templates\hotel\hotel_detail.html:42
-#, fuzzy
-#| msgid "Booked Rooms"
-msgid "Book Now"
-msgstr "Броньдалған бөлмелер"
-
-#: .\templates\hotel\hotel_detail.html:56
-#: .\templates\hotel\hotel_detail.html:116
+#: .\templates\hotel\hotel_detail.html:46
+#: .\templates\hotel\hotel_detail.html:106
 msgid "Add Review"
 msgstr "Пікір қосу"
 
-#: .\templates\hotel\hotel_detail.html:59
-#: .\templates\hotel\hotel_detail.html:119
+#: .\templates\hotel\hotel_detail.html:49
+#: .\templates\hotel\hotel_detail.html:109
 msgid "Write a review"
 msgstr "Пікір жазу"
 
-#: .\templates\hotel\hotel_detail.html:62
-#: .\templates\hotel\hotel_detail.html:122
+#: .\templates\hotel\hotel_detail.html:52
+#: .\templates\hotel\hotel_detail.html:112
 msgid "Your Message..."
 msgstr ""
 
-#: .\templates\hotel\hotel_detail.html:70
-#: .\templates\hotel\hotel_detail.html:130
+#: .\templates\hotel\hotel_detail.html:60
+#: .\templates\hotel\hotel_detail.html:120
 msgid "Reply Message"
 msgstr "Хабарламаға жауап беру"
 
-#: .\templates\hotel\hotel_detail.html:75
-#: .\templates\hotel\hotel_detail.html:135
+#: .\templates\hotel\hotel_detail.html:65
+#: .\templates\hotel\hotel_detail.html:125
 msgid "Login to Write Review"
 msgstr "Пікір қалдыру үшін жеке парақшана кіріңіз"
 
-#: .\templates\hotel\hotel_detail.html:77
-#: .\templates\hotel\hotel_detail.html:137
+#: .\templates\hotel\hotel_detail.html:67
+#: .\templates\hotel\hotel_detail.html:127
 msgid "Share"
 msgstr "Бөлісу"
 
-#: .\templates\hotel\hotel_detail.html:142
+#: .\templates\hotel\hotel_detail.html:132
 msgid "Description"
 msgstr "Сипаттама"
 
-#: .\templates\hotel\hotel_detail.html:146
+#: .\templates\hotel\hotel_detail.html:136
 #, fuzzy
 #| msgid "Check-in Date"
 msgid "Check-in Time"
 msgstr "Қоңақ үйге кіру күні"
 
-#: .\templates\hotel\hotel_detail.html:147
+#: .\templates\hotel\hotel_detail.html:137
 #, fuzzy
 #| msgid "Check-out Date"
 msgid "Check-out Time"
 msgstr "Қоңақ үйден шығу күні"
 
-#: .\templates\hotel\hotel_detail.html:163
+#: .\templates\hotel\hotel_detail.html:153
 msgid "Pricing"
 msgstr "Бағалар"
 
-#: .\templates\hotel\hotel_detail.html:166
+#: .\templates\hotel\hotel_detail.html:156
 msgid "Room Types"
 msgstr "Бөлме түрлері"
 
-#: .\templates\hotel\hotel_detail.html:174
+#: .\templates\hotel\hotel_detail.html:164
 msgid "Photo"
 msgstr "Сурет"
 
-#: .\templates\hotel\hotel_detail.html:176
-msgid "from"
-msgstr ""
-
-#: .\templates\hotel\hotel_detail.html:189
+#: .\templates\hotel\hotel_detail.html:179
 msgid "Amenities"
 msgstr "Қызметтер"
 
-#: .\templates\hotel\hotel_detail.html:202
+#: .\templates\hotel\hotel_detail.html:192
 msgid "FAQ's"
 msgstr "Жиі қойылатын сұрақтар"
 
-#: .\templates\hotel\hotel_detail.html:224
+#: .\templates\hotel\hotel_detail.html:214
 msgid "Not Rated Yet"
 msgstr "Әлі бағаланған жоқ"
 
-#: .\templates\hotel\hotel_detail.html:342
+#: .\templates\hotel\hotel_detail.html:332
 #, fuzzy
 #| msgid "Room Price"
 msgid "Room size"
 msgstr "Бөлме бағасы"
 
-#: .\templates\hotel\hotel_detail.html:368
+#: .\templates\hotel\hotel_detail.html:358
 msgid "Close"
 msgstr "Жабық"
 
@@ -610,7 +600,7 @@ msgid "Select Booking Date"
 msgstr "Бронь күнің таңдау"
 
 #: .\templates\hotel\index.html:31 .\templates\hotel\index.html:41
-#: .\templates\search\search_results.html:46
+#: .\templates\search\search_results.html:127
 msgid "Number of Guests"
 msgstr ""
 
@@ -645,7 +635,7 @@ msgid "5+ Guests"
 msgstr "Қонақтар"
 
 #: .\templates\hotel\index.html:49 .\templates\hotel\index_translated.html:31
-#: .\templates\search\search_results.html:100
+#: .\templates\search\search_results.html:181
 msgid "Search"
 msgstr "Іздеу"
 
@@ -685,7 +675,7 @@ msgstr ""
 msgid "Cancel"
 msgstr "Броньды жою"
 
-#: .\templates\hotel\index.html:140 .\templates\search\search_results.html:172
+#: .\templates\hotel\index.html:140 .\templates\search\search_results.html:253
 msgid "From"
 msgstr ""
 
@@ -1015,11 +1005,11 @@ msgstr "Толық аты-жөні"
 msgid "Country Code"
 msgstr "Ел"
 
-#: .\templates\hotel\payment_method_selection.html:422
+#: .\templates\hotel\payment_method_selection.html:419
 msgid "Please accept all legal agreements before proceeding with payment."
 msgstr ""
 
-#: .\templates\hotel\payment_method_selection.html:462
+#: .\templates\hotel\payment_method_selection.html:456
 msgid "Processing..."
 msgstr ""
 
@@ -1440,164 +1430,164 @@ msgstr ""
 msgid "Hotel Search Results"
 msgstr "Қоңақ үй детальдары"
 
-#: .\templates\search\search_results.html:14
+#: .\templates\search\search_results.html:95
 msgid "Filters"
 msgstr ""
 
-#: .\templates\search\search_results.html:20
+#: .\templates\search\search_results.html:101
 #: .\templates\user_dashboard\booking_detail.html:25
 #: .\templates\user_dashboard\dashboard.html:54
 msgid "Hotel Name"
 msgstr "Қонақ үйдің атауы"
 
-#: .\templates\search\search_results.html:36
+#: .\templates\search\search_results.html:117
 #, fuzzy
 #| msgid "Price"
 msgid "Min Price"
 msgstr "Баға"
 
-#: .\templates\search\search_results.html:40
+#: .\templates\search\search_results.html:121
 #, fuzzy
 #| msgid "Price"
 msgid "Max Price"
 msgstr "Баға"
 
-#: .\templates\search\search_results.html:52
+#: .\templates\search\search_results.html:133
 msgid "Minimum Rating"
 msgstr ""
 
-#: .\templates\search\search_results.html:54
+#: .\templates\search\search_results.html:135
 msgid "Any"
 msgstr ""
 
-#: .\templates\search\search_results.html:55
+#: .\templates\search\search_results.html:136
 msgid "1+ Star"
 msgstr ""
 
-#: .\templates\search\search_results.html:56
+#: .\templates\search\search_results.html:137
 msgid "2+ Stars"
 msgstr ""
 
-#: .\templates\search\search_results.html:57
+#: .\templates\search\search_results.html:138
 msgid "3+ Stars"
 msgstr ""
 
-#: .\templates\search\search_results.html:58
+#: .\templates\search\search_results.html:139
 msgid "4+ Stars"
 msgstr ""
 
-#: .\templates\search\search_results.html:59
+#: .\templates\search\search_results.html:140
 msgid "5 Stars"
 msgstr ""
 
-#: .\templates\search\search_results.html:90
+#: .\templates\search\search_results.html:171
 msgid "Sort By"
 msgstr ""
 
-#: .\templates\search\search_results.html:93
+#: .\templates\search\search_results.html:174
 msgid "Price: Low to High"
 msgstr ""
 
-#: .\templates\search\search_results.html:94
+#: .\templates\search\search_results.html:175
 msgid "Price: High to Low"
 msgstr ""
 
-#: .\templates\search\search_results.html:95
+#: .\templates\search\search_results.html:176
 #, fuzzy
 #| msgid "No Rating Yet"
 msgid "Rating"
 msgstr "Әлі баға жоқ"
 
-#: .\templates\search\search_results.html:96
+#: .\templates\search\search_results.html:177
 msgid "Popularity"
 msgstr ""
 
-#: .\templates\search\search_results.html:109
+#: .\templates\search\search_results.html:190
 #, fuzzy
 #| msgid "Search"
 msgid "Search Results"
 msgstr "Іздеу"
 
-#: .\templates\search\search_results.html:111
+#: .\templates\search\search_results.html:192
 #, python-format
 msgid "Found %(count)s hotel"
 msgid_plural "Found %(count)s hotels"
 msgstr[0] ""
 msgstr[1] ""
 
-#: .\templates\search\search_results.html:127
+#: .\templates\search\search_results.html:208
 msgid "No Image"
 msgstr ""
 
-#: .\templates\search\search_results.html:141
+#: .\templates\search\search_results.html:222
 #, fuzzy
 #| msgid "No Rating Yet"
 msgid "No ratings"
 msgstr "Әлі баға жоқ"
 
-#: .\templates\search\search_results.html:149
+#: .\templates\search\search_results.html:230
 #, fuzzy
 #| msgid "Amenities"
 msgid "Amenities:"
 msgstr "Қызметтер"
 
-#: .\templates\search\search_results.html:154
+#: .\templates\search\search_results.html:235
 msgid "No amenities listed"
 msgstr ""
 
-#: .\templates\search\search_results.html:157
+#: .\templates\search\search_results.html:238
 msgid "more"
 msgstr ""
 
-#: .\templates\search\search_results.html:163
+#: .\templates\search\search_results.html:244
 #, fuzzy
 #| msgid "Available Rooms"
 msgid "Available Rooms:"
 msgstr "Қолжетімді бөлмелер"
 
-#: .\templates\search\search_results.html:168
+#: .\templates\search\search_results.html:249
 #, fuzzy
 #| msgid "Reviews"
 msgid "views"
 msgstr "Пікірлер"
 
-#: .\templates\search\search_results.html:172
+#: .\templates\search\search_results.html:253
 #, fuzzy
 #| msgid "/Per Night"
 msgid "per night"
 msgstr "/Бір түнге"
 
-#: .\templates\search\search_results.html:174
+#: .\templates\search\search_results.html:255
 msgid "Price not available"
 msgstr ""
 
-#: .\templates\search\search_results.html:176
+#: .\templates\search\search_results.html:257
 #, fuzzy
 #| msgid "Profile Details"
 msgid "View Details"
 msgstr "Профиль деректері"
 
-#: .\templates\search\search_results.html:191
+#: .\templates\search\search_results.html:272
 #, fuzzy
 #| msgid "First Name"
 msgid "First"
 msgstr "Атыңыз"
 
-#: .\templates\search\search_results.html:194
+#: .\templates\search\search_results.html:275
 #, fuzzy
 #| msgid "reviews"
 msgid "Previous"
 msgstr "Пікірлер"
 
-#: .\templates\search\search_results.html:210
+#: .\templates\search\search_results.html:291
 msgid "Next"
 msgstr ""
 
-#: .\templates\search\search_results.html:213
+#: .\templates\search\search_results.html:294
 msgid "Last"
 msgstr ""
 
-#: .\templates\search\search_results.html:222
+#: .\templates\search\search_results.html:303
 msgid ""
 "No hotels found matching your search criteria. Try adjusting your filters."
 msgstr ""
@@ -2666,6 +2656,11 @@ msgstr ""
 #: .\venv\Lib\site-packages\grappelli\templates\smuggler\load_data_form.html:53
 msgid "Load"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Booked Rooms"
+#~ msgid "Book Now"
+#~ msgstr "Броньдалған бөлмелер"
 
 #~ msgid "HMS Team"
 #~ msgstr "HMS тобы"
