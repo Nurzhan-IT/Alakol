@@ -9,7 +9,7 @@
 {% endblock special_header_links %}
 {% block content %}
         <!-- Banner -->
-        <div class="search_container_block main_search_block" data-background-image="{% static 'images/home_section_1.jpg' %}">
+        <div class="search_container_block main_search_block" data-background-image="{% static 'images/john-wood-KkXf7lxXS78-unsplash.jpg' %}">
             <div class="main_inner_search_block">
                 <div class="container">
                     <div class="row">
@@ -77,8 +77,8 @@
                                                         <!-- <span class="utp_approve_item"><i class="utf_approve_listing"></i></span> -->
                                                     </div>
                                                     <h3>{{h.name|truncatechars:20}}</h3>
-                                                    <span><i class="fas fa-location-arrow"></i> {{h.address}}</span>
-                                                    <span><i class="fas fa-phone"></i> {{h.mobile}}</span>
+                                                    <span><i class="fa fa-map-marker"></i> {{h.address}}</span>
+                                                    
                                                 </div>
                                             </div>
                                             <div class="utf_star_rating_section" data-rating="{{h.average_rating}}">
