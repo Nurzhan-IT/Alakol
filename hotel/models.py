@@ -482,8 +482,10 @@ class Booking(models.Model):
         # Автоматически рассчитываем предоплату (10%) и платеж отелю (90%)
         if self.total:
             from decimal import Decimal
-            self.prepayment = self.total * Decimal('0.10')
-            self.payment_for_hotel = self.total * Decimal('0.90')
+            # Приводим total к Decimal для корректных вычислений
+            total_decimal = Decimal(str(self.total))
+            self.prepayment = total_decimal * Decimal('0.10')
+            self.payment_for_hotel = total_decimal * Decimal('0.90')
         
         super().save(*args, **kwargs)
 

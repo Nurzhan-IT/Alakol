@@ -508,6 +508,80 @@ CSRF_TRUSTED_ORIGINS = [
     'https://b855-2a0d-b201-c0-774-907e-b5d8-ed29-207b.ngrok-free.app',
 ]
 
+# Redis Configuration for Caching
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.getenv("REDIS_URL", "redis://127.0.0.1:6379/1"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_POOL_KWARGS": {
+                "max_connections": 50,
+                "health_check_interval": 30,
+            },
+            "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
+            "SERIALIZER": "django_redis.serializers.pickle.PickleSerializer",
+        },
+        "KEY_PREFIX": "hms_alakol",
+        "TIMEOUT": 300,  # 5 минут по умолчанию
+    },
+    "sessions": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.getenv("REDIS_URL", "redis://127.0.0.1:6379/2"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_POOL_KWARGS": {
+                "max_connections": 50,
+                "health_check_interval": 30,
+            },
+        },
+        "KEY_PREFIX": "hms_sessions",
+        "TIMEOUT": 86400,  # 24 часа для сессий
+    },
+    "long_term": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.getenv("REDIS_URL", "redis://127.0.0.1:6379/3"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_POOL_KWARGS": {
+                "max_connections": 20,
+                "health_check_interval": 60,
+            },
+            "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
+        },
+        "KEY_PREFIX": "hms_longterm",
+        "TIMEOUT": 3600,  # 1 час для долгосрочных данных
+    }
+}
+
+# Session Configuration - используем Redis для сессий
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "sessions"
+SESSION_COOKIE_AGE = 86400  # 24 часа
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_SAVE_EVERY_REQUEST = True
+
+# Cache Middleware Configuration
+MIDDLEWARE.insert(1, 'django.middleware.cache.UpdateCacheMiddleware')
+MIDDLEWARE.append('django.middleware.cache.FetchFromCacheMiddleware')
+
+# Cache времена жизни для различных типов данных
+CACHE_TTL = {
+    'hotels_list': 900,         # 15 минут - список отелей
+    'hotel_detail': 1800,       # 30 минут - детали отеля
+    'search_results': 300,      # 5 минут - результаты поиска
+    'room_availability': 180,   # 3 минуты - доступность номеров
+    'booking_data': 1800,       # 30 минут - данные бронирования
+    'user_bookings': 600,       # 10 минут - бронирования пользователя
+    'hotel_reviews': 3600,      # 1 час - отзывы отеля
+    'dynamic_pricing': 600,     # 10 минут - динамические цены
+    'features_and_amenities': 7200,  # 2 часа - удобства и особенности
+    'static_content': 86400,    # 24 часа - статический контент
+    # Настройки для booking приложения
+    'booking_availability_check': 120,  # 2 минуты - проверка доступности
+    'room_unavailability': 300,     # 5 минут - недоступность номеров
+    'booking_session_data': 1800,   # 30 минут - данные сессии бронирования
+}
 
 CRONJOBS = [
     ('*/5 * * * *', 'hotel.cron.handle_bookings_payment_status_processing'),

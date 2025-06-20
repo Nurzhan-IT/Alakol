@@ -4,10 +4,13 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.db.models import Q, Prefetch, Count
-
+from django.core.cache import cache
+from django.conf import settings
 
 from hotel.models import Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType
 from hotel.views import calculate_total_price  # Импортируем функцию для расчета динамических цен
+from hotel.cache_utils import CacheKeyGenerator, CacheInvalidator
+from booking.cache_utils import BookingCacheHelper, cache_booking_function
 
 from datetime import datetime, timedelta
 from decimal import Decimal
@@ -17,6 +20,17 @@ from django.contrib import messages
 import logging
 logger = logging.getLogger(__name__)
 
+@cache_booking_function(
+    key_func=lambda request: (
+        f"room_availability_check:"
+        f"{request.POST.get('hotel-id', '')}:"
+        f"{request.POST.get('room-type-id', request.POST.get('room-type', ''))}:"
+        f"{request.POST.get('checkin', '')}:"
+        f"{request.POST.get('checkout', '')}"
+        if request.method == "POST" else "invalid_method"
+    ),
+    timeout=settings.CACHE_TTL.get('booking_availability_check', 120)
+)
 def check_room_availability(request):
     if request.method == "POST":
         id = request.POST.get("hotel-id")
@@ -26,6 +40,19 @@ def check_room_availability(request):
         children = request.POST.get("children")
         room_type = request.POST.get("room-type", "")
         room_type_id = request.POST.get("room-type-id", "")
+        
+        # Проверяем кэш для данного запроса
+        cached_result = BookingCacheHelper.get_cached_booking_availability_check(
+            int(id) if id else 0,
+            int(room_type_id) if room_type_id else 0,
+            checkin or "",
+            checkout or ""
+        )
+        
+        if cached_result and not settings.DEBUG:
+            logger.debug(f"Возвращаем кэшированный результат проверки доступности")
+            # Если есть кэшированный результат, возвращаем его
+            return cached_result
         
         # Подробное логирование всех параметров запроса
         logger.info(f"Получен POST запрос с параметрами: hotel-id={id}, checkin={checkin}, checkout={checkout}, "
@@ -127,15 +154,40 @@ def check_room_availability(request):
         logger.info(f"Redirecting to room_type_detail with hotel_slug={hotel.slug}, room_type_slug={room_type_obj.slug}")
         url = reverse("hotel:room_type_detail", args=[hotel.slug, room_type_obj.slug])
         url_with_params = f"{url}?hotel-id={id}&checkin={checkin}&checkout={checkout}&adult={adult}&children={children}&room_type={room_type_obj.slug}"
-        return HttpResponseRedirect(url_with_params)
+        response = HttpResponseRedirect(url_with_params)
+        
+        # Кэшируем результат успешной проверки доступности
+        if id and room_type_id and checkin and checkout:
+            BookingCacheHelper.cache_booking_availability_check(
+                int(id), int(room_type_id), checkin, checkout, {
+                    'success': True,
+                    'redirect_url': url_with_params,
+                    'hotel_slug': hotel.slug,
+                    'room_type_slug': room_type_obj.slug
+                }
+            )
+        
+        return response
 
     else:
         logger.warning("Non-POST request to check_room_availability")
         return redirect("hotel:index")
     
 def booking_data(request, slug):
-    # Оптимизация: используем select_related для загрузки связанных объектов отеля
-    hotel = get_object_or_404(Hotel.objects.select_related(), status="Live", slug=slug)
+    # Пытаемся получить отель из кэша
+    cache_key = CacheKeyGenerator.hotel_detail(slug)
+    cached_hotel = cache.get(cache_key)
+    
+    if cached_hotel:
+        hotel = cached_hotel
+        logger.debug(f"Отель {slug} получен из кэша")
+    else:
+        # Оптимизация: используем select_related для загрузки связанных объектов отеля
+        hotel = get_object_or_404(Hotel.objects.select_related(), status="Live", slug=slug)
+        # Кэшируем отель
+        cache.set(cache_key, hotel, settings.CACHE_TTL.get('hotel_detail', 1800))
+        logger.debug(f"Отель {slug} закэширован")
+    
     context = {
         "hotel": hotel,
     }
@@ -143,6 +195,9 @@ def booking_data(request, slug):
 
 
 def add_to_selection(request):
+    # Кэшируем данные сессии бронирования
+    session_key = request.session.session_key or request.session._get_or_create_session_key()
+    
     # Проверяем наличие данных о поиске типа номера
     if 'room_type_search_dates' in request.session:
         # Используем эти данные для обновления booking_common_data
@@ -150,21 +205,29 @@ def add_to_selection(request):
             request.session['booking_common_data'] = {}
         
         # Обновляем booking_common_data данными из room_type_search_dates
-        request.session['booking_common_data'] = {
+        booking_common_data = {
             'checkin': request.session['room_type_search_dates'].get('checkin', request.GET['checkin']),
             'checkout': request.session['room_type_search_dates'].get('checkout', request.GET['checkout']),
             'adult': request.session['room_type_search_dates'].get('adult', request.GET['adult']),
             'children': request.session['room_type_search_dates'].get('children', request.GET['children']),
         }
+        request.session['booking_common_data'] = booking_common_data
+        
+        # Кэшируем данные сессии
+        BookingCacheHelper.cache_booking_session_data(session_key, booking_common_data)
     else:
         # Если room_type_search_dates отсутствует, используем данные из запроса
         if 'booking_common_data' not in request.session:
-            request.session['booking_common_data'] = {
+            booking_common_data = {
                 'checkin': request.GET['checkin'],
                 'checkout': request.GET['checkout'],
                 'adult': request.GET['adult'],
                 'children': request.GET['children'],
             }
+            request.session['booking_common_data'] = booking_common_data
+            
+            # Кэшируем данные сессии
+            BookingCacheHelper.cache_booking_session_data(session_key, booking_common_data)
     
     room_selection = {}
     current_hotel_id = request.GET['hotel_id']
@@ -177,10 +240,21 @@ def add_to_selection(request):
     room_type_obj = None
     
     if need_room_capacity:
-        try:
-            room_type_obj = RoomType.objects.get(id=room_type_id)
-        except RoomType.DoesNotExist:
-            pass
+        # Пытаемся получить тип номера из кэша
+        cache_key = f"room_type:{room_type_id}"
+        cached_room_type = cache.get(cache_key)
+        
+        if cached_room_type:
+            room_type_obj = cached_room_type
+            logger.debug(f"Тип номера {room_type_id} получен из кэша")
+        else:
+            try:
+                room_type_obj = RoomType.objects.get(id=room_type_id)
+                # Кэшируем тип номера на 1 час
+                cache.set(cache_key, room_type_obj, 3600)
+                logger.debug(f"Тип номера {room_type_id} закэширован")
+            except RoomType.DoesNotExist:
+                pass
 
     room_selection[room_id] = {
         'hotel_id': current_hotel_id,

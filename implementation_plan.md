@@ -66,6 +66,7 @@
 1. **Backup базы данных**
    ```bash
    pg_dump alakol > backup_$(date +%Y%m%d).sql
+   $env:PGPASSWORD = "fINyNm89Ct0s9xci"; pg_dump -U alakol_admin -h 127.0.0.1 -p 5432 alakol > backup_$(Get-Date -Format 'yyyyMMdd').sql; $env:PGPASSWORD = $null
    ```
 
 2. **Настройка Redis и кэширования**
