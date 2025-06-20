@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-18 11:50+0500\n"
+"POT-Creation-Date: 2025-06-19 06:25+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,8 +34,8 @@ msgid "Select Booking Data"
 msgstr "Бронь күнің таңдау"
 
 #: .\templates\booking\booking_data.html:22
-#: .\templates\hotel\hotel_detail.html:45
-#: .\templates\hotel\hotel_detail.html:264
+#: .\templates\hotel\hotel_detail.html:35
+#: .\templates\hotel\hotel_detail.html:254
 #: .\templates\hotel\room_type_detail.html:189
 #: .\templates\partials\dashboard_base.html:102
 #: .\templates\partials\dashboard_base.html:148
@@ -44,10 +44,10 @@ msgid "Booking"
 msgstr "Бронь"
 
 #: .\templates\booking\booking_data.html:27
-#: .\templates\hotel\hotel_detail.html:269
+#: .\templates\hotel\hotel_detail.html:259
 #: .\templates\hotel\payment_method_selection.html:150
 #: .\templates\hotel\room_type_detail.html:194
-#: .\templates\search\search_results.html:26
+#: .\templates\search\search_results.html:107
 msgid "Check-in Date"
 msgstr "Қоңақ үйге кіру күні"
 
@@ -59,10 +59,10 @@ msgid "Select Date"
 msgstr "Бронь күнің таңдау"
 
 #: .\templates\booking\booking_data.html:31
-#: .\templates\hotel\hotel_detail.html:273
+#: .\templates\hotel\hotel_detail.html:263
 #: .\templates\hotel\payment_method_selection.html:151
 #: .\templates\hotel\room_type_detail.html:198
-#: .\templates\search\search_results.html:30
+#: .\templates\search\search_results.html:111
 msgid "Check-out Date"
 msgstr "Қоңақ үйден шығу күні"
 
@@ -74,7 +74,7 @@ msgstr "Қонақтар"
 #: .\templates\booking\booking_data.html:39
 #: .\templates\email\booking_completed.html:519
 #: .\templates\hotel\async\selected_rooms.html:162
-#: .\templates\hotel\checkout.html:93 .\templates\hotel\hotel_detail.html:281
+#: .\templates\hotel\checkout.html:93 .\templates\hotel\hotel_detail.html:271
 #: .\templates\hotel\payment_method_selection.html:153
 #: .\templates\hotel\room_type_detail.html:206
 #: .\templates\hotel\selected_rooms.html:153
@@ -88,24 +88,24 @@ msgid "Adults"
 msgstr "Ересектер"
 
 #: .\templates\booking\booking_data.html:43
-#: .\templates\hotel\hotel_detail.html:285
+#: .\templates\hotel\hotel_detail.html:275
 #: .\templates\hotel\room_type_detail.html:210
 msgid "Childrens"
 msgstr "Балалар"
 
 #: .\templates\booking\booking_data.html:52
-#: .\templates\hotel\hotel_detail.html:293
+#: .\templates\hotel\hotel_detail.html:283
 #: .\templates\hotel\room_type_detail.html:219
 msgid "Select Room Type"
 msgstr "Бөлме түрін таңдау"
 
 #: .\templates\booking\booking_data.html:54
-#: .\templates\hotel\hotel_detail.html:295
+#: .\templates\hotel\hotel_detail.html:285
 msgid "Select Room"
 msgstr "Бөлме таңдау"
 
 #: .\templates\booking\booking_data.html:62
-#: .\templates\hotel\hotel_detail.html:302
+#: .\templates\hotel\hotel_detail.html:292
 #: .\templates\hotel\room_type_detail.html:231
 msgid "Check Availability"
 msgstr "Бөлменің қолжетімділігін тексеру"
@@ -183,7 +183,7 @@ msgid "Hotel Details"
 msgstr "Қоңақ үй детальдары"
 
 #: .\templates\email\booking_completed.html:668
-#: .\templates\search\search_results.html:92
+#: .\templates\search\search_results.html:173
 #: .\venv\Lib\site-packages\grappelli\templates\admin\constance\includes\results_list.html:8
 msgid "Name"
 msgstr "Атауы"
@@ -287,7 +287,7 @@ msgid "Hotel"
 msgstr "Қонақ үй"
 
 #: .\templates\hotel\async\selected_rooms.html:43
-#: .\templates\hotel\checkout.html:17 .\templates\hotel\hotel_detail.html:172
+#: .\templates\hotel\checkout.html:17 .\templates\hotel\hotel_detail.html:162
 #: .\templates\hotel\payment_method_selection.html:19
 #: .\templates\hotel\room_type_detail.html:29
 #: .\templates\hotel\selected_rooms.html:27
@@ -307,7 +307,7 @@ msgid "Selected Rooms"
 msgstr "Таңдалған бөлмелер"
 
 #: .\templates\hotel\async\selected_rooms.html:64
-#: .\templates\hotel\checkout.html:41 .\templates\hotel\hotel_detail.html:172
+#: .\templates\hotel\checkout.html:41 .\templates\hotel\hotel_detail.html:162
 #: .\templates\hotel\room_type_detail.html:79
 #: .\templates\hotel\selected_rooms.html:50
 msgid "Beds"
@@ -324,7 +324,7 @@ msgstr "Бөлменің сыйымдылығы"
 #: .\templates\hotel\async\selected_rooms.html:165
 #: .\templates\hotel\async\selected_rooms.html:172
 #: .\templates\hotel\checkout.html:42 .\templates\hotel\checkout.html:99
-#: .\templates\hotel\checkout.html:105 .\templates\hotel\hotel_detail.html:176
+#: .\templates\hotel\checkout.html:105 .\templates\hotel\hotel_detail.html:166
 #: .\templates\hotel\payment_failed.html:38
 #: .\templates\hotel\payment_method_selection.html:53
 #: .\templates\hotel\payment_method_selection.html:57
@@ -393,9 +393,9 @@ msgid "Continue to checkout"
 msgstr "Шығуды"
 
 #: .\templates\hotel\async\selected_rooms.html:151
-#: .\templates\hotel\hotel_detail.html:36
-#: .\templates\hotel\hotel_detail.html:104
-#: .\templates\hotel\hotel_detail.html:217
+#: .\templates\hotel\hotel_detail.html:25
+#: .\templates\hotel\hotel_detail.html:94
+#: .\templates\hotel\hotel_detail.html:207
 #: .\templates\hotel\selected_rooms.html:142
 msgid "Reviews"
 msgstr "Пікірлер"
@@ -493,99 +493,89 @@ msgstr "Бөлме"
 msgid "Continue to Payment"
 msgstr "Шығуды"
 
-#: .\templates\hotel\hotel_detail.html:34
-#: .\templates\hotel\hotel_detail.html:102
-#: .\templates\hotel\hotel_detail.html:252
+#: .\templates\hotel\hotel_detail.html:23
+#: .\templates\hotel\hotel_detail.html:92
+#: .\templates\hotel\hotel_detail.html:242
 msgid "No Reviews Yet"
 msgstr "Пікір қалдырмады"
 
-#: .\templates\hotel\hotel_detail.html:42
-#, fuzzy
-#| msgid "Booked Rooms"
-msgid "Book Now"
-msgstr "Броньдалған бөлмелер"
-
-#: .\templates\hotel\hotel_detail.html:56
-#: .\templates\hotel\hotel_detail.html:116
+#: .\templates\hotel\hotel_detail.html:46
+#: .\templates\hotel\hotel_detail.html:106
 msgid "Add Review"
 msgstr "Пікір қосу"
 
-#: .\templates\hotel\hotel_detail.html:59
-#: .\templates\hotel\hotel_detail.html:119
+#: .\templates\hotel\hotel_detail.html:49
+#: .\templates\hotel\hotel_detail.html:109
 msgid "Write a review"
 msgstr "Пікір жазу"
 
-#: .\templates\hotel\hotel_detail.html:62
-#: .\templates\hotel\hotel_detail.html:122
+#: .\templates\hotel\hotel_detail.html:52
+#: .\templates\hotel\hotel_detail.html:112
 msgid "Your Message..."
 msgstr ""
 
-#: .\templates\hotel\hotel_detail.html:70
-#: .\templates\hotel\hotel_detail.html:130
+#: .\templates\hotel\hotel_detail.html:60
+#: .\templates\hotel\hotel_detail.html:120
 msgid "Reply Message"
 msgstr "Хабарламаға жауап беру"
 
-#: .\templates\hotel\hotel_detail.html:75
-#: .\templates\hotel\hotel_detail.html:135
+#: .\templates\hotel\hotel_detail.html:65
+#: .\templates\hotel\hotel_detail.html:125
 msgid "Login to Write Review"
 msgstr "Пікір қалдыру үшін жеке парақшана кіріңіз"
 
-#: .\templates\hotel\hotel_detail.html:77
-#: .\templates\hotel\hotel_detail.html:137
+#: .\templates\hotel\hotel_detail.html:67
+#: .\templates\hotel\hotel_detail.html:127
 msgid "Share"
 msgstr "Бөлісу"
 
-#: .\templates\hotel\hotel_detail.html:142
+#: .\templates\hotel\hotel_detail.html:132
 msgid "Description"
 msgstr "Сипаттама"
 
-#: .\templates\hotel\hotel_detail.html:146
+#: .\templates\hotel\hotel_detail.html:136
 #, fuzzy
 #| msgid "Check-in Date"
 msgid "Check-in Time"
 msgstr "Қоңақ үйге кіру күні"
 
-#: .\templates\hotel\hotel_detail.html:147
+#: .\templates\hotel\hotel_detail.html:137
 #, fuzzy
 #| msgid "Check-out Date"
 msgid "Check-out Time"
 msgstr "Қоңақ үйден шығу күні"
 
-#: .\templates\hotel\hotel_detail.html:163
+#: .\templates\hotel\hotel_detail.html:153
 msgid "Pricing"
 msgstr "Бағалар"
 
-#: .\templates\hotel\hotel_detail.html:166
+#: .\templates\hotel\hotel_detail.html:156
 msgid "Room Types"
 msgstr "Бөлме түрлері"
 
-#: .\templates\hotel\hotel_detail.html:174
+#: .\templates\hotel\hotel_detail.html:164
 msgid "Photo"
 msgstr "Сурет"
 
-#: .\templates\hotel\hotel_detail.html:176
-msgid "from"
-msgstr ""
-
-#: .\templates\hotel\hotel_detail.html:189
+#: .\templates\hotel\hotel_detail.html:179
 msgid "Amenities"
 msgstr "Қызметтер"
 
-#: .\templates\hotel\hotel_detail.html:202
+#: .\templates\hotel\hotel_detail.html:192
 msgid "FAQ's"
 msgstr "Жиі қойылатын сұрақтар"
 
-#: .\templates\hotel\hotel_detail.html:224
+#: .\templates\hotel\hotel_detail.html:214
 msgid "Not Rated Yet"
 msgstr "Әлі бағаланған жоқ"
 
-#: .\templates\hotel\hotel_detail.html:342
+#: .\templates\hotel\hotel_detail.html:332
 #, fuzzy
 #| msgid "Room Price"
 msgid "Room size"
 msgstr "Бөлме бағасы"
 
-#: .\templates\hotel\hotel_detail.html:368
+#: .\templates\hotel\hotel_detail.html:358
 msgid "Close"
 msgstr "Жабық"
 
@@ -610,7 +600,7 @@ msgid "Select Booking Date"
 msgstr "Бронь күнің таңдау"
 
 #: .\templates\hotel\index.html:31 .\templates\hotel\index.html:41
-#: .\templates\search\search_results.html:46
+#: .\templates\search\search_results.html:127
 msgid "Number of Guests"
 msgstr ""
 
@@ -645,7 +635,7 @@ msgid "5+ Guests"
 msgstr "Қонақтар"
 
 #: .\templates\hotel\index.html:49 .\templates\hotel\index_translated.html:31
-#: .\templates\search\search_results.html:100
+#: .\templates\search\search_results.html:181
 msgid "Search"
 msgstr "Іздеу"
 
@@ -685,7 +675,7 @@ msgstr ""
 msgid "Cancel"
 msgstr "Броньды жою"
 
-#: .\templates\hotel\index.html:140 .\templates\search\search_results.html:172
+#: .\templates\hotel\index.html:140 .\templates\search\search_results.html:253
 msgid "From"
 msgstr ""
 
@@ -1015,11 +1005,11 @@ msgstr "Толық аты-жөні"
 msgid "Country Code"
 msgstr "Ел"
 
-#: .\templates\hotel\payment_method_selection.html:422
+#: .\templates\hotel\payment_method_selection.html:419
 msgid "Please accept all legal agreements before proceeding with payment."
 msgstr ""
 
-#: .\templates\hotel\payment_method_selection.html:462
+#: .\templates\hotel\payment_method_selection.html:456
 msgid "Processing..."
 msgstr ""
 
@@ -1121,6 +1111,3757 @@ msgstr ""
 #| msgid "Continue to checkout"
 msgid "Select checkout"
 msgstr "Шығуды"
+
+#: .\templates\legal\booking_rules.html:4
+msgid "Правила бронирования и отмены"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:7
+msgid "ПРАВИЛА БРОНИРОВАНИЯ И ОТМЕНЫ БРОНИРОВАНИЯ"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:8
+msgid "СИСТЕМЫ БРОНИРОВАНИЯ ОТЕЛЕЙ eKol"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:11
+#: .\templates\legal\payment_rules.html:11
+#: .\templates\legal\personal_data_consent.html:11
+#: .\templates\legal\privacy_policy.html:16
+#: .\templates\legal\public_offer.html:12
+#: .\templates\legal\terms_of_use.html:11
+msgid "Дата вступления в силу:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:12
+#: .\templates\legal\payment_rules.html:12
+#: .\templates\legal\personal_data_consent.html:12
+#: .\templates\legal\privacy_policy.html:17
+#: .\templates\legal\public_offer.html:13
+#: .\templates\legal\terms_of_use.html:12
+msgid "Версия документа:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:15
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:18
+#: .\templates\legal\payment_rules.html:15
+#: .\templates\legal\personal_data_consent.html:15
+#: .\templates\legal\privacy_policy.html:24
+#: .\templates\legal\terms_of_use.html:19
+msgid "1. ОБЩИЕ ПОЛОЖЕНИЯ"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:16
+msgid ""
+"Настоящие Правила определяют условия и порядок бронирования номеров в "
+"отелях, а также условия изменения и отмены бронирования через веб-сайт "
+"[АДРЕС САЙТА]."
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:18
+msgid ""
+"Правила действуют для всех пользователей системы бронирования и являются "
+"неотъемлемой частью Публичной оферты на оказание услуг бронирования отелей."
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:20
+msgid ""
+"Принимая условия бронирования, Пользователь соглашается с настоящими "
+"Правилами в полном объеме."
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:22
+msgid "2. УСЛОВИЯ БРОНИРОВАНИЯ"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:23
+msgid "2.1. Минимальные требования для бронирования:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:25
+msgid "Регистрация на сайте или указание контактных данных"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:26
+msgid "Выбор отеля, типа номера и дат проживания"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:27
+msgid "Согласие с условиями отеля и настоящими Правилами"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:28
+msgid "Внесение предоплаты в размере, установленном отелем"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:31
+msgid "2.2. Размер предоплаты:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:33
+msgid "Размер предоплаты определяется каждым отелем самостоятельно"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:34
+#, python-format
+msgid ""
+"Предоплата может составлять 10%%, 30%%, 50%%, 70%% или 100%% от общей "
+"стоимости"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:35
+msgid "Оставшаяся сумма доплачивается в отеле при заселении"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:36
+#, python-format
+msgid "При 100%% предоплате доплата в отеле не требуется"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:39
+msgid "2.3. Подтверждение бронирования:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:41
+msgid "Бронирование считается подтвержденным после успешной оплаты предоплаты"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:42
+msgid "Подтверждение направляется на указанный email в течение 15 минут"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:43
+msgid "В подтверждении указываются все детали бронирования и контакты отеля"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:46
+msgid "3. УСЛОВИЯ ОТМЕНЫ БРОНИРОВАНИЯ"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:49
+msgid "ВАЖНО:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:49
+msgid ""
+"Условия отмены зависят от размера внесенной предоплаты и времени до заезда."
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:52
+msgid "3.1. Общие принципы отмены:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:54
+#, python-format
+msgid ""
+"Первые 10%% предоплаты являются гарантийным депозитом и не возвращаются при "
+"отмене по инициативе клиента"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:55
+msgid ""
+"Остальная часть предоплаты может быть возвращена в зависимости от времени "
+"отмены"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:56
+msgid "При форс-мажорных обстоятельствах предоплата возвращается полностью"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:59
+msgid "3.2. Условия отмены по размеру предоплаты:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:61
+#: .\templates\legal\payment_rules.html:123
+#, python-format
+msgid "При предоплате 10%%:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:63
+#, python-format
+msgid ""
+"Отмена в любое время: возврат 0%% (вся сумма остается в качестве "
+"гарантийного депозита)"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:64
+#: .\templates\legal\booking_rules.html:72
+#: .\templates\legal\booking_rules.html:81
+#: .\templates\legal\booking_rules.html:90
+#: .\templates\legal\booking_rules.html:100
+#, python-format
+msgid "Неявка (No-show): возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:67
+#: .\templates\legal\payment_rules.html:129
+#, python-format
+msgid "При предоплате 30%%:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:69
+#, python-format
+msgid "Отмена за 15+ дней до заезда: возврат 20%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:70
+#, python-format
+msgid "Отмена за 10-14 дней до заезда: возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:71
+#: .\templates\legal\payment_rules.html:139
+#, python-format
+msgid "Отмена менее чем за 10 дней: возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:75
+#: .\templates\legal\payment_rules.html:135
+#, python-format
+msgid "При предоплате 50%%:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:77
+#, python-format
+msgid "Отмена за 15+ дней до заезда: возврат 40%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:78
+#, python-format
+msgid "Отмена за 10-14 дней до заезда: возврат 20%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:79
+#, python-format
+msgid "Отмена за 7-9 дней до заезда: возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:80
+#, python-format
+msgid "Отмена менее чем за 7 дней: возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:84
+#: .\templates\legal\payment_rules.html:142
+#, python-format
+msgid "При предоплате 70%%:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:86
+#, python-format
+msgid "Отмена за 15+ дней до заезда: возврат 60%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:87
+#, python-format
+msgid "Отмена за 10-14 дней до заезда: возврат 40%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:88
+#, python-format
+msgid "Отмена за 7-9 дней до заезда: возврат 10%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:89
+#: .\templates\legal\booking_rules.html:99
+#: .\templates\legal\payment_rules.html:147
+#: .\templates\legal\payment_rules.html:156
+#, python-format
+msgid "Отмена менее чем за 36 часов: возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:93
+#: .\templates\legal\payment_rules.html:150
+#, python-format
+msgid "При предоплате 100%%:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:95
+#, python-format
+msgid "Отмена за 15+ дней до заезда: возврат 90%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:96
+#, python-format
+msgid "Отмена за 10-14 дней до заезда: возврат 70%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:97
+#, python-format
+msgid "Отмена за 7-9 дней до заезда: возврат 40%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:98
+#, python-format
+msgid "Отмена за 36+ часов до заезда: возврат 20%%"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:103
+msgid "3.3. Форс-мажорные обстоятельства:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:105
+msgid "Стихийные бедствия"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:106
+msgid "Военные действия или террористические акты"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:107
+msgid "Эпидемии и пандемии с введением ограничений на передвижение"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:108
+msgid "Закрытие отеля по решению государственных органов"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:109
+msgid "Другие чрезвычайные ситуации, признанные форс-мажорными"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:112
+msgid ""
+"При форс-мажорных обстоятельствах предоплата возвращается в полном объеме "
+"независимо от времени отмены."
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:114
+msgid "4. ПРОЦЕДУРА ОТМЕНЫ"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:116
+msgid "4.1. Подача заявления на отмену:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:118
+msgid "Заявление подается через личный кабинет на сайте"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:119
+msgid "Или по email с указанием номера бронирования"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:120
+msgid "Или по телефону службы поддержки"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:123
+msgid "4.2. Обработка заявления:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:125
+msgid "Заявления обрабатываются в течение 1-2 рабочих дней"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:126
+msgid "Клиент получает подтверждение отмены на email"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:127
+msgid "В подтверждении указывается сумма к возврату"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:130
+msgid "4.3. Возврат средств:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:132
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:277
+msgid "Возврат осуществляется тем же способом, которым была внесена оплата"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:133
+msgid "Срок возврата: 5-10 рабочих дней"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:134
+msgid "Комиссии платежных систем не возвращаются"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:137
+msgid "5. ИЗМЕНЕНИЕ БРОНИРОВАНИЯ"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:139
+msgid "5.1. Возможные изменения:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:141
+msgid "Изменение дат проживания (при наличии свободных номеров)"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:142
+msgid "Изменение типа номера"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:143
+msgid "Изменение количества гостей"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:146
+msgid "5.2. Условия изменения:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:148
+msgid "Изменения принимаются не позднее чем за 15 дней до заезда"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:149
+msgid "При увеличении стоимости доплачивается разница"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:150
+msgid "При уменьшении стоимости разница не возвращается"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:151
+msgid "За изменение бронирования может взиматься административный сбор"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:154
+msgid "6. ОСОБЫЕ УСЛОВИЯ"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:156
+msgid "6.1. Групповые бронирования:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:158
+msgid "Бронирования от 5 номеров считаются групповыми"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:159
+msgid "Для групповых бронирований могут действовать особые условия отмены"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:160
+msgid "Условия согласовываются индивидуально с отелем"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:163
+msgid "6.2. Праздничные даты:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:165
+msgid "В праздничные и пиковые периоды могут действовать особые условия"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:166
+msgid "Отели могут устанавливать более жесткие условия отмены"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:167
+msgid "Особые условия указываются при бронировании"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:170
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:157
+msgid "7. ОТВЕТСТВЕННОСТЬ СТОРОН"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:172
+msgid "7.1. Ответственность системы бронирования:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:174
+msgid "Обеспечение работы платформы бронирования"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:175
+msgid "Корректная передача информации отелям"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:176
+msgid "Обработка платежей и возвратов"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:177
+msgid "Техническая поддержка пользователей"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:180
+msgid "7.2. Ответственность отелей:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:182
+msgid "Предоставление забронированных номеров"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:183
+msgid "Соблюдение заявленных условий размещения"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:184
+msgid "Качество предоставляемых услуг"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:185
+msgid "Соблюдение условий отмены и возврата"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:188
+msgid "7.3. Ответственность клиентов:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:190
+msgid "Предоставление корректной информации при бронировании"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:191
+msgid "Своевременная оплата предоплаты"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:192
+msgid "Соблюдение правил отеля"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:193
+msgid "Уведомление об отмене в установленные сроки"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:196
+msgid "8. РАЗРЕШЕНИЕ СПОРОВ"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:198
+msgid "8.1. Досудебное урегулирование:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:200
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:327
+msgid "Все споры решаются путем переговоров"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:201
+msgid "Претензии рассматриваются в течение 10 рабочих дней"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:202
+msgid "Ответ направляется в письменном виде"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:205
+msgid "8.2. Судебное разрешение:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:207
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:334
+msgid "При невозможности досудебного урегулирования споры передаются в суд"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:208
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:335
+msgid "Применимое право: законодательство Республики Казахстан"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:209
+msgid "Подсудность: суды г. Алматы"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:212
+#: .\templates\legal\payment_rules.html:231
+msgid "9. КОНТАКТНАЯ ИНФОРМАЦИЯ"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:215
+#: .\templates\legal\payment_rules.html:239
+msgid "Служба поддержки:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:218
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:28
+#: .\templates\legal\payment_rules.html:237
+#: .\templates\legal\personal_data_consent.html:28
+#: .\templates\legal\personal_data_consent.html:253
+#: .\templates\legal\privacy_policy.html:252
+#: .\templates\legal\terms_of_use.html:156
+msgid "Телефон:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:219
+#: .\templates\legal\payment_rules.html:238
+msgid "Время работы:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:219
+msgid "ПН-ВС 9:00-21:00"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:220
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:26
+#: .\templates\legal\personal_data_consent.html:254
+#: .\templates\legal\privacy_policy.html:251
+msgid "Адрес:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:220
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:26
+#: .\templates\legal\personal_data_consent.html:26
+#: .\templates\legal\personal_data_consent.html:254
+msgid "г. Алматы, Республика Казахстан"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:225
+#: .\templates\legal\payment_rules.html:244
+msgid "Важно:"
+msgstr ""
+
+#: .\templates\legal\booking_rules.html:225
+msgid ""
+"Настоящие Правила могут изменяться. Актуальная версия всегда доступна на "
+"сайте. Изменения вступают в силу с момента публикации."
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:4
+msgid "Соглашение с владельцами отелей"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:8
+msgid "Последнее обновление:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:11
+msgid "СОГЛАШЕНИЕ О СОТРУДНИЧЕСТВЕ С ПЛАТФОРМОЙ БРОНИРОВАНИЯ ОТЕЛЕЙ"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:14
+msgid "Дата:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:15
+msgid "Место:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:15
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:381
+msgid "Алматы, Республика Казахстан"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:20
+msgid ""
+"Настоящее Соглашение регулирует отношения между Платформой бронирования "
+"отелей \\"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:22
+msgid "Реквизиты Платформы:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:24
+#: .\templates\legal\personal_data_consent.html:24
+msgid "Наименование:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:25
+#: .\templates\legal\personal_data_consent.html:25
+msgid "БИН:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:25
+#: .\templates\legal\personal_data_consent.html:25
+msgid "предполагаемый"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:31
+msgid ""
+"Платформа выступает в качестве посредника между Отелями и клиентами, "
+"обеспечивая технологическую инфраструктуру для бронирования номеров."
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:33
+msgid ""
+"Настоящее Соглашение является публичной офертой в соответствии со статьей "
+"395 Гражданского кодекса Республики Казахстан."
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:35
+msgid "2. ПРЕДМЕТ СОГЛАШЕНИЯ"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:37
+msgid ""
+"Платформа предоставляет Отелю доступ к системе управления бронированиями "
+"eKol (Hotel Management System), включающей:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:39
+msgid "Веб-интерфейс для размещения информации об отеле"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:40
+msgid "Систему онлайн-бронирования номеров"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:41
+msgid "Интеграцию с платежной системой Robokassa"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:42
+msgid "Многоязычную поддержку (казахский, русский, английский языки)"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:43
+msgid "Систему уведомлений и отчетности"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:46
+msgid ""
+"Отель предоставляет Платформе право размещать информацию о своих объектах и "
+"принимать бронирования от клиентов через Платформу."
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:48
+msgid "3. СХЕМА ОПЛАТЫ И КОМИССИОННОЕ ВОЗНАГРАЖДЕНИЕ"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:50
+msgid "Гибкая схема оплаты:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:52
+#, python-format
+msgid ""
+"Клиент вносит предоплату в размере N%% от общей стоимости проживания через "
+"Платформу, где N определяется политикой конкретного отеля и может составлять:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:54
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:55
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:56
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:57
+#: .\templates\legal\payment_rules.html:56
+#: .\templates\legal\payment_rules.html:57
+#: .\templates\legal\payment_rules.html:58
+#: .\templates\legal\payment_rules.html:59
+#: .\templates\legal\public_offer.html:107
+#: .\templates\legal\public_offer.html:108
+#: .\templates\legal\public_offer.html:109
+#: .\templates\legal\public_offer.html:110
+msgid "от общей стоимости проживания"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:58
+#: .\templates\legal\payment_rules.html:60
+msgid "от общей стоимости проживания (полная предоплата)"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:61
+#, python-format
+msgid ""
+"Оставшиеся (100%% - N%%) клиент доплачивает непосредственно в Отеле при "
+"заселении"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:62
+#: .\templates\legal\payment_rules.html:67
+#, python-format
+msgid "При N = 100%% доплата в отеле не требуется"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:65
+msgid "Комиссионное вознаграждение Платформы:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:67
+msgid "Платформа удерживает комиссию с каждого успешного бронирования"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:68
+msgid "Размер комиссии"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:69
+#, python-format
+msgid "Размер комиссии включен в предоплату N%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:70
+msgid "Комиссия взимается с полной стоимости бронирования"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:73
+#: .\templates\legal\payment_rules.html:80
+#: .\templates\legal\privacy_policy.html:88
+msgid "ВАЖНОЕ УВЕДОМЛЕНИЕ О ОКРУГЛЕНИЯХ:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:73
+msgid ""
+"В связи с процентными вычислениями при расчете предоплаты, доплаты, комиссий "
+"и перечислений отелю, все денежные суммы могут округляться с погрешностью до "
+"1 (одного) тенге в большую или меньшую сторону."
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:75
+msgid "Расчеты между сторонами:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:77
+msgid "Предоплата от клиентов поступает на счет Платформы через Robokassa"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:78
+#, python-format
+msgid ""
+"К оплате со стороны клиента: Предоплата N%% (включая комиссию платформы) + "
+"Доплата в отеле (100%% - N%%)"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:79
+#, python-format
+msgid ""
+"Отель получает N%% за вычетом комиссии платформы сразу после заселения "
+"клиента"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:82
+msgid "4. ОБЯЗАННОСТИ ОТЕЛЯ"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:84
+msgid "Предоставление актуальной информации:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:86
+msgid "Поддержание актуальных данных об отеле (название, адрес, контакты)"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:87
+msgid "Обновление информации о номерах, ценах и доступности"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:88
+msgid "Предоставление качественных фотографий номеров и территории"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:89
+msgid "Указание точного времени заезда и выезда"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:92
+msgid "Соблюдение условий бронирования:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:94
+msgid "Гарантировать наличие забронированных номеров на указанные даты"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:95
+msgid "Обеспечить заселение клиентов с подтвержденными бронированиями"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:96
+#, python-format
+msgid ""
+"Принимать доплату в размере (100%% - N%%) при заселении, где N - размер "
+"предоплаты"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:97
+#, python-format
+msgid "При N = 100%% доплата не требуется"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:98
+msgid "Предоставлять фискальные документы об оплате"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:101
+msgid "Обслуживание клиентов:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:103
+msgid "Соблюдать стандарты качества обслуживания"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:104
+msgid "Реагировать на запросы клиентов в течение 24 часов"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:105
+msgid "Информировать Платформу о проблемах с бронированиями"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:106
+msgid "Вести корректную отчетность по заселениям"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:109
+msgid "Соблюдение законодательства:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:111
+msgid "Иметь все необходимые лицензии и разрешения"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:112
+msgid "Соблюдать требования пожарной безопасности и санитарных норм"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:113
+msgid "Вести учет и отчетность в соответствии с налоговым законодательством РК"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:114
+msgid "Обеспечивать безопасность персональных данных клиентов"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:117
+msgid "5. ОБЯЗАННОСТИ ПЛАТФОРМЫ"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:119
+msgid "Техническое обеспечение:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:121
+msgid "Поддержание работоспособности системы бронирования"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:122
+#: .\templates\legal\personal_data_consent.html:37
+msgid "Обеспечение безопасности платежных операций"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:123
+msgid "Предоставление технической поддержки Отелю"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:124
+msgid "Регулярное обновление и развитие функциональности"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:127
+msgid "Маркетинг и продвижение:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:129
+msgid "Размещение информации об Отеле на платформе"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:130
+msgid "Оптимизация поисковой выдачи"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:131
+msgid "Проведение маркетинговых кампаний"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:134
+msgid "Обработка бронирований:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:136
+msgid "Передача информации о бронированиях в Отель"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:137
+msgid "Обработка платежей через Robokassa"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:138
+msgid "Ведение истории бронирований"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:141
+msgid "6. УПРАВЛЕНИЕ ДАННЫМИ И КОНФИДЕНЦИАЛЬНОСТЬ"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:143
+msgid "Персональные данные клиентов:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:145
+msgid "Платформа передает Отелю только необходимые данные для заселения"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:146
+msgid "Отель обязуется использовать данные исключительно для оказания услуг"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:147
+msgid "Обе стороны соблюдают требования Закона РК \\"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:150
+msgid "Коммерческая информация:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:152
+msgid "Стороны обязуются не разглашать конфиденциальную информацию"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:153
+msgid "Данные о ценах, наличии номеров и клиентах являются конфиденциальными"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:154
+msgid ""
+"Обязательство по конфиденциальности действует в течение 3 лет после "
+"расторжения Соглашения"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:159
+msgid "Ответственность Отеля:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:161
+msgid "За качество предоставляемых услуг размещения"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:162
+msgid "За соответствие фактических условий заявленным на Платформе"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:163
+msgid "За своевременное предоставление номеров клиентам"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:164
+msgid "За ущерб, причиненный неисполнением обязательств"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:167
+msgid "Ответственность Платформы:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:169
+msgid "За корректную передачу информации о бронированиях"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:170
+msgid "За безопасность обработки платежей"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:171
+msgid "За сохранность персональных данных в системе"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:172
+msgid "За техническую доступность сервиса"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:175
+msgid "Ограничение ответственности:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:177
+msgid "Платформа не несет ответственности за качество услуг Отеля"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:178
+msgid "Отель не несет ответственности за технические сбои Платформы"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:179
+msgid ""
+"Максимальный размер ущерба ограничен суммой комиссионных за последние 3 "
+"месяца"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:182
+msgid "8. УСЛОВИЯ ОТМЕНЫ БРОНИРОВАНИЙ"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:184
+msgid "Стандартные условия отмены в зависимости от размера предоплаты:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:186
+#: .\templates\legal\public_offer.html:129
+#: .\templates\legal\terms_of_use.html:120
+#, python-format
+msgid "При предоплате N = 10%%:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:188
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:195
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:211
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:227
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:243
+#: .\templates\legal\public_offer.html:131
+#: .\templates\legal\public_offer.html:137
+#: .\templates\legal\terms_of_use.html:122
+#: .\templates\legal\terms_of_use.html:128
+#, python-format
+msgid ""
+"Первые 10%% предоплаты не возвращаются при НЕ форс-мажоре (гарантийный "
+"депозит)"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:189
+#: .\templates\legal\public_offer.html:132
+#: .\templates\legal\terms_of_use.html:123
+#, python-format
+msgid "Аннуляция в любое время до заезда: возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:190
+#, python-format
+msgid "No-show (неявка): возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:193
+#: .\templates\legal\public_offer.html:135
+#: .\templates\legal\terms_of_use.html:126
+#, python-format
+msgid "При предоплате N = 30%%:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:196
+#: .\templates\legal\public_offer.html:138
+#: .\templates\legal\terms_of_use.html:129
+#, python-format
+msgid "Возврат до 20%% от (30%% - 10%%) = 20%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:197
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:213
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:229
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:245
+msgid "Условия по времени отмены до заселения:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:199
+#: .\templates\legal\public_offer.html:139
+#: .\templates\legal\terms_of_use.html:130
+#, python-format
+msgid "Аннуляция бронирования за 15 суток до заезда: возврат 20%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:200
+#, python-format
+msgid "Аннуляция бронирования за 10 суток до заезда: возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:201
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:217
+#, python-format
+msgid "Аннуляция бронирования за 7 суток до заезда: возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:202
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:218
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:234
+#, python-format
+msgid "Аннуляция бронирования за 36 часов до заезда: возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:203
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:219
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:235
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:251
+#, python-format
+msgid "Аннуляция бронирования менее чем за 36 часов до заезда: возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:206
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:222
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:238
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:254
+msgid "No-show (неявка): применяются те же условия"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:209
+#, python-format
+msgid "При предоплате N = 50%%:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:212
+#, python-format
+msgid "Возврат до 40%% от (50%% - 10%%) = 40%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:215
+#, python-format
+msgid "Аннуляция бронирования за 15 суток до заезда: возврат 40%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:216
+#, python-format
+msgid "Аннуляция бронирования за 10 суток до заезда: возврат 20%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:225
+#, python-format
+msgid "При предоплате N = 70%%:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:228
+#, python-format
+msgid "Возврат до 60%% от (70%% - 10%%) = 60%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:231
+#, python-format
+msgid "Аннуляция бронирования за 15 суток до заезда: возврат 60%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:232
+#, python-format
+msgid "Аннуляция бронирования за 10 суток до заезда: возврат 40%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:233
+#, python-format
+msgid "Аннуляция бронирования за 7 суток до заезда: возврат 10%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:241
+#, python-format
+msgid "При предоплате N = 100%%:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:244
+#, python-format
+msgid "Возврат до 90%% от (100%% - 10%%) = 90%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:247
+#, python-format
+msgid "Аннуляция бронирования за 15 суток до заезда: возврат 90%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:248
+#, python-format
+msgid "Аннуляция бронирования за 10 суток до заезда: возврат 70%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:249
+#, python-format
+msgid "Аннуляция бронирования за 7 суток до заезда: возврат 40%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:250
+#, python-format
+msgid "Аннуляция бронирования за 36 часов до заезда: возврат 20%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:257
+msgid "Форс-мажорные обстоятельства:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:259
+msgid "При закрытии отеля по причинам, не зависящим от Отеля"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:260
+msgid "При введении государственных ограничений на передвижение"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:261
+msgid ""
+"При чрезвычайных ситуациях природного или техногенного характера (стихийные "
+"бедствия, военные действия, эпидемии)"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:262
+msgid "В указанных случаях предоплата возвращается клиенту в полном объеме:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:264
+#, python-format
+msgid "При N = 10%%: возврат 10%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:265
+#, python-format
+msgid "При N = 30%%: возврат 30%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:266
+#, python-format
+msgid "При N = 50%%: возврат 50%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:267
+#, python-format
+msgid "При N = 70%%: возврат 70%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:268
+#, python-format
+msgid "При N = 100%%: возврат 100%%"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:273
+msgid "Процедура возврата средств:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:275
+msgid "Заявление на возврат подается через Платформу"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:276
+msgid "Срок рассмотрения: до 10 рабочих дней"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:280
+msgid "9. НАЛОГООБЛОЖЕНИЕ И ОТЧЕТНОСТЬ"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:282
+msgid "Налоговые обязательства Отеля:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:284
+msgid "Отель самостоятельно ведет учет доходов от бронирований"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:285
+msgid "Декларирует все доходы в соответствии с Налоговым кодексом РК"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:286
+msgid "Предоставляет клиентам фискальные документы при доплате"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:287
+msgid "При запросе предоставляет Платформе справки о налоговых выплатах"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:290
+msgid "Налоговые обязательства Платформы:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:292
+msgid "Платформа ведет учет комиссионных доходов"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:293
+msgid "Декларирует доходы от посреднической деятельности"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:294
+msgid "Предоставляет Отелю справки о выплаченных комиссиях"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:295
+msgid "Сотрудничает с налоговыми органами при проведении проверок"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:298
+msgid "10. СРОК ДЕЙСТВИЯ И РАСТОРЖЕНИЕ"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:300
+msgid "Срок действия:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:302
+msgid "Соглашение вступает в силу с момента регистрации Отеля на Платформе"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:303
+msgid "Действует до расторжения одной из сторон"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:304
+msgid "Автоматически продлевается при отсутствии уведомления о расторжении"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:307
+msgid "Основания для расторжения:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:309
+msgid "Взаимное согласие сторон"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:310
+msgid "Одностороннее расторжение с уведомлением за 30 дней"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:311
+msgid "Существенное нарушение условий Соглашения"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:312
+msgid "Ликвидация или банкротство одной из сторон"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:315
+msgid "Процедура расторжения:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:317
+msgid "Направление письменного уведомления"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:318
+msgid "Завершение всех активных бронирований"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:319
+msgid "Окончательный расчет между сторонами"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:320
+msgid "Удаление информации об Отеле с Платформы"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:323
+msgid "11. РАЗРЕШЕНИЕ СПОРОВ"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:325
+msgid "Досудебный порядок:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:328
+msgid "Срок рассмотрения претензий: 15 рабочих дней"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:329
+msgid "Обязательное направление письменной претензии"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:332
+msgid "Судебный порядок:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:338
+msgid "Урегулирование споров при недоступности номера:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:340
+msgid ""
+"В случае, если номер не может быть предоставлен на выбранные даты "
+"бронирования, Отель обязан:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:342
+msgid ""
+"Первым делом связаться с Платформой eKol и сообщить о данном инциденте "
+"немедленно после выявления проблемы"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:343
+msgid "Далее связаться с клиентом, забронировавшим номер в их отеле"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:344
+msgid ""
+"Отель обязуется урегулировать данный инцидент путем переговоров с клиентом "
+"(предложение альтернативного размещения, перенос дат, компенсация и т.д.)"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:345
+msgid ""
+"Результаты переговоров с клиентом должны быть сообщены Платформе с "
+"предоставлением необходимых доказательств (переписка, документы, "
+"подтверждения)"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:346
+msgid ""
+"Предоставленная информация необходима для корректного изменения данных о "
+"бронировании в системе"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:349
+msgid ""
+"Заявки на изменение бронирования принимаются только за 15 дней до заезда"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:352
+msgid "12. ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:354
+msgid "Изменения и дополнения:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:356
+msgid "Платформа имеет право изменять условия Соглашения"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:357
+msgid "Уведомление об изменениях направляется за 5 дней"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:358
+msgid "Продолжение работы после изменений означает согласие с новыми условиями"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:361
+msgid "Прочие условия:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:363
+msgid "Соглашение составлено на русском языке"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:364
+msgid "Переводы на казахский и английский языки носят справочный характер"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:365
+msgid "Электронная подпись имеет юридическую силу"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:366
+msgid "Все приложения являются неотъемлемой частью Соглашения"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:370
+msgid "Контактная информация для связи:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:372
+msgid "Email для Отелей:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:373
+msgid "Техническая поддержка:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:374
+msgid "Телефон горячей линии:"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:374
+msgid "круглосуточно"
+msgstr ""
+
+#: .\templates\legal\hotel_owner_docs\hotel_owner_agreement.html:379
+msgid ""
+"Соглашение вступает в силу с момента принятия его условий при регистрации на "
+"Платформе."
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:4
+msgid "Правила оплаты и возврата средств"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:7
+msgid "ПРАВИЛА ОПЛАТЫ И ВОЗВРАТА СРЕДСТВ"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:8
+#: .\templates\legal\privacy_policy.html:13
+#: .\templates\legal\terms_of_use.html:8
+msgid "СИСТЕМЫ БРОНИРОВАНИЯ ОТЕЛЕЙ ALAKOL"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:16
+msgid ""
+"Настоящие Правила регулируют порядок оплаты услуг бронирования и возврата "
+"средств в системе бронирования отелей Alakol."
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:18
+msgid ""
+"Правила являются неотъемлемой частью Пользовательского соглашения и "
+"обязательны для всех пользователей системы."
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:20
+msgid ""
+"Совершая платеж, пользователь подтверждает согласие с настоящими Правилами."
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:24
+msgid "2. СПОСОБЫ ОПЛАТЫ"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:26
+msgid "2.1. Доступные способы оплаты:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:28
+msgid "Банковские карты (Visa, MasterCard, МИР)"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:29
+msgid "Электронные кошельки"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:30
+msgid "Банковские переводы"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:31
+msgid "Мобильные платежи"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:32
+msgid "Другие способы, поддерживаемые платежной системой Robokassa"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:35
+msgid "2.2. Валюта платежей:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:37
+msgid "Основная валюта: казахстанский тенге (KZT)"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:38
+msgid "Поддерживаются: российский рубль (RUB), доллар США (USD), евро (EUR)"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:39
+msgid ""
+"Конвертация осуществляется по курсу платежной системы на момент операции"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:42
+msgid "2.3. Безопасность платежей:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:44
+msgid "Все платежи обрабатываются через сертифицированную систему Robokassa"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:45
+msgid "Соблюдение стандартов безопасности PCI DSS"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:46
+msgid "Шифрование данных по протоколу SSL"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:47
+#: .\templates\legal\payment_rules.html:219
+msgid "Система не хранит данные банковских карт"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:50
+msgid "3. СТРУКТУРА ОПЛАТЫ"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:52
+msgid "3.1. Гибкая система предоплаты:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:54
+msgid ""
+"Размер предоплаты определяется политикой каждого отеля и может составлять:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:64
+msgid "3.2. Доплата в отеле:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:66
+#, python-format
+msgid "Размер доплаты составляет (100%% - N%%), где N - размер предоплаты"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:68
+msgid "Доплата производится непосредственно в отеле при заселении"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:69
+msgid "Способы доплаты определяются политикой отеля"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:72
+msgid "3.3. Комиссия платформы:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:74
+#, python-format
+msgid "Размер комиссии: 10%% от общей стоимости бронирования"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:75
+#, python-format
+msgid "Комиссия включена в предоплату N%%"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:76
+msgid "Комиссия не возвращается при отмене бронирования"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:80
+msgid ""
+"В связи с процентными вычислениями при расчете предоплаты, доплаты и "
+"комиссий, все денежные суммы могут округляться с погрешностью до 1 (одного) "
+"тенге в большую или меньшую сторону."
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:83
+msgid "4. ПРОЦЕДУРА ОПЛАТЫ"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:85
+msgid "4.1. Этапы оплаты:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:87
+msgid "Выбор отеля и параметров бронирования"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:88
+msgid "Ознакомление с условиями оплаты и отмены"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:89
+msgid "Заполнение данных для бронирования"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:90
+msgid "Переход в платежную систему Robokassa"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:91
+msgid "Выбор способа оплаты и введение платежных данных"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:92
+msgid "Подтверждение платежа"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:93
+msgid "Получение подтверждения бронирования"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:96
+msgid "4.2. Подтверждение оплаты:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:98
+msgid "Успешная оплата подтверждается мгновенно"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:99
+msgid "Подтверждение направляется на указанный email"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:100
+msgid "В подтверждении указывается номер бронирования и детали платежа"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:101
+msgid "При неуспешной оплате средства не списываются"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:104
+msgid "4.3. Чек об оплате:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:106
+msgid "Электронный чек направляется на email в течение 24 часов"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:107
+msgid "Чек содержит все необходимые реквизиты для отчетности"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:108
+msgid "Дубликат чека можно запросить в службе поддержки"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:111
+msgid "5. ВОЗВРАТ СРЕДСТВ"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:113
+msgid "5.1. Основания для возврата:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:115
+msgid "Отмена бронирования по инициативе клиента (частичный возврат)"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:116
+msgid "Отмена бронирования по форс-мажорным обстоятельствам (полный возврат)"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:117
+msgid "Невозможность предоставления услуг отелем (полный возврат)"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:118
+msgid "Техническая ошибка при оплате (полный возврат)"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:121
+msgid "5.2. Условия возврата при отмене:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:125
+#, python-format
+msgid "Возврат при любой отмене: 0%%"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:126
+msgid "Вся сумма остается в качестве гарантийного депозита"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:131
+#, python-format
+msgid "Отмена за 15+ дней: возврат 20%%"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:132
+#, python-format
+msgid "Отмена менее чем за 15 дней: возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:137
+#, python-format
+msgid "Отмена за 15+ дней: возврат 40%%"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:138
+#, python-format
+msgid "Отмена за 10-14 дней: возврат 20%%"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:144
+#, python-format
+msgid "Отмена за 15+ дней: возврат 60%%"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:145
+#, python-format
+msgid "Отмена за 10-14 дней: возврат 40%%"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:146
+#, python-format
+msgid "Отмена за 7-9 дней: возврат 10%%"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:152
+#, python-format
+msgid "Отмена за 15+ дней: возврат 90%%"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:153
+#, python-format
+msgid "Отмена за 10-14 дней: возврат 70%%"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:154
+#, python-format
+msgid "Отмена за 7-9 дней: возврат 40%%"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:155
+#, python-format
+msgid "Отмена за 36+ часов: возврат 20%%"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:159
+msgid "5.3. Процедура возврата:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:161
+msgid "Подача заявления на возврат через систему или службу поддержки"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:162
+msgid "Рассмотрение заявления в течение 3 рабочих дней"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:163
+msgid "Принятие решения о возврате и уведомление клиента"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:164
+msgid "Инициация возврата через платежную систему"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:165
+msgid "Зачисление средств на счет клиента"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:168
+msgid "5.4. Сроки возврата:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:170
+msgid "На банковскую карту: 5-10 рабочих дней"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:171
+msgid "На электронный кошелек: 1-3 рабочих дня"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:172
+msgid "Банковским переводом: 3-7 рабочих дней"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:173
+msgid "Сроки могут увеличиваться в зависимости от банка-эмитента"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:176
+msgid "6. СПОРНЫЕ СИТУАЦИИ"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:178
+msgid "6.1. Неуспешные платежи:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:180
+msgid "При технических сбоях средства не списываются"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:181
+msgid ""
+"Если средства списались, но бронирование не создалось - автоматический "
+"возврат"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:182
+msgid "Срок автоматического возврата: 1-3 рабочих дня"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:185
+msgid "6.2. Двойные списания:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:187
+msgid "При двойном списании одна операция автоматически отменяется"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:188
+msgid "Если автоматическая отмена не произошла - обращение в службу поддержки"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:189
+msgid "Возврат дублирующего платежа в течение 5 рабочих дней"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:192
+msgid "6.3. Оспаривание платежей:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:194
+msgid "Все споры рассматриваются в досудебном порядке"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:195
+msgid "Срок рассмотрения претензий: 10 рабочих дней"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:196
+msgid "Решения принимаются на основании документов и данных системы"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:199
+msgid "7. КОМИССИИ И ДОПОЛНИТЕЛЬНЫЕ РАСХОДЫ"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:201
+msgid "7.1. Комиссии платежных систем:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:203
+msgid "Комиссии за прием платежей включены в стоимость"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:204
+msgid "Дополнительные комиссии банков-эмитентов оплачиваются клиентом"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:205
+msgid "При возврате комиссии не возвращаются"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:208
+msgid "7.2. Конвертация валют:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:210
+msgid "Конвертация производится по курсу платежной системы"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:211
+msgid "Курс фиксируется на момент совершения операции"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:212
+msgid "Разница курсов при возврате не компенсируется"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:215
+msgid "8. БЕЗОПАСНОСТЬ И ЗАЩИТА ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:217
+msgid "8.1. Защита платежных данных:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:220
+msgid "Все операции проходят через защищенное соединение"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:221
+msgid "Соблюдение международных стандартов безопасности"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:224
+msgid "8.2. Мониторинг операций:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:226
+msgid "Автоматический контроль подозрительных операций"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:227
+msgid "Дополнительная верификация при необходимости"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:228
+msgid "Блокировка мошеннических транзакций"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:234
+msgid "По вопросам оплаты и возврата:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:238
+msgid "ПН-ПТ 9:00-18:00"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:244
+msgid ""
+"При возникновении проблем с оплатой или возвратом средств обращайтесь в "
+"службу поддержки с указанием номера бронирования и деталей операции."
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:248
+#: .\templates\legal\privacy_policy.html:259
+#: .\templates\legal\public_offer.html:157
+#: .\templates\legal\terms_of_use.html:161
+msgid "ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:251
+#: .\templates\legal\privacy_policy.html:262
+#: .\templates\legal\public_offer.html:160
+#: .\templates\legal\terms_of_use.html:164
+msgid "Система работает в временной зоне:"
+msgstr ""
+
+#: .\templates\legal\payment_rules.html:252
+#: .\templates\legal\privacy_policy.html:19
+#: .\templates\legal\privacy_policy.html:263
+#: .\templates\legal\public_offer.html:14
+#: .\templates\legal\public_offer.html:161
+#: .\templates\legal\terms_of_use.html:14
+#: .\templates\legal\terms_of_use.html:165
+msgid "Платежная система:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:4
+msgid "Согласие на обработку персональных данных"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:7
+msgid "СОГЛАСИЕ НА ОБРАБОТКУ ПЕРСОНАЛЬНЫХ ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:8
+msgid "СИСТЕМА БРОНИРОВАНИЯ ОТЕЛЕЙ ALAKOL"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:11
+msgid "с момента принятия пользователем"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:16
+msgid ""
+"Настоящее Согласие дается в соответствии с требованиями Закона Республики "
+"Казахстан \\"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:18
+msgid "Согласие дается оператору персональных данных - ТОО \\"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:20
+msgid ""
+"Согласие распространяется на обработку персональных данных при использовании "
+"системы бронирования отелей Alakol."
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:22
+msgid "2. РЕКВИЗИТЫ ОПЕРАТОРА"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:26
+#: .\templates\legal\public_offer.html:152
+#: .\templates\legal\terms_of_use.html:155
+msgid "Юридический адрес:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:31
+msgid "3. ЦЕЛИ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:32
+msgid "Персональные данные обрабатываются в следующих целях:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:34
+msgid "Регистрация пользователей в системе бронирования"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:35
+msgid "Обработка и подтверждение бронирований"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:36
+msgid "Связь с клиентами по вопросам бронирования"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:38
+msgid "Предоставление технической поддержки"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:39
+msgid "Исполнение договорных обязательств"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:40
+msgid "Соблюдение требований законодательства РК"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:41
+msgid "Улучшение качества предоставляемых услуг"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:42
+msgid "Проведение маркетинговых исследований (с согласия субъекта)"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:45
+msgid "4. КАТЕГОРИИ ПЕРСОНАЛЬНЫХ ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:46
+msgid "Обработке подлежат следующие категории персональных данных:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:48
+msgid "4.1. Обязательные данные:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:50
+msgid "Фамилия, имя, отчество"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:51
+msgid "Номер телефона"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:52
+msgid "Адрес электронной почты"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:53
+msgid "Данные документа, удостоверяющего личность (при необходимости)"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:56
+msgid "4.2. Дополнительные данные:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:58
+msgid "Дата рождения"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:59
+msgid "Пол"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:60
+msgid "Адрес проживания"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:61
+msgid "Предпочтения по размещению"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:62
+msgid "История бронирований"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:65
+msgid "4.3. Технические данные:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:67
+msgid "IP-адрес"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:68
+msgid "Данные браузера и устройства"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:69
+msgid "Файлы cookie"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:70
+msgid "Информация о действиях на сайте"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:73
+#: .\templates\legal\privacy_policy.html:150
+msgid "5. СПОСОБЫ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:74
+msgid "Обработка персональных данных осуществляется следующими способами:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:76
+msgid "Сбор, запись, систематизация"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:77
+msgid "Накопление, хранение"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:78
+msgid "Уточнение (обновление, изменение)"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:79
+msgid "Извлечение, использование"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:80
+msgid "Передача (распространение, предоставление, доступ)"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:81
+msgid "Обезличивание, блокирование"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:82
+msgid "Удаление, уничтожение"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:85
+msgid "6. УСЛОВИЯ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:87
+msgid "6.1. Правовые основания:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:89
+msgid "Согласие субъекта персональных данных"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:90
+msgid "Исполнение договора, стороной которого является субъект"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:91
+msgid "Соблюдение правовых обязательств оператора"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:92
+msgid "Защита жизненно важных интересов субъекта"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:95
+msgid "6.2. Принципы обработки:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:97
+msgid "Законность и справедливость"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:98
+msgid "Ограничение конкретными целями"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:99
+msgid "Соответствие целям обработки"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:100
+msgid "Точность и актуальность"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:101
+msgid "Ограничение времени хранения"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:102
+msgid "Конфиденциальность и безопасность"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:105
+#: .\templates\legal\privacy_policy.html:164
+msgid "7. ПЕРЕДАЧА ПЕРСОНАЛЬНЫХ ДАННЫХ ТРЕТЬИМ ЛИЦАМ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:107
+msgid "7.1. Передача данных осуществляется:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:109
+msgid "Отелям-партнерам для обеспечения бронирования"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:110
+msgid "Платежным системам для обработки платежей"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:111
+msgid "Курьерским службам для доставки документов"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:112
+msgid "Государственным органам по требованию законодательства"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:113
+msgid "Техническим партнерам для обеспечения работы системы"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:116
+msgid "7.2. Условия передачи:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:118
+msgid "Только в объеме, необходимом для достижения цели"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:119
+msgid "С обеспечением конфиденциальности данных"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:120
+msgid "С заключением соответствующих соглашений"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:121
+msgid "С соблюдением требований законодательства"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:124
+msgid "8. СРОКИ ОБРАБОТКИ И ХРАНЕНИЯ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:126
+msgid "8.1. Сроки хранения:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:128
+msgid "Данные активных пользователей: в течение действия аккаунта"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:129
+msgid "Данные неактивных пользователей: 3 года с последней активности"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:130
+msgid "История бронирований: 5 лет для налогового учета"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:131
+msgid "Технические логи: 1 год"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:132
+msgid "Данные для маркетинга: до отзыва согласия"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:135
+msgid "8.2. Условия продления:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:137
+msgid "При продолжении использования сервиса"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:138
+msgid "При наличии неисполненных обязательств"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:139
+msgid "По требованию законодательства"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:142
+msgid "9. МЕРЫ ЗАЩИТЫ ПЕРСОНАЛЬНЫХ ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:144
+msgid "9.1. Технические меры:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:146
+msgid "Шифрование данных при передаче и хранении"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:147
+msgid "Использование защищенных протоколов связи (SSL/TLS)"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:148
+msgid "Регулярное резервное копирование"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:149
+msgid "Антивирусная защита серверов"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:150
+msgid "Мониторинг несанкционированного доступа"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:153
+msgid "9.2. Организационные меры:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:155
+msgid "Назначение ответственного за защиту данных"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:156
+msgid "Обучение персонала правилам работы с данными"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:157
+msgid "Ограничение доступа к персональным данным"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:158
+msgid "Ведение журналов доступа к данным"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:159
+msgid "Регулярный аудит системы защиты"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:162
+msgid "10. ПРАВА СУБЪЕКТА ПЕРСОНАЛЬНЫХ ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:164
+msgid "Субъект персональных данных имеет право:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:166
+msgid "Получать информацию об обработке своих данных"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:167
+msgid "Требовать уточнения, блокирования или уничтожения данных"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:168
+msgid "Отзывать согласие на обработку данных"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:169
+msgid "Обжаловать действия оператора в уполномоченном органе"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:170
+msgid "Требовать возмещения ущерба при нарушении прав"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:171
+msgid "Получать копию своих персональных данных"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:172
+msgid "Требовать передачи данных другому оператору"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:175
+msgid "11. ПОРЯДОК РЕАЛИЗАЦИИ ПРАВ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:177
+msgid "11.1. Подача запросов:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:179
+msgid "Через личный кабинет на сайте"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:180
+msgid "По электронной почте: privacy@alakol-booking.kz"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:181
+msgid "Письменно по юридическому адресу"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:182
+msgid "Лично в офисе оператора"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:185
+msgid "11.2. Сроки рассмотрения:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:187
+msgid "Запрос на доступ к данным: 10 рабочих дней"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:188
+msgid "Запрос на исправление данных: 5 рабочих дней"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:189
+msgid "Запрос на удаление данных: 10 рабочих дней"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:190
+msgid "Отзыв согласия: немедленно"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:193
+msgid "12. ОТЗЫВ СОГЛАСИЯ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:195
+msgid "12.1. Способы отзыва:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:197
+msgid "Через настройки личного кабинета"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:198
+msgid "Письменное заявление на email"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:199
+msgid "Обращение в службу поддержки"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:202
+msgid "12.2. Последствия отзыва:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:204
+msgid "Прекращение обработки данных для маркетинговых целей"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:205
+msgid "Сохранение данных для исполнения договорных обязательств"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:206
+msgid "Возможное ограничение функциональности сервиса"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:209
+msgid "13. ИСПОЛЬЗОВАНИЕ ФАЙЛОВ COOKIE"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:211
+msgid "13.1. Типы используемых cookie:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:213
+msgid "Необходимые для работы сайта"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:214
+msgid "Функциональные для улучшения работы"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:215
+msgid "Аналитические для анализа использования"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:216
+msgid "Маркетинговые для персонализации рекламы"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:219
+msgid "13.2. Управление cookie:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:221
+msgid "Настройка через браузер пользователя"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:222
+msgid "Использование настроек сайта"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:223
+msgid "Отключение через панель управления cookie"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:226
+msgid "14. МЕЖДУНАРОДНАЯ ПЕРЕДАЧА ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:228
+msgid "14.1. Условия передачи:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:230
+msgid "Только в страны с адекватным уровнем защиты"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:231
+msgid "С применением дополнительных гарантий защиты"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:232
+msgid "С согласия субъекта персональных данных"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:233
+msgid "В соответствии с требованиями законодательства РК"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:236
+msgid "15. ИЗМЕНЕНИЕ СОГЛАСИЯ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:238
+msgid "Оператор имеет право изменять настоящее Согласие."
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:240
+msgid "Изменения вступают в силу с момента публикации на сайте."
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:242
+msgid "Пользователи уведомляются об изменениях по электронной почте."
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:244
+msgid "Продолжение использования сервиса означает согласие с изменениями."
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:246
+msgid "16. КОНТАКТНАЯ ИНФОРМАЦИЯ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:249
+msgid "Для связи по вопросам защиты персональных данных:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:252
+msgid "Ответственный за защиту данных:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:252
+msgid "ФИО"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:259
+msgid "ПОДТВЕРЖДЕНИЕ СОГЛАСИЯ"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:260
+msgid ""
+"Регистрируясь на сайте или используя наши услуги, вы подтверждаете, что:"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:262
+msgid "Ознакомились с настоящим Согласием"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:263
+msgid "Понимаете цели и способы обработки ваших данных"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:264
+msgid "Даете добровольное согласие на обработку персональных данных"
+msgstr ""
+
+#: .\templates\legal\personal_data_consent.html:265
+msgid "Понимаете свои права и способы их реализации"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:4
+msgid "Политика конфиденциальности"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:9
+msgid "Документ обновлен:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:9
+msgid "для"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:12
+msgid "ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:18
+#: .\templates\legal\terms_of_use.html:13
+msgid "Система:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:20
+#: .\templates\legal\public_offer.html:15
+#: .\templates\legal\terms_of_use.html:15
+msgid "Регион:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:21
+#: .\templates\legal\public_offer.html:16
+#: .\templates\legal\terms_of_use.html:16
+msgid "Временная зона:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:25
+msgid "1.1. Настоящая Политика конфиденциальности (далее - \\"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:27
+msgid ""
+"1.2. Оператором персональных данных является [НАИМЕНОВАНИЕ ЮРИДИЧЕСКОГО ЛИЦА/"
+"ИП], БИН/ИИН: [БИН/ИИН], юридический адрес: [АДРЕС] (далее - \\"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:29
+msgid ""
+"1.3. Обработка персональных данных осуществляется в соответствии с Законом "
+"Республики Казахстан \\"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:31
+msgid ""
+"1.4. Используя систему eKol, вы даете согласие на обработку ваших "
+"персональных данных в соответствии с настоящей Политикой."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:33
+msgid "2. ПРАВОВЫЕ ОСНОВАНИЯ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:34
+msgid "2.1. Правовыми основаниями обработки персональных данных являются:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:36
+msgid "согласие субъекта персональных данных;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:37
+msgid ""
+"необходимость исполнения договора, стороной которого является субъект "
+"персональных данных;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:38
+msgid "необходимость соблюдения правовых обязательств Оператора;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:39
+msgid "защита жизненно важных интересов субъекта персональных данных."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:42
+msgid "3. КАТЕГОРИИ ПЕРСОНАЛЬНЫХ ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:43
+msgid ""
+"3.1. Мы обрабатываем следующие категории персональных данных согласно модели "
+"пользователя (User) системы eKol:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:45
+msgid "3.1.1. Данные учетной записи:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:47
+msgid "фамилия, имя, отчество (full_name);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:48
+msgid ""
+"адрес электронной почты (email) - используется как username, уникальный;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:49
+#: .\templates\legal\privacy_policy.html:65
+msgid "номер телефона (phone);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:50
+msgid "пол (gender) - мужской/женский;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:51
+msgid "страна и город проживания (country, city);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:52
+msgid "адрес места жительства (address);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:53
+msgid "пароль (в зашифрованном виде);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:54
+msgid "фотография профиля (image);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:55
+msgid "OTP код для верификации;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:56
+msgid "электронный кошелек (wallet) - для будущих бонусных программ;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:57
+msgid "статус верификации (verified)."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:60
+msgid "3.1.2. Данные для бронирования согласно модели Booking:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:62
+msgid "полное имя гостя (full_name);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:63
+msgid "email гостя (email);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:64
+msgid "код страны (country_code);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:66
+msgid "выбранный отель (hotel);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:67
+msgid "тип номера (room_type);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:68
+msgid "конкретные номера (room) - связь многие-ко-многим;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:69
+msgid "данные о выборе (selection_data) - JSON поле;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:70
+msgid "даты заезда и выезда (check_in_date, check_out_date);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:71
+msgid "количество дней (total_days);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:72
+msgid "количество взрослых и детей (num_adults, num_children);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:73
+msgid "статусы заселения/выселения (checked_in, checked_out);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:74
+msgid "уникальный ID бронирования (booking_id);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:75
+msgid "ID транзакции Robokassa (robokassa_inv_id);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:76
+msgid "предпочтения и особые запросы."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:79
+msgid "3.1.3. Платежная информация:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:81
+msgid "данные банковской карты (обрабатываются платежной системой Robokassa);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:82
+msgid "информация о платежах и транзакциях;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:83
+msgid "платежные идентификаторы;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:84
+msgid "сумма до скидки (before_discount);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:85
+msgid "итоговая сумма (total);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:86
+msgid "сумма экономии (saved);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:87
+msgid "статус оплаты (payment_status);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:88
+msgid ""
+"В связи с процентными вычислениями при расчете предоплаты, доплаты и "
+"возвратов средств, все денежные суммы могут округляться с погрешностью до 1 "
+"(одного) тенге в большую или меньшую сторону;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:89
+msgid "примененные купоны (coupons)."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:92
+msgid "3.1.4. Технические данные:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:94
+msgid "информация о браузере и устройстве;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:95
+msgid "файлы cookie;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:96
+msgid "логи посещений и действий пользователя;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:97
+msgid "время сессий;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:98
+msgid ""
+"системные поля: активность бронирования (is_active), время создания "
+"(created_at), время истечения (expires_at)."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:101
+msgid "3.1.5. Поведенческие данные:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:103
+msgid "история поиска отелей;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:104
+msgid "предпочтения в выборе номеров;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:105
+msgid "частота использования сервиса;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:106
+msgid "аналитика взаимодействия с интерфейсом системы eKol."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:109
+msgid "4. ЦЕЛИ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:110
+msgid "4.1. Персональные данные обрабатываются в следующих целях:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:112
+msgid "4.1.1. Предоставление услуг бронирования:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:114
+msgid "обработка запросов на бронирование через модуль booking системы eKol;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:115
+msgid ""
+"подтверждение и изменение бронирований (изменение возможно только за 15 дней "
+"до заезда);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:116
+msgid "связь с отелями для организации проживания."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:119
+msgid "4.1.2. Обеспечение работы системы eKol:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:121
+msgid "регистрация и аутентификация пользователей через модуль userauths;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:122
+msgid "система OTP для верификации;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:123
+msgid "персонализация интерфейса;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:124
+msgid "обеспечение безопасности;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:125
+msgid "управление через модуль user_dashboard."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:128
+msgid "4.1.3. Коммуникации:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:130
+msgid "отправка подтверждений бронирования;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:131
+msgid "информирование об изменениях в заказах;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:132
+msgid "техническая поддержка на казахском, русском и английском языках;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:133
+msgid "маркетинговые сообщения (при наличии согласия)."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:136
+msgid "4.1.4. Аналитика и улучшение сервиса:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:138
+msgid "анализ использования системы eKol через модуль search и addon;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:139
+msgid "улучшение функциональности;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:140
+msgid "статистические исследования."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:143
+msgid "4.1.5. Соблюдение правовых обязательств:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:145
+msgid "исполнение требований законодательства РК;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:146
+msgid "противодействие мошенничеству;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:147
+msgid "разрешение споров."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:151
+msgid ""
+"5.1. Обработка персональных данных осуществляется с использованием средств "
+"автоматизации и без их использования."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:152
+msgid ""
+"5.2. К способам обработки относятся: сбор, систематизация, накопление, "
+"хранение в базе данных; уточнение, изменение, использование; "
+"распространение, передача, обезличивание, блокирование, удаление."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:154
+msgid "6. СРОКИ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:155
+msgid "6.1. Персональные данные обрабатываются в течение следующих сроков:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:157
+msgid ""
+"6.1.1. Данные учетной записи - до подачи заявления об отзыве согласия или "
+"удаления аккаунта."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:158
+msgid ""
+"6.1.2. Данные бронирований - в течение 5 лет после завершения последнего "
+"бронирования для целей бухгалтерской отчетности и разрешения споров."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:159
+msgid ""
+"6.1.3. Технические данные - в течение 1 года с момента последнего посещения "
+"системы eKol."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:160
+msgid ""
+"6.1.4. Платежная информация - в соответствии с требованиями финансового "
+"законодательства РК и политикой Robokassa."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:161
+msgid ""
+"6.1.5. Неоплаченные бронирования - автоматически удаляются через 10 минут "
+"после истечения срока оплаты."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:165
+msgid "7.1. Мы можем передавать персональные данные следующим третьим лицам:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:167
+msgid ""
+"7.1.1. Отелям-партнерам в регионе Алаколь для обеспечения бронирования и "
+"проживания."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:168
+msgid ""
+"7.1.2. Платежной системе Robokassa для обработки платежей с использованием "
+"безопасных цифровых подписей SHA256."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:169
+msgid ""
+"7.1.3. Поставщикам IT-услуг для обеспечения работы системы eKol на платформе."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:170
+msgid "7.1.4. Email-провайдеру AWS для отправки уведомлений."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:171
+msgid "7.1.5. Хостинг-провайдерам для обеспечения работы сайта."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:172
+msgid ""
+"7.1.6. Государственным органам в случаях, предусмотренных законодательством "
+"РК."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:175
+msgid "8. ТРАНСГРАНИЧНАЯ ПЕРЕДАЧА ПЕРСОНАЛЬНЫХ ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:176
+msgid ""
+"8.1. Трансграничная передача персональных данных может осуществляться в "
+"страны, обеспечивающие адекватный уровень защиты персональных данных."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:177
+msgid ""
+"8.2. При передаче данных в другие страны мы используем соответствующие "
+"гарантии защиты в соответствии с требованиями законодательства РК."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:179
+msgid "9. МЕРЫ БЕЗОПАСНОСТИ"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:180
+msgid ""
+"9.1. Мы применяем технические и организационные меры для защиты персональных "
+"данных:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:182
+msgid "9.1.1. Технические меры:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:184
+msgid "шифрование данных при передаче (SSL/TLS);"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:185
+msgid "хеширование паролей;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:186
+msgid "регулярное резервное копирование;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:187
+msgid "защита от несанкционированного доступа;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:188
+msgid "мониторинг безопасности;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:189
+msgid "защита от CSRF-атак;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:190
+msgid "валидация и санитизация пользовательского ввода."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:193
+msgid "9.1.2. Организационные меры:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:195
+msgid "разграничение доступа к персональным данным;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:196
+msgid "обучение сотрудников вопросам защиты персональных данных;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:197
+msgid "внутренние политики безопасности;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:198
+msgid "аудит систем безопасности;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:199
+msgid "ограниченный доступ к персональным данным;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:200
+msgid "логирование действий администраторов."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:203
+msgid "9.1.3. Хранение данных:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:205
+msgid "персональные данные хранятся в защищенной базе данных;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:206
+msgid "платежная информация не сохраняется локально;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:207
+msgid "логи активности ведутся для аудита;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:208
+msgid "автоматическое удаление истекших сессий."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:211
+msgid "10. ИСПОЛЬЗОВАНИЕ COOKIE И АНАЛОГИЧНЫХ ТЕХНОЛОГИЙ"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:212
+msgid "10.1. Система eKol использует файлы cookie для:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:214
+msgid "запоминания настроек пользователя;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:215
+msgid "анализа трафика и поведения пользователей;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:216
+msgid "персонализации контента;"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:217
+msgid "обеспечения безопасности."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:219
+msgid "10.2. Вы можете управлять файлами cookie через настройки браузера."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:220
+msgid "10.3. Отключение cookie может ограничить функциональность системы eKol."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:222
+msgid "11. ПРАВА СУБЪЕКТОВ ПЕРСОНАЛЬНЫХ ДАННЫХ"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:223
+msgid "11.1. Вы имеете следующие права в отношении ваших персональных данных:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:225
+msgid ""
+"11.1.1. Право на доступ - получение информации об обрабатываемых "
+"персональных данных через личный кабинет user_dashboard."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:226
+msgid ""
+"11.1.2. Право на изменение - внесение изменений в неточные или неполные "
+"персональные данные."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:227
+msgid ""
+"11.1.3. Право на удаление - требование удаления персональных данных в "
+"случаях, предусмотренных законом."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:228
+msgid ""
+"11.1.4. Право на ограничение обработки - приостановление обработки "
+"персональных данных."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:229
+msgid ""
+"11.1.5. Право на отзыв согласия - отзыв ранее данного согласия на обработку "
+"персональных данных."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:230
+msgid ""
+"11.1.6. Право на портативность данных - получение персональных данных в "
+"структурированном формате."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:232
+msgid ""
+"11.2. Для реализации своих прав обращайтесь по адресу: [EMAIL] или [АДРЕС]."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:234
+msgid "12. ПРАВА НЕСОВЕРШЕННОЛЕТНИХ"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:235
+msgid "12.1. Система eKol не предназначена для лиц младше 18 лет."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:236
+msgid ""
+"12.2. Мы не осуществляем целенаправленный сбор персональных данных "
+"несовершеннолетних."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:237
+msgid ""
+"12.3. При обнаружении персональных данных несовершеннолетних мы "
+"незамедлительно их удаляем."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:239
+msgid "13. ИЗМЕНЕНИЯ В ПОЛИТИКЕ КОНФИДЕНЦИАЛЬНОСТИ"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:240
+msgid "13.1. Мы можем обновлять настоящую Политику."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:241
+msgid ""
+"13.2. О существенных изменениях мы уведомляем пользователей через систему "
+"eKol или по электронной почте."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:242
+msgid ""
+"13.3. Продолжение использования системы eKol после внесения изменений "
+"означает согласие с новой версией Политики."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:244
+msgid "14. КОНТРОЛЬ СО СТОРОНЫ УПОЛНОМОЧЕННОГО ОРГАНА"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:245
+msgid ""
+"14.1. Контроль за соблюдением законодательства о персональных данных "
+"осуществляет Министерство цифрового развития, инноваций и аэрокосмической "
+"промышленности РК."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:246
+msgid ""
+"14.2. Вы имеете право обратиться в уполномоченный орган с жалобой на "
+"нарушение ваших прав."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:249
+#: .\templates\legal\public_offer.html:149
+#: .\templates\legal\terms_of_use.html:152
+msgid "КОНТАКТНАЯ ИНФОРМАЦИЯ"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:250
+msgid "Ответственное лицо за обработку персональных данных:"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:250
+msgid "ФИО, ДОЛЖНОСТЬ"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:251
+msgid "ЮРИДИЧЕСКИЙ АДРЕС"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:252
+msgid "ТЕЛЕФОН"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:253
+#: .\templates\legal\terms_of_use.html:157
+#, fuzzy
+#| msgid "Email"
+msgid "Email:"
+msgstr "Электрондық мекенжай"
+
+#: .\templates\legal\privacy_policy.html:253
+msgid "EMAIL ДЛЯ ВОПРОСОВ ПО ПЕРСОНАЛЬНЫМ ДАННЫМ"
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:255
+msgid "Время рассмотрения обращений: до 30 дней с момента получения."
+msgstr ""
+
+#: .\templates\legal\privacy_policy.html:260
+msgid ""
+"Настоящая Политика является неотъемлемой частью Пользовательского соглашения "
+"и действует наравне с ним. Вопросы, не урегулированные настоящей Политикой, "
+"разрешаются в соответствии с законодательством Республики Казахстан."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:4
+msgid "Публичная оферта"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:7
+msgid "ПУБЛИЧНАЯ ОФЕРТА"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:8
+msgid "НА ОКАЗАНИЕ УСЛУГ БРОНИРОВАНИЯ ОТЕЛЕЙ"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:19
+msgid "1. ОПРЕДЕЛЕНИЯ И ТЕРМИНЫ"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:20
+msgid "Оферта"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:22
+msgid "Исполнитель"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:24
+msgid "Заказчик"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:26
+msgid "Сайт"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:28
+msgid "Услуги"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:30
+msgid "Бронирование"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:43
+msgid "2. ПРЕДМЕТ ДОГОВОРА"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:50
+msgid "3. ПОРЯДОК ЗАКЛЮЧЕНИЯ ДОГОВОРА"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:67
+msgid "4. ПРАВА И ОБЯЗАННОСТИ СТОРОН"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:68
+msgid "4.1. Исполнитель обязуется:"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:70
+msgid ""
+"Предоставлять актуальную информацию об отелях, номерах и ценах через систему "
+"eKol."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:71
+msgid ""
+"Обеспечивать передачу данных о бронировании в выбранный отель с "
+"использованием системы eKol."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:72
+msgid ""
+"Предоставлять Заказчику подтверждение бронирования через электронные "
+"уведомления."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:73
+msgid ""
+"Обеспечивать конфиденциальность персональных данных Заказчика в соответствии "
+"с законодательством РК о персональных данных."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:74
+msgid ""
+"Оказывать информационную поддержку по вопросам бронирования на казахском, "
+"русском и английском языках."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:75
+msgid ""
+"Обеспечивать работу системы eKol с поддержкой казахского, русского и "
+"английского языков."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:78
+msgid "4.2. Исполнитель имеет право:"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:80
+msgid "Требовать от Заказчика предоставления достоверной информации."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:81
+msgid "Отказать в оказании услуг при нарушении Заказчиком условий договора."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:82
+msgid ""
+"Изменять цены на услуги с уведомлением на Сайте с применением динамического "
+"ценообразования."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:85
+msgid "4.3. Заказчик обязуется:"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:87
+msgid ""
+"Предоставлять достоверную и полную информацию при бронировании через систему "
+"eKol."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:88
+msgid "Своевременно производить оплату согласно условиям договора."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:89
+msgid "Соблюдать правила проживания в отеле."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:90
+msgid "Уведомлять об изменениях или отмене бронирования в установленные сроки."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:93
+msgid "4.4. Заказчик имеет право:"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:95
+msgid ""
+"Получать информацию о статусе бронирования через личный кабинет в системе "
+"eKol."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:96
+msgid "Изменять или отменять бронирование в соответствии с условиями п. 7."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:97
+msgid "Требовать возврата средств в случаях, предусмотренных договором."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:100
+msgid "6. СТОИМОСТЬ УСЛУГ И ПОРЯДОК ОПЛАТЫ"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:105
+#, python-format
+msgid ""
+"6.2.1. При бронировании - предоплата в размере N%% от общей стоимости "
+"проживания через платежную систему Robokassa, где N может составлять:"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:111
+msgid "полная предоплата"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:121
+msgid "6.6. ВАЖНОЕ УВЕДОМЛЕНИЕ О ОКРУГЛЕНИЯХ:"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:121
+#: .\templates\legal\terms_of_use.html:112
+msgid ""
+"В связи с процентными вычислениями при расчете предоплаты, доплаты и "
+"возвратов средств, все денежные суммы могут округляться с погрешностью до 1 "
+"(одного) тенге в большую или меньшую сторону."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:124
+msgid "7. ИЗМЕНЕНИЕ И ОТМЕНА БРОНИРОВАНИЯ"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:140
+#, python-format
+msgid "Аннуляция бронирования менее чем за 15 суток: возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:143
+msgid "При форс-мажорных обстоятельствах:"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:144
+msgid ""
+"При форс-мажорных обстоятельствах (стихийные бедствия, военные действия, "
+"эпидемии) возврат предоплаты производится в полном объеме."
+msgstr ""
+
+#: .\templates\legal\public_offer.html:150
+msgid "Исполнитель:"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:151
+#: .\templates\legal\terms_of_use.html:154
+msgid "БИН/ИИН:"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:153
+msgid "Email для уведомлений:"
+msgstr ""
+
+#: .\templates\legal\public_offer.html:158
+msgid ""
+"Настоящая оферта действует до ее отзыва Исполнителем. Все споры разрешаются "
+"в соответствии с законодательством Республики Казахстан."
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:4
+msgid "Пользовательское соглашение"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:7
+msgid "ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:20
+msgid "Настоящее Пользовательское соглашение (далее - \\"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:22
+msgid ""
+"Соглашение является публичным договором в соответствии с законодательством "
+"Республики Казахстан."
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:24
+msgid ""
+"Использование платформы означает полное и безоговорочное принятие условий "
+"настоящего Соглашения."
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:39
+msgid "2. ОПИСАНИЕ УСЛУГ"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:58
+msgid "3. РЕГИСТРАЦИЯ И УЧЕТНАЯ ЗАПИСЬ"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:79
+msgid "4. ПОРЯДОК БРОНИРОВАНИЯ"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:96
+msgid "5. ОПЛАТА И ЦЕНООБРАЗОВАНИЕ"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:112
+msgid "5.5. ВАЖНОЕ УВЕДОМЛЕНИЕ О ОКРУГЛЕНИЯХ:"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:115
+msgid "6. ОТМЕНА БРОНИРОВАНИЯ И ВОЗВРАТ СРЕДСТВ"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:131
+#, python-format
+msgid "Аннуляция бронирования менее чем за 15 суток до заезда: возврат 0%%"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:134
+msgid "7. ПРАВА И ОБЯЗАННОСТИ СТОРОН"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:137
+msgid "обеспечивать работоспособность системы eKol;"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:138
+msgid "защищать персональные данные Пользователей в защищенной базе данных;"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:139
+msgid "предоставлять актуальную информацию об отелях;"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:140
+msgid ""
+"обеспечивать техническую поддержку на казахском, русском и английском языках."
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:145
+msgid "предоставлять достоверную информацию;"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:146
+msgid "соблюдать правила пользования системой eKol;"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:147
+msgid "своевременно производить оплату;"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:148
+msgid "соблюдать правила проживания в отеле."
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:153
+msgid "Компания:"
+msgstr ""
+
+#: .\templates\legal\terms_of_use.html:162
+msgid ""
+"Настоящее Соглашение составлено на казахском, русском и английском языках. "
+"Все вопросы, не урегулированные настоящим Соглашением, разрешаются в "
+"соответствии с действующим законодательством Республики Казахстан."
+msgstr ""
 
 #: .\templates\partials\async_base.html:11 .\templates\partials\base.html:11
 msgid "Alakol hotel booking"
@@ -1440,164 +5181,164 @@ msgstr ""
 msgid "Hotel Search Results"
 msgstr "Қоңақ үй детальдары"
 
-#: .\templates\search\search_results.html:14
+#: .\templates\search\search_results.html:95
 msgid "Filters"
 msgstr ""
 
-#: .\templates\search\search_results.html:20
+#: .\templates\search\search_results.html:101
 #: .\templates\user_dashboard\booking_detail.html:25
 #: .\templates\user_dashboard\dashboard.html:54
 msgid "Hotel Name"
 msgstr "Қонақ үйдің атауы"
 
-#: .\templates\search\search_results.html:36
+#: .\templates\search\search_results.html:117
 #, fuzzy
 #| msgid "Price"
 msgid "Min Price"
 msgstr "Баға"
 
-#: .\templates\search\search_results.html:40
+#: .\templates\search\search_results.html:121
 #, fuzzy
 #| msgid "Price"
 msgid "Max Price"
 msgstr "Баға"
 
-#: .\templates\search\search_results.html:52
+#: .\templates\search\search_results.html:133
 msgid "Minimum Rating"
 msgstr ""
 
-#: .\templates\search\search_results.html:54
+#: .\templates\search\search_results.html:135
 msgid "Any"
 msgstr ""
 
-#: .\templates\search\search_results.html:55
+#: .\templates\search\search_results.html:136
 msgid "1+ Star"
 msgstr ""
 
-#: .\templates\search\search_results.html:56
+#: .\templates\search\search_results.html:137
 msgid "2+ Stars"
 msgstr ""
 
-#: .\templates\search\search_results.html:57
+#: .\templates\search\search_results.html:138
 msgid "3+ Stars"
 msgstr ""
 
-#: .\templates\search\search_results.html:58
+#: .\templates\search\search_results.html:139
 msgid "4+ Stars"
 msgstr ""
 
-#: .\templates\search\search_results.html:59
+#: .\templates\search\search_results.html:140
 msgid "5 Stars"
 msgstr ""
 
-#: .\templates\search\search_results.html:90
+#: .\templates\search\search_results.html:171
 msgid "Sort By"
 msgstr ""
 
-#: .\templates\search\search_results.html:93
+#: .\templates\search\search_results.html:174
 msgid "Price: Low to High"
 msgstr ""
 
-#: .\templates\search\search_results.html:94
+#: .\templates\search\search_results.html:175
 msgid "Price: High to Low"
 msgstr ""
 
-#: .\templates\search\search_results.html:95
+#: .\templates\search\search_results.html:176
 #, fuzzy
 #| msgid "No Rating Yet"
 msgid "Rating"
 msgstr "Әлі баға жоқ"
 
-#: .\templates\search\search_results.html:96
+#: .\templates\search\search_results.html:177
 msgid "Popularity"
 msgstr ""
 
-#: .\templates\search\search_results.html:109
+#: .\templates\search\search_results.html:190
 #, fuzzy
 #| msgid "Search"
 msgid "Search Results"
 msgstr "Іздеу"
 
-#: .\templates\search\search_results.html:111
+#: .\templates\search\search_results.html:192
 #, python-format
 msgid "Found %(count)s hotel"
 msgid_plural "Found %(count)s hotels"
 msgstr[0] ""
 msgstr[1] ""
 
-#: .\templates\search\search_results.html:127
+#: .\templates\search\search_results.html:208
 msgid "No Image"
 msgstr ""
 
-#: .\templates\search\search_results.html:141
+#: .\templates\search\search_results.html:222
 #, fuzzy
 #| msgid "No Rating Yet"
 msgid "No ratings"
 msgstr "Әлі баға жоқ"
 
-#: .\templates\search\search_results.html:149
+#: .\templates\search\search_results.html:230
 #, fuzzy
 #| msgid "Amenities"
 msgid "Amenities:"
 msgstr "Қызметтер"
 
-#: .\templates\search\search_results.html:154
+#: .\templates\search\search_results.html:235
 msgid "No amenities listed"
 msgstr ""
 
-#: .\templates\search\search_results.html:157
+#: .\templates\search\search_results.html:238
 msgid "more"
 msgstr ""
 
-#: .\templates\search\search_results.html:163
+#: .\templates\search\search_results.html:244
 #, fuzzy
 #| msgid "Available Rooms"
 msgid "Available Rooms:"
 msgstr "Қолжетімді бөлмелер"
 
-#: .\templates\search\search_results.html:168
+#: .\templates\search\search_results.html:249
 #, fuzzy
 #| msgid "Reviews"
 msgid "views"
 msgstr "Пікірлер"
 
-#: .\templates\search\search_results.html:172
+#: .\templates\search\search_results.html:253
 #, fuzzy
 #| msgid "/Per Night"
 msgid "per night"
 msgstr "/Бір түнге"
 
-#: .\templates\search\search_results.html:174
+#: .\templates\search\search_results.html:255
 msgid "Price not available"
 msgstr ""
 
-#: .\templates\search\search_results.html:176
+#: .\templates\search\search_results.html:257
 #, fuzzy
 #| msgid "Profile Details"
 msgid "View Details"
 msgstr "Профиль деректері"
 
-#: .\templates\search\search_results.html:191
+#: .\templates\search\search_results.html:272
 #, fuzzy
 #| msgid "First Name"
 msgid "First"
 msgstr "Атыңыз"
 
-#: .\templates\search\search_results.html:194
+#: .\templates\search\search_results.html:275
 #, fuzzy
 #| msgid "reviews"
 msgid "Previous"
 msgstr "Пікірлер"
 
-#: .\templates\search\search_results.html:210
+#: .\templates\search\search_results.html:291
 msgid "Next"
 msgstr ""
 
-#: .\templates\search\search_results.html:213
+#: .\templates\search\search_results.html:294
 msgid "Last"
 msgstr ""
 
-#: .\templates\search\search_results.html:222
+#: .\templates\search\search_results.html:303
 msgid ""
 "No hotels found matching your search criteria. Try adjusting your filters."
 msgstr ""
@@ -2666,6 +6407,11 @@ msgstr ""
 #: .\venv\Lib\site-packages\grappelli\templates\smuggler\load_data_form.html:53
 msgid "Load"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Booked Rooms"
+#~ msgid "Book Now"
+#~ msgstr "Броньдалған бөлмелер"
 
 #~ msgid "HMS Team"
 #~ msgstr "HMS тобы"
