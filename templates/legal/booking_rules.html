@@ -1,240 +1,236 @@
 {% extends 'legal/base_legal.html' %}
-{% load i18n %}
 
-{% block title %}{% trans "Правила бронирования и отмены" %}{% endblock %}
+{% block title %}Booking and Cancellation Rules{% endblock %}
 
 {% block content %}
-<h1>{% trans "ПРАВИЛА БРОНИРОВАНИЯ И ОТМЕНЫ БРОНИРОВАНИЯ" %}</h1>
-<h2>{% trans "СИСТЕМЫ БРОНИРОВАНИЯ ОТЕЛЕЙ eKol" %}</h2>
+<h1>BOOKING AND CANCELLATION RULES</h1>
+<h2>eKol HOTEL BOOKING SYSTEM</h2>
 
 <div class="document-meta">
-    <strong>{% trans "Дата вступления в силу:" %}</strong> 19.06.2025<br>
-    <strong>{% trans "Версия документа:" %}</strong> 1.0
+    <strong>Effective Date:</strong> June 19, 2025<br>
+    <strong>Document Version:</strong> 1.0
 </div>
 
-<h2>{% trans "1. ОБЩИЕ ПОЛОЖЕНИЯ" %}</h2>
-<p><strong>1.1.</strong> {% trans "Настоящие Правила определяют условия и порядок бронирования номеров в отелях, а также условия изменения и отмены бронирования через веб-сайт [АДРЕС САЙТА]." %}</p>
+<h2>1. GENERAL PROVISIONS</h2>
+<p><strong>1.1.</strong> These Rules define the terms and procedures for booking hotel rooms, as well as the conditions for modifying and canceling bookings through the website [WEBSITE ADDRESS].</p>
 
-<p><strong>1.1.1.</strong> {% trans "В настоящих Правилах под \"владельцами гостиничных объектов размещения\" понимаются отели, мини-отели, гостевые дома и иные средства размещения (далее - \"Отель\", \"Партнер\")." %}</p>
+<p><strong>1.1.1.</strong> In these Rules, "owners of accommodation facilities" means hotels, mini-hotels, guest houses, and other accommodation facilities (hereinafter - "Hotel", "Partner").</p>
 
-<p><strong>1.1.2.</strong> <strong>{% trans "Оператор персональных данных:" %}</strong> ИП [Название ИП], БИН: [БИН]</p>
+<p><strong>1.1.2.</strong> <strong>Personal Data Operator:</strong> IP [IP Name], BIN: [BIN]</p>
 
-<p><strong>1.2.</strong> {% trans "Правила действуют для всех пользователей системы бронирования и являются неотъемлемой частью Публичной оферты на оказание услуг бронирования отелей." %}</p>
+<p><strong>1.2.</strong> The Rules apply to all users of the booking system and are an integral part of the Public Offer for hotel booking services.</p>
 
-<p><strong>1.3.</strong> {% trans "Принимая условия бронирования, Пользователь соглашается с настоящими Правилами в полном объеме." %}</p>
+<p><strong>1.3.</strong> By accepting the booking terms, the User agrees to these Rules in full.</p>
 
-<h2>{% trans "2. УСЛОВИЯ БРОНИРОВАНИЯ" %}</h2>
-<h3>{% trans "2.1. Минимальные требования для бронирования:" %}</h3>
+<h2>2. BOOKING CONDITIONS</h2>
+<h3>2.1. Minimum requirements for booking:</h3>
 <ul>
-    <li>{% trans "Регистрация на сайте или указание контактных данных" %}</li>
-    <li>{% trans "Выбор отеля, типа номера и дат проживания" %}</li>
-    <li>{% trans "Согласие с условиями отеля и настоящими Правилами" %}</li>
-    <li>{% trans "Внесение предоплаты в размере, установленном отелем" %}</li>
+    <li>Registration on the website or providing contact information</li>
+    <li>Selecting hotel, room type, and accommodation dates</li>
+    <li>Agreement with hotel terms and these Rules</li>
+    <li>Payment of advance payment in the amount established by the hotel</li>
 </ul>
 
-<h3>{% trans "2.2. Размер предоплаты:" %}</h3>
+<h3>2.2. Advance payment amount:</h3>
 <ul>
-    <li>{% trans "Размер предоплаты определяется каждым отелем самостоятельно" %}</li>
-    <li>{% trans "Предоплата может составлять 10%, 30%, 50%, 70% или 100% от общей стоимости" %}</li>
-    <li>{% trans "Оставшаяся сумма доплачивается в отеле при заселении" %}</li>
-    <li>{% trans "При 100% предоплате доплата в отеле не требуется" %}</li>
+    <li>The advance payment amount is determined by each hotel independently</li>
+    <li>Advance payment can be 10%, 30%, 50%, 70%, or 100% of the total cost</li>
+    <li>The remaining amount is paid at the hotel upon check-in</li>
+    <li>With 100% advance payment, no additional payment at the hotel is required</li>
 </ul>
 
-<h3>{% trans "2.3. Подтверждение бронирования:" %}</h3>
+<h3>2.3. Booking confirmation:</h3>
 <ul>
-    <li>{% trans "Бронирование считается подтвержденным после успешной оплаты предоплаты" %}</li>
-    <li>{% trans "Подтверждение направляется на указанный email в течение 15 минут" %}</li>
-    <li>{% trans "В подтверждении указываются все детали бронирования и контакты отеля" %}</li>
+    <li>Booking is considered confirmed after successful payment of the advance payment</li>
+    <li>Confirmation is sent to the specified email within 15 minutes</li>
+    <li>The confirmation includes all booking details and hotel contacts</li>
 </ul>
 
-<h2>{% trans "3. УСЛОВИЯ ОТМЕНЫ БРОНИРОВАНИЯ" %}</h2>
+<h2>3. CANCELLATION CONDITIONS</h2>
 
 <div class="alert alert-warning">
-    <strong>{% trans "ВАЖНО:" %}</strong> {% trans "Условия отмены зависят от размера внесенной предоплаты и времени до заезда." %}
+    <strong>IMPORTANT:</strong> Cancellation conditions depend on the amount of advance payment made and the time until check-in.
 </div>
 
-<h3>{% trans "3.1. Общие принципы отмены:" %}</h3>
+<h3>3.1. General cancellation principles:</h3>
 <ul>
-    <li>{% trans "Первые 10% предоплаты являются гарантийным депозитом и не возвращаются при отмене по инициативе клиента" %}</li>
-    <li>{% trans "Остальная часть предоплаты может быть возвращена в зависимости от времени отмены" %}</li>
-    <li>{% trans "При форс-мажорных обстоятельствах предоплата возвращается полностью" %}</li>
+    <li>The first 10% of advance payment serves as a guarantee deposit and is non-refundable upon customer-initiated cancellation</li>
+    <li>The remaining portion of advance payment may be refunded depending on cancellation timing</li>
+    <li>In case of force majeure circumstances, the advance payment is refunded in full</li>
 </ul>
 
-<h3>{% trans "3.2. Условия отмены по размеру предоплаты:" %}</h3>
+<h3>3.2. Cancellation conditions by advance payment amount:</h3>
 
-<h4>{% trans "При предоплате 10%:" %}</h4>
+<h4>With 10% advance payment:</h4>
 <ul>
-    <li>{% trans "Отмена в любое время: возврат 0% (вся сумма остается в качестве гарантийного депозита)" %}</li>
-    <li>{% trans "Неявка (No-show): возврат 0%" %}</li>
+    <li>Cancellation at any time: 0% refund (entire amount remains as guarantee deposit)</li>
+    <li>No-show: 0% refund</li>
 </ul>
 
-<h4>{% trans "При предоплате 30%:" %}</h4>
+<h4>With 30% advance payment:</h4>
 <ul>
-    <li>{% trans "Отмена за 15+ дней до заезда: возврат 20%" %}</li>
-    <li>{% trans "Отмена за 10-14 дней до заезда: возврат 0%" %}</li>
-    <li>{% trans "Отмена менее чем за 10 дней: возврат 0%" %}</li>
-    <li>{% trans "Неявка (No-show): возврат 0%" %}</li>
+    <li>Cancellation 15+ days before check-in: 20% refund</li>
+    <li>Cancellation 10-14 days before check-in: 0% refund</li>
+    <li>Cancellation less than 10 days before check-in: 0% refund</li>
+    <li>No-show: 0% refund</li>
 </ul>
 
-<h4>{% trans "При предоплате 50%:" %}</h4>
+<h4>With 50% advance payment:</h4>
 <ul>
-    <li>{% trans "Отмена за 15+ дней до заезда: возврат 40%" %}</li>
-    <li>{% trans "Отмена за 10-14 дней до заезда: возврат 20%" %}</li>
-    <li>{% trans "Отмена за 7-9 дней до заезда: возврат 0%" %}</li>
-    <li>{% trans "Отмена менее чем за 7 дней: возврат 0%" %}</li>
-    <li>{% trans "Неявка (No-show): возврат 0%" %}</li>
+    <li>Cancellation 15+ days before check-in: 40% refund</li>
+    <li>Cancellation 10-14 days before check-in: 20% refund</li>
+    <li>Cancellation 7-9 days before check-in: 0% refund</li>
+    <li>Cancellation less than 7 days before check-in: 0% refund</li>
+    <li>No-show: 0% refund</li>
 </ul>
 
-<h4>{% trans "При предоплате 70%:" %}</h4>
+<h4>With 70% advance payment:</h4>
 <ul>
-    <li>{% trans "Отмена за 15+ дней до заезда: возврат 60%" %}</li>
-    <li>{% trans "Отмена за 10-14 дней до заезда: возврат 40%" %}</li>
-    <li>{% trans "Отмена за 7-9 дней до заезда: возврат 10%" %}</li>
-    <li>{% trans "Отмена менее чем за 36 часов: возврат 0%" %}</li>
-    <li>{% trans "Неявка (No-show): возврат 0%" %}</li>
+    <li>Cancellation 15+ days before check-in: 60% refund</li>
+    <li>Cancellation 10-14 days before check-in: 40% refund</li>
+    <li>Cancellation 7-9 days before check-in: 10% refund</li>
+    <li>Cancellation less than 36 hours before check-in: 0% refund</li>
+    <li>No-show: 0% refund</li>
 </ul>
 
-<h4>{% trans "При предоплате 100%:" %}</h4>
+<h4>With 100% advance payment:</h4>
 <ul>
-    <li>{% trans "Отмена за 15+ дней до заезда: возврат 90%" %}</li>
-    <li>{% trans "Отмена за 10-14 дней до заезда: возврат 70%" %}</li>
-    <li>{% trans "Отмена за 7-9 дней до заезда: возврат 40%" %}</li>
-    <li>{% trans "Отмена за 36+ часов до заезда: возврат 20%" %}</li>
-    <li>{% trans "Отмена менее чем за 36 часов: возврат 0%" %}</li>
-    <li>{% trans "Неявка (No-show): возврат 0%" %}</li>
+    <li>Cancellation 15+ days before check-in: 90% refund</li>
+    <li>Cancellation 10-14 days before check-in: 70% refund</li>
+    <li>Cancellation 7-9 days before check-in: 40% refund</li>
+    <li>Cancellation 36+ hours before check-in: 20% refund</li>
+    <li>Cancellation less than 36 hours before check-in: 0% refund</li>
+    <li>No-show: 0% refund</li>
 </ul>
 
-<h3>{% trans "3.3. Форс-мажорные обстоятельства:" %}</h3>
+<h3>3.3. Force majeure circumstances:</h3>
 <ul>
-    <li>{% trans "Стихийные бедствия" %}</li>
-    <li>{% trans "Военные действия или террористические акты" %}</li>
-    <li>{% trans "Эпидемии и пандемии с введением ограничений на передвижение" %}</li>
-    <li>{% trans "Закрытие отеля по решению государственных органов" %}</li>
-    <li>{% trans "Другие чрезвычайные ситуации, признанные форс-мажорными" %}</li>
+    <li>Natural disasters</li>
+    <li>Military actions or terrorist acts</li>
+    <li>Epidemics and pandemics with movement restrictions</li>
+    <li>Hotel closure by government authorities</li>
+    <li>Other emergency situations recognized as force majeure</li>
 </ul>
 
-<p>{% trans "При форс-мажорных обстоятельствах предоплата возвращается в полном объеме независимо от времени отмены." %}</p>
+<p>In case of force majeure circumstances, the advance payment is refunded in full regardless of cancellation timing.</p>
 
-<h2>{% trans "4. ПРОЦЕДУРА ОТМЕНЫ" %}</h2>
+<h2>4. CANCELLATION PROCEDURE</h2>
 
-<h3>{% trans "4.1. Подача заявления на отмену:" %}</h3>
+<h3>4.1. Submitting cancellation request:</h3>
 <ul>
-    <li>{% trans "Заявление подается через личный кабинет на сайте" %}</li>
-    <li>{% trans "Или по email с указанием номера бронирования" %}</li>
-    <li>{% trans "Или по телефону службы поддержки" %}</li>
+    <li>Request is submitted through personal account on the website</li>
+    <li>Or by email with booking number</li>
+    <li>Or by phone to customer support</li>
 </ul>
 
-<h3>{% trans "4.2. Обработка заявления:" %}</h3>
+<h3>4.2. Request processing:</h3>
 <ul>
-    <li>{% trans "Заявления обрабатываются в течение 1-2 рабочих дней" %}</li>
-    <li>{% trans "Клиент получает подтверждение отмены на email" %}</li>
-    <li>{% trans "В подтверждении указывается сумма к возврату" %}</li>
+    <li>Requests are processed within 1-2 business days</li>
+    <li>Customer receives cancellation confirmation by email</li>
+    <li>The confirmation specifies the refund amount</li>
 </ul>
 
-<h3>{% trans "4.3. Возврат средств:" %}</h3>
+<h3>4.3. Refund process:</h3>
 <ul>
-    <li>{% trans "Возврат осуществляется тем же способом, которым была внесена оплата" %}</li>
-    <li>{% trans "Срок возврата: 5-10 рабочих дней" %}</li>
-    <li>{% trans "Комиссии платежных систем не возвращаются" %}</li>
+    <li>Refund is made using the same payment method used for the original payment</li>
+    <li>Refund period: 5-10 business days</li>
+    <li>Payment system fees are not refunded</li>
 </ul>
 
-<h2>{% trans "5. ИЗМЕНЕНИЕ БРОНИРОВАНИЯ" %}</h2>
+<h2>5. BOOKING MODIFICATION</h2>
 
-<h3>{% trans "5.1. Возможные изменения:" %}</h3>
+<h3>5.1. Possible modifications:</h3>
 <ul>
-    <li>{% trans "Изменение дат проживания (при наличии свободных номеров)" %}</li>
-    <li>{% trans "Изменение типа номера" %}</li>
-    <li>{% trans "Изменение количества гостей" %}</li>
+    <li>Changing accommodation dates (subject to room availability)</li>
+    <li>Changing room type</li>
+    <li>Changing number of guests</li>
 </ul>
 
-<h3>{% trans "5.2. Условия изменения:" %}</h3>
+<h3>5.2. Modification conditions:</h3>
 <ul>
-    <li>{% trans "Изменения принимаются не позднее чем за 15 дней до заезда" %}</li>
-    <li>{% trans "При увеличении стоимости доплачивается разница" %}</li>
-    <li>{% trans "При уменьшении стоимости разница не возвращается" %}</li>
-    <li>{% trans "За изменение бронирования может взиматься административный сбор" %}</li>
+    <li>Modifications are accepted no later than 15 days before check-in</li>
+    <li>If the cost increases, the difference must be paid</li>
+    <li>If the cost decreases, the difference is not refunded</li>
+    <li>An administrative fee may be charged for booking modifications</li>
 </ul>
 
-<h2>{% trans "6. ОСОБЫЕ УСЛОВИЯ" %}</h2>
+<h2>6. SPECIAL CONDITIONS</h2>
 
-<h3>{% trans "6.1. Групповые бронирования:" %}</h3>
+<h3>6.1. Group bookings:</h3>
 <ul>
-    <li>{% trans "Бронирования от 5 номеров считаются групповыми" %}</li>
-    <li>{% trans "Для групповых бронирований могут действовать особые условия отмены" %}</li>
-    <li>{% trans "Условия согласовываются индивидуально с отелем" %}</li>
+    <li>Bookings for 5 or more rooms are considered group bookings</li>
+    <li>Special cancellation conditions may apply to group bookings</li>
+    <li>Conditions are agreed individually with the hotel</li>
 </ul>
 
-<h3>{% trans "6.2. Праздничные даты:" %}</h3>
+<h3>6.2. Holiday periods:</h3>
 <ul>
-    <li>{% trans "В праздничные и пиковые периоды могут действовать особые условия" %}</li>
-    <li>{% trans "Отели могут устанавливать более жесткие условия отмены" %}</li>
-    <li>{% trans "Особые условия указываются при бронировании" %}</li>
+    <li>Special conditions may apply during holiday and peak periods</li>
+    <li>Hotels may set stricter cancellation conditions</li>
+    <li>Special conditions are indicated during booking</li>
 </ul>
 
-<h2>{% trans "7. ОТВЕТСТВЕННОСТЬ СТОРОН" %}</h2>
+<h2>7. RESPONSIBILITIES OF PARTIES</h2>
 
-<h3>{% trans "7.1. Ответственность системы бронирования:" %}</h3>
+<h3>7.1. Booking system responsibilities:</h3>
 <ul>
-    <li>{% trans "Обеспечение работы платформы бронирования" %}</li>
-    <li>{% trans "Корректная передача информации отелям" %}</li>
-    <li>{% trans "Обработка платежей и возвратов" %}</li>
-    <li>{% trans "Техническая поддержка пользователей" %}</li>
+    <li>Ensuring the operation of the booking platform</li>
+    <li>Correct transmission of information to hotels</li>
+    <li>Processing payments and refunds</li>
+    <li>Technical support for users</li>
 </ul>
 
-<h3>{% trans "7.2. Ответственность отелей:" %}</h3>
+<h3>7.2. Hotel responsibilities:</h3>
 <ul>
-    <li>{% trans "Предоставление забронированных номеров" %}</li>
-    <li>{% trans "Соблюдение заявленных условий размещения" %}</li>
-    <li>{% trans "Качество предоставляемых услуг" %}</li>
-    <li>{% trans "Соблюдение условий отмены и возврата" %}</li>
+    <li>Providing booked rooms</li>
+    <li>Compliance with stated accommodation conditions</li>
+    <li>Quality of services provided</li>
+    <li>Compliance with cancellation and refund conditions</li>
 </ul>
 
-<h3>{% trans "7.3. Ответственность клиентов:" %}</h3>
+<h3>7.3. Customer responsibilities:</h3>
 <ul>
-    <li>{% trans "Предоставление корректной информации при бронировании" %}</li>
-    <li>{% trans "Своевременная оплата предоплаты" %}</li>
-    <li>{% trans "Соблюдение правил отеля" %}</li>
-    <li>{% trans "Уведомление об отмене в установленные сроки" %}</li>
+    <li>Providing correct information when booking</li>
+    <li>Timely payment of advance payment</li>
+    <li>Compliance with hotel rules</li>
+    <li>Notification of cancellation within established timeframes</li>
 </ul>
 
-<h3>{% trans "7.4. Ответственность за овербукинг:" %}</h3>
+<h3>7.4. Responsibility for overbooking:</h3>
 <ul>
-    <li><strong>{% trans "За овербукинг (избыточное бронирование) полную ответственность несет владелец гостиничного объекта размещения, так как отель вовремя не предоставил актуальные данные о доступности номеров" %}</strong></li>
-    <li>{% trans "В случае овербукинга Отель обязан самостоятельно решить вопрос размещения клиента за свой счет (предоставление альтернативного размещения равного или более высокого класса, компенсация )" %}</li>
-    <li>{% trans "Система бронирования eKol не несет ответственности за овербукинг и является только посредником в предоставлении информации" %}</li>
-    <li>{% trans "Отель обязан незамедлительно уведомить платформу и клиента о невозможности предоставления забронированного номера" %}</li>
+    <li>The hotel bears full responsibility for overbooking as it failed to provide timely updates on room availability</li>
+    <li>In case of overbooking, the Hotel must independently resolve the customer accommodation issue at its own expense (providing alternative accommodation of equal or higher class, compensation)</li>
+    <li>The eKol platform does not bear responsibility for overbooking and serves only as an intermediary in providing information</li>
 </ul>
 
-<h2>{% trans "8. РАЗРЕШЕНИЕ СПОРОВ" %}</h2>
+<h2>8. DISPUTE RESOLUTION</h2>
 
-<h3>{% trans "8.1. Досудебное урегулирование:" %}</h3>
+<h3>8.1. Dispute resolution procedure:</h3>
 <ul>
-    <li>{% trans "Все споры решаются путем переговоров" %}</li>
-    <li>{% trans "Претензии рассматриваются в течение 10 рабочих дней" %}</li>
-    <li>{% trans "Ответ направляется в письменном виде" %}</li>
+    <li>All disputes are resolved through pre-trial procedures</li>
+    <li>Claims processing period: 10 business days</li>
+    <li>Decisions are made based on documents and system data</li>
 </ul>
 
-<h3>{% trans "8.2. Судебное разрешение:" %}</h3>
+<h3>8.2. Complaint submission:</h3>
 <ul>
-    <li>{% trans "При невозможности досудебного урегулирования споры передаются в суд" %}</li>
-    <li>{% trans "Применимое право: законодательство Республики Казахстан" %}</li>
-    <li>{% trans "Подсудность: суды г. Алматы" %}</li>
+    <li>Through customer support service</li>
+    <li>By email with detailed description</li>
+    <li>Through personal account on the website</li>
 </ul>
 
-<h2>{% trans "9. КОНТАКТНАЯ ИНФОРМАЦИЯ" %}</h2>
+<h2>9. FINAL PROVISIONS</h2>
+
+<p>9.1. These Rules may be amended by the Company without prior notice. The new version of the Rules takes effect upon posting on the website.</p>
+
+<p>9.2. All matters not regulated by these Rules are resolved in accordance with the current legislation of the Republic of Kazakhstan.</p>
+
+<p>9.3. If any provision of these Rules is found to be invalid, the remaining provisions continue to be in force.</p>
 
 <div class="contact-info">
-    <h3>{% trans "Служба поддержки:" %}</h3>
-    <ul>
-        <li><strong>Email:</strong> support@alakol-booking.kz</li>
-        <li><strong>{% trans "Телефон:" %}</strong> +7 (727) XXX-XX-XX</li>
-        <li><strong>{% trans "Время работы:" %}</strong> {% trans "ПН-ВС 9:00-21:00" %}</li>
-        <li><strong>{% trans "Адрес:" %}</strong> {% trans "г. Алматы, Республика Казахстан" %}</li>
-    </ul>
+    <h2>CONTACT INFORMATION</h2>
+    <p><strong>For questions and complaints:</strong> [EMAIL]<br>
+    <strong>Customer support:</strong> [PHONE]<br>
+    <strong>Working hours:</strong> 24/7</p>
 </div>
-
-<div class="alert alert-info">
-    <strong>{% trans "Важно:" %}</strong> {% trans "Настоящие Правила могут изменяться. Актуальная версия всегда доступна на сайте. Изменения вступают в силу с момента публикации." %}
-</div>
-
-{% endblock %} 
+{% endblock %}
