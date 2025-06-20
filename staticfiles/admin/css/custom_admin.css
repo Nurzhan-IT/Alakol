@@ -1,0 +1,39 @@
+/* Стили для админки */
+.field-dynamic_pricing_input {
+    position: relative;
+}
+
+.field-dynamic_pricing_input textarea {
+    font-family: monospace;
+    font-size: 12px;
+}
+
+/* Стили для полей даты */
+.vDateField {
+    width: 150px !important;
+    padding: 5px !important;
+    font-size: 13px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+}
+
+/* Подсказка для формата даты */
+.vDateField::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+/* Добавляем подсказку о формате даты */
+.vDateField:focus::before {
+    content: "Формат: YYYY-MM-DD (например, 2025-12-31)";
+    position: absolute;
+    top: -25px;
+    left: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 2px 5px;
+    font-size: 11px;
+    color: #666;
+    border-radius: 3px;
+    z-index: 1000;
+}

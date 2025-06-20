@@ -1,3 +1,18 @@
+function bounceButton() {
+    const buttons = document.querySelectorAll('.selected-rooms-button');
+    // Removed console.log for buttons debugging
+    if (!buttons) {
+        return;
+    }
+
+    buttons.forEach(button => {
+        button.classList.add('bounce');
+        button.addEventListener('animationend', () => {
+            button.classList.remove('bounce');
+        }, { once: true });
+    });
+}
+
 $(document).ready(function(){
     
     // Add To Selection
@@ -20,20 +35,9 @@ $(document).ready(function(){
         let adult = $("#adult").val()
         let children = $("#children").val()
 
-        console.log(`${id} Added To Selection`);
-        console.log(`hotel_id: ${hotel_id}`);
-        console.log(`room_number: ${room_number}`);
-        console.log(`room_id: ${room_id}`);
-        console.log(`hotel_name: ${hotel_name}`);
-        console.log(`room_name: ${room_name}`);
-        console.log(`room_price: ${room_price}`);
-        console.log(`number_of_beds: ${number_of_beds}`);
-        console.log(`room_type: ${room_type}`);
-        console.log(`room_capacity: ${room_capacity}`);
-        console.log(`checkin: ${checkin}`);
-        console.log(`checkout: ${checkout}`);
-        console.log(`adult: ${adult}`);
-        console.log(`children: ${children}`);
+        // Removed console.log statements for booking data debugging (security improvement)
+        // Previously logged: id, hotel_id, room_number, room_id, hotel_name, room_name, 
+        // room_price, number_of_beds, room_type, room_capacity, checkin, checkout, adult, children
 
 
         $.ajax({
@@ -56,8 +60,8 @@ $(document).ready(function(){
             },
             dataType: 'json',
             beforeSend: function(){
-                console.log("Adding room...");
-                button.html("<i class='fas fa-clock-rotate-left'></i> Adding room... ")
+                // Removed console.log for "Adding room..." status
+                button.html("<i class='fas fa-clock-rotate-left'></i> " + gettext("Adding room...") + " ")
             },
             success: function(response){
                 // Проверяем, есть ли ошибка с отелем
@@ -93,7 +97,7 @@ $(document).ready(function(){
                                 },
                                 dataType: 'json',
                                 success: function(res) {
-                                    button.html("<i class='fas fa-check-circle'></i> Added to selection ");
+                                    button.html("<i class='fas fa-check-circle'></i> " + gettext("Added to selection") + " ");
                                     $(".room-count").text(res.total_selected_items);
                                     
                                     const Toast = Swal.mixin({
@@ -103,10 +107,10 @@ $(document).ready(function(){
                                         timer: 1500,
                                         timerProgressBar: true,
                                     });
-                                    
+
                                     Toast.fire({
                                         icon: 'success',
-                                        title: 'Корзина очищена и добавлен новый номер'
+                                        title: gettext('Корзина очищена и добавлен новый номер')
                                     });
                                 }
                             });
@@ -121,28 +125,32 @@ $(document).ready(function(){
                 let buttonText = button.text().trim();
                 
                 // Определяем новый текст кнопки
-                if (buttonText === "Update" || buttonText === "Обновить") {
-                    button.html("<i class='fas fa-check-circle'></i> Updated ")
+                if (buttonText === gettext("Update") || buttonText === "Обновить") {
+                    button.html("<i class='fas fa-check-circle'></i> " + gettext("Updated") + " ")
                 } else {
-                    button.html("<i class='fas fa-check-circle'></i> Added to selection ")
+                    button.html("<i class='fas fa-check-circle'></i> " + gettext("Added to selection") + " ")
                 }
 
-                console.log("Added Room To Selection!");
+                bounceButton();
+
+                // Removed console.log for "Added Room To Selection!" status
                 $(".room-count").text(response.total_selected_items)
+
+                ;
                 
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 1000,
-                    timerProgressBar: true,
-                })
-                    
-                Toast.fire({
-                    icon: 'success',
-                    title: buttonText === "Update" || buttonText === "Обновить" ? 
-                        'Room Updated Successfully!' : 'Added Room To Selection!'
-                })
+                // const Toast = Swal.mixin({
+                //     toast: true,
+                //     position: 'top-end',
+                //     showConfirmButton: false,
+                //     timer: 1000,
+                //     timerProgressBar: true,
+                // })
+                //
+                // Toast.fire({
+                //     icon: 'success',
+                //     title: buttonText === "Update" || buttonText === "Обновить" ?
+                //         'Room Updated Successfully!' : 'Added Room To Selection!'
+                // })
             }
         })
 
@@ -187,13 +195,13 @@ $(document).ready(function(){
         $.ajax({
             url:"/dashboard/notification_filter/",
             beforeSend: function(){
-                console.log("Sending Data...");
+                // Removed console.log for "Sending Data..." status
             },
             data: {
                 "query": query
             },
             success: function(res){
-                console.log(res.data);
+                // Removed console.log for res.data debugging
 				$(".noti-div-main").html(res.data);
 
             }
@@ -204,11 +212,11 @@ $(document).ready(function(){
     $(document).on('click', '.mark-noti-as-seen', function(){
         let button = $(this)
         let id = button.attr("data-index")
-        console.log(id);
+        // Removed console.log for id debugging
         $.ajax({
             url:"/dashboard/notification_mark_as_seen/",
             beforeSend: function(){
-                console.log("Sending Data...");
+                // Removed console.log for "Sending Data..." status
             },
             data: {
                 "id": id
@@ -235,7 +243,7 @@ $(document).ready(function(){
     $(document).on('click', '#add-to-bookmark', function(){
         let button = $(this)
         let id = button.attr("data-hotel")
-        console.log(id);
+        // Removed console.log for id debugging
 
         $.ajax({
             url:"/dashboard/add_to_bookmark/",
@@ -279,7 +287,7 @@ $(document).ready(function(){
         let id = button.attr("data-hotel")
         let review = $("#review-input").val()
         let rating = $("#rating-input").val()
-        console.log(rating);
+        // Removed console.log for rating debugging
 
         $.ajax({
             url:"/dashboard/add_review/",

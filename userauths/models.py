@@ -125,7 +125,6 @@ class UserConsent(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     consent_type = models.CharField(max_length=50, choices=CONSENT_TYPES, verbose_name='Тип согласия')
     given_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата предоставления')
-    ip_address = models.GenericIPAddressField(verbose_name='IP адрес')
     user_agent = models.TextField(verbose_name='User Agent')
     document_version = models.CharField(max_length=10, default='1.0', verbose_name='Версия документа')
     is_active = models.BooleanField(default=True, verbose_name='Активно')

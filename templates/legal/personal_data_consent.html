@@ -1,473 +1,269 @@
-<!-- Generated on 2025-05-31 02:59 AM +05 -->
 {% extends 'legal/base_legal.html' %}
 {% load i18n %}
 
-{% block title %}Personal Data Processing Consent{% endblock %}
-
-{% block meta_description %}Personal data processing consent for HMS Alakol hotel booking system. Information about data categories, processing purposes, and user rights in accordance with Kazakhstan legislation.{% endblock %}
-
-{% block page_name %}Personal Data Processing Consent{% endblock %}
+{% block title %}{% trans "Согласие на обработку персональных данных" %}{% endblock %}
 
 {% block content %}
-<div class="generation-info">
-    <small class="text-muted">Generated on 2025-05-31 02:59 AM +05 | Django 4.2.2 HMS Alakol System</small>
-</div>
-
-<h1 id="document-title" tabindex="-1">PERSONAL DATA PROCESSING CONSENT</h1>
-<h2>HMS ALAKOL HOTEL BOOKING SYSTEM</h2>
+<h1>{% trans "СОГЛАСИЕ НА ОБРАБОТКУ ПЕРСОНАЛЬНЫХ ДАННЫХ" %}</h1>
+<h2>{% trans "СИСТЕМА БРОНИРОВАНИЯ ОТЕЛЕЙ ALAKOL" %}</h2>
 
 <div class="document-meta">
-    <p><strong>Effective Date:</strong> [DATE]</p>
-    <p><strong>Document Version:</strong> 1.0</p>
-    <p><strong>System:</strong> HMS (Hotel Management System) - Alakol Hotel Management System</p>
-    <p><strong>Technology Platform:</strong> Django 4.2.2 (Python web framework)</p>
-    <p><strong>Database:</strong> PostgreSQL</p>
-    <p><strong>Payment System:</strong> Robokassa (official integration)</p>
-    <p><strong>Region:</strong> Alakol, Republic of Kazakhstan</p>
-    <p><strong>Time Zone:</strong> Kazakhstan/Astana (UTC+5)</p>
+    <strong>{% trans "Дата вступления в силу:" %}</strong> {% trans "с момента принятия пользователем" %}<br>
+    <strong>{% trans "Версия документа:" %}</strong> 1.0
 </div>
 
-<nav class="legal-navigation" aria-label="Document Contents">
-    <h3>Document Contents</h3>
-    <ol>
-        <li><a href="#section-1">General Provisions</a></li>
-        <li><a href="#section-2">Personal Data Categories</a></li>
-        <li><a href="#section-3">Data Processing Purposes</a></li>
-        <li><a href="#section-4">Data Processing Methods</a></li>
-        <li><a href="#section-5">Data Processing Conditions</a></li>
-        <li><a href="#section-6">Data Processing Terms</a></li>
-        <li><a href="#section-7">Data Transfer to Third Parties</a></li>
-        <li><a href="#section-8">Cross-border Data Transfer</a></li>
-        <li><a href="#section-9">Security Measures</a></li>
-        <li><a href="#section-10">Data Subject Rights</a></li>
-        <li><a href="#section-11">Consent Withdrawal</a></li>
-        <li><a href="#section-12">Confirmation</a></li>
-    </ol>
-</nav>
+<h2>{% trans "1. ОБЩИЕ ПОЛОЖЕНИЯ" %}</h2>
+<p><strong>1.1.</strong> {% trans "Настоящее Согласие дается в соответствии с требованиями Закона Республики Казахстан \"О персональных данных и их защите\" от 21 мая 2013 года № 94-V." %}</p>
 
-<section id="section-1" aria-labelledby="section-1-title">
-    <h2 id="section-1-title">1. GENERAL PROVISIONS</h2>
-    
-    <p>I, ___________________________________________________ (Full name of the data subject)</p>
-    
-    <p>acting freely, of my own will and in my own interest, and confirming my legal capacity, give consent to <strong>[LEGAL ENTITY/IP NAME]</strong>, BIN/IIN: <strong>[BIN/IIN]</strong>, legal address: <strong>[ADDRESS]</strong> (hereinafter - "Operator") for the processing of my personal data within the framework of using the HMS (Hotel Management System) for the Alakol region under the following conditions:</p>
-    
-    <h3>1.1. HMS Alakol Platform</h3>
-    <p>HMS Alakol is a modern web platform for hotel booking, built on the Django 4.2.2 (Python web framework) technology base using a secure PostgreSQL database and officially integrated Robokassa payment system.</p>
-    
-    <h3>1.2. System Operation</h3>
-    <p>The system operates in the Kazakhstan/Astana time zone (UTC+5) and supports multilingual functionality (Kazakh, Russian, English languages).</p>
-    
-    <h3>1.3. HMS Architecture</h3>
-    <p>The HMS architecture includes seven specialized modules: hotel (hotel management), booking (reservation), userauths (user authentication), user_dashboard (personal cabinet), robokassa (payment system), search (hotel search), addon (additional functions).</p>
-</section>
+<p><strong>1.2.</strong> {% trans "Согласие дается оператору персональных данных - ТОО \"Alakol Booking Ltd\" (далее - \"Оператор\")." %}</p>
 
-<section id="section-2" aria-labelledby="section-2-title">
-    <h2 id="section-2-title">2. PERSONAL DATA CATEGORIES</h2>
-    
-    <h3>2.1. User Account Data (HMS User Model)</h3>
-    <ul>
-        <li>Email address (used as username, unique identifier)</li>
-        <li>Password (encrypted via Django 4.2.2)</li>
-        <li>Username</li>
-        <li>Full name</li>
-        <li>Phone number with country code</li>
-        <li>Gender (male/female)</li>
-        <li>Country of residence</li>
-        <li>City of residence</li>
-        <li>Residential address</li>
-        <li>Profile photo</li>
-        <li>OTP code for security verification</li>
-        <li>Account verification status</li>
-        <li>Electronic wallet data for bonus programs</li>
-    </ul>
-    
-    <h3>2.2. Booking Data (HMS Booking Model)</h3>
-    <ul>
-        <li>Guest's full name</li>
-        <li>Guest's contact email</li>
-        <li>Country code and phone number</li>
-        <li>Selected hotel and room type</li>
-        <li>Specific booked rooms</li>
-        <li>Check-in and check-out dates</li>
-        <li>Number of accommodation days</li>
-        <li>Number of adults and children</li>
-        <li>Room selection data in JSON format</li>
-        <li>Unique booking identifier</li>
-        <li>Robokassa transaction identifier</li>
-        <li>Financial data: amount before discount, total amount, savings</li>
-        <li>Check-in and check-out statuses</li>
-        <li>Payment status and booking activity</li>
-        <li>Applied coupons and discounts</li>
-    </ul>
-    
-    <h3>2.3. Payment Information (via Robokassa Integration)</h3>
-    <ul>
-        <li>Transaction and payment data (without storing card numbers)</li>
-        <li>Payment and receipt identifiers</li>
-        <li>Financial transaction history</li>
-        <li>Refund and chargeback information</li>
-        <li>Tax accounting data</li>
-    </ul>
-    
-    <h3>2.4. Technical Data</h3>
-    <ul>
-        <li>User device IP address</li>
-        <li>Cookie files and session data</li>
-        <li>Browser and operating system information</li>
-        <li>Visit times and session duration</li>
-        <li>User action logs in the HMS system</li>
-        <li>Automatic deletion data of expired sessions</li>
-    </ul>
-    
-    <h3>2.5. Behavioral Data</h3>
-    <ul>
-        <li>Hotel search and filtering history</li>
-        <li>Preferences in room and hotel selection</li>
-        <li>Frequency of using various service functions</li>
-        <li>Interface interaction analytics</li>
-        <li>Usage statistics for mobile and web versions</li>
-        <li>Data for personalizing offers</li>
-    </ul>
-</section>
+<p><strong>1.3.</strong> {% trans "Согласие распространяется на обработку персональных данных при использовании системы бронирования отелей Alakol." %}</p>
 
-<section id="section-3" aria-labelledby="section-3-title">
-    <h2 id="section-3-title">3. DATA PROCESSING PURPOSES</h2>
-    
-    <h3>3.1. Providing Hotel Booking Services within HMS</h3>
-    <ul>
-        <li>Processing booking requests with availability checks</li>
-        <li>Booking confirmation and management</li>
-        <li>Communication with partner hotels for accommodation organization</li>
-        <li>Ensuring HMS six-stage booking process</li>
-        <li>Providing real-time booking status information</li>
-    </ul>
-    
-    <h3>3.2. Fulfilling Contractual Obligations</h3>
-    <ul>
-        <li>Concluding and executing booking service contracts</li>
-        <li>Processing payments according to "10% prepayment + 90% at check-in" scheme</li>
-        <li>Calculations and settlements with partner hotels</li>
-        <li>Providing electronic documents for rendered services</li>
-    </ul>
-    
-    <h3>3.3. Ensuring HMS Platform Operation</h3>
-    <ul>
-        <li>User identification and authentication</li>
-        <li>OTP verification for additional security</li>
-        <li>Multilingual interface personalization</li>
-        <li>Ensuring Django 4.2.2 system security</li>
-        <li>User technical support</li>
-    </ul>
-    
-    <h3>3.4. Communications and Information</h3>
-    <ul>
-        <li>Sending booking status notifications via email and SMS</li>
-        <li>Informing about changes in orders and conditions</li>
-        <li>Responding to inquiries and requests through support module</li>
-        <li>Notifications about expiring unpaid bookings (10 minutes)</li>
-    </ul>
-    
-    <h3>3.5. Ensuring Payment Security via Robokassa</h3>
-    <ul>
-        <li>Generating secure SHA256 digital signatures</li>
-        <li>Monitoring suspicious transactions</li>
-        <li>Preventing fraud and unauthorized access</li>
-        <li>Compliance with PCI DSS standards</li>
-    </ul>
-    
-    <h3>3.6. Analytics and HMS Service Improvement</h3>
-    <ul>
-        <li>Analysis of various system modules usage</li>
-        <li>Statistical user behavior studies</li>
-        <li>Improving search and recommendation algorithms</li>
-        <li>Optimizing booking processes</li>
-    </ul>
-    
-    <h3>3.7. Legal Requirements Compliance</h3>
-    <ul>
-        <li>Fulfilling Republic of Kazakhstan legislation requirements</li>
-        <li>Maintaining records for tax reporting</li>
-        <li>Providing information to government agencies upon official requests</li>
-    </ul>
-</section>
+<h2>{% trans "2. РЕКВИЗИТЫ ОПЕРАТОРА" %}</h2>
+<ul>
+    <li><strong>{% trans "Наименование:" %}</strong> ТОО "Alakol Booking Ltd"</li>
+    <li><strong>{% trans "БИН:" %}</strong> 123456789012 ({% trans "предполагаемый" %})</li>
+    <li><strong>{% trans "Юридический адрес:" %}</strong> {% trans "г. Алматы, Республика Казахстан" %}</li>
+    <li><strong>Email:</strong> legal@alakol-booking.kz</li>
+    <li><strong>{% trans "Телефон:" %}</strong> +7 (727) XXX-XX-XX</li>
+</ul>
 
-<section id="section-4" aria-labelledby="section-4-title">
-    <h2 id="section-4-title">4. DATA PROCESSING METHODS</h2>
-    
-    <p><strong>4.1.</strong> Processing may be carried out both using automation tools (including software) and without their use (in paper form).</p>
-    
-    <p><strong>4.2.</strong> Processing methods include:</p>
-    <ul>
-        <li>Collection, recording, systematization, accumulation, storage</li>
-        <li>Clarification (updating, modification)</li>
-        <li>Extraction, use, transfer (distribution, provision, access)</li>
-        <li>Depersonalization, blocking, deletion, destruction</li>
-    </ul>
-</section>
+<h2>{% trans "3. ЦЕЛИ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ" %}</h2>
+<p>{% trans "Персональные данные обрабатываются в следующих целях:" %}</p>
+<ul>
+    <li>{% trans "Регистрация пользователей в системе бронирования" %}</li>
+    <li>{% trans "Обработка и подтверждение бронирований" %}</li>
+    <li>{% trans "Связь с клиентами по вопросам бронирования" %}</li>
+    <li>{% trans "Обеспечение безопасности платежных операций" %}</li>
+    <li>{% trans "Предоставление технической поддержки" %}</li>
+    <li>{% trans "Исполнение договорных обязательств" %}</li>
+    <li>{% trans "Соблюдение требований законодательства РК" %}</li>
+    <li>{% trans "Улучшение качества предоставляемых услуг" %}</li>
+    <li>{% trans "Проведение маркетинговых исследований (с согласия субъекта)" %}</li>
+</ul>
 
-<section id="section-5" aria-labelledby="section-5-title">
-    <h2 id="section-5-title">5. DATA PROCESSING CONDITIONS</h2>
-    
-    <h3>5.1. Processing Principles</h3>
-    <p>Personal data processing in HMS system is carried out in compliance with principles of:</p>
-    <ul>
-        <li>Legality and fairness</li>
-        <li>Limitation to specific purposes</li>
-        <li>Correspondence to processing purposes</li>
-        <li>Data accuracy and relevance</li>
-        <li>Prevention of excessive collection</li>
-        <li>Ensuring security of storage and transfer</li>
-    </ul>
-    
-    <h3>5.2. Technical Security Measures in HMS</h3>
-    <ul>
-        <li>Using built-in Django 4.2.2 encryption</li>
-        <li>Secure PostgreSQL database with restricted access</li>
-        <li>SSL/TLS encryption for all connections</li>
-        <li>Automatic action logging for auditing</li>
-        <li>Security monitoring and anomaly detection</li>
-        <li>Regular data backup</li>
-    </ul>
-</section>
+<h2>{% trans "4. КАТЕГОРИИ ПЕРСОНАЛЬНЫХ ДАННЫХ" %}</h2>
+<p>{% trans "Обработке подлежат следующие категории персональных данных:" %}</p>
 
-<section id="section-6" aria-labelledby="section-6-title">
-    <h2 id="section-6-title">6. DATA PROCESSING TERMS</h2>
-    
-    <h3>6.1. Processing Terms</h3>
-    <p>Personal data is processed for the following periods:</p>
-    
-    <h4>6.1.1. Account Data</h4>
-    <ul>
-        <li>Throughout the entire period of service use</li>
-        <li>Until consent withdrawal or account deletion</li>
-    </ul>
-    
-    <h4>6.1.2. Booking Data</h4>
-    <ul>
-        <li>For 5 years after completion of the last booking</li>
-        <li>For accounting and dispute resolution purposes</li>
-    </ul>
-    
-    <h4>6.1.3. Technical Data</h4>
-    <ul>
-        <li>For 1 year from the last website visit</li>
-    </ul>
-    
-    <h4>6.1.4. Marketing Data</h4>
-    <ul>
-        <li>Until withdrawal of consent for marketing communications</li>
-    </ul>
-    
-    <h3>6.2. Data Destruction</h3>
-    <p>Upon expiration of specified terms, personal data shall be destroyed, except when their storage is necessary for compliance with legislation requirements.</p>
-</section>
+<h3>{% trans "4.1. Обязательные данные:" %}</h3>
+<ul>
+    <li>{% trans "Фамилия, имя, отчество" %}</li>
+    <li>{% trans "Номер телефона" %}</li>
+    <li>{% trans "Адрес электронной почты" %}</li>
+    <li>{% trans "Данные документа, удостоверяющего личность (при необходимости)" %}</li>
+</ul>
 
-<section id="section-7" aria-labelledby="section-7-title">
-    <h2 id="section-7-title">7. DATA TRANSFER TO THIRD PARTIES</h2>
-    
-    <h3>7.1. Recipient Categories</h3>
-    <p>Consent extends to transfer of personal data to the following recipient categories:</p>
-    
-    <h4>7.1.1. Partner Hotels in Alakol Region</h4>
-    <ul>
-        <li>Ensuring guest accommodation and stay</li>
-        <li>Providing additional hotel services</li>
-        <li>Communication with guests regarding accommodation and service</li>
-        <li>Coordinating check-in and check-out processes</li>
-    </ul>
-    
-    <h4>7.1.2. Robokassa Payment System</h4>
-    <ul>
-        <li>Processing payments according to 10%+90% scheme</li>
-        <li>Ensuring financial transaction security</li>
-        <li>Preventing fraud and suspicious operations</li>
-        <li>Generating electronic receipts and payment documents</li>
-    </ul>
-    
-    <h4>7.1.3. IT Services and Technical Contractors</h4>
-    <ul>
-        <li>Ensuring HMS web platform functionality</li>
-        <li>User technical support</li>
-        <li>Data storage and backup</li>
-        <li>System performance monitoring</li>
-    </ul>
-    
-    <h4>7.1.4. Government Agencies of the Republic of Kazakhstan</h4>
-    <ul>
-        <li>Fulfilling tax legislation requirements</li>
-        <li>Providing financial transaction reports</li>
-        <li>Responding to official requests from authorized agencies</li>
-    </ul>
-    
-    <h3>7.2. Transfer Obligations</h3>
-    <p>When transferring personal data to third parties, the Operator undertakes to:</p>
-    <ul>
-        <li>Transfer only data necessary to achieve processing purposes</li>
-        <li>Require recipients to ensure confidentiality and security</li>
-        <li>Conclude appropriate personal data protection agreements</li>
-    </ul>
-</section>
+<h3>{% trans "4.2. Дополнительные данные:" %}</h3>
+<ul>
+    <li>{% trans "Дата рождения" %}</li>
+    <li>{% trans "Пол" %}</li>
+    <li>{% trans "Адрес проживания" %}</li>
+    <li>{% trans "Предпочтения по размещению" %}</li>
+    <li>{% trans "История бронирований" %}</li>
+</ul>
 
-<section id="section-8" aria-labelledby="section-8-title">
-    <h2 id="section-8-title">8. CROSS-BORDER DATA TRANSFER</h2>
-    
-    <h3>8.1. Adequate Protection Countries</h3>
-    <p>Consent extends to cross-border transfer of personal data to countries ensuring adequate level of personal data protection.</p>
-    
-    <h3>8.2. Additional Protection Measures</h3>
-    <p>When transferring personal data to countries not ensuring adequate protection level, the Operator applies additional protection measures in accordance with RK legislation requirements.</p>
-</section>
+<h3>{% trans "4.3. Технические данные:" %}</h3>
+<ul>
+    <li>{% trans "IP-адрес" %}</li>
+    <li>{% trans "Данные браузера и устройства" %}</li>
+    <li>{% trans "Файлы cookie" %}</li>
+    <li>{% trans "Информация о действиях на сайте" %}</li>
+</ul>
 
-<section id="section-9" aria-labelledby="section-9-title">
-    <h2 id="section-9-title">9. SECURITY MEASURES</h2>
-    
-    <h3>9.1. Security Measures in HMS</h3>
-    <p>Security measures in HMS system include:</p>
-    <ul>
-        <li>Data encryption during transmission and storage</li>
-        <li>Multi-level access control</li>
-        <li>Regular security audits</li>
-        <li>Incident monitoring and response</li>
-        <li>Staff training on data protection</li>
-        <li>Compliance with international security standards</li>
-    </ul>
-</section>
+<h2>{% trans "5. СПОСОБЫ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ" %}</h2>
+<p>{% trans "Обработка персональных данных осуществляется следующими способами:" %}</p>
+<ul>
+    <li>{% trans "Сбор, запись, систематизация" %}</li>
+    <li>{% trans "Накопление, хранение" %}</li>
+    <li>{% trans "Уточнение (обновление, изменение)" %}</li>
+    <li>{% trans "Извлечение, использование" %}</li>
+    <li>{% trans "Передача (распространение, предоставление, доступ)" %}</li>
+    <li>{% trans "Обезличивание, блокирование" %}</li>
+    <li>{% trans "Удаление, уничтожение" %}</li>
+</ul>
 
-<section id="section-10" aria-labelledby="section-10-title">
-    <h2 id="section-10-title">10. DATA SUBJECT RIGHTS</h2>
-    
-    <h3>10.1. Your Rights</h3>
-    <p>As a data subject, you have the right to:</p>
-    
-    <h4>10.1.1. Right to Access</h4>
-    <ul>
-        <li>Obtaining information about processed personal data through user_dashboard personal account</li>
-        <li>Confirmation of processing fact</li>
-        <li>Legal grounds and processing purposes</li>
-        <li>Applied processing methods</li>
-        <li>Operator name and location</li>
-        <li>Information about persons having data access</li>
-        <li>Processed personal data and their source</li>
-        <li>Processing periods</li>
-    </ul>
-    
-    <h4>10.1.2. Right to Rectification</h4>
-    <ul>
-        <li>Requiring clarification, blocking or destruction of inaccurate or illegally processed personal data</li>
-    </ul>
-    
-    <h4>10.1.3. Right to Withdraw Consent</h4>
-    <ul>
-        <li>Withdrawing previously given consent for personal data processing</li>
-    </ul>
-    
-    <h4>10.1.4. Right to Restrict Processing</h4>
-    <ul>
-        <li>Suspending personal data processing</li>
-    </ul>
-    
-    <h4>10.1.5. Right to Data Portability</h4>
-    <ul>
-        <li>Obtaining personal data in structured format</li>
-    </ul>
-    
-    <h4>10.1.6. Right to Object to Processing</h4>
-    <ul>
-        <li>Objecting to processing for direct marketing</li>
-    </ul>
-    
-    <h4>10.1.7. Right to Appeal</h4>
-    <ul>
-        <li>Appealing Operator actions or inaction to authorized personal data protection body or court</li>
-    </ul>
-    
-    <h4>10.1.8. Right to Compensation</h4>
-    <ul>
-        <li>Compensation for material and moral damage in case of personal data legislation violations</li>
-    </ul>
-    
-    <h3>10.2. Rights Exercise</h3>
-    <p>To exercise your rights, contact: [EMAIL] or [ADDRESS].</p>
-</section>
+<h2>{% trans "6. УСЛОВИЯ ОБРАБОТКИ ПЕРСОНАЛЬНЫХ ДАННЫХ" %}</h2>
 
-<section id="section-11" aria-labelledby="section-11-title">
-    <h2 id="section-11-title">11. CONSENT WITHDRAWAL</h2>
-    
-    <h3>11.1. Withdrawal Methods</h3>
-    <p>This consent may be withdrawn by me at any time by:</p>
-    <ul>
-        <li>Sending written application to address: [ADDRESS]</li>
-        <li>Sending electronic letter to: [EMAIL]</li>
-        <li>Submitting application through personal account on website</li>
-        <li>Oral application during personal visit</li>
-    </ul>
-    
-    <h3>11.2. Withdrawal Consequences</h3>
-    <p>Upon consent withdrawal, the Operator ceases personal data processing, except when:</p>
-    <ul>
-        <li>Processing is necessary for contract execution</li>
-        <li>Processing is necessary for compliance with legal obligations</li>
-        <li>Processing is necessary for protecting vital interests</li>
-    </ul>
-    
-    <h3>11.3. Retroactive Effect</h3>
-    <p>Consent withdrawal does not affect the lawfulness of personal data processing carried out before its withdrawal.</p>
-</section>
+<h3>{% trans "6.1. Правовые основания:" %}</h3>
+<ul>
+    <li>{% trans "Согласие субъекта персональных данных" %}</li>
+    <li>{% trans "Исполнение договора, стороной которого является субъект" %}</li>
+    <li>{% trans "Соблюдение правовых обязательств оператора" %}</li>
+    <li>{% trans "Защита жизненно важных интересов субъекта" %}</li>
+</ul>
 
-<section id="section-12" aria-labelledby="section-12-title">
-    <h2 id="section-12-title">12. CONFIRMATION</h2>
-    
-    <div class="consent-section">
-        <h3>Consent Confirmation</h3>
-        <p>By checking the boxes below, I confirm that:</p>
-        
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="consent-read" name="consent_read" required>
-            <label class="form-check-label" for="consent-read">
-                I have read and understood this Personal Data Processing Consent
-            </label>
-        </div>
-        
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="consent-agree" name="consent_agree" required>
-            <label class="form-check-label" for="consent-agree">
-                I voluntarily give my consent to the processing of my personal data as described above
-            </label>
-        </div>
-        
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="consent-transfer" name="consent_transfer" required>
-            <label class="form-check-label" for="consent-transfer">
-                I consent to the transfer of my personal data to third parties as specified in this document
-            </label>
-        </div>
-        
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="consent-cross-border" name="consent_cross_border">
-            <label class="form-check-label" for="consent-cross-border">
-                I consent to cross-border transfer of my personal data (optional)
-            </label>
-        </div>
-    </div>
-</section>
+<h3>{% trans "6.2. Принципы обработки:" %}</h3>
+<ul>
+    <li>{% trans "Законность и справедливость" %}</li>
+    <li>{% trans "Ограничение конкретными целями" %}</li>
+    <li>{% trans "Соответствие целям обработки" %}</li>
+    <li>{% trans "Точность и актуальность" %}</li>
+    <li>{% trans "Ограничение времени хранения" %}</li>
+    <li>{% trans "Конфиденциальность и безопасность" %}</li>
+</ul>
+
+<h2>{% trans "7. ПЕРЕДАЧА ПЕРСОНАЛЬНЫХ ДАННЫХ ТРЕТЬИМ ЛИЦАМ" %}</h2>
+
+<h3>{% trans "7.1. Передача данных осуществляется:" %}</h3>
+<ul>
+    <li>{% trans "Отелям-партнерам для обеспечения бронирования" %}</li>
+    <li>{% trans "Платежным системам для обработки платежей" %}</li>
+    <li>{% trans "Курьерским службам для доставки документов" %}</li>
+    <li>{% trans "Государственным органам по требованию законодательства" %}</li>
+    <li>{% trans "Техническим партнерам для обеспечения работы системы" %}</li>
+</ul>
+
+<h3>{% trans "7.2. Условия передачи:" %}</h3>
+<ul>
+    <li>{% trans "Только в объеме, необходимом для достижения цели" %}</li>
+    <li>{% trans "С обеспечением конфиденциальности данных" %}</li>
+    <li>{% trans "С заключением соответствующих соглашений" %}</li>
+    <li>{% trans "С соблюдением требований законодательства" %}</li>
+</ul>
+
+<h2>{% trans "8. СРОКИ ОБРАБОТКИ И ХРАНЕНИЯ" %}</h2>
+
+<h3>{% trans "8.1. Сроки хранения:" %}</h3>
+<ul>
+    <li>{% trans "Данные активных пользователей: в течение действия аккаунта" %}</li>
+    <li>{% trans "Данные неактивных пользователей: 3 года с последней активности" %}</li>
+    <li>{% trans "История бронирований: 5 лет для налогового учета" %}</li>
+    <li>{% trans "Технические логи: 1 год" %}</li>
+    <li>{% trans "Данные для маркетинга: до отзыва согласия" %}</li>
+</ul>
+
+<h3>{% trans "8.2. Условия продления:" %}</h3>
+<ul>
+    <li>{% trans "При продолжении использования сервиса" %}</li>
+    <li>{% trans "При наличии неисполненных обязательств" %}</li>
+    <li>{% trans "По требованию законодательства" %}</li>
+</ul>
+
+<h2>{% trans "9. МЕРЫ ЗАЩИТЫ ПЕРСОНАЛЬНЫХ ДАННЫХ" %}</h2>
+
+<h3>{% trans "9.1. Технические меры:" %}</h3>
+<ul>
+    <li>{% trans "Шифрование данных при передаче и хранении" %}</li>
+    <li>{% trans "Использование защищенных протоколов связи (SSL/TLS)" %}</li>
+    <li>{% trans "Регулярное резервное копирование" %}</li>
+    <li>{% trans "Антивирусная защита серверов" %}</li>
+    <li>{% trans "Мониторинг несанкционированного доступа" %}</li>
+</ul>
+
+<h3>{% trans "9.2. Организационные меры:" %}</h3>
+<ul>
+    <li>{% trans "Назначение ответственного за защиту данных" %}</li>
+    <li>{% trans "Обучение персонала правилам работы с данными" %}</li>
+    <li>{% trans "Ограничение доступа к персональным данным" %}</li>
+    <li>{% trans "Ведение журналов доступа к данным" %}</li>
+    <li>{% trans "Регулярный аудит системы защиты" %}</li>
+</ul>
+
+<h2>{% trans "10. ПРАВА СУБЪЕКТА ПЕРСОНАЛЬНЫХ ДАННЫХ" %}</h2>
+
+<p>{% trans "Субъект персональных данных имеет право:" %}</p>
+<ul>
+    <li>{% trans "Получать информацию об обработке своих данных" %}</li>
+    <li>{% trans "Требовать уточнения, блокирования или уничтожения данных" %}</li>
+    <li>{% trans "Отзывать согласие на обработку данных" %}</li>
+    <li>{% trans "Обжаловать действия оператора в уполномоченном органе" %}</li>
+    <li>{% trans "Требовать возмещения ущерба при нарушении прав" %}</li>
+    <li>{% trans "Получать копию своих персональных данных" %}</li>
+    <li>{% trans "Требовать передачи данных другому оператору" %}</li>
+</ul>
+
+<h2>{% trans "11. ПОРЯДОК РЕАЛИЗАЦИИ ПРАВ" %}</h2>
+
+<h3>{% trans "11.1. Подача запросов:" %}</h3>
+<ul>
+    <li>{% trans "Через личный кабинет на сайте" %}</li>
+    <li>{% trans "По электронной почте: privacy@alakol-booking.kz" %}</li>
+    <li>{% trans "Письменно по юридическому адресу" %}</li>
+    <li>{% trans "Лично в офисе оператора" %}</li>
+</ul>
+
+<h3>{% trans "11.2. Сроки рассмотрения:" %}</h3>
+<ul>
+    <li>{% trans "Запрос на доступ к данным: 10 рабочих дней" %}</li>
+    <li>{% trans "Запрос на исправление данных: 5 рабочих дней" %}</li>
+    <li>{% trans "Запрос на удаление данных: 10 рабочих дней" %}</li>
+    <li>{% trans "Отзыв согласия: немедленно" %}</li>
+</ul>
+
+<h2>{% trans "12. ОТЗЫВ СОГЛАСИЯ" %}</h2>
+
+<h3>{% trans "12.1. Способы отзыва:" %}</h3>
+<ul>
+    <li>{% trans "Через настройки личного кабинета" %}</li>
+    <li>{% trans "Письменное заявление на email" %}</li>
+    <li>{% trans "Обращение в службу поддержки" %}</li>
+</ul>
+
+<h3>{% trans "12.2. Последствия отзыва:" %}</h3>
+<ul>
+    <li>{% trans "Прекращение обработки данных для маркетинговых целей" %}</li>
+    <li>{% trans "Сохранение данных для исполнения договорных обязательств" %}</li>
+    <li>{% trans "Возможное ограничение функциональности сервиса" %}</li>
+</ul>
+
+<h2>{% trans "13. ИСПОЛЬЗОВАНИЕ ФАЙЛОВ COOKIE" %}</h2>
+
+<h3>{% trans "13.1. Типы используемых cookie:" %}</h3>
+<ul>
+    <li>{% trans "Необходимые для работы сайта" %}</li>
+    <li>{% trans "Функциональные для улучшения работы" %}</li>
+    <li>{% trans "Аналитические для анализа использования" %}</li>
+    <li>{% trans "Маркетинговые для персонализации рекламы" %}</li>
+</ul>
+
+<h3>{% trans "13.2. Управление cookie:" %}</h3>
+<ul>
+    <li>{% trans "Настройка через браузер пользователя" %}</li>
+    <li>{% trans "Использование настроек сайта" %}</li>
+    <li>{% trans "Отключение через панель управления cookie" %}</li>
+</ul>
+
+<h2>{% trans "14. МЕЖДУНАРОДНАЯ ПЕРЕДАЧА ДАННЫХ" %}</h2>
+
+<h3>{% trans "14.1. Условия передачи:" %}</h3>
+<ul>
+    <li>{% trans "Только в страны с адекватным уровнем защиты" %}</li>
+    <li>{% trans "С применением дополнительных гарантий защиты" %}</li>
+    <li>{% trans "С согласия субъекта персональных данных" %}</li>
+    <li>{% trans "В соответствии с требованиями законодательства РК" %}</li>
+</ul>
+
+<h2>{% trans "15. ИЗМЕНЕНИЕ СОГЛАСИЯ" %}</h2>
+
+<p><strong>15.1.</strong> {% trans "Оператор имеет право изменять настоящее Согласие." %}</p>
+
+<p><strong>15.2.</strong> {% trans "Изменения вступают в силу с момента публикации на сайте." %}</p>
+
+<p><strong>15.3.</strong> {% trans "Пользователи уведомляются об изменениях по электронной почте." %}</p>
+
+<p><strong>15.4.</strong> {% trans "Продолжение использования сервиса означает согласие с изменениями." %}</p>
+
+<h2>{% trans "16. КОНТАКТНАЯ ИНФОРМАЦИЯ" %}</h2>
 
 <div class="contact-info">
-    <h3>Contact Information</h3>
-    <p><strong>Data Controller:</strong> [ORGANIZATION NAME]</p>
-    <p><strong>BIN/IIN:</strong> [BIN/IIN]</p>
-    <p><strong>Address:</strong> [LEGAL ADDRESS]</p>
-    <p><strong>Phone:</strong> [PHONE]</p>
-    <p><strong>Email:</strong> [EMAIL]</p>
-    <p><strong>Data Protection Officer:</strong> [DPO NAME, POSITION]</p>
-    <p><strong>Working Hours:</strong> [WORKING HOURS]</p>
+    <h3>{% trans "Для связи по вопросам защиты персональных данных:" %}</h3>
+    <ul>
+        <li><strong>Email:</strong> privacy@alakol-booking.kz</li>
+        <li><strong>{% trans "Ответственный за защиту данных:" %}</strong> [{% trans "ФИО" %}]</li>
+        <li><strong>{% trans "Телефон:" %}</strong> +7 (727) XXX-XX-XX</li>
+        <li><strong>{% trans "Адрес:" %}</strong> {% trans "г. Алматы, Республика Казахстан" %}</li>
+    </ul>
 </div>
 
-<div class="document-version">
-    <p><strong>Document Date:</strong> [DATE]</p>
-    <p><strong>Version:</strong> 1.0</p>
-    <p><strong>Next Review:</strong> [REVIEW DATE]</p>
-    <p><strong>System operates in Kazakhstan/Astana time zone (UTC+5)</strong></p>
-    <p><strong>Technical Platform:</strong> Django 4.2.2 with PostgreSQL database</p>
+<div class="alert alert-info">
+    <h4>{% trans "ПОДТВЕРЖДЕНИЕ СОГЛАСИЯ" %}</h4>
+    <p>{% trans "Регистрируясь на сайте или используя наши услуги, вы подтверждаете, что:" %}</p>
+    <ul>
+        <li>{% trans "Ознакомились с настоящим Согласием" %}</li>
+        <li>{% trans "Понимаете цели и способы обработки ваших данных" %}</li>
+        <li>{% trans "Даете добровольное согласие на обработку персональных данных" %}</li>
+        <li>{% trans "Понимаете свои права и способы их реализации" %}</li>
+    </ul>
 </div>
+
 {% endblock %} 

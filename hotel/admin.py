@@ -557,7 +557,7 @@ class CheckInDateFilter(admin.SimpleListFilter):
 class BookingAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     # inlines = [ActivityLog_Tab, StaffOnDuty_Tab]
     list_filter = [HotelFilter, RoomTypeFilter, 'is_active', 'checked_in', 'checked_out', CheckInDateFilter, 'payment_status']
-    list_display = ['booking_id', 'user', 'hotel', 'room_type', 'rooms', 'total', 'prepayment', 'payment_for_hotel', 'payment_status', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date']
+    list_display = ['booking_id', 'user', 'hotel', 'room_type', 'rooms', 'total', 'prepayment', 'payment_for_hotel', 'payment_status', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'date']
     search_fields = ['booking_id', 'robokassa_inv_id']
     search_help_text = 'Поиск по ID бронирования, ID инвойса Robokassa, Сумме'
     list_per_page = 100
@@ -567,6 +567,11 @@ class BookingAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
             self.search_help_text = 'Поиск по ID бронирования, ID инвойса Robokassa'
             return ['booking_id', 'robokassa_inv_id']
         return self.search_fields
+
+    def get_list_display(self, request):
+        if is_manager(request.user):
+            return ['booking_id', 'hotel', 'room_type', 'rooms', 'total', 'prepayment', 'payment_for_hotel', 'payment_status', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'date']
+        return self.list_display
 
     def get_list_filter(self, request):
         if is_manager(request.user):
@@ -584,7 +589,7 @@ class BookingAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         if is_manager(request.user) and not request.user.is_superuser:
-            # Удаляем поле 'selection_data' из формы
+            # Удаляем поля из формы для менеджеров
             if 'selection_data' in form.base_fields:
                 del form.base_fields['selection_data']
             if 'checked_in_tracker' in form.base_fields:
@@ -595,6 +600,9 @@ class BookingAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
                 del form.base_fields['expires_at']
             if 'is_active' in form.base_fields:
                 del form.base_fields['is_active']
+            # Скрываем legal_agreements от менеджеров согласно требованиям
+            if 'legal_agreements' in form.base_fields:
+                del form.base_fields['legal_agreements']
             # Делаем поля prepayment и payment_for_hotel только для чтения
             if 'prepayment' in form.base_fields:
                 form.base_fields['prepayment'].widget.attrs['readonly'] = True

@@ -942,7 +942,15 @@ def process_booking(request):
         from decimal import Decimal
         booking.total = Decimal(str(total))
         booking.before_discount = Decimal(str(total))
-        booking.save()
+        
+        # Сохраняем согласия при бронировании
+        from userauths.utils import save_booking_consents
+        consent_data = {
+            'public_offer_consent': request.POST.get('public_offer_consent'),
+            'booking_rules_consent': request.POST.get('booking_rules_consent'),
+            'payment_rules_consent': request.POST.get('payment_rules_consent'),
+        }
+        save_booking_consents(booking, request, consent_data)
         
         logger.info(f"Создано бронирование {booking.booking_id} на сумму {booking.total}")
         logger.info(f"{booking.booking_id}: selection_data_obj === {request.session['selection_data_obj']}")

@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load static %}
 
-{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Alakol Admin{% endblock %}
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | eKol Admin{% endblock %}
 
 {% block extrahead %}
     {{ block.super }}
@@ -176,7 +176,7 @@
 {% endblock %}
 
 {% block branding %}
-<h1 id="site-name"><a href="{% url 'admin:index' %}">Админ панель Alakol</a></h1>
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Админ панель eKol</a></h1>
 {% endblock %}
 
 {% block nav-global %}

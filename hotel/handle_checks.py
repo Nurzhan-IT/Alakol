@@ -24,7 +24,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hms_prj.settings')
 django.setup()
 
 # Импортируем функции после настройки Django
-from hotel.services import handle_bookings_payment_status_processing_to_cancelled, get_bookings_with_related_data
+from hotel.services import handle_bookings_payment_status_processing_to_unpaid, get_bookings_with_related_data
 
 def run_periodic_tasks():
     """
@@ -35,10 +35,10 @@ def run_periodic_tasks():
     
     # Отмена просроченных бронирований
     try:
-        result = handle_bookings_payment_status_processing_to_cancelled()
+        result = handle_bookings_payment_status_processing_to_unpaid()
         logger.info(result)
     except Exception as e:
-        logger.error(f"Error running handle_bookings_payment_status_processing_to_cancelled: {str(e)}")
+        logger.error(f"Error running handle_bookings_payment_status_processing_to_unpaid: {str(e)}")
     
     # Здесь можно добавить другие периодические задачи
     # Например, получение и обработка бронирований со связанными данными
