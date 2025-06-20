@@ -14,7 +14,5 @@ urlpatterns = [
     path('payment-rules/', views.PaymentRulesView.as_view(), name='payment_rules'),
     
     # Hotel Owner Documents
-    # path('hotel-tax-obligations/', views.HotelTaxObligationsView.as_view(), name='hotel_tax_obligations'),
-    # path('hotel-integration-requirements/', views.HotelIntegrationRequirementsView.as_view(), name='hotel_integration_requirements'),
     path('hotel-owner-agreement/', views.HotelOwnerAgreementView.as_view(), name='hotel_owner_agreement'),
 ] 
