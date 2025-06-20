@@ -1,8 +1,9 @@
-# Generated on 2025-05-31 02:59 AM +05
+# Generated on 2025-06-21 01:55 AM +05
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
+from django.utils.translation import get_language
 from .models import DocumentView
 from django.http import HttpResponse
 
@@ -11,13 +12,32 @@ from django.http import HttpResponse
 class LegalDocumentView(TemplateView):
     """Base class for legal documents"""
     document_type = None
+    base_template_name = None  # Базовое имя шаблона без языкового префикса
+    
+    def get_template_names(self):
+        """Динамически выбираем шаблон в зависимости от активного языка"""
+        if not self.base_template_name:
+            return super().get_template_names()
+        
+        current_language = get_language()
+        
+        # Определяем папку в зависимости от языка
+        if current_language == 'ru':
+            template_path = f'legal_ru/{self.base_template_name}'
+        elif current_language == 'kk':
+            template_path = f'legal_kk/{self.base_template_name}'
+        else:
+            # Для английского и всех остальных языков используем стандартную папку
+            template_path = f'legal/{self.base_template_name}'
+        
+        return [template_path]
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
             'document_version': '1.0',
-            'last_updated': '2025-05-31',
-            'generation_time': '2025-05-31 02:59 AM +05',
+            'last_updated': '2025-06-19',
+            'generation_time': '2025-06-19 04:45 AM +05',
             'company_info': {
                 'name': '[ORGANIZATION NAME]',
                 'bin': '[BIN/IIN]',
@@ -48,78 +68,52 @@ def test_view(request):
     return HttpResponse("Legal app is working!")
 
 
-class TermsOfUseView(TemplateView):
-    template_name = 'legal/terms_of_use.html'
+class TermsOfUseView(LegalDocumentView):
+    base_template_name = 'terms_of_use.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
             'document_version': '1.0',
-            'last_updated': '2025-05-31',
-            'generation_time': '2025-05-31 02:59 AM +05',
+            'last_updated': '2025-06-19',
+            'generation_time': '2025-06-19 04:45 AM +05',
         })
         return context
 
 
-class PrivacyPolicyView(TemplateView):
-    template_name = 'legal/privacy_policy.html'
+class PrivacyPolicyView(LegalDocumentView):
+    base_template_name = 'privacy_policy.html'
 
 
-class PublicOfferView(TemplateView):
-    template_name = 'legal/public_offer.html'
+class PublicOfferView(LegalDocumentView):
+    base_template_name = 'public_offer.html'
 
 
-class BookingRulesView(TemplateView):
-    template_name = 'legal/booking_rules.html'
+class BookingRulesView(LegalDocumentView):
+    base_template_name = 'booking_rules.html'
 
 
-class PersonalDataConsentView(TemplateView):
-    template_name = 'legal/personal_data_consent.html'
+class PersonalDataConsentView(LegalDocumentView):
+    base_template_name = 'personal_data_consent.html'
 
 
-class PaymentRulesView(TemplateView):
-    template_name = 'legal/payment_rules.html'
+class PaymentRulesView(LegalDocumentView):
+    base_template_name = 'payment_rules.html'
 
 
 # ===== HOTEL OWNER DOCUMENTS =====
 
-class HotelTaxObligationsView(TemplateView):
-    """Налоговые обязательства владельцев отелей"""
-    template_name = 'legal/hotel_owner_docs/hotel_tax_obligations.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'document_version': '1.0',
-            'last_updated': '2025-06-03',
-            'generation_time': '2025-06-03 06:24 PM +05',
-        })
-        return context
-
-
-class HotelIntegrationRequirementsView(TemplateView):
-    """Технические требования для интеграции отелей"""
-    template_name = 'legal/hotel_owner_docs/hotel_integration_requirements.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'document_version': '1.0',
-            'last_updated': '2025-06-03',
-            'generation_time': '2025-06-03 06:24 PM +05',
-        })
-        return context
-
-
-class HotelOwnerAgreementView(TemplateView):
+class HotelOwnerAgreementView(LegalDocumentView):
     """Соглашение с владельцами отелей"""
-    template_name = 'legal/hotel_owner_docs/hotel_owner_agreement.html'
+    base_template_name = 'hotel_owner_docs/hotel_owner_agreement.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
             'document_version': '1.0',
-            'last_updated': '2025-06-03',
-            'generation_time': '2025-06-03 06:24 PM +05',
+            'last_updated': '2025-06-19',
+            'generation_time': '2025-06-19 04:45 AM +05',
         })
         return context
+
+
