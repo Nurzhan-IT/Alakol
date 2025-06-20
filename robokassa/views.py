@@ -6,7 +6,7 @@ from django.conf import settings
 from django.utils import timezone
 import logging
 
-from hotel.models import Booking, Hotel
+from hotel.models import Booking, Hotel, Room
 
 logger = logging.getLogger(__name__)
 

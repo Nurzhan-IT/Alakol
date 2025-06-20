@@ -319,7 +319,9 @@ def delete_session(request):
     request.session.pop('selection_data_obj', None)
     request.session.pop('booking_common_data', None)
     request.session.pop('room_types_data', None)
-    return redirect(request.META.get("HTTP_REFERER"))
+    # Безопасный редирект: используем referer или главную страницу как fallback
+    referer = request.META.get("HTTP_REFERER", "/")
+    return redirect(referer)
 
 
 # Новый метод для очистки сессии и добавления нового номера
