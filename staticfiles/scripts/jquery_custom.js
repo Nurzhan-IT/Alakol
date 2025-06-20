@@ -189,7 +189,7 @@
             });
 
         } catch (error) {
-            console.log(error);
+            // Removed console.log for error debugging - error handling preserved
         }
         if ("ontouchstart" in window) {
             document.documentElement.className = document.documentElement.className + " touch";

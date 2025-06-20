@@ -417,6 +417,10 @@ class HotelViewsTestCase(TestCase):
         
     def test_index_view(self):
         """Тест маршрутизации к главной странице с учетом i18n"""
+        # Очищаем кэш перед тестом
+        from django.core.cache import cache
+        cache.clear()
+        
         # Проверяем правильность URL-маршрутизации
         url = reverse('hotel:index')
         
@@ -428,10 +432,10 @@ class HotelViewsTestCase(TestCase):
         request = self.factory.get(url)
         request.user = self.user  # Устанавливаем пользователя
         
-        # Патчим вызов базы данных в представлении index
-        with patch('hotel.views.Hotel.objects.filter') as mock_filter:
+        # Патчим весь механизм кэширования для тестов
+        with patch('hotel.cache_utils.CacheHelper.get_or_set_complex') as mock_cache:
             # Настраиваем мок для возврата списка с нашим тестовым отелем
-            mock_filter.return_value = [self.hotel]
+            mock_cache.return_value = [self.hotel]
             
             # Патчим вызов render
             with patch('hotel.views.render') as mock_render:
@@ -452,6 +456,8 @@ class HotelViewsTestCase(TestCase):
                 # В представлении index контекст передается как третий позиционный аргумент,
                 # а не как именованный аргумент context
                 self.assertIn("hotel", args[2])
+                # Проверяем, что hotel в контексте является списком
+                self.assertIsInstance(args[2]["hotel"], list)
     
     def test_hotel_detail_view(self):
         """Тест маршрутизации к детальной странице отеля с учетом i18n"""

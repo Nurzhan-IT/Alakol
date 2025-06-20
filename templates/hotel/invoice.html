@@ -482,7 +482,7 @@
                                 </div>
                                 <div class="col-12 col-md-6 col-mobile-12 mobile-text-center mobile-mt-3">
                                     <div class="receipt-right">
-                                        <h5>Alakol</h5>
+                                        <h5>eKol</h5>
                                         <p><i class="fa fa-phone"></i> +1 3649-6589</p>
                                         <p><i class="fa fa-envelope"></i> company@gmail.com</p>
                                         <p><i class="fa fa-location-arrow"></i> 123 Main Street</p>
@@ -671,7 +671,7 @@
                             doc.save(fileName);
                             
                         } catch (error) {
-                            console.error('Ошибка при создании PDF:', error);
+                            // Removed console.error for PDF creation error - user feedback preserved
                             alert('Произошла ошибка при создании PDF файла. Попробуйте еще раз.');
                         } finally {
                             // Восстанавливаем кнопку
@@ -679,7 +679,7 @@
                             this.disabled = false;
                         }
                     }).catch(error => {
-                        console.error('Ошибка html2canvas:', error);
+                        // Removed console.error for html2canvas error - user feedback preserved
                         alert('Произошла ошибка при генерации PDF. Попробуйте еще раз.');
                         // Восстанавливаем кнопку
                         this.innerHTML = originalText;

@@ -6,7 +6,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h2> {% trans "Select Booking Data" %}</h2>
+          <h2> {% trans "Select Booking Data" %} - {{hotel.name}}</h2>
         </div>
       </div>
     </div>
@@ -19,7 +19,7 @@
       <div class="row d-flex justify-content-center" style="display: flex; justify-content: center;">  
         <div class="col-lg-6">
             <div class=" booking_widget_box" style="border: 1px dashed rgba(42, 1, 119, 0.61); padding: 14px; border-radius: 10px;">
-              <h3><i class="fa fa-calendar"></i> {% trans "Booking" %}</h3>
+              <h3><i class="fa fa-calendar"></i> {% trans "Booking" %} - {{hotel.name}}</h3>
               <form class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}">
                 {% csrf_token %}
                 <input type="hidden" value="{{hotel.id}}" name="hotel-id" id="">
