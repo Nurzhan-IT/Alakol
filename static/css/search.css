@@ -23,7 +23,7 @@
 .results-hotel-card{
     box-shadow: 2px 2px 12px 2px rgba(44, 44, 44, 0.144);
     border-radius: 10px;
-    height: 400px;
+    height: 450px;
     width: 900px;
     display: flex;
     flex-direction: row;
@@ -81,6 +81,12 @@
     font-size: 20px;
     position: absolute;
     bottom: 10px;
+}
+
+.amenities_list {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .view-details-button:hover {
@@ -167,6 +173,8 @@
         border: none;
         height: 50px;
     }
+
+
 }
 
 @media (max-width: 520px) {
