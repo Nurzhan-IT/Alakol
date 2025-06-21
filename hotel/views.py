@@ -1562,3 +1562,25 @@ def calculate_total_price(room_type, checkin_date, checkout_date):
         current_date += timedelta(days=1)
     
     return total
+
+def robots_txt(request):
+    """
+    Генерация robots.txt для SEO оптимизации
+    """
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /admin/",
+        "Disallow: /dashboard/", 
+        "Disallow: /api/",
+        "Disallow: /ckeditor/",
+        "Disallow: /user/",
+        "",
+        "# Языковые версии",
+        "Allow: /ru/",
+        "Allow: /kk/",
+        "Allow: /en/",
+        "",
+        f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")

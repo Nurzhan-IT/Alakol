@@ -1,0 +1,112 @@
+# ==============================================
+# ALAKOL HMS - Шаблон переменных окружения
+# ==============================================
+# Скопируйте этот файл в .env и заполните необходимые значения
+
+# ==============================================
+# ОСНОВНЫЕ НАСТРОЙКИ DJANGO
+# ==============================================
+
+# Секретный ключ Django (ОБЯЗАТЕЛЬНО изменить для продакшена!)
+SECRET_KEY=django-insecure-m*t5wynyhd=2udczig6#n&0337+m=ga!p=cglnd-+srqdpq4r2
+
+# Режим отладки (True для разработки, False для продакшена)
+DEBUG=True
+
+# Разрешенные хосты (через запятую, для продакшена указать реальные домены)
+ALLOWED_HOSTS=localhost,127.0.0.1,*.ngrok-free.app
+
+# Адрес сайта (используется в email уведомлениях и т.д.)
+WEBSITE_ADDRESS=http://localhost:8000
+
+# ==============================================
+# НАСТРОЙКИ БАЗЫ ДАННЫХ
+# ==============================================
+
+# PostgreSQL настройки
+DB_NAME=alakol_hms
+DB_USER=postgres
+DB_PASSWORD=your_password_here
+DB_HOST=localhost
+DB_PORT=5432
+
+# ==============================================
+# НАСТРОЙКИ REDIS (для кеширования и сессий)
+# ==============================================
+
+# URL подключения к Redis
+REDIS_URL=redis://127.0.0.1:6379/1
+
+# ==============================================
+# НАСТРОЙКИ EMAIL (AWS SES)
+# ==============================================
+
+# Бэкенд для отправки email
+EMAIL_BACKEND=anymail.backends.amazon_ses.EmailBackend
+
+# Email адрес отправителя по умолчанию
+DEFAULT_FROM_EMAIL=noreply@yourdomain.com
+
+# AWS SES настройки
+AWS_ACCESS_KEY_ID=your_aws_access_key_id
+AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+AWS_REGION=us-east-1
+
+# ==============================================
+# НАСТРОЙКИ MAILGUN (альтернатива AWS SES)
+# ==============================================
+
+# Mailgun API ключ (если используете вместо AWS SES)
+MAILGUN_API_KEY=your_mailgun_api_key
+MAILGUN_SENDER_DOMAIN=your-domain.com
+
+# ==============================================
+# НАСТРОЙКИ ROBOKASSA (платежная система)
+# ==============================================
+
+# Логин мерчанта в Robokassa
+ROBOKASSA_MERCHANT_LOGIN=your_merchant_login
+
+# Пароли для Robokassa (продакшен)
+ROBOKASSA_MERCHANT_PASSWORD_1=your_password_1
+ROBOKASSA_MERCHANT_PASSWORD_2=your_password_2
+
+# Пароли для тестирования Robokassa
+ROBOKASSA_TEST_PASSWORD_1=your_test_password_1
+ROBOKASSA_TEST_PASSWORD_2=your_test_password_2
+
+# Режим тестирования Robokassa (True/False)
+ROBOKASSA_USE_TEST_MODE=True
+
+# ==============================================
+# ДОПОЛНИТЕЛЬНЫЕ НАСТРОЙКИ
+# ==============================================
+
+# Настройки для Celery (если используется)
+# CELERY_BROKER_URL=redis://127.0.0.1:6379/0
+# CELERY_RESULT_BACKEND=redis://127.0.0.1:6379/0
+
+# Настройки для S3 хранилища (если используется)
+# AWS_STORAGE_BUCKET_NAME=your-bucket-name
+# AWS_S3_REGION_NAME=us-east-1
+# AWS_S3_CUSTOM_DOMAIN=your-cdn-domain.com
+
+# Настройки для социальной аутентификации (если используется)
+# GOOGLE_OAUTH2_CLIENT_ID=your_google_client_id
+# GOOGLE_OAUTH2_CLIENT_SECRET=your_google_client_secret
+
+# Настройки для reCAPTCHA (если используется)
+# RECAPTCHA_PUBLIC_KEY=your_recaptcha_public_key
+# RECAPTCHA_PRIVATE_KEY=your_recaptcha_private_key
+
+# Настройки для SMS уведомлений (Twilio)
+# TWILIO_ACCOUNT_SID=your_twilio_account_sid
+# TWILIO_AUTH_TOKEN=your_twilio_auth_token
+# TWILIO_PHONE_NUMBER=your_twilio_phone_number
+
+# Настройки для логирования
+# LOG_LEVEL=DEBUG
+# LOG_FILE_PATH=logs/debug.log
+
+# Настройки для мониторинга (Sentry)
+# SENTRY_DSN=your_sentry_dsn_url 

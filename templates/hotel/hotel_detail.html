@@ -1,6 +1,198 @@
 {% extends 'partials/base.html' %}
 {% load static %}{% load i18n %}{% load hotel_extras %}{% load price_format %}
 
+{% block title %}{{ hotel.name }} | {% trans "Бронирование отеля и базы отдыха на Алаколе" %}{% endblock %}
+
+{% block meta_description %}{{ hotel.description|striptags|truncatewords:30 }} {% trans "Забронируйте номер в" %} {{ hotel.name }} {% trans "на озере Алаколь. Лучшие цены, удобное расположение" %}.{% endblock %}
+
+{% block meta_keywords %}{{ hotel.name }}, {% trans "отель Алаколь, база отдыха Алаколь, бронирование" %} {{ hotel.name }}, {% trans "номера" %} {{ hotel.address }}, {% trans "отдых Алаколь, базы отдыха Алаколь" %}{% endblock %}
+
+{% block og_title %}{{ hotel.name }} - {% trans "Отель и база отдыха на озере Алаколь" %}{% endblock %}
+{% block og_type %}business.business{% endblock %}
+{% block og_image %}{{ hotel.image.url }}{% endblock %}
+
+{% block schema_type %}Hotel{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Hotel",
+    "@id": "{{ request.build_absolute_uri }}",
+    "name": "{{ hotel.name|escapejs }}",
+    "description": "{{ hotel.description|striptags|truncatewords:50|escapejs }}",
+    "url": "{{ request.build_absolute_uri }}",
+    "sameAs": [
+        {% if hotel.website %}"{{ hotel.website }}"{% endif %}
+        {% if hotel.facebook_url %},"{{ hotel.facebook_url }}"{% endif %}
+        {% if hotel.instagram_url %},"{{ hotel.instagram_url }}"{% endif %}
+    ],
+    "image": [
+        "{{ request.scheme }}://{{ request.get_host }}{{ hotel.image.url }}"
+        {% for image in hotel.hotel_gallery.all %}
+        ,"{{ request.scheme }}://{{ request.get_host }}{{ image.image.url }}"
+        {% endfor %}
+    ],
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ hotel.address|escapejs }}",
+        "addressLocality": "{% trans 'Алаколь' %}",
+        "addressRegion": "{% trans 'Восточно-Казахстанская область' %}",
+        "postalCode": "{{ hotel.postal_code|default:'' }}",
+        "addressCountry": "KZ"
+    },
+    "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "{{ hotel.latitude|default:'46.1167' }}",
+        "longitude": "{{ hotel.longitude|default:'81.8167' }}"
+    },
+    "telephone": "{{ hotel.mobile }}",
+    "email": "{{ hotel.email|default:'' }}",
+    {% if hotel.average_rating %}
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ hotel.average_rating }}",
+        "reviewCount": "{{ hotel.rating_count|default:0 }}",
+        "bestRating": "5",
+        "worstRating": "1"
+    },
+    {% endif %}
+    "starRating": {
+        "@type": "Rating",
+        "ratingValue": "{{ hotel.star_rating|default:'3' }}"
+    },
+    "priceRange": "${{ hotel.min_price|default:'50' }} - ${{ hotel.max_price|default:'200' }}",
+    "currenciesAccepted": "KZT, USD",
+    "paymentAccepted": "{% trans 'Наличные, банковские карты, банковский перевод' %}",
+    "amenityFeature": [
+        {% for feature in hotel.hotel_features %}
+        {
+            "@type": "LocationFeatureSpecification",
+            "name": "{{ feature.name|escapejs }}",
+            "value": true
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ],
+    "containsPlace": [
+        {% for room_type in hotel.hotel_room_types %}
+        {
+            "@type": "Accommodation",
+            "@id": "{{ request.build_absolute_uri }}#room-{{ room_type.id }}",
+            "name": "{{ room_type.type|escapejs }}",
+            "description": "{% trans 'Номер на' %} {{ room_type.room_capacity }} {% trans 'гостей' %}",
+            "occupancy": {
+                "@type": "QuantitativeValue",
+                "value": "{{ room_type.room_capacity }}"
+            },
+            "floorSize": {
+                "@type": "QuantitativeValue",
+                "value": "{{ room_type.room_size|default:'25' }}",
+                "unitCode": "MTK"
+            },
+            "numberOfBeds": "{{ room_type.number_of_beds|default:'1' }}",
+            "offers": {
+                "@type": "Offer",
+                "price": "{{ room_type.price }}",
+                "priceCurrency": "KZT",
+                "availability": "https://schema.org/InStock",
+                "validFrom": "{{ today|date:'Y-m-d' }}",
+                "url": "{{ request.build_absolute_uri }}#room-{{ room_type.id }}"
+            }
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ],
+    "hasMap": "https://maps.google.com/?q={{ hotel.latitude|default:'46.1167' }},{{ hotel.longitude|default:'81.8167' }}",
+    "checkinTime": "{% if hotel.check_in_time %}{{ hotel.check_in_time }}{% else %}14:00{% endif %}",
+    "checkoutTime": "{% if hotel.check_out_time %}{{ hotel.check_out_time }}{% else %}12:00{% endif %}",
+    "petsAllowed": {% if hotel.pets_allowed %}true{% else %}false{% endif %},
+    "smokingAllowed": {% if hotel.smoking_allowed %}true{% else %}false{% endif %},
+    "numberOfRooms": "{{ hotel.total_rooms|default:'10' }}",
+    "availableLanguage": ["ru", "kk", "en"]
+}
+</script>
+
+{% if reviews %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Review",
+    "itemReviewed": {
+        "@type": "Hotel",
+        "name": "{{ hotel.name|escapejs }}",
+        "url": "{{ request.build_absolute_uri }}"
+    },
+    "reviewBody": "{{ reviews.0.review|truncatechars:200|escapejs }}",
+    "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "{{ reviews.0.rating }}",
+        "bestRating": "5",
+        "worstRating": "1"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "{{ reviews.0.user.username|escapejs }}"
+    },
+    "datePublished": "{{ reviews.0.date|date:'Y-m-d' }}"
+}
+</script>
+{% endif %}
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "{% trans 'Главная' %}",
+            "item": "{{ request.scheme }}://{{ request.get_host }}/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "{% trans 'Отели Алаколь' %}",
+            "item": "{{ request.scheme }}://{{ request.get_host }}/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "{{ hotel.name|escapejs }}",
+            "item": "{{ request.build_absolute_uri }}"
+        }
+    ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "TouristAttraction",
+    "name": "{{ hotel.name|escapejs }} - {% trans 'Отель на озере Алаколь' %}",
+    "description": "{{ hotel.description|striptags|truncatewords:30|escapejs }}",
+    "url": "{{ request.build_absolute_uri }}",
+    "image": "{{ request.scheme }}://{{ request.get_host }}{{ hotel.image.url }}",
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ hotel.address|escapejs }}",
+        "addressLocality": "{% trans 'Алаколь' %}",
+        "addressRegion": "{% trans 'Восточно-Казахстанская область' %}",
+        "addressCountry": "KZ"
+    },
+    "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "{{ hotel.latitude|default:'46.1167' }}",
+        "longitude": "{{ hotel.longitude|default:'81.8167' }}"
+    },
+    "touristType": [
+        "{% trans 'Семейный отдых' %}",
+        "{% trans 'Оздоровительный туризм' %}",
+        "{% trans 'Пляжный отдых' %}"
+    ]
+}
+</script>
+{% endblock %}
+
 {% block special_header_links %}
 <link rel="stylesheet" href="{% static 'css/bootstrap_part_for_modal.css' %}"> 
 <link rel="stylesheet" href="{% static 'css/hotel_detail.css' %}"> 

@@ -1,14 +1,67 @@
 {% load static %}
 {% load i18n %}
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="{{ LANGUAGE_CODE }}">
 
 <head>
-    <meta name="author" content="">
-    <meta name="description" content="">
+    <meta name="google-site-verification" content="0ABk3Ms6mIECgNX043l_7Sxci1NACbcpmtH1f2oDqu0" />
+    <!-- SEO Meta Tags -->
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="description" content="{% block meta_description %}{% trans 'Бронирование отелей и баз отдыха на озере Алаколь, Казахстан. Лучшие цены, удобный поиск, мгновенное подтверждение бронирования. Откройте для себя красоту Алаколя.' %}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}{% trans 'Алаколь, отели, базы отдыха, бронирование, Казахстан, Алаколь базы отдыха,озеро, отдых, туризм, номера, гостиницы, базы отдыха Алаколь' %}{% endblock %}">
+    <meta name="author" content="Alakol Booking System">
+    <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}{% trans 'Алаколь - Бронирование отелей и баз отдыха онлайн' %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% trans 'Бронирование отелей и баз отдыха на озере Алаколь, Казахстан. Лучшие цены, удобный поиск, мгновенное подтверждение бронирования.' %}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/og-image.jpg' %}{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:site_name" content="Alakol Hotel Booking">
+    <meta property="og:locale" content="{{ LANGUAGE_CODE }}">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{% trans 'Алаколь - Бронирование отелей онлайн' %}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{% trans 'Бронирование отелей на озере Алаколь, Казахстан. Лучшие цены, удобный поиск.' %}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{% static 'images/og-image.jpg' %}{% endblock %}">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% trans "Alakol hotel booking" %}</title>
+    
+    <title>{% block title %}{% trans "Алаколь - Бронирование отелей онлайн" %}{% endblock %}</title>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    
+    <!-- Alternate Language URLs for hreflang -->
+    {% get_available_languages as LANGUAGES %}
+    {% for language_code, language_name in LANGUAGES %}
+        <link rel="alternate" hreflang="{{ language_code }}" href="{% block hreflang_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    {% endfor %}
+    
+    <!-- JSON-LD Structured Data -->
+    {% block structured_data %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "{% trans 'Алаколь - Бронирование отелей' %}",
+        "url": "{{ request.build_absolute_uri }}",
+        "description": "{% trans 'Бронирование отелей на озере Алаколь, Казахстан. Лучшие цены, удобный поиск, мгновенное подтверждение бронирования.' %}",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ request.scheme }}://{{ request.get_host }}/search/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Alakol Hotel Booking",
+            "url": "{{ request.scheme }}://{{ request.get_host }}"
+        }
+    }
+    </script>
+    {% endblock %}
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="images/favicon.png">
