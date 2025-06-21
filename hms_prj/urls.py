@@ -20,10 +20,26 @@ from django.conf.urls.static import static
 
 from django.conf.urls.i18n import i18n_patterns
 from django.views.i18n import JavaScriptCatalog
-from hotel.views import robokassa_result, robokassa_success_direct, robokassa_failed_direct
+from django.contrib.sitemaps.views import sitemap
+from hotel.views import robokassa_result, robokassa_success_direct, robokassa_failed_direct, robots_txt
 from hotel.admin import custom_admin_site
+from hotel.sitemaps import HotelSitemap, RoomTypeSitemap, StaticViewSitemap, SearchPagesSitemap, LegalPagesSitemap
+
+# Настройка sitemaps для SEO
+sitemaps = {
+    'hotels': HotelSitemap,
+    'room_types': RoomTypeSitemap,
+    'static': StaticViewSitemap,
+    'search': SearchPagesSitemap,
+    'legal': LegalPagesSitemap,
+}
+
 urlpatterns = [
     path('admin/', custom_admin_site.urls),
+
+    # SEO URLs
+    path('robots.txt', robots_txt, name='robots_txt'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 
     # Apps Routes
     # path("booking/", include("booking.urls")),
