@@ -127,6 +127,21 @@ ROOM_TYPE_FEATURES_DETAILED = [
     ('services_amenities', 'Услуги и удобства'),
 ]
 
+MEAL_PLAN_TYPES = (
+    ("not_included", "Не включено"),
+    ("full_board", "Трехразовое питание"),
+    ("half_board_lunch_dinner", "Двухразовое (обед + ужин)"),
+    ("half_board_breakfast_lunch", "Двухразовое (завтрак + обед)"),
+    ("breakfast_only", "Только завтрак"),
+    ("lunch_only", "Только обед"),
+    ("dinner_only", "Только ужин"),
+)
+
+MEAL_INCLUDED_IN_PRICE = (
+    ("yes", "Да"),
+    ("no", "Нет"),
+)
+
 
 class Hotel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
@@ -145,6 +160,20 @@ class Hotel(models.Model):
     # Даты начала и окончания работы отеля
     start_date = models.DateField(null=True, blank=True, help_text="Дата начала работы отеля", verbose_name='Дата начала работы отеля')
     end_date = models.DateField(null=True, blank=True, help_text="Дата окончания работы отеля", verbose_name='Дата окончания работы отеля')
+
+    # Поля для питания
+    meal_plan_type = models.CharField(
+        max_length=50, 
+        choices=MEAL_PLAN_TYPES, 
+        default="not_included", 
+        verbose_name='Тип комплексного питания'
+    )
+    meal_included_in_price = models.CharField(
+        max_length=3,
+        choices=MEAL_INCLUDED_IN_PRICE,
+        default="no",
+        verbose_name='Включено ли питание в стоимость номера?'
+    )
 
     # tags = TaggableManager(blank=True)
     views = models.PositiveIntegerField(default=0, verbose_name='Просмотры')
@@ -206,6 +235,9 @@ class Hotel(models.Model):
 
     def hotel_room_types(self):
         return RoomType.objects.filter(hotel=self)
+    
+    def hotel_meal_plans(self):
+        return HotelMealPlan.objects.filter(hotel=self)
     
     def average_rating(self):
         average_rating = Review.objects.filter(hotel=self, active=True).aggregate(avg_rating=models.Avg("rating"))
@@ -284,6 +316,31 @@ class HotelFAQs(models.Model):
     
     class Meta:
         verbose_name_plural = "Вопрос/Ответ"
+
+class HotelMealPlan(models.Model):
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
+    price_per_day = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, verbose_name='Цена за день')
+    age_min = models.PositiveIntegerField(default=0, verbose_name='Минимальный возраст')
+    age_max = models.PositiveIntegerField(null=True, blank=True, verbose_name='Максимальный возраст')
+    hmpid = models.CharField(max_length=20, blank=True, verbose_name='ID плана питания')
+
+    def save(self, *args, **kwargs):
+        # Генерация уникального hmpid, если оно отсутствует
+        if not self.hmpid:
+            self.hmpid = shortuuid.uuid()[:10]
+
+        while HotelMealPlan.objects.filter(hmpid=self.hmpid).exists():
+            self.hmpid = shortuuid.uuid()[:10]  # Regenerate if it already exists
+    
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.hotel.name} - {self.price_per_day} тенге"
+    
+    class Meta:
+        verbose_name = 'План питания отеля'
+        verbose_name_plural = "Планы питания отеля"
+        ordering = ['price_per_day']
 
 class RoomType(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')

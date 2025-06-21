@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from hotel.models import  ICON_CHOICES,Hotel, Room, Booking, RoomServices, HotelGallery, RoomTypeGallery,RoomTypeFeatures, HotelFeatures, HotelFAQs, RoomType, RoomTypeDescription, Coupon, CouponUsers, Notification, Bookmark, Review, RoomTypeFeaturesDetailed
+from hotel.models import  ICON_CHOICES,Hotel, Room, Booking, RoomServices, HotelGallery, RoomTypeGallery,RoomTypeFeatures, HotelFeatures, HotelFAQs, RoomType, RoomTypeDescription, Coupon, CouponUsers, Notification, Bookmark, Review, RoomTypeFeaturesDetailed, HotelMealPlan
 from import_export.admin import ImportExportModelAdmin
 from import_export.formats import base_formats
 from django.utils.html import mark_safe
@@ -229,14 +229,33 @@ class HotelFAQs_Tab(admin.TabularInline):
     extra = 0
 
     def get_formset(self, request, obj=None, **kwargs):
-        formset = super().get_formset(request, obj, **kwargs)
+        FormSet = super().get_formset(request, obj, **kwargs)
+        
+        class CustomFormSet(FormSet):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                
+        return CustomFormSet
 
-        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
-            for form in formset.form.base_fields.values():
-                if 'hfid' in formset.form.base_fields:
-                    formset.form.base_fields['hfid'].widget = forms.HiddenInput()
+class HotelMealPlan_Tab(admin.TabularInline):
+    model = HotelMealPlan
+    extra = 0
+    fields = ['price_per_day', 'age_min', 'age_max']
 
-        return formset
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'hotel':
+            if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+                kwargs['queryset'] = Hotel.objects.filter(user=request.user)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def get_formset(self, request, obj=None, **kwargs):
+        FormSet = super().get_formset(request, obj, **kwargs)
+        
+        class CustomFormSet(FormSet):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                
+        return CustomFormSet
 
 class Room_Tab(admin.TabularInline):
     model = Room
@@ -365,7 +384,7 @@ class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     form = HotelAdminForm
     inlines = [
         HotelGallery_Tab, HotelFeatures_Tab, RoomType_Tab, RoomTypeDescription_Tab, 
-        RoomTypeGallery_Tab, RoomTypeFeatures_Tab, RoomTypeFeaturesDetailed_Tab, Room_Tab, HotelFAQs_Tab
+        RoomTypeGallery_Tab, RoomTypeFeatures_Tab, RoomTypeFeaturesDetailed_Tab, Room_Tab, HotelFAQs_Tab, HotelMealPlan_Tab
     ]
     list_filter = ['featured', 'status']
     list_editable = ['status']
@@ -769,21 +788,28 @@ class PriceOnDateAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
             pricing_count = len(obj.dynamic_pricing) if isinstance(obj.dynamic_pricing, dict) else 0
             self.message_user(request, f"Динамические цены успешно сохранены. {pricing_count} дней с ценами.")
         return super().response_change(request, obj)
-    
+
 @receiver(post_migrate)
 def add_permissions_to_manager_group(sender, **kwargs):
-    if sender.name == 'hotel':  # Только для приложения hotel
-        # Получаем или создаем группу Manager
+    """Добавляет права на изменение отелей группе Manager"""
+    try:
         manager_group, created = Group.objects.get_or_create(name='Manager')
         
-        # Добавляем разрешения для PriceOnDate
-        content_type = ContentType.objects.get_for_model(RoomType)
-        permissions = Permission.objects.filter(content_type=content_type)
+        # Список моделей для которых нужно добавить разрешения
+        models_to_add = ['Hotel', 'Room', 'HotelGallery', 'HotelFeatures', 
+                        'HotelFAQs', 'RoomType', 'RoomTypeDescription', 
+                        'RoomTypeGallery', 'RoomTypeFeatures', 'RoomTypeFeaturesDetailed']
         
-        for permission in permissions:
-            manager_group.permissions.add(permission)
-        
-        print(f"Разрешения для PriceOnDate добавлены группе Manager: {[p.codename for p in permissions]}")
+        for model_name in models_to_add:
+            try:
+                content_type = ContentType.objects.get(app_label='hotel', model=model_name.lower())
+                permissions = Permission.objects.filter(content_type=content_type)
+                manager_group.permissions.add(*permissions)
+            except ContentType.DoesNotExist:
+                pass  # Модель может не существовать в некоторых случаях
+                
+    except Exception as e:
+        print(f"Ошибка при создании группы Manager: {e}")
 
 class CustomAdminSite(admin.AdminSite):
     site_header = "Админ панель Alakol"
@@ -809,6 +835,7 @@ class CustomAdminSite(admin.AdminSite):
         'HotelGallery': 'Галерея отелей',
         'HotelFeatures': 'Особенности отелей',
         'HotelFAQs': 'FAQ отелей',
+        'HotelMealPlan': 'Планы питания отелей',
         'RoomTypeDescription': 'Описания типов номеров',
         'RoomTypeGallery': 'Галерея типов номеров',
         'RoomTypeFeatures': 'Особенности типов номеров',
