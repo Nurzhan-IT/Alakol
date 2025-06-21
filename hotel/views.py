@@ -10,11 +10,11 @@ from django.conf import settings
 from django.urls import reverse
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
-from django.db.models import Q, Count, OuterRef
+from django.db.models import Q, Count, OuterRef, Prefetch
 from django.core.cache import cache
 import uuid
 
-from hotel.models import Coupon, CouponUsers, Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType, RoomTypeGallery, Notification, Bookmark, Review
+from hotel.models import Coupon, CouponUsers, Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType, RoomTypeGallery, Notification, Bookmark, Review, HotelMealPlan
 from booking.models import RoomUnavailability
 from hotel.cache_utils import (
     CacheKeyGenerator, CacheInvalidator, cache_function, 
@@ -73,11 +73,36 @@ def hotel_detail(request, slug):
     cache_key = CacheKeyGenerator.hotel_detail(slug)
     
     def get_hotel_data():
+        from django.db.models import Case, When, IntegerField
         return get_object_or_404(
             Hotel.objects.prefetch_related(
                 'roomtype_set',
                 'hotelgallery_set',
-                'hotelfeatures_set'
+                'hotelfeatures_set',
+                Prefetch('hotelmealplan_set', 
+                        queryset=HotelMealPlan.objects.annotate(
+                            # Создаем приоритет сортировки для правильного порядка
+                            sort_priority=Case(
+                                # Только age_min (например, 12+ лет) - используем age_min как приоритет
+                                When(age_min__isnull=False, age_max__isnull=True, then='age_min'),
+                                # Диапазон age_min-age_max (например, от 3 до 12 лет) - используем age_min как приоритет
+                                When(age_min__isnull=False, age_max__isnull=False, then='age_min'),
+                                # Только age_max (например, до 3 лет) - используем age_max как приоритет
+                                When(age_min__isnull=True, age_max__isnull=False, then='age_max'),
+                                # Без ограничений по возрасту - минимальный приоритет
+                                default=0,
+                                output_field=IntegerField()
+                            ),
+                            # Категория для группировки типов возрастных ограничений
+                            category=Case(
+                                When(age_min__gt=0, age_max__isnull=True, then=1),  # Только age_min (12+ лет)
+                                When(age_min__gt=0, age_max__isnull=False, then=2), # Диапазон (от X до Y лет)
+                                When(age_min__isnull=True, age_max__isnull=False, then=3),  # Только age_max (до X лет)
+                                When(age_min=0, age_max__isnull=True, then=3),  # age_min=0 тоже считаем как "только age_max"
+                                default=4,  # Без ограничений или прочее
+                                output_field=IntegerField()
+                            )
+                        ).order_by('category', '-sort_priority'))
             ), 
             status="Live", 
             slug=slug

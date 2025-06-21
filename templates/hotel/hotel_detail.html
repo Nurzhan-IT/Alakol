@@ -363,8 +363,6 @@
 <!--                <a href="#" class="show-more-button" data-more-title="Show More" data-less-title="Show Less"><i class="fas fa-down-arrow"></i></a>-->
             </div>
 
-
-
             <div id="utf_listing_amenities" class="utf_listing_section">
                 <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">{% trans "Amenities" %}</h3>
                 <ul class="utf_listing_features checkboxes margin-top-0">
@@ -376,6 +374,66 @@
                     {% endfor %}
                 </ul>
             </div>
+
+            {% if hotel.meal_plan_type != 'not_included' or hotel.hotelmealplan_set.exists %}
+            <div id="utf_listing_meal_plans" class="utf_listing_section">
+                <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">{% trans "Питание" %}</h3>
+                
+                <!-- Тип питания отеля -->
+                {% if hotel.meal_plan_type != 'not_included' %}
+                <div class="meal-plan-info">
+                    <div class="meal-plan-type">
+                        <i class="fas fa-utensils"></i>
+                        <span>{{ hotel.get_meal_plan_type_display }}</span>
+                        {% if hotel.meal_included_in_price == 'yes' %}
+                            <span class="meal-included-badge">{% trans "Включено в стоимость номера" %}</span>
+                        {% else %}
+                            <span class="meal-additional-badge">{% trans "Дополнительно оплачивается при заселении" %}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Планы питания с ценами - показываем только если питание НЕ включено в стоимость -->
+                {% if hotel.hotelmealplan_set.exists and hotel.meal_included_in_price == 'no' %}
+                <div class="meal-plans-pricing">
+                    <h4>{% trans "Стоимость питания" %}</h4>
+                    <div class="meal-plans-list">
+                        {% for meal_plan in hotel.hotelmealplan_set.all %}
+                        <div class="meal-plan-item">
+                            <div class="meal-plan-info">
+                                <div class="age-range">
+                                    <i class="fas fa-user"></i>
+                                    {% if meal_plan.age_min and meal_plan.age_max %}
+                                        {% trans "Возраст" %}: {% trans "от" %} {{ meal_plan.age_min }} {% trans "до" %} {{ meal_plan.age_max }} {% trans "лет" %}
+                                    {% elif meal_plan.age_min %}
+                                        {% trans "Возраст" %}: {{ meal_plan.age_min }}+ {% trans "лет" %}
+                                    {% elif meal_plan.age_max %}
+                                        {% trans "Возраст" %}: {% trans "до" %} {{ meal_plan.age_max }} {% trans "лет" %}
+                                    {% else %}
+                                        {% trans "Возраст" %}: {% trans "любой" %}
+                                    {% endif %}
+                                    
+                                </div>
+                            </div>
+                            <div class="meal-plan-price">
+                                <span class="price">{{ meal_plan.price_per_day|price_format }} {% trans "тенге" %}</span>
+                                <span class="period">{% trans "за день" %}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if hotel.meal_plan_type == 'not_included' and not hotel.hotelmealplan_set.exists %}
+                <div class="no-meal-plan">
+                    <i class="fas fa-info-circle"></i>
+                    <span>{% trans "Питание не предоставляется" %}</span>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
 
             {% if hotel.hotel_faqs %}
             <div id="utf_listing_faq" class="utf_listing_section">
