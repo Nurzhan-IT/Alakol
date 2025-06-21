@@ -1,0 +1,231 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{% get_current_language as LANGUAGE_CODE %}">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block meta_description %}Бронирование отелей на озере Алаколь, Казахстан. Лучшие цены, удобный поиск, мгновенное подтверждение бронирования. Откройте для себя красоту Алаколя.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}Алаколь, отели, бронирование, Казахстан, озеро, отдых, туризм, номера, гостиницы{% endblock %}">
+    <meta name="author" content="Alakol Booking System">
+    <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}{% block title %}Alakol Hotel Booking{% endblock %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% block meta_description %}{% endblock %}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/og-image.jpg' %}{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:site_name" content="Alakol Hotel Booking">
+    <meta property="og:locale" content="{% get_current_language %}">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{% block title %}{% endblock %}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{% block meta_description %}{% endblock %}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{% static 'images/og-image.jpg' %}{% endblock %}">
+    
+    <title>{% block title %}Алаколь - Бронирование отелей онлайн{% endblock %}</title>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    
+    <!-- Alternate Language URLs for hreflang -->
+    {% get_available_languages as LANGUAGES %}
+    {% for language_code, language_name in LANGUAGES %}
+        <link rel="alternate" hreflang="{{ language_code }}" href="{% block hreflang_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    {% endfor %}
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+    
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mmenu.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" id="colors">
+
+    <!-- Legal Integration CSS - Generated on 2025-05-31 04:53 AM +05 -->
+    <link rel="stylesheet" href="{% static 'css/legal_integration.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
+    <link rel="stylesheet" href="{% static 'css/topbar.css' %}">
+
+    <!-- Icons, Font and assets -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon-ligatures@2.5.0/fonts/remixicon.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800&display=swap&subset=latin-ext,vietnamese" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700,800" rel="stylesheet" type="text/css">
+    
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script> 
+    
+    <!-- Structured Data JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "{% block schema_type %}WebSite{% endblock %}",
+        "name": "Alakol Hotel Booking",
+        "description": "{% block meta_description %}{% endblock %}",
+        "url": "{{ request.build_absolute_uri }}",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "{{ request.scheme }}://{{ request.get_host }}/search/?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Alakol Booking",
+            "url": "{{ request.scheme }}://{{ request.get_host }}",
+            "sameAs": [
+                "https://www.facebook.com/alakol",
+                "https://www.instagram.com/alakol"
+            ]
+        }
+    }
+    </script>
+    
+    {% block additional_structured_data %}{% endblock %}
+    {% block special_header_links %}{% endblock %}
+</head>
+
+<body>
+    <!-- Wrapper -->
+    <div id="main_wrapper">
+        <header id="header_part" class="fullwidth">
+            <div id="header">
+                <div class="container">
+                    <div class="utf_left_side">
+                        <div id="logo"> 
+                            <a href="/" title="{% trans 'Главная страница - Бронирование отелей Алаколь' %}">
+                                <img src="{% static 'images/logo.png' %}" alt="{% trans 'Логотип Alakol Hotel Booking' %}">
+                            </a> 
+                        </div>
+                        <div class="mmenu-trigger">
+                            <!-- Mobile menu trigger -->
+                        </div>
+                        <div class='lang-code'>
+                            <form action="{% url 'set_language' %}" method="post">
+                                {% csrf_token %}
+                                <input name="next" type="hidden" value="{{ redirect_to }}">
+                                {% get_current_language as LANGUAGE_CODE %}
+                                {% get_available_languages as LANGUAGES %}
+                                {% get_language_info_list for LANGUAGES as languages %}
+                                {% for language in languages %}
+                                <button class="lang-button-topbar" name="language" value="{{ language.code }}" type="submit" 
+                                        title="{% trans 'Переключить на' %} {{ language.name_local }}">
+                                    <img src="{% static 'images/flags/'|add:language.code|add:'.png' %}" 
+                                         alt="{{ language.code }}" width="20" height="15">
+                                </button>
+                                {% endfor %}
+                            </form>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    
+                    <div class="utf_right_side">
+                        <div class="header_widget"> 
+                            {% if request.user.is_authenticated %}
+                                <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button" 
+                                   title="{% trans 'Выбранные номера' %}">
+                                    <i class="fas fa-bed"></i><span class="room-count">{{ total_selected_items }}</span>
+                                </a>
+                                <a href="{% url 'dashboard:dashboard' %}" class="sign-in-button" 
+                                   title="{% trans 'Личный кабинет' %}">
+                                    <i class="bi bi-grid"></i> <span class="sign-in-span">{% trans "Dashboard" %}</span>
+                                </a>
+                                <a href="{% url 'userauths:sign-out' %}" class="sign-in-button" 
+                                   title="{% trans 'Выйти из системы' %}">
+                                    <i class="bi bi-power"></i> <span class="sign-up-span">{% trans "Sign Out" %}</span>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button" 
+                                   title="{% trans 'Выбранные номера' %}">
+                                    <i class="fas fa-bed"></i><span class="room-count">{{ total_selected_items }}</span>
+                                </a>
+                                <a href="{% url 'userauths:sign-in' %}" class="sign-in-button" 
+                                   title="{% trans 'Войти в систему' %}">
+                                    <i class="fa fa-sign-in"></i><span class="sign-in-span">{% trans "Sign In" %}</span>
+                                </a>
+                                <a href="{% url 'userauths:sign-up' %}" class="sign-in-button" 
+                                   title="{% trans 'Зарегистрироваться' %}">
+                                    <i class="bi bi-person-add"></i><span class="sign-in-span">{% trans "Sign Up" %}</span>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Sign in modal - kept as is from original -->
+                    <div id="dialog_signin_part" class="zoom-anim-dialog mfp-hide">
+                        <!-- Modal content would go here -->
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        {% block content %}
+        {% endblock %}
+
+        <!-- Footer -->
+        <footer id="footer" class="footer">
+            <div class="footer-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>{% trans "О нас" %}</h5>
+                            <p>{% trans "Alakol Hotel Booking - ваш надежный партнер для бронирования отелей на озере Алаколь" %}</p>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>{% trans "Полезные ссылки" %}</h5>
+                            <ul>
+                                <li><a href="{% url 'legal:terms_of_use' %}" title="{% trans 'Пользовательское соглашение' %}">{% trans "Пользовательское соглашение" %}</a></li>
+                                <li><a href="{% url 'legal:privacy_policy' %}" title="{% trans 'Политика конфиденциальности' %}">{% trans "Политика конфиденциальности" %}</a></li>
+                                <li><a href="{% url 'legal:public_offer' %}" title="{% trans 'Публичная оферта' %}">{% trans "Публичная оферта" %}</a></li>
+                                <li><a href="{% url 'legal:booking_rules' %}" title="{% trans 'Правила бронирования' %}">{% trans "Правила бронирования" %}</a></li>
+                                <li><a href="{% url 'legal:payment_rules' %}" title="{% trans 'Правила оплаты' %}">{% trans "Правила оплаты" %}</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h5>{% trans "Контакты" %}</h5>
+                            <p>{% trans "Свяжитесь с нами для получения дополнительной информации" %}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="container">
+                    <p>&copy; 2025 Alakol Hotel Booking. {% trans "Все права защищены" %}.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript at the end for better performance -->
+    {% block javascript %}{% endblock %}
+</body>
+</html> 
