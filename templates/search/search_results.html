@@ -159,14 +159,14 @@
 
                             <div class="hotel-card-amenities mb-2">
                                 <strong>{% trans "Amenities:" %}</strong>
-                                <div class="mt-1">
+                                <div class="amenities_list">
                                     {% for feature in hotel.hotelfeatures_set.all|slice:":5" %}
-                                    <span class="badge bg-info text-dark">{{ feature.name }}</span>
+                                    <span>{{ feature.name }}</span>
                                     {% empty %}
                                     <span class="text-muted">{% trans "No amenities listed" %}</span>
                                     {% endfor %}
                                     {% if hotel.hotelfeatures_set.all.count > 5 %}
-                                    <span class="badge bg-secondary">+{{ hotel.hotelfeatures_set.all.count|add:"-5" }} {% trans "more" %}</span>
+                                    <span class="badge">+{{ hotel.hotelfeatures_set.all.count|add:"-5" }} {% trans "more" %}</span>
                                     {% endif %}
                                 </div>
                             </div>

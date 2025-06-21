@@ -531,7 +531,7 @@ CACHES = {
             "SERIALIZER": "django_redis.serializers.pickle.PickleSerializer",
         },
         "KEY_PREFIX": "hms_alakol",
-        "TIMEOUT": 300,  # 5 минут по умолчанию
+        "TIMEOUT": 1,  # 5 минут по умолчанию 300
     },
     "sessions": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -544,7 +544,7 @@ CACHES = {
             },
         },
         "KEY_PREFIX": "hms_sessions",
-        "TIMEOUT": 86400,  # 24 часа для сессий
+        "TIMEOUT": 1,  # 24 часа для сессий 86400
     },
     "long_term": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -558,7 +558,7 @@ CACHES = {
             "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
         },
         "KEY_PREFIX": "hms_longterm",
-        "TIMEOUT": 3600,  # 1 час для долгосрочных данных
+        "TIMEOUT": 1,  # 1 час для долгосрочных данных 3600
     }
 }
 
@@ -575,20 +575,20 @@ MIDDLEWARE.append('django.middleware.cache.FetchFromCacheMiddleware')
 
 # Cache времена жизни для различных типов данных
 CACHE_TTL = {
-    'hotels_list': 900,         # 15 минут - список отелей
-    'hotel_detail': 1800,       # 30 минут - детали отеля
-    'search_results': 300,      # 5 минут - результаты поиска
-    'room_availability': 180,   # 3 минуты - доступность номеров
-    'booking_data': 1800,       # 30 минут - данные бронирования
-    'user_bookings': 600,       # 10 минут - бронирования пользователя
-    'hotel_reviews': 3600,      # 1 час - отзывы отеля
-    'dynamic_pricing': 600,     # 10 минут - динамические цены
-    'features_and_amenities': 7200,  # 2 часа - удобства и особенности
-    'static_content': 86400,    # 24 часа - статический контент
+    'hotels_list': 1,         # 15 минут - список отелей
+    'hotel_detail': 1,       # 30 минут - детали отеля
+    'search_results': 1,      # 5 минут - результаты поиска
+    'room_availability': 1,   # 3 минуты - доступность номеров
+    'booking_data': 1,       # 30 минут - данные бронирования
+    'user_bookings': 1,       # 10 минут - бронирования пользователя
+    'hotel_reviews': 1,      # 1 час - отзывы отеля
+    'dynamic_pricing': 1,     # 10 минут - динамические цены
+    'features_and_amenities': 1,  # 2 часа - удобства и особенности
+    'static_content': 1,    # 24 часа - статический контент
     # Настройки для booking приложения
-    'booking_availability_check': 120,  # 2 минуты - проверка доступности
-    'room_unavailability': 300,     # 5 минут - недоступность номеров
-    'booking_session_data': 1800,   # 30 минут - данные сессии бронирования
+    'booking_availability_check': 1,  # 2 минуты - проверка доступности
+    'room_unavailability': 1,     # 5 минут - недоступность номеров
+    'booking_session_data': 1,   # 30 минут - данные сессии бронирования
 }
 
 CRONJOBS = [
