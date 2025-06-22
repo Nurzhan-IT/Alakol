@@ -6,6 +6,7 @@ from django.template import RequestContext
 from django.db.models import Q, Prefetch, Count
 from django.core.cache import cache
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 from hotel.models import Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType
 from hotel.views import calculate_total_price  # Импортируем функцию для расчета динамических цен
@@ -87,9 +88,9 @@ def check_room_availability(request):
         if missing_params:
             logger.error(f"Отсутствуют обязательные параметры: {', '.join(missing_params)}")
             if 'checkout' in missing_params or 'checkin' in missing_params:
-                messages.error(request, "Пожалуйста, выберите даты заезда и выезда")
+                messages.error(request, _("Please select check-in and check-out dates"))
             else:
-                messages.error(request, f"Пожалуйста, заполните все обязательные поля: {', '.join(missing_params)}")
+                messages.error(request, _("Please fill in all required fields: %(params)s") % {'params': ', '.join(missing_params)})
             # Безопасный редирект: используем referer или главную страницу как fallback
             referer = request.META.get("HTTP_REFERER", reverse("hotel:index"))
             return redirect(referer)
@@ -99,7 +100,7 @@ def check_room_availability(request):
             hotel = Hotel.objects.select_related().get(status="Live", id=id)
         except Hotel.DoesNotExist:
             logger.error(f"Hotel with id={id} not found")
-            messages.error(request, "Отель не найден.")
+            messages.error(request, _("Hotel not found."))
             # Безопасный редирект: используем referer или главную страницу как fallback
             referer = request.META.get("HTTP_REFERER", reverse("hotel:index"))
             return redirect(referer)
@@ -113,7 +114,7 @@ def check_room_availability(request):
                     logger.info(f"Найден тип номера по id (из поля room-type): {room_type}")
                 except RoomType.DoesNotExist:
                     logger.error(f"RoomType с id={room_type} не найден")
-                    messages.error(request, "Выбранный тип номера недоступен. Пожалуйста, выберите другой тип номера.")
+                    messages.error(request, _("The selected room type is not available. Please choose another room type."))
                     return redirect("hotel:detail", slug=hotel.slug)
             # Иначе приоритет поиска: сначала по ID, затем по slug
             elif room_type_id:
@@ -143,7 +144,7 @@ def check_room_availability(request):
                 
         except RoomType.DoesNotExist as e:
             logger.error(f"RoomType not found: {str(e)}, hotel id={id}, room-type={room_type}, room-type-id={room_type_id}")
-            messages.error(request, "Выбранный тип номера недоступен. Пожалуйста, выберите другой тип номера.")
+            messages.error(request, _("The selected room type is not available. Please choose another room type."))
             return redirect("hotel:detail", slug=hotel.slug)
 
         # Сохраняем данные о датах поиска в новой сессии room_type_search_dates
