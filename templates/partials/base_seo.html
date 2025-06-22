@@ -152,7 +152,7 @@
                             {% if request.user.is_authenticated %}
                                 <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button" 
                                    title="{% trans 'Выбранные номера' %}">
-                                    <i class="fas fa-bed"></i><span class="room-count">{{ total_selected_items }}</span>
+                                    <i class="fas fa-bed"></i><span class="room-count">0</span>
                                 </a>
                                 <a href="{% url 'dashboard:dashboard' %}" class="sign-in-button" 
                                    title="{% trans 'Личный кабинет' %}">
@@ -165,7 +165,7 @@
                             {% else %}
                                 <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button" 
                                    title="{% trans 'Выбранные номера' %}">
-                                    <i class="fas fa-bed"></i><span class="room-count">{{ total_selected_items }}</span>
+                                    <i class="fas fa-bed"></i><span class="room-count">0</span>
                                 </a>
                                 <a href="{% url 'userauths:sign-in' %}" class="sign-in-button" 
                                    title="{% trans 'Войти в систему' %}">
