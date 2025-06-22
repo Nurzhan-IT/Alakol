@@ -65,6 +65,54 @@ def index(request):
     return render(request, "hotel/index.html", context)
 
 
+def get_selected_items_count(request):
+    """
+    API endpoint для получения количества выбранных номеров.
+    Возвращает данные в реальном времени без кэширования.
+    """
+    if 'selection_data_obj' in request.session:
+        total_selected_items = len(request.session['selection_data_obj'])
+    else:
+        total_selected_items = 0
+    
+    return JsonResponse({
+        'total_selected_items': total_selected_items
+    })
+
+
+def get_messages(request):
+    """
+    API endpoint для получения Django messages.
+    КРИТИЧНО: Messages НЕ кэшируются из соображений безопасности!
+    Возвращает сообщения в реальном времени и очищает их после получения.
+    """
+    from django.contrib.messages import get_messages
+    
+    # Получаем все messages для текущего пользователя
+    storage = get_messages(request)
+    messages_data = []
+    
+    # Определяем соответствие уровней Django messages с SweetAlert2 иконками
+    level_map = {
+        'debug': 'info',
+        'info': 'info', 
+        'success': 'success',
+        'warning': 'warning',
+        'error': 'error'
+    }
+    
+    for message in storage:
+        messages_data.append({
+            'message': str(message),
+            'level_tag': level_map.get(message.tags, 'info'),
+            'tags': message.tags
+        })
+    
+    return JsonResponse({
+        'messages': messages_data
+    })
+
+
 @vary_on_cookie
 def hotel_detail(request, slug):
     """Детальная страница отеля с комплексным кэшированием."""
@@ -126,17 +174,10 @@ def hotel_detail(request, slug):
         timeout=settings.CACHE_TTL['features_and_amenities']
     )
     
-    # Кэшируем отзывы пользователя (если авторизован)
+    # Кэширование отзывов пользователя отключено для данных реального времени
     if request.user.is_authenticated:
-        user_reviews_key = f"user_reviews:{request.user.id}:hotel_{hotel.id}"
-        def get_user_reviews():
-            return Review.objects.select_related('user', 'hotel').filter(user=request.user, hotel=hotel)
-        
-        reviews = CacheHelper.get_or_set_complex(
-            user_reviews_key,
-            get_user_reviews,
-            timeout=settings.CACHE_TTL['hotel_reviews']
-        )
+        # Убираем кэширование для пользовательских отзывов - они должны обновляться мгновенно
+        reviews = Review.objects.select_related('user', 'hotel').filter(user=request.user, hotel=hotel)
     else:
         reviews = None
         
