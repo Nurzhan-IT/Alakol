@@ -142,14 +142,15 @@ class CacheInvalidator:
     
     @staticmethod
     def invalidate_booking_cache(user_id: int = None, hotel_id: int = None):
-        """Инвалидирует кэш бронирований."""
-        logger.info(f"Invalidating booking cache for user {user_id}, hotel {hotel_id}")
+        """Инвалидирует кэш бронирований (отключено для данных реального времени)."""
+        logger.info(f"Booking cache invalidation called for user {user_id}, hotel {hotel_id} - but caching is disabled for real-time data")
         
-        if user_id:
-            cache.delete(CacheKeyGenerator.user_bookings(user_id))
-            cache.delete(CacheKeyGenerator.user_bookings(user_id, 'paid'))
-            cache.delete(CacheKeyGenerator.user_bookings(user_id, 'pending'))
-            cache.delete(CacheKeyGenerator.user_bookings(user_id, 'cancelled'))
+        # Кэширование пользовательских бронирований отключено для обеспечения данных реального времени
+        # if user_id:
+        #     cache.delete(CacheKeyGenerator.user_bookings(user_id))
+        #     cache.delete(CacheKeyGenerator.user_bookings(user_id, 'paid'))
+        #     cache.delete(CacheKeyGenerator.user_bookings(user_id, 'pending'))
+        #     cache.delete(CacheKeyGenerator.user_bookings(user_id, 'cancelled'))
         
         if hotel_id:
             # Инвалидируем доступность номеров для всех дат
