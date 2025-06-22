@@ -161,16 +161,34 @@
 
 
               <script>
-                  //{% for message in messages %}
-
-                      Swal.fire({
-                          icon: '{{message.tags}}',
-                          title: '{{message}}',
-                          text: '{{message.tags}}',
-                          timer: 1500
-                      })
-
-                  //{% endfor %}
+                  // Messages загружаются динамически через AJAX для предотвращения кэширования
+                  function loadAndDisplayMessages() {
+                      $.ajax({
+                          url: '{% url "hotel:get_messages" %}',
+                          type: 'GET',
+                          success: function(data) {
+                              if (data.messages && data.messages.length > 0) {
+                                  data.messages.forEach(function(message) {
+                                      Swal.fire({
+                                          icon: message.level_tag,
+                                          title: message.message,
+                                          text: message.level_tag,
+                                          timer: 1500
+                                      });
+                                  });
+                              }
+                          },
+                          error: function() {
+                              // Тихо игнорируем ошибки загрузки messages
+                              console.log('Messages loading failed silently');
+                          }
+                      });
+                  }
+                  
+                  // Загружаем messages при загрузке страницы
+                  $(document).ready(function() {
+                      loadAndDisplayMessages();
+                  });
               </script>
 
 

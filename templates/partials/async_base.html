@@ -53,15 +53,35 @@
     {% endblock content %}
 
     <script>
-        // {% for message in messages %}
+        // Messages загружаются динамически через AJAX для предотвращения кэширования
 
-        Swal.fire({
-            icon: '{{message.tags}}',
-            title: '{{message}}',
-            text: '{{message.tags}}',
-            timer: 15000
-        })
-        // {% endfor %}
+        function loadAndDisplayMessages() {
+            $.ajax({
+                url: '{% url "hotel:get_messages" %}',
+                type: 'GET',
+                success: function(data) {
+                    if (data.messages && data.messages.length > 0) {
+                        data.messages.forEach(function(message) {
+                            Swal.fire({
+                                icon: message.level_tag,
+                                title: message.message,
+                                text: message.level_tag,
+                                timer: 15000
+                            });
+                        });
+                    }
+                },
+                error: function() {
+                    // Тихо игнорируем ошибки загрузки messages
+                    console.log('Messages loading failed silently');
+                }
+            });
+        }
+        
+        // Загружаем messages при загрузке страницы
+        $(document).ready(function() {
+            loadAndDisplayMessages();
+        });
     </script>
 
     <!-- Scripts -->

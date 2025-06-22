@@ -98,7 +98,12 @@ $(document).ready(function(){
                                 dataType: 'json',
                                 success: function(res) {
                                     button.html("<i class='fas fa-check-circle'></i> " + gettext("Added to selection") + " ");
-                                    $(".room-count").text(res.total_selected_items);
+                                    // Обновляем счетчик через API для получения актуальных данных
+                                    if (typeof loadSelectedItemsCount === 'function') {
+                                        loadSelectedItemsCount();
+                                    } else {
+                                        $(".room-count").text(res.total_selected_items);
+                                    }
                                     
                                     const Toast = Swal.mixin({
                                         toast: true,
@@ -133,8 +138,17 @@ $(document).ready(function(){
 
                 bounceButton();
 
-                // Removed console.log for "Added Room To Selection!" status
-                $(".room-count").text(response.total_selected_items)
+                // Обновляем счетчик через API для получения актуальных данных
+                if (typeof loadSelectedItemsCount === 'function') {
+                    loadSelectedItemsCount();
+                } else {
+                    $(".room-count").text(response.total_selected_items);
+                }
+                
+                // Загружаем и показываем новые messages после операции
+                if (typeof loadAndDisplayMessages === 'function') {
+                    setTimeout(loadAndDisplayMessages, 500); // Небольшая задержка для обработки
+                }
 
                 ;
                 
@@ -171,7 +185,12 @@ $(document).ready(function(){
 				button.text('...');
 			},
 			success:function(res){
-				$(".room-count").text(res.total_selected_items);
+				// Обновляем счетчик через API для получения актуальных данных
+				if (typeof loadSelectedItemsCount === 'function') {
+					loadSelectedItemsCount();
+				} else {
+					$(".room-count").text(res.total_selected_items);
+				}
 				$(".selection-list").html(res.data);
 
                 if (res.total_selected_items < 1) {
