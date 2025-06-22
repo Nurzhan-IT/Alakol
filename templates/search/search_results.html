@@ -159,7 +159,7 @@
 
                             <div class="hotel-card-amenities mb-2">
                                 <strong>{% trans "Amenities:" %}</strong>
-                                <div class="amenities_list">
+                                <div class="amenities_list">    
                                     {% for feature in hotel.hotelfeatures_set.all|slice:":5" %}
                                     <span>{{ feature.name }}</span>
                                     {% empty %}
@@ -170,7 +170,7 @@
                                     {% endif %}
                                 </div>
                             </div>
-
+                            
                             <div class="mb-3">
                                 <strong>{% trans "Available Rooms:" %}</strong> {{ hotel.rooms_count }}
                             </div>
