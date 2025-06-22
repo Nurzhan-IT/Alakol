@@ -86,8 +86,13 @@ def check_room_availability(request):
             
         if missing_params:
             logger.error(f"Отсутствуют обязательные параметры: {', '.join(missing_params)}")
-            messages.error(request, f"Пожалуйста, заполните все обязательные поля: {', '.join(missing_params)}")
-            return redirect("hotel:index")
+            if 'checkout' in missing_params or 'checkin' in missing_params:
+                messages.error(request, "Пожалуйста, выберите даты заезда и выезда")
+            else:
+                messages.error(request, f"Пожалуйста, заполните все обязательные поля: {', '.join(missing_params)}")
+            # Безопасный редирект: используем referer или главную страницу как fallback
+            referer = request.META.get("HTTP_REFERER", reverse("hotel:index"))
+            return redirect(referer)
 
         try:
             # Оптимизация: используем select_related для получения связанных данных отеля за один запрос
@@ -95,7 +100,9 @@ def check_room_availability(request):
         except Hotel.DoesNotExist:
             logger.error(f"Hotel with id={id} not found")
             messages.error(request, "Отель не найден.")
-            return redirect("hotel:index")
+            # Безопасный редирект: используем referer или главную страницу как fallback
+            referer = request.META.get("HTTP_REFERER", reverse("hotel:index"))
+            return redirect(referer)
 
         try:
             # Если room_type совпадает с room_type_id, значит это ID, а не slug
@@ -172,7 +179,9 @@ def check_room_availability(request):
 
     else:
         logger.warning("Non-POST request to check_room_availability")
-        return redirect("hotel:index")
+        # Безопасный редирект: используем referer или главную страницу как fallback
+        referer = request.META.get("HTTP_REFERER", reverse("hotel:index"))
+        return redirect(referer)
     
 def booking_data(request, slug):
     # Пытаемся получить отель из кэша
