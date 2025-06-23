@@ -68,12 +68,12 @@ $(document).ready(function(){
                 if (response.error) {
                     // Показываем уведомление с возможностью очистить корзину
                     Swal.fire({
-                        title: 'Внимание!',
+                        title: gettext('Attention!'),
                         text: response.message,
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonText: 'Да, очистить',
-                        cancelButtonText: 'Нет, отмена'
+                        confirmButtonText: gettext('Yes, clear'),
+                        cancelButtonText: gettext('No, cancel')
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Если пользователь согласился очистить корзину
@@ -98,7 +98,12 @@ $(document).ready(function(){
                                 dataType: 'json',
                                 success: function(res) {
                                     button.html("<i class='fas fa-check-circle'></i> " + gettext("Added to selection") + " ");
-                                    $(".room-count").text(res.total_selected_items);
+                                    // Обновляем счетчик через API для получения актуальных данных
+                                    if (typeof loadSelectedItemsCount === 'function') {
+                                        loadSelectedItemsCount();
+                                    } else {
+                                        $(".room-count").text(res.total_selected_items);
+                                    }
                                     
                                     const Toast = Swal.mixin({
                                         toast: true,
@@ -116,7 +121,7 @@ $(document).ready(function(){
                             });
                         } else {
                             // Если пользователь отменил
-                            button.html("<i class='fas fa-plus'></i> Add To Selection");
+                            button.html("<i class='fas fa-plus'></i> " + gettext("Add To Selection"));
                         }
                     });
                     return;
@@ -133,8 +138,17 @@ $(document).ready(function(){
 
                 bounceButton();
 
-                // Removed console.log for "Added Room To Selection!" status
-                $(".room-count").text(response.total_selected_items)
+                // Обновляем счетчик через API для получения актуальных данных
+                if (typeof loadSelectedItemsCount === 'function') {
+                    loadSelectedItemsCount();
+                } else {
+                    $(".room-count").text(response.total_selected_items);
+                }
+                
+                // Загружаем и показываем новые messages после операции
+                if (typeof loadAndDisplayMessages === 'function') {
+                    setTimeout(loadAndDisplayMessages, 500); // Небольшая задержка для обработки
+                }
 
                 ;
                 
@@ -171,14 +185,19 @@ $(document).ready(function(){
 				button.text('...');
 			},
 			success:function(res){
-				$(".room-count").text(res.total_selected_items);
+				// Обновляем счетчик через API для получения актуальных данных
+				if (typeof loadSelectedItemsCount === 'function') {
+					loadSelectedItemsCount();
+				} else {
+					$(".room-count").text(res.total_selected_items);
+				}
 				$(".selection-list").html(res.data);
 
                 if (res.total_selected_items < 1) {
                     Swal.fire({
                         icon: 'warning',
-                        title: 'No Selections Yet...',
-                        text: "Add some selection to continue to cart..."
+                        title: gettext('No Selections Yet...'),
+                        text: gettext("Add some selection to continue to cart...")
                     }).then((result) => {
                         window.location.href = "/"
                       });
@@ -233,7 +252,7 @@ $(document).ready(function(){
                     
                 Toast.fire({
                     icon: 'success',
-                    title: 'Notification Seen!'
+                    title: gettext('Notification Seen!')
                 })
             }
         })
@@ -268,13 +287,13 @@ $(document).ready(function(){
                     title: res.data
                 })
 
-                if (res.data == "Bookmark Deleted") {
+                if (res.data == gettext("Bookmark Deleted")) {
                     button.html('<i class="fas fa-heart" style="color: gray;"></i>')
                 } else {
                     button.html('<i class="fas fa-heart" style="color: red;"></i>')
                 }
 
-                if (res.data == "Login To Bookmark Hotel") {
+                if (res.data == gettext("Login To Bookmark Hotel")) {
                     button.html('<i class="fas fa-heart" style="color: gray;"></i>')
                 } 
             }
@@ -314,7 +333,7 @@ $(document).ready(function(){
                 })
 
                 $("#add-review-button").hide()
-                $("#review_div").html('Review submitted successfully <i class="fas fa-check-circle"></i> ')
+                $("#review_div").html(gettext('Review submitted successfully') + ' <i class="fas fa-check-circle"></i> ')
                 
             }
         })

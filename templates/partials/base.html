@@ -165,11 +165,11 @@
 <!--                            </div>-->
                                
                             {% if request.user.is_authenticated %}
-                                <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button"><i class="fas fa-bed"></i><span class="room-count">{{ total_selected_items }}</span></a>
+                                <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button"><i class="fas fa-bed"></i><span class="room-count">0</span></a>
                                 <a href="{% url 'dashboard:dashboard' %}" class="sign-in-button"><i class="bi bi-grid"></i> <span class="sign-in-span">{% trans "Dashboard" %}</span></a>
                                 <a href="{% url 'userauths:sign-out' %}" class="sign-in-button"><i class="bi bi-power"></i> <span class="sign-up-span">{% trans "Sign Out" %}</span></a>
                             {% else %}
-                                <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button"><i class="fas fa-bed"></i><span class="room-count">{{ total_selected_items }}</span></a>
+                                <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button"><i class="fas fa-bed"></i><span class="room-count">0</span></a>
                                 <a href="{% url 'userauths:sign-in' %}" class="sign-in-button"><i class="fa fa-sign-in"></i><span class="sign-in-span">{% trans "Sign In" %}</span></a>
                                 <a href="{% url 'userauths:sign-up' %}" class="sign-in-button"><i class="bi bi-person-add"></i><span class="sign-in-span">{% trans "Sign Up" %}</span></a>
                             {% endif %}
@@ -356,15 +356,34 @@
     </div>
 
     <script>
-        // {% for message in messages %}
-
-        Swal.fire({
-            icon: '{{message.tags}}',
-            title: '{{message}}',
-            text: '{{message.tags}}',
-            timer: 15000
-        })
-        // {% endfor %}
+        // Messages загружаются динамически через AJAX для предотвращения кэширования
+        function loadAndDisplayMessages() {
+            $.ajax({
+                url: '{% url "hotel:get_messages" %}',
+                type: 'GET',
+                success: function(data) {
+                    if (data.messages && data.messages.length > 0) {
+                        data.messages.forEach(function(message) {
+                            Swal.fire({
+                                icon: message.level_tag,
+                                title: message.message,
+                                text: message.level_tag,
+                                timer: 15000
+                            });
+                        });
+                    }
+                },
+                error: function() {
+                    // Тихо игнорируем ошибки загрузки messages
+                    console.log('Messages loading failed silently');
+                }
+            });
+        }
+        
+        // Загружаем messages при загрузке страницы
+        $(document).ready(function() {
+            loadAndDisplayMessages();
+        });
     </script>
 
     <!-- Scripts -->
@@ -380,16 +399,8 @@
     <script src="{% static 'scripts/bootstrap-select.min.js' %}"></script>
     <script src="{% static 'scripts/mmenu.js' %}"></script>
     <script src="{% static 'scripts/tooltips.min.js' %}"></script>
-    <script src="{% static 'scripts/color_switcher.js' %}"></script>
     <script src="{% static 'scripts/jquery_custom.js' %}"></script>
-    <script src="{% static 'scripts/typed.js' %}"></script>
-    <script src="{% static 'scripts/infobox.min.js' %}"></script> 
-    <script src="{% static 'scripts/markerclusterer.js' %}"></script> 
-    <script src="{% static 'scripts/maps.js' %}"></script>
-    {% comment %} <script src="{% static 'scripts/datedropper.js' %}"></script>  {% endcomment %}
     <script src="{% static 'scripts/quantityButtons.js' %}"></script>
-    <script src="{% static 'scripts/moment.min.js' %}"></script>
-    <script src="{% static 'scripts/daterangepicker.js' %}"></script>
     <script src="{% static 'scripts/moment.min.js' %}"></script>
     <script src="{% static 'scripts/daterangepicker.js' %}"></script>
     
@@ -403,6 +414,26 @@
     {% endblock script_links %}
 
     <script>
+        // Функция для загрузки количества выбранных номеров в реальном времени
+        function loadSelectedItemsCount() {
+            $.ajax({
+                url: '{% url "hotel:get_selected_items_count" %}',
+                type: 'GET',
+                success: function(data) {
+                    $('.room-count').text(data.total_selected_items);
+                },
+                error: function() {
+                    // В случае ошибки оставляем 0
+                    $('.room-count').text('0');
+                }
+            });
+        }
+        
+        // Загружаем количество выбранных номеров при загрузке страницы
+        $(document).ready(function() {
+            loadSelectedItemsCount();
+        });
+        
         $(function() {
 
             var start = moment().subtract(0, 'days');

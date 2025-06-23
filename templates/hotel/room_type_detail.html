@@ -759,8 +759,6 @@
         }
 
         // Calendar functionality
-        let currentMonth = new Date().getMonth();
-        let currentYear = new Date().getFullYear();
         let selectedDates = {
             checkin: null,
             checkout: null
@@ -774,6 +772,16 @@
         }
         if (checkoutValue) {
             selectedDates.checkout = new Date(checkoutValue);
+        }
+
+        // Initialize calendar month/year based on checkin date or current date
+        let currentMonth, currentYear;
+        if (selectedDates.checkin) {
+            currentMonth = selectedDates.checkin.getMonth();
+            currentYear = selectedDates.checkin.getFullYear();
+        } else {
+            currentMonth = new Date().getMonth();
+            currentYear = new Date().getFullYear();
         }
 
         // function formatPrice(price) {
@@ -929,12 +937,21 @@
                             // Removed console.log for reset checkin
                         }
 
-                        // Update form inputs
+                        // Update form inputs and their constraints
                         if (selectedDates.checkin) {
                             $('#date-picker').val(formatDateForInput(selectedDates.checkin));
+                            
+                            // Update checkout minimum date
+                            const nextDay = new Date(selectedDates.checkin);
+                            nextDay.setDate(nextDay.getDate() + 1);
+                            $('.checkout_date').attr('min', formatDateForInput(nextDay));
                             // Removed console.log for updated form checkin
                         } else {
                             $('#date-picker').val('');
+                            // Reset checkout minimum to tomorrow if no checkin
+                            const tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate() + 1);
+                            $('.checkout_date').attr('min', formatDateForInput(tomorrow));
                         }
                         if (selectedDates.checkout) {
                             $('.checkout_date').val(formatDateForInput(selectedDates.checkout));
@@ -1006,12 +1023,21 @@
                         // Removed console.log for reset checkin
                     }
 
-                    // Update form inputs
+                    // Update form inputs and their constraints
                     if (selectedDates.checkin) {
                         $('#date-picker').val(formatDateForInput(selectedDates.checkin));
+                        
+                        // Update checkout minimum date
+                        const nextDay = new Date(selectedDates.checkin);
+                        nextDay.setDate(nextDay.getDate() + 1);
+                        $('.checkout_date').attr('min', formatDateForInput(nextDay));
                         // Removed console.log for updated form checkin
                     } else {
                         $('#date-picker').val('');
+                        // Reset checkout minimum to tomorrow if no checkin
+                        const tomorrow = new Date();
+                        tomorrow.setDate(tomorrow.getDate() + 1);
+                        $('.checkout_date').attr('min', formatDateForInput(tomorrow));
                     }
                     if (selectedDates.checkout) {
                         $('.checkout_date').val(formatDateForInput(selectedDates.checkout));
@@ -1085,12 +1111,21 @@
                         // Removed console.log for reset checkin
                     }
 
-                    // Update form inputs
+                    // Update form inputs and their constraints
                     if (selectedDates.checkin) {
                         $('#date-picker').val(formatDateForInput(selectedDates.checkin));
+                        
+                        // Update checkout minimum date
+                        const nextDay = new Date(selectedDates.checkin);
+                        nextDay.setDate(nextDay.getDate() + 1);
+                        $('.checkout_date').attr('min', formatDateForInput(nextDay));
                         // Removed console.log for updated form checkin
                     } else {
                         $('#date-picker').val('');
+                        // Reset checkout minimum to tomorrow if no checkin
+                        const tomorrow = new Date();
+                        tomorrow.setDate(tomorrow.getDate() + 1);
+                        $('.checkout_date').attr('min', formatDateForInput(tomorrow));
                     }
                     if (selectedDates.checkout) {
                         $('.checkout_date').val(formatDateForInput(selectedDates.checkout));
@@ -1149,6 +1184,12 @@
             const newDate = new Date($(this).val());
             if (!isNaN(newDate)) {
                 selectedDates.checkin = newDate;
+                
+                // Update checkout minimum date
+                const nextDay = new Date(selectedDates.checkin);
+                nextDay.setDate(nextDay.getDate() + 1);
+                $('.checkout_date').attr('min', formatDateForInput(nextDay));
+                
                 if (selectedDates.checkout && selectedDates.checkout <= selectedDates.checkin) {
                     selectedDates.checkout = null;
                     $('.checkout_date').val('');
@@ -1178,66 +1219,40 @@
 
         // Устанавливаем минимальную дату для check-in как сегодня
         const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
-        const minDate = `${year}-${month}-${day}`;
+        const formatDateForInput = function(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
 
+        const minDate = formatDateForInput(today);
         checkinInput.min = minDate;
 
-        // Устанавливаем значение check-in только если оно не задано
+        // Инициализируем значения только если они не заданы
         if (!checkinInput.value) {
             checkinInput.value = minDate;
         }
 
-        // Устанавливаем минимальную дату для check-out
-        let minCheckoutDate;
-
-        // Если дата заезда установлена, то минимальная дата выезда - следующий день после заезда
+        // Правильно устанавливаем минимальную дату для checkout
         if (checkinInput.value) {
             const checkinDate = new Date(checkinInput.value);
             const nextDay = new Date(checkinDate);
             nextDay.setDate(nextDay.getDate() + 1);
-
-            const nextDayYear = nextDay.getFullYear();
-            const nextDayMonth = String(nextDay.getMonth() + 1).padStart(2, '0');
-            const nextDayDay = String(nextDay.getDate()).padStart(2, '0');
-            minCheckoutDate = `${nextDayYear}-${nextDayMonth}-${nextDayDay}`;
+            checkoutInput.min = formatDateForInput(nextDay);
+            
+            if (!checkoutInput.value) {
+                checkoutInput.value = formatDateForInput(nextDay);
+            }
         } else {
-            // Иначе - завтра от текущей даты
             const tomorrow = new Date(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
-            const tomorrowYear = tomorrow.getFullYear();
-            const tomorrowMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
-            const tomorrowDay = String(tomorrow.getDate()).padStart(2, '0');
-            minCheckoutDate = `${tomorrowYear}-${tomorrowMonth}-${tomorrowDay}`;
-        }
-
-        checkoutInput.min = minCheckoutDate;
-
-        // Устанавливаем значение check-out только если оно не задано
-        if (!checkoutInput.value) {
-            checkoutInput.value = minCheckoutDate;
-        }
-
-        // Обработчик изменения даты check-in
-        checkinInput.addEventListener('change', function() {
-            const checkinDate = new Date(this.value);
-            const nextDay = new Date(checkinDate);
-            nextDay.setDate(nextDay.getDate() + 1);
-
-            const nextDayYear = nextDay.getFullYear();
-            const nextDayMonth = String(nextDay.getMonth() + 1).padStart(2, '0');
-            const nextDayDay = String(nextDay.getDate()).padStart(2, '0');
-            const nextDayFormatted = `${nextDayYear}-${nextDayMonth}-${nextDayDay}`;
-
-            checkoutInput.min = nextDayFormatted;
-
-            // Если текущая дата check-out раньше новой минимальной даты
-            if (new Date(checkoutInput.value) < nextDay) {
-                checkoutInput.value = nextDayFormatted;
+            checkoutInput.min = formatDateForInput(tomorrow);
+            
+            if (!checkoutInput.value) {
+                checkoutInput.value = formatDateForInput(tomorrow);
             }
-        });
+        }
     });
 </script>
 

@@ -161,16 +161,34 @@
 
 
               <script>
-                  //{% for message in messages %}
-
-                      Swal.fire({
-                          icon: '{{message.tags}}',
-                          title: '{{message}}',
-                          text: '{{message.tags}}',
-                          timer: 1500
-                      })
-
-                  //{% endfor %}
+                  // Messages загружаются динамически через AJAX для предотвращения кэширования
+                  function loadAndDisplayMessages() {
+                      $.ajax({
+                          url: '{% url "hotel:get_messages" %}',
+                          type: 'GET',
+                          success: function(data) {
+                              if (data.messages && data.messages.length > 0) {
+                                  data.messages.forEach(function(message) {
+                                      Swal.fire({
+                                          icon: message.level_tag,
+                                          title: message.message,
+                                          text: message.level_tag,
+                                          timer: 1500
+                                      });
+                                  });
+                              }
+                          },
+                          error: function() {
+                              // Тихо игнорируем ошибки загрузки messages
+                              console.log('Messages loading failed silently');
+                          }
+                      });
+                  }
+                  
+                  // Загружаем messages при загрузке страницы
+                  $(document).ready(function() {
+                      loadAndDisplayMessages();
+                  });
               </script>
 
 
@@ -185,12 +203,10 @@
     <script src="{% static 'scripts/chosen.min.js' %}"></script>
     <script src="{% static 'scripts/perfect-scrollbar.min.js' %}"></script>
     <script src="{% static 'scripts/slick.min.js' %}"></script>
-    <script src="{% static 'scripts/rangeslider.min.js' %}"></script>
     <script src="{% static 'scripts/magnific-popup.min.js' %}"></script>
     <script src="{% static 'scripts/jquery-ui.min.js' %}"></script>
     <script src="{% static 'scripts/mmenu.js' %}"></script>
     <script src="{% static 'scripts/tooltips.min.js' %}"></script>
-    <script src="{% static 'scripts/color_switcher.js' %}"></script>
     <script src="{% static 'scripts/jquery_custom.js' %}"></script>
     <!-- Translations for JavaScript -->
     <script src="{% static 'scripts/translations.js' %}"></script>

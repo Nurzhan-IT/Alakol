@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.utils.translation import gettext_lazy as _
 
 from userauths.models import User, Profile
 from userauths.forms import UserRegisterForm
@@ -14,7 +15,7 @@ from userauths.utils import save_registration_consents
 
 def RegisterView(request, *args, **kwargs):
     if request.user.is_authenticated:
-        messages.warning(request, f"Hey {request.user.username}, you are already logged in")
+        messages.warning(request, _("Hey %(username)s, you are already logged in") % {'username': request.user.username})
         return redirect('hotel:index')   
 
     form = UserRegisterForm(request.POST or None)
@@ -31,7 +32,7 @@ def RegisterView(request, *args, **kwargs):
             user = authenticate(email=email, password=password)
             login(request, user)
 
-            messages.success(request, f"Hi {request.user.username}, your account have been created successfully.")
+            messages.success(request, _("Hi %(username)s, your account have been created successfully.") % {'username': request.user.username})
 
             profile = user.profile
             profile.full_name = full_name
@@ -67,19 +68,19 @@ def LoginView(request):
 
             if user is not None:
                 login(request, user)
-                messages.success(request, "You are Logged In")
+                messages.success(request, _("You are Logged In"))
                 return redirect('hotel:index')
             else:
-                messages.error(request, 'Username or password does not exit.')
+                messages.error(request, _('Username or password does not exist.'))
         
         except User.DoesNotExist:
-            messages.error(request, 'User does not exist')
+            messages.error(request, _('User does not exist'))
 
     return HttpResponseRedirect("/")
 
 def loginViewTemp(request):
     if request.user.is_authenticated:
-        messages.warning(request, "You are already logged in")
+        messages.warning(request, _("You are already logged in"))
         return redirect('hotel:index')
     
     if request.method == 'POST':
@@ -93,25 +94,25 @@ def loginViewTemp(request):
             user_exists = User.objects.filter(email=email).exists()
             
             if not user_exists:
-                messages.error(request, 'User does not exist')
+                messages.error(request, _('User does not exist'))
                 return render(request, "userauths/sign-in.html")
                 
             user = authenticate(request, email=email, password=password)
 
             if user is not None:
                 login(request, user)
-                messages.success(request, "You are Logged In")
+                messages.success(request, _("You are Logged In"))
                 next_url = request.GET.get("next", 'hotel:index')
                 return redirect(next_url)
             else:
-                messages.error(request, 'Username or password does not exit.')
+                messages.error(request, _('Username or password does not exist.'))
         
         except Exception as e:
-            messages.error(request, 'An error occurred during login')
+            messages.error(request, _('An error occurred during login'))
 
     return render(request, "userauths/sign-in.html")
 
 def LogoutView(request):
     logout(request)
-    messages.success(request, 'You have been logged out')
+    messages.success(request, _('You have been logged out'))
     return redirect("userauths:sign-in")
