@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import RoomUnavailability
 from django.core.exceptions import ValidationError
 from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 from hotel.models import Room, Hotel, RoomType
 from hotel.admin import custom_admin_site, RussianModelAdminMixin
 

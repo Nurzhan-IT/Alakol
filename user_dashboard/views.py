@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 from django.db.models import Sum, Prefetch, Q
 
 from hotel.models import Booking, Notification, Bookmark, Hotel, Review, Room, RoomType
@@ -184,7 +185,7 @@ def profile(request):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            messages.success(request, "Profile Updated Successfully")
+            messages.success(request, _("Profile Updated Successfully"))
             return redirect("dashboard:profile")
     else:
         u_form = UserUpdateForm(instance=request.user)
