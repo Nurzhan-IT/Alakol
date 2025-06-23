@@ -531,7 +531,7 @@ CACHES = {
             "SERIALIZER": "django_redis.serializers.pickle.PickleSerializer",
         },
         "KEY_PREFIX": "hms_alakol",
-        "TIMEOUT": 300,  # 5 минут по умолчанию
+        "TIMEOUT": 300,  # 5 минут по умолчанию 300
     },
 
     "long_term": {
@@ -546,7 +546,7 @@ CACHES = {
             "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
         },
         "KEY_PREFIX": "hms_longterm",
-        "TIMEOUT": 3600,  # 1 час для долгосрочных данных
+        "TIMEOUT": 3600,  # 1 час для долгосрочных данных 3600
     }
 }
 

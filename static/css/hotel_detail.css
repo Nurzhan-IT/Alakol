@@ -9,6 +9,11 @@
   padding: 0 20px;
 }
 
+.hotel-room-description {
+  font-size: 16px;
+  line-height: 1.3;
+}
+
 .carousel {
   display: block;
   text-align: left;
@@ -308,18 +313,22 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   z-index: 1000;
-  overflow: auto;
+  overflow-y: scroll;
   background: transparent;
-  padding: 0; /* Убираем padding, так как центрирование выполняется через flex */
+  padding-bottom: 100px;
 }
 
 .custom-modal.show {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  height: 100%;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 100px;
 }
 
 .custom-modal-backdrop {
@@ -345,13 +354,15 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   width: 100%;
   max-width: 1200px;
-  height: 700px;
+  height: max-content;
   padding-bottom: 100px;
   z-index: 1002;
   transform: scale(0.9);
   transition: transform 0.3s ease, opacity 0.3s ease;
+  overflow-y: auto;
   opacity: 0;
-  margin: auto; /* Добавляем margin: auto для центрирования */
+  margin: auto;
+  box-sizing: border-box;
 }
 
 .custom-modal.show .custom-modal-content {
@@ -396,7 +407,7 @@
   display: flex;
   flex-direction: row;
   background: #fff;
-  padding: 16px;
+  padding: 16px 16px 100px;
 }
 
 .custom-room-gallery {
@@ -525,10 +536,9 @@
   padding: 12px;
   /*background: #ecf0f1;*/
   display: flex;
-  justify-content: center;
+  justify-content: end;
   border-radius: 0 0 12px 12px;
-  position: absolute;
-  bottom: 0;
+  align-items: center;
   width: 100%;
 }
 
@@ -549,11 +559,11 @@
   background-color: #95a5a6;
 }
 
-/* Адаптивность */
+
 @media (max-width: 991px) {
   .custom-modal-content {
     max-width: 85%;
-    margin: auto;
+
   }
 
   .custom-main-image img {
@@ -567,6 +577,12 @@
 
   .custom-room-description {
     max-height: 350px;
+    font-size: 14px;
+  }
+
+  .hotel-room-description {
+    font-size: 14px;
+    line-height: 1.3;
   }
 }
 
@@ -578,12 +594,12 @@
   .custom-modal-content {
     max-width: 95%;
     margin: auto;
-    height: 800px;
+    height: 160%;
   }
 
   .custom-modal-body {
     flex-direction: column;
-    padding: 12px;
+    padding: 12px 12px 100px;
   }
 
   .custom-main-image img {
@@ -738,10 +754,7 @@
   }
 }
 
-.hotel-room-description {
-  font-size: 16px;
-  line-height: 1.3;
-}
+
 
 /* Стили для секции питания */
 #utf_listing_meal_plans {
