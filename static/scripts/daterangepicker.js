@@ -130,7 +130,7 @@
                 Y += "<tr>", this.showWeekNumbers ? Y += '<td class="week">' + i[b][0].week() + "</td>" : this.showISOWeekNumbers && (Y += '<td class="week">' + i[b][0].isoWeek() + "</td>");
                 for (k = 0; k < 7; k++) {
                     var N = [];
-                    i[b][k].isSame(new Date, "day") && N.push("today"), i[b][k].isoWeekday() > 5 && N.push("weekend"), i[b][k].month() != i[1][1].month() && N.push("off"), this.minDate && i[b][k].isBefore(this.minDate, "day") && N.push("off", "disabled"), v && i[b][k].isAfter(v, "day") && N.push("off", "disabled"), this.isInvalidDate(i[b][k]) && N.push("off", "disabled"), i[b][k].format("YYYY-MM-DD") == this.startDate.format("YYYY-MM-DD") && N.push("active", "start-date"), null != this.endDate && i[b][k].format("YYYY-MM-DD") == this.endDate.format("YYYY-MM-DD") && N.push("active", "end-date"), null != this.endDate && i[b][k] > this.startDate && i[b][k] < this.endDate && N.push("in-range");
+                    i[b][k].isSame(new Date, "day") && N.push("today"), i[b][k].isoWeekday() > 5 && N.push("weekend"), i[b][k].month() != i[1][1].month() && N.push("off"), this.minDate && i[b][k].isBefore(this.minDate, "day") && N.push("off", "disabled"), v && i[b][k].isAfter(v, "day") && N.push("off", "disabled"), i[b][k].isBefore(t().startOf("day")) && N.push("off", "disabled"), this.isInvalidDate(i[b][k]) && N.push("off", "disabled"), i[b][k].format("YYYY-MM-DD") == this.startDate.format("YYYY-MM-DD") && N.push("active", "start-date"), null != this.endDate && i[b][k].format("YYYY-MM-DD") == this.endDate.format("YYYY-MM-DD") && N.push("active", "end-date"), null != this.endDate && i[b][k] > this.startDate && i[b][k] < this.endDate && N.push("in-range");
                     var j = this.isCustomDate(i[b][k]);
                     !1 !== j && ("string" == typeof j ? N.push(j) : Array.prototype.push.apply(N, j));
                     var H = "",
@@ -278,12 +278,13 @@
                 })
             }
         },
-        clickDate: function(t) {
-            if (e(t.target).hasClass("available")) {
-                var a = e(t.target).attr("data-title"),
+        clickDate: function(evt) {
+            if (e(evt.target).hasClass("available")) {
+                var a = e(evt.target).attr("data-title"),
                     i = a.substr(1, 1),
                     s = a.substr(3, 1),
-                    n = e(t.target).parents(".drp-calendar").hasClass("left") ? this.leftCalendar.calendar[i][s] : this.rightCalendar.calendar[i][s];
+                    n = e(evt.target).parents(".drp-calendar").hasClass("left") ? this.leftCalendar.calendar[i][s] : this.rightCalendar.calendar[i][s];
+                if (n.isBefore(t().startOf("day"))) return;
                 if (this.endDate || n.isBefore(this.startDate, "day")) {
                     if (this.timePicker) {
                         var r = parseInt(this.container.find(".left .hourselect").val(), 10);
@@ -304,7 +305,7 @@
                     }
                     this.setEndDate(n.clone()), this.autoApply && (this.calculateChosenLabel(), this.clickApply())
                 }
-                this.singleDatePicker && (this.setEndDate(this.startDate), this.timePicker || this.clickApply()), this.updateView(), t.stopPropagation()
+                this.singleDatePicker && (this.setEndDate(this.startDate), this.timePicker || this.clickApply()), this.updateView(), evt.stopPropagation()
             }
         },
         calculateChosenLabel: function() {
