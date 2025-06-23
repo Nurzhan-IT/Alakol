@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (priceData[dateStr]) {
                     const priceSpan = document.createElement("span");
                     priceSpan.className = "day-price";
-                    priceSpan.textContent = priceData[dateStr] + "₽";
+                    priceSpan.textContent = priceData[dateStr] + gettext("currency_symbol");
                     cell.appendChild(document.createElement("br"));
                     cell.appendChild(priceSpan);
                 }

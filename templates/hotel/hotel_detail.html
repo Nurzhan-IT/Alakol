@@ -1,13 +1,13 @@
 {% extends 'partials/base.html' %}
 {% load static %}{% load i18n %}{% load hotel_extras %}{% load price_format %}
 
-{% block title %}{{ hotel.name }} | {% trans "Бронирование отеля и базы отдыха на Алаколе" %}{% endblock %}
+{% block title %}{{ hotel.name }} | {% trans "Hotel and recreation base booking at Alakol" %}{% endblock %}
 
-{% block meta_description %}{{ hotel.description|striptags|truncatewords:30 }} {% trans "Забронируйте номер в" %} {{ hotel.name }} {% trans "на озере Алаколь. Лучшие цены, удобное расположение" %}.{% endblock %}
+{% block meta_description %}{{ hotel.description|striptags|truncatewords:30 }} {% trans "Book a room at" %} {{ hotel.name }} {% trans "on Lake Alakol. Best prices, convenient location" %}.{% endblock %}
 
-{% block meta_keywords %}{{ hotel.name }}, {% trans "отель Алаколь, база отдыха Алаколь, бронирование" %} {{ hotel.name }}, {% trans "номера" %} {{ hotel.address }}, {% trans "отдых Алаколь, базы отдыха Алаколь" %}{% endblock %}
+{% block meta_keywords %}{{ hotel.name }}, {% trans "Alakol hotel, Alakol recreation base, booking" %} {{ hotel.name }}, {% trans "rooms" %} {{ hotel.address }}, {% trans "Alakol vacation, Alakol recreation bases" %}{% endblock %}
 
-{% block og_title %}{{ hotel.name }} - {% trans "Отель и база отдыха на озере Алаколь" %}{% endblock %}
+{% block og_title %}{{ hotel.name }} - {% trans "Hotel and recreation base on Lake Alakol" %}{% endblock %}
 {% block og_type %}business.business{% endblock %}
 {% block og_image %}{{ hotel.image.url }}{% endblock %}
 
@@ -36,8 +36,8 @@
     "address": {
         "@type": "PostalAddress",
         "streetAddress": "{{ hotel.address|escapejs }}",
-        "addressLocality": "{% trans 'Алаколь' %}",
-        "addressRegion": "{% trans 'Восточно-Казахстанская область' %}",
+        "addressLocality": "{% trans 'Alakol' %}",
+        "addressRegion": "{% trans 'East Kazakhstan Region' %}",
         "postalCode": "{{ hotel.postal_code|default:'' }}",
         "addressCountry": "KZ"
     },
@@ -63,7 +63,7 @@
     },
     "priceRange": "${{ hotel.min_price|default:'50' }} - ${{ hotel.max_price|default:'200' }}",
     "currenciesAccepted": "KZT, USD",
-    "paymentAccepted": "{% trans 'Наличные, банковские карты, банковский перевод' %}",
+    "paymentAccepted": "{% trans 'Cash, credit cards, bank transfer' %}",
     "amenityFeature": [
         {% for feature in hotel.hotel_features %}
         {
@@ -79,7 +79,7 @@
             "@type": "Accommodation",
             "@id": "{{ request.build_absolute_uri }}#room-{{ room_type.id }}",
             "name": "{{ room_type.type|escapejs }}",
-            "description": "{% trans 'Номер на' %} {{ room_type.room_capacity }} {% trans 'гостей' %}",
+            "description": "{% trans 'Room for' %} {{ room_type.room_capacity }} {% trans 'guests' %}",
             "occupancy": {
                 "@type": "QuantitativeValue",
                 "value": "{{ room_type.room_capacity }}"
@@ -102,8 +102,8 @@
         {% endfor %}
     ],
     "hasMap": "https://maps.google.com/?q={{ hotel.latitude|default:'46.1167' }},{{ hotel.longitude|default:'81.8167' }}",
-    "checkinTime": "{% if hotel.check_in_time %}{{ hotel.check_in_time }}{% else %}14:00{% endif %}",
-    "checkoutTime": "{% if hotel.check_out_time %}{{ hotel.check_out_time }}{% else %}12:00{% endif %}",
+    "checkinTime": "{% if hotel.check_in_time %}{{ hotel.check_in_time|format_time }}{% else %}14:00{% endif %}",
+    "checkoutTime": "{% if hotel.check_out_time %}{{ hotel.check_out_time|format_time }}{% else %}12:00{% endif %}",
     "petsAllowed": {% if hotel.pets_allowed %}true{% else %}false{% endif %},
     "smokingAllowed": {% if hotel.smoking_allowed %}true{% else %}false{% endif %},
     "numberOfRooms": "{{ hotel.total_rooms|default:'10' }}",
@@ -145,13 +145,13 @@
         {
             "@type": "ListItem",
             "position": 1,
-            "name": "{% trans 'Главная' %}",
+            "name": "{% trans 'Home' %}",
             "item": "{{ request.scheme }}://{{ request.get_host }}/"
         },
         {
             "@type": "ListItem",
             "position": 2,
-            "name": "{% trans 'Отели Алаколь' %}",
+            "name": "{% trans 'Alakol Hotels' %}",
             "item": "{{ request.scheme }}://{{ request.get_host }}/"
         },
         {
@@ -168,15 +168,15 @@
 {
     "@context": "https://schema.org",
     "@type": "TouristAttraction",
-    "name": "{{ hotel.name|escapejs }} - {% trans 'Отель на озере Алаколь' %}",
+    "name": "{{ hotel.name|escapejs }} - {% trans 'Hotel on Lake Alakol' %}",
     "description": "{{ hotel.description|striptags|truncatewords:30|escapejs }}",
     "url": "{{ request.build_absolute_uri }}",
     "image": "{{ request.scheme }}://{{ request.get_host }}{{ hotel.image.url }}",
     "address": {
         "@type": "PostalAddress",
         "streetAddress": "{{ hotel.address|escapejs }}",
-        "addressLocality": "{% trans 'Алаколь' %}",
-        "addressRegion": "{% trans 'Восточно-Казахстанская область' %}",
+        "addressLocality": "{% trans 'Alakol' %}",
+        "addressRegion": "{% trans 'East Kazakhstan Region' %}",
         "addressCountry": "KZ"
     },
     "geo": {
@@ -185,9 +185,9 @@
         "longitude": "{{ hotel.longitude|default:'81.8167' }}"
     },
     "touristType": [
-        "{% trans 'Семейный отдых' %}",
-        "{% trans 'Оздоровительный туризм' %}",
-        "{% trans 'Пляжный отдых' %}"
+        "{% trans 'Family vacation' %}",
+        "{% trans 'Wellness tourism' %}",
+        "{% trans 'Beach vacation' %}"
     ]
 }
 </script>
@@ -324,8 +324,8 @@
                 <p>{{hotel.description|safe}}</p>
                 {% if hotel.check_in_time and hotel.check_out_time %}
                     <div class="check_in_out_time_container">
-                        <span class="check_in_out_time"><i>{% trans "Check-in Time" %}</i><span class="time">{{hotel.check_in_time}}</span></span>
-                        <span class="check_in_out_time"><i>{% trans "Check-out Time" %}</i><span class="time">{{hotel.check_out_time}}</span></span>
+                        <span class="check_in_out_time"><i>{% trans "Check-in Time" %}</i><span class="time">{{hotel.check_in_time|format_time}}</span></span>
+                        <span class="check_in_out_time"><i>{% trans "Check-out Time" %}</i><span class="time">{{hotel.check_out_time|format_time}}</span></span>
                     </div>
                 {% endif %}
             </div>
@@ -377,27 +377,27 @@
 
             {% if hotel.meal_plan_type != 'not_included' or hotel.hotelmealplan_set.exists %}
             <div id="utf_listing_meal_plans" class="utf_listing_section">
-                <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">{% trans "Питание" %}</h3>
+                <h3 class="utf_listing_headline_part margin-top-50 margin-bottom-40">{% trans "Meals" %}</h3>
                 
-                <!-- Тип питания отеля -->
+                <!-- Hotel meal plan type -->
                 {% if hotel.meal_plan_type != 'not_included' %}
                 <div class="meal-plan-info">
                     <div class="meal-plan-type">
                         <i class="fas fa-utensils"></i>
                         <span>{{ hotel.get_meal_plan_type_display }}</span>
                         {% if hotel.meal_included_in_price == 'yes' %}
-                            <span class="meal-included-badge">{% trans "Включено в стоимость номера" %}</span>
+                            <span class="meal-included-badge">{% trans "Included in the room price" %}</span>
                         {% else %}
-                            <span class="meal-additional-badge">{% trans "Дополнительно оплачивается при заселении" %}</span>
+                            <span class="meal-additional-badge">{% trans "Additionally paid upon check-in" %}</span>
                         {% endif %}
                     </div>
                 </div>
                 {% endif %}
 
-                <!-- Планы питания с ценами - показываем только если питание НЕ включено в стоимость -->
+                <!-- Meal plans with prices - shown only if meals are NOT included in the price -->
                 {% if hotel.hotelmealplan_set.exists and hotel.meal_included_in_price == 'no' %}
                 <div class="meal-plans-pricing">
-                    <h4>{% trans "Стоимость питания" %}</h4>
+                    <h4>{% trans "Meal costs" %}</h4>
                     <div class="meal-plans-list">
                         {% for meal_plan in hotel.hotelmealplan_set.all %}
                         <div class="meal-plan-item">
@@ -405,20 +405,20 @@
                                 <div class="age-range">
                                     <i class="fas fa-user"></i>
                                     {% if meal_plan.age_min and meal_plan.age_max %}
-                                        {% trans "Возраст" %}: {% trans "от" %} {{ meal_plan.age_min }} {% trans "до" %} {{ meal_plan.age_max }} {% trans "лет" %}
+                                        {% trans "Age" %}: {% trans "from" %} {{ meal_plan.age_min }} {% trans "to" %} {{ meal_plan.age_max }} {% trans "years" %}
                                     {% elif meal_plan.age_min %}
-                                        {% trans "Возраст" %}: {{ meal_plan.age_min }}+ {% trans "лет" %}
+                                        {% trans "Age" %}: {{ meal_plan.age_min }}+ {% trans "years old." %}
                                     {% elif meal_plan.age_max %}
-                                        {% trans "Возраст" %}: {% trans "до" %} {{ meal_plan.age_max }} {% trans "лет" %}
+                                        {% trans "Age" %}: {% trans "up to" %} {{ meal_plan.age_max }} {% trans "years" %}
                                     {% else %}
-                                        {% trans "Возраст" %}: {% trans "любой" %}
+                                        {% trans "Age" %}: {% trans "any" %}
                                     {% endif %}
                                     
                                 </div>
                             </div>
                             <div class="meal-plan-price">
-                                <span class="price">{{ meal_plan.price_per_day|price_format }} {% trans "тенге" %}</span>
-                                <span class="period">{% trans "за день" %}</span>
+                                <span class="price">{{ meal_plan.price_per_day|price_format }} {% trans "tenge" %}</span>
+                                <span class="period">{% trans "per day" %}</span>
                             </div>
                         </div>
                         {% endfor %}
@@ -429,7 +429,7 @@
                 {% if hotel.meal_plan_type == 'not_included' and not hotel.hotelmealplan_set.exists %}
                 <div class="no-meal-plan">
                     <i class="fas fa-info-circle"></i>
-                    <span>{% trans "Питание не предоставляется" %}</span>
+                    <span>{% trans "Meals are not provided" %}</span>
                 </div>
                 {% endif %}
             </div>

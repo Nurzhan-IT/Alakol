@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from django.db.models import Q, Count, OuterRef, Prefetch
 from django.core.cache import cache
+from django.utils.translation import gettext_lazy as _
 import uuid
 
 from hotel.models import Coupon, CouponUsers, Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType, RoomTypeGallery, Notification, Bookmark, Review, HotelMealPlan
@@ -63,6 +64,54 @@ def index(request):
         "hotel": hotels  # Передаем весь список
     }
     return render(request, "hotel/index.html", context)
+
+
+def get_selected_items_count(request):
+    """
+    API endpoint для получения количества выбранных номеров.
+    Возвращает данные в реальном времени без кэширования.
+    """
+    if 'selection_data_obj' in request.session:
+        total_selected_items = len(request.session['selection_data_obj'])
+    else:
+        total_selected_items = 0
+    
+    return JsonResponse({
+        'total_selected_items': total_selected_items
+    })
+
+
+def get_messages(request):
+    """
+    API endpoint для получения Django messages.
+    КРИТИЧНО: Messages НЕ кэшируются из соображений безопасности!
+    Возвращает сообщения в реальном времени и очищает их после получения.
+    """
+    from django.contrib.messages import get_messages
+    
+    # Получаем все messages для текущего пользователя
+    storage = get_messages(request)
+    messages_data = []
+    
+    # Определяем соответствие уровней Django messages с SweetAlert2 иконками
+    level_map = {
+        'debug': 'info',
+        'info': 'info', 
+        'success': 'success',
+        'warning': 'warning',
+        'error': 'error'
+    }
+    
+    for message in storage:
+        messages_data.append({
+            'message': str(message),
+            'level_tag': level_map.get(message.tags, 'info'),
+            'tags': message.tags
+        })
+    
+    return JsonResponse({
+        'messages': messages_data
+    })
 
 
 @vary_on_cookie
@@ -126,17 +175,10 @@ def hotel_detail(request, slug):
         timeout=settings.CACHE_TTL['features_and_amenities']
     )
     
-    # Кэшируем отзывы пользователя (если авторизован)
+    # Кэширование отзывов пользователя отключено для данных реального времени
     if request.user.is_authenticated:
-        user_reviews_key = f"user_reviews:{request.user.id}:hotel_{hotel.id}"
-        def get_user_reviews():
-            return Review.objects.select_related('user', 'hotel').filter(user=request.user, hotel=hotel)
-        
-        reviews = CacheHelper.get_or_set_complex(
-            user_reviews_key,
-            get_user_reviews,
-            timeout=settings.CACHE_TTL['hotel_reviews']
-        )
+        # Убираем кэширование для пользовательских отзывов - они должны обновляться мгновенно
+        reviews = Review.objects.select_related('user', 'hotel').filter(user=request.user, hotel=hotel)
     else:
         reviews = None
         
@@ -305,7 +347,7 @@ def room_type_detail(request, slug, rt_slug):
         children = booking_data.get('children', children)
     
     if not all([checkin, checkout]):
-        messages.warning(request, "Please enter your booking data to check availability.")
+        messages.warning(request, _("Please enter your booking data to check availability."))
         return redirect("booking:booking_data", hotel.slug)
     
     # Конвертируем строки с датами в объекты datetime
@@ -316,7 +358,7 @@ def room_type_detail(request, slug, rt_slug):
     # Проверяем, активен ли отель на выбранные даты
     hotel_available = hotel.is_active_for_dates(user_checkin_date, user_checkout_date)
     if not hotel_available:
-        messages.warning(request, "Отель не доступен для бронирования на выбранные даты.")
+        messages.warning(request, _("Hotel is not available for booking on selected dates."))
         return redirect("hotel:detail", hotel.slug)
     
     # Кэшируем доступность номеров для конкретных дат
@@ -434,7 +476,7 @@ def selected_rooms(request):
     checkout = "" 
     children = 0 
     if request.session['selection_data_obj'] == {} or 'selection_data_obj' not in request.session :
-        messages.warning(request, "You don't have any room selections yet!")
+        messages.warning(request, _("You don't have any room selections yet!"))
         return redirect("/")
     # Если пришли данные POST с датами, обновим booking_common_data
     if request.method == "POST" and 'selection_data_obj' in request.session:
@@ -664,7 +706,7 @@ def payment_method_selection(request):
     """Страница выбора способа оплаты"""
     
     if 'selection_data_obj' not in request.session or 'user_data' not in request.session:
-        messages.warning(request, "You don't have any room selections or missing user information!")
+        messages.warning(request, _("You don't have any room selections or missing user information!"))
         return redirect("/")
     
     # Расчет итоговой суммы для отображения
@@ -853,7 +895,7 @@ def process_booking(request):
     logger = logging.getLogger(__name__)
     
     if 'selection_data_obj' not in request.session or 'user_data' not in request.session or 'booking_common_data' not in request.session:
-        messages.warning(request, "Missing booking information!")
+        messages.warning(request, _("Missing booking information!"))
         return None
     
     booking = None
@@ -909,7 +951,7 @@ def process_booking(request):
         # Проверяем, активен ли отель на выбранные даты
         hotel_available = hotel.is_active_for_dates(checkin_date, checkout_date)
         if not hotel_available:
-            messages.warning(request, "Отель не доступен для бронирования на выбранные даты.")
+            messages.warning(request, _("Hotel is not available for booking on selected dates."))
             return None
         
         # Получаем данные пользователя из сессии
@@ -1020,7 +1062,7 @@ def create_robokassa_payment(request, payment_key=None):
             # Проверяем, активен ли отель на выбранные даты
             hotel_available = hotel.is_active_for_dates(checkin_date, checkout_date)
             if not hotel_available:
-                messages.warning(request, "Отель не доступен для бронирования на выбранные даты.")
+                messages.warning(request, _("Hotel is not available for booking on selected dates."))
                 return redirect("/")
             
             for h_id, item in request.session['selection_data_obj'].items():
@@ -1080,20 +1122,20 @@ def create_robokassa_payment(request, payment_key=None):
                         request.session.modified = True
                         
                         if reason == 'not_available':
-                            messages.error(request, f"Номер {room_number} недоступен для бронирования и был удален из списка.")
+                            messages.error(request, _("Room %(room_number)s is not available for booking and has been removed from the list.") % {'room_number': room_number})
                         elif reason == 'marked_unavailable':
-                            messages.error(request, f"Номер {room_number} отмечен как недоступный на выбранные даты и был удален из списка.")
+                            messages.error(request, _("Room %(room_number)s is marked as unavailable for selected dates and has been removed from the list.") % {'room_number': room_number})
                         else:
-                            messages.error(request, f"Номер {room_number} уже забронирован на выбранные даты и был удален из списка.")
+                            messages.error(request, _("Room %(room_number)s is already booked for selected dates and has been removed from the list.") % {'room_number': room_number})
                 
                 # Если после удаления недоступных номеров в сессии не осталось выбранных номеров,
                 # перенаправляем на страницу выбора номеров
                 if not request.session['selection_data_obj']:
-                    messages.error(request, "Все выбранные номера недоступны для бронирования.")
+                    messages.error(request, _("All selected rooms are not available for booking."))
                     return redirect("/")
                 else:
                     # Если остались доступные номера, перенаправляем на страницу выбранных номеров
-                    messages.warning(request, "Некоторые выбранные номера недоступны. Пожалуйста, проверьте список и продолжите бронирование.")
+                    messages.warning(request, _("Some selected rooms are not available. Please check the list and continue booking."))
                     return redirect("hotel:selected_rooms")
         
         # Если бронирование еще не создано
@@ -1102,7 +1144,7 @@ def create_robokassa_payment(request, payment_key=None):
             # Создаем бронирование из данных в сессии
             booking = process_booking(request)
             if not booking:
-                messages.error(request, "Failed to create booking!")
+                messages.error(request, _("Failed to create booking!"))
                 return redirect("/")
         else:
             # Если уже есть ID бронирования, получаем его
@@ -1185,14 +1227,14 @@ def create_robokassa_payment(request, payment_key=None):
                     logger.error(f"Ошибка при удалении бронирования: {str(del_err)}")
             
             # Сообщаем об ошибке пользователю
-            messages.error(request, f"Ошибка при создании платежа: {str(e)}")
+            messages.error(request, _("Error creating payment: %(error)s") % {'error': str(e)})
             return redirect("/")
             
     except Exception as e:
         logger.error(f"Ошибка при создании платежа: {str(e)}")
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({'error': str(e)}, status=500)
-        messages.error(request, f"Error: {str(e)}")
+        messages.error(request, _("Error: %(error)s") % {'error': str(e)})
         return redirect("/")
 
 @csrf_exempt
@@ -1337,7 +1379,7 @@ def robokassa_success(request, booking_id):
                 # Попытка доступа к success без прямых параметров и без предварительной обработки Result URL
                 # Вероятная попытка обойти оплату
                 logger.warning(f"Попытка доступа к странице успешной оплаты без верификации: {booking_id}")
-                messages.error(request, "Ошибка: Оплата не подтверждена системой. Если вы произвели оплату, обратитесь в службу поддержки.")
+                messages.error(request, _("Error: Payment not confirmed by the system. If you have made a payment, please contact support."))
                 return redirect("/")
         
         # Если оплата подтверждена, обновляем статус и очищаем сессию
@@ -1345,7 +1387,7 @@ def robokassa_success(request, booking_id):
             if booking.payment_status != "paid":
                 booking.payment_status = "paid"
                 booking.save()
-                messages.success(request, f'Ваше бронирование успешно оплачено!')
+                messages.success(request, _('Your booking was successfully paid!'))
                 logger.info(f"Статус бронирования {booking_id} обновлен на 'paid'")
             
             # Удаляем данные из сессии
@@ -1365,12 +1407,12 @@ def robokassa_success(request, booking_id):
             return render(request, "hotel/payment_success.html", context)
         else:
             # На всякий случай, хотя мы должны были перенаправить раньше
-            messages.error(request, "Ошибка: Оплата не подтверждена системой.")
+            messages.error(request, _("Error: Payment not confirmed by the system."))
             return redirect("/")
         
     except Exception as e:
         logger.error(f"Ошибка при обработке успешного платежа: {str(e)}")
-        messages.error(request, f"Произошла ошибка: {str(e)}")
+        messages.error(request, _("An error occurred: %(error)s") % {'error': str(e)})
         return redirect("/")
 
 @csrf_exempt
@@ -1423,7 +1465,7 @@ def robokassa_success_direct(request):
     # Проверяем, есть ли необходимые параметры в запросе
     if not all(param in request.GET for param in ['OutSum', 'InvId', 'SignatureValue']):
         logger.warning("Отсутствуют обязательные параметры в запросе success от Робокассы")
-        messages.error(request, "Ошибка: Недостаточно данных для проверки платежа")
+        messages.error(request, _("Error: Insufficient data to verify payment"))
         return redirect('/')
     
     inv_id = request.GET.get('InvId')
@@ -1431,7 +1473,7 @@ def robokassa_success_direct(request):
     # Проверяем подпись
     if not check_success_payment(request.GET):
         logger.warning(f"Неверная подпись платежа в запросе success от Робокассы: InvId={inv_id}")
-        messages.error(request, "Ошибка: Верификация платежа не пройдена")
+        messages.error(request, _("Error: Payment verification failed"))
         return redirect('/')
     
     # Если подпись правильная, находим бронирование и обновляем его статус
@@ -1462,7 +1504,7 @@ def robokassa_success_direct(request):
         return redirect('hotel:robokassa_success', booking_id=booking.booking_id)
     except Exception as e:
         logger.error(f"Ошибка при обработке прямого success URL: {str(e)}")
-        messages.error(request, "Ошибка при обработке платежа")
+        messages.error(request, _("Error processing payment"))
         return redirect('/')
 
 @csrf_exempt
@@ -1524,7 +1566,7 @@ def invoice(request, booking_id):
         # Проверяем статус оплаты
         if booking.payment_status != "paid":
             logger.warning(f"Попытка доступа к неоплаченной квитанции: {booking_id}, статус: {booking.payment_status}")
-            messages.error(request, "Доступ к квитанции возможен только для оплаченных бронирований.")
+            messages.error(request, _("Access to receipt is only available for paid bookings."))
             return redirect("/")
         
         # Преобразуем selection_data из JSON в словарь Python для использования в шаблоне
@@ -1555,7 +1597,7 @@ def invoice(request, booking_id):
         return render(request, "hotel/invoice.html", context)
     except Exception as e:
         logger.error(f"Ошибка при доступе к квитанции {booking_id}: {str(e)}")
-        messages.error(request, f"Произошла ошибка при получении квитанции: {str(e)}")
+        messages.error(request, _("An error occurred while retrieving the receipt: %(error)s") % {'error': str(e)})
         return redirect("/")
 
 # Добавим вспомогательную функцию для расчета общей стоимости с учетом динамических цен

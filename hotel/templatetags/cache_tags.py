@@ -155,24 +155,16 @@ def cached_popular_hotels(limit=6):
 @register.filter
 def room_price_for_date(room_type, date_str):
     """
-    Получает кэшированную цену номера на конкретную дату.
+    Получает цену номера на конкретную дату БЕЗ кэширования (для реального времени).
     Учитывает динамическое ценообразование.
     """
     if not date_str:
         return room_type.price
     
-    cache_key = f"room_price:{room_type.id}:{date_str}"
-    
-    def get_price_for_date():
-        if room_type.dynamic_pricing and isinstance(room_type.dynamic_pricing, dict):
-            return room_type.dynamic_pricing.get(date_str, room_type.price)
-        return room_type.price
-    
-    return CacheHelper.get_or_set_complex(
-        cache_key,
-        get_price_for_date,
-        timeout=settings.CACHE_TTL['dynamic_pricing']
-    )
+    # Убираем кэширование для динамических цен - они должны обновляться в реальном времени
+    if room_type.dynamic_pricing and isinstance(room_type.dynamic_pricing, dict):
+        return room_type.dynamic_pricing.get(date_str, room_type.price)
+    return room_type.price
 
 
 @register.inclusion_tag('hotel/templatetags/cached_room_availability.html')
@@ -234,25 +226,17 @@ def cached_room_availability(hotel_id, room_type_id, checkin_date, checkout_date
 
 @register.simple_tag(takes_context=True)
 def cached_user_bookings_count(context):
-    """Получает кэшированное количество бронирований пользователя."""
+    """Получает количество бронирований пользователя БЕЗ кэширования (для реального времени)."""
     request = context['request']
     
     if not request.user.is_authenticated:
         return 0
     
-    cache_key = f"user_bookings_count:{request.user.id}"
-    
-    def get_bookings_count():
-        return Booking.objects.filter(
-            user=request.user,
-            is_active=True
-        ).count()
-    
-    return CacheHelper.get_or_set_complex(
-        cache_key,
-        get_bookings_count,
-        timeout=settings.CACHE_TTL['user_bookings']
-    )
+    # Убираем кэширование для данных пользователя - они должны обновляться в реальном времени
+    return Booking.objects.filter(
+        user=request.user,
+        is_active=True
+    ).count()
 
 
 @register.simple_tag

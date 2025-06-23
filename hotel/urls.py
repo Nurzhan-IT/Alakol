@@ -14,6 +14,10 @@ urlpatterns = [
     # Session validation API
     path('check-session-data/', views.check_session_data, name='check_session_data'),
     
+    # Real-time data API (no cache)
+    path('api/selected-items-count/', views.get_selected_items_count, name='get_selected_items_count'),
+    path('api/messages/', views.get_messages, name='get_messages'),
+    
     # Robokassa Payment API
     path('api/robokassa-payment/', views.create_robokassa_payment, name='api_robokassa_payment'),
     path('api/robokassa-payment/<payment_key>/', views.create_robokassa_payment, name='api_robokassa_payment_with_key'),
