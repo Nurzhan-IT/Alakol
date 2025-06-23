@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 17:56+0500\n"
+"POT-Creation-Date: 2025-06-23 15:23+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,63 +20,45 @@ msgstr ""
 
 #: .\booking\views.py:91
 msgid "Please select check-in and check-out dates"
-msgstr ""
+msgstr "Кіру және шығу күндерін таңдаңыз"
 
 #: .\booking\views.py:93
 #, python-format
 msgid "Please fill in all required fields: %(params)s"
-msgstr ""
+msgstr "Барлық қажетті өрістерді толтырыңыз: %(params)s"
 
 #: .\booking\views.py:103
-#, fuzzy
-#| msgid "Page not found"
 msgid "Hotel not found."
-msgstr "Парақша табылмады"
+msgstr "Қонақ үй табылмады"
 
 #: .\booking\views.py:117 .\booking\views.py:147
 msgid ""
 "The selected room type is not available. Please choose another room type."
-msgstr ""
-
-#: .\hms_prj\settings.py:178
-msgid "Kazakh"
-msgstr ""
-
-#: .\hms_prj\settings.py:179
-msgid "Russia"
-msgstr ""
-
-#: .\hms_prj\settings.py:180
-msgid "English"
-msgstr ""
+msgstr "Таңдалған бөлме түрі қолжетімді емес. Басқа бөлме түрін таңдаңыз."
 
 #: .\hotel\admin.py:548
-#, fuzzy
-#| msgid "Check-in Date"
 msgid "Check-In Date"
-msgstr "Қоңақ үйге кіру күні"
+msgstr "Тіркелу күні"
 
 #: .\hotel\decorators.py:9 .\hotel\views.py:479
 msgid "You don't have any room selections yet!"
-msgstr ""
+msgstr "Сіз әлі ешқандай бөлме таңдамадыңыз!"
 
 #: .\hotel\views.py:350
 msgid "Please enter your booking data to check availability."
-msgstr ""
+msgstr "Қолжетімділікті тексеру үшін брондау деректерін енгізіңіз."
 
 #: .\hotel\views.py:361 .\hotel\views.py:954 .\hotel\views.py:1065
 msgid "Hotel is not available for booking on selected dates."
-msgstr ""
+msgstr "Қонақ үй таңдалған күндерде брондауға қолжетімді емес."
 
 #: .\hotel\views.py:709
 msgid "You don't have any room selections or missing user information!"
-msgstr ""
+msgstr "Сізде бөлме таңдаулары жоқ немесе пайдаланушы ақпараты жетіспейді!"
 
 #: .\hotel\views.py:898
-#, fuzzy
-#| msgid "Billing Information"
 msgid "Missing booking information!"
-msgstr "Төлем ақпараттары"
+msgstr "Брондау туралы ақпарат жетіспейді!"
 
 #: .\hotel\views.py:1125
 #, python-format
@@ -84,6 +66,8 @@ msgid ""
 "Room %(room_number)s is not available for booking and has been removed from "
 "the list."
 msgstr ""
+"%(room_number)s бөлмесі брондауға қолжетімді емес және тізімнен алынып "
+"тасталды."
 
 #: .\hotel\views.py:1127
 #, python-format
@@ -91,6 +75,8 @@ msgid ""
 "Room %(room_number)s is marked as unavailable for selected dates and has "
 "been removed from the list."
 msgstr ""
+"%(room_number)s бөлмесі таңдалған күндерде қолжетімсіз деп белгіленді және "
+"тізімнен алынып тасталды."
 
 #: .\hotel\views.py:1129
 #, python-format
@@ -98,72 +84,76 @@ msgid ""
 "Room %(room_number)s is already booked for selected dates and has been "
 "removed from the list."
 msgstr ""
+"%(room_number)s бөлмесі таңдалған күндерде брондалған және тізімнен алынып "
+"тасталды."
 
 #: .\hotel\views.py:1134
 msgid "All selected rooms are not available for booking."
-msgstr ""
+msgstr "Барлық таңдалған бөлмелер брондауға қолжетімді емес."
 
 #: .\hotel\views.py:1138
 msgid ""
 "Some selected rooms are not available. Please check the list and continue "
 "booking."
 msgstr ""
+"Кейбір таңдалған бөлмелер қолжетімді емес. Тізімді тексеріп, брондауды "
+"жалғастырыңыз."
 
 #: .\hotel\views.py:1147
-#, fuzzy
-#| msgid "Alakol hotel booking"
 msgid "Failed to create booking!"
-msgstr "Алакөл қонақ үйлеріне бронь жасау"
+msgstr "Брондау жасау сәтсіз аяқталды!"
 
 #: .\hotel\views.py:1230
 #, python-format
 msgid "Error creating payment: %(error)s"
-msgstr ""
+msgstr "Төлем жасау қатесі: %(error)s"
 
 #: .\hotel\views.py:1237
 #, python-format
 msgid "Error: %(error)s"
-msgstr ""
+msgstr "Қате: %(error)s"
 
 #: .\hotel\views.py:1382
 msgid ""
 "Error: Payment not confirmed by the system. If you have made a payment, "
 "please contact support."
 msgstr ""
+"Қате: Төлем жүйе арқылы расталмады. Егер сіз төлем жасаған болсаңыз, қолдау "
+"қызметіне хабарласыңыз."
 
 #: .\hotel\views.py:1390
 msgid "Your booking was successfully paid!"
-msgstr ""
+msgstr "Сіздің брондауыңыз сәтті төленді!"
 
 #: .\hotel\views.py:1410
 msgid "Error: Payment not confirmed by the system."
-msgstr ""
+msgstr "Қате: Төлем жүйе арқылы расталмады."
 
 #: .\hotel\views.py:1415
 #, python-format
 msgid "An error occurred: %(error)s"
-msgstr ""
+msgstr "Қате пайда болды: %(error)s"
 
 #: .\hotel\views.py:1468
 msgid "Error: Insufficient data to verify payment"
-msgstr ""
+msgstr "Қате: Төлемді тексеру үшін деректер жеткіліксіз"
 
 #: .\hotel\views.py:1476
 msgid "Error: Payment verification failed"
-msgstr ""
+msgstr "Қате: Төлемді тексеру сәтсіз аяқталды"
 
 #: .\hotel\views.py:1507
 msgid "Error processing payment"
-msgstr ""
+msgstr "Төлемді өңдеу қатесі"
 
 #: .\hotel\views.py:1569
 msgid "Access to receipt is only available for paid bookings."
-msgstr ""
+msgstr "Чекке қол жеткізу тек төленген брондаулар үшін қолжетімді."
 
 #: .\hotel\views.py:1600
 #, python-format
 msgid "An error occurred while retrieving the receipt: %(error)s"
-msgstr ""
+msgstr "Чекті алу кезінде қате пайда болды: %(error)s"
 
 #: .\templates\admin\input_filter.html:21
 #: .\templates\admin\input_filter.html:41
@@ -383,7 +373,8 @@ msgid "All Room Selections"
 msgstr "Барлық бөлмелерден таңдау"
 
 #: .\templates\hotel\async\selected_rooms.html:42
-#: .\templates\hotel\checkout.html:15 .\templates\hotel\payment_failed.html:15
+#: .\templates\hotel\checkout.html:15 .\templates\hotel\hotel_detail.html:148
+#: .\templates\hotel\payment_failed.html:15
 msgid "Home"
 msgstr "Үй"
 
@@ -421,7 +412,7 @@ msgstr "Таңдалған бөлмелер"
 #: .\templates\hotel\room_type_detail.html:79
 #: .\templates\hotel\selected_rooms.html:50
 msgid "Beds"
-msgstr "Төсектер"
+msgstr "Төсек"
 
 #: .\templates\hotel\async\selected_rooms.html:68
 #: .\templates\hotel\selected_rooms.html:51
@@ -596,78 +587,74 @@ msgid "Continue to Payment"
 msgstr "Төлемге өту"
 
 #: .\templates\hotel\hotel_detail.html:4
-msgid "Бронирование отеля и базы отдыха на Алаколе"
-msgstr ""
+msgid "Hotel and recreation base booking at Alakol"
+msgstr "Алакөлдегі қонақ үйлер мен демалыс базаларын брондау"
 
 #: .\templates\hotel\hotel_detail.html:6
-msgid "Забронируйте номер в"
-msgstr ""
+msgid "Book a room at"
+msgstr "Алакөл Көліндегі"
 
 #: .\templates\hotel\hotel_detail.html:6
-msgid "на озере Алаколь. Лучшие цены, удобное расположение"
-msgstr ""
+msgid "on Lake Alakol. Best prices, convenient location"
+msgstr "қонақүйінде бөлмені брондаңыз. Ең жақсы бағалар, ыңғайлы орналасу"
 
 #: .\templates\hotel\hotel_detail.html:8
-msgid "отель Алаколь, база отдыха Алаколь, бронирование"
-msgstr ""
+msgid "Alakol hotel, Alakol recreation base, booking"
+msgstr "Алакөл қонақ үйі, Алакөл демалыс базасы, брондау"
 
 #: .\templates\hotel\hotel_detail.html:8
-msgid "номера"
-msgstr ""
+msgid "rooms"
+msgstr "бөлмелер"
 
 #: .\templates\hotel\hotel_detail.html:8
-msgid "отдых Алаколь, базы отдыха Алаколь"
-msgstr ""
+msgid "Alakol vacation, Alakol recreation bases"
+msgstr "Алакөл демалысы, Алакөл демалыс базалары"
 
 #: .\templates\hotel\hotel_detail.html:10
-msgid "Отель и база отдыха на озере Алаколь"
-msgstr ""
+msgid "Hotel and recreation base on Lake Alakol"
+msgstr "Алакөл көліндегі қонақ үй және демалыс базасы"
 
 #: .\templates\hotel\hotel_detail.html:39
 #: .\templates\hotel\hotel_detail.html:178
-msgid "Алаколь"
-msgstr ""
+msgid "Alakol"
+msgstr "Алакөл"
 
 #: .\templates\hotel\hotel_detail.html:40
 #: .\templates\hotel\hotel_detail.html:179
-msgid "Восточно-Казахстанская область"
-msgstr ""
+msgid "East Kazakhstan Region"
+msgstr "Шығыс Қазақстан облысы"
 
 #: .\templates\hotel\hotel_detail.html:66
-msgid "Наличные, банковские карты, банковский перевод"
-msgstr ""
+msgid "Cash, credit cards, bank transfer"
+msgstr "Қолма-қол ақша, несие карталары, банктік аударым"
 
 #: .\templates\hotel\hotel_detail.html:82
-msgid "Номер на"
-msgstr ""
+msgid "Room for"
+msgstr "Бөлме"
 
 #: .\templates\hotel\hotel_detail.html:82
-msgid "гостей"
-msgstr ""
-
-#: .\templates\hotel\hotel_detail.html:148
-msgid "Главная"
-msgstr ""
+msgid "guests"
+msgstr "қонаққа"
 
 #: .\templates\hotel\hotel_detail.html:154
-msgid "Отели Алаколь"
-msgstr ""
+msgid "Alakol Hotels"
+msgstr "Алакөл қонақ үйлері"
 
 #: .\templates\hotel\hotel_detail.html:171
-msgid "Отель на озере Алаколь"
-msgstr ""
+msgid "Hotel on Lake Alakol"
+msgstr "Алакөл көліндегі қонақ үй"
 
 #: .\templates\hotel\hotel_detail.html:188
-msgid "Семейный отдых"
-msgstr ""
+msgid "Family vacation"
+msgstr "Отбасылық демалыс"
 
 #: .\templates\hotel\hotel_detail.html:189
-msgid "Оздоровительный туризм"
-msgstr ""
+msgid "Wellness tourism"
+msgstr "Сауықтыру туризмі"
 
 #: .\templates\hotel\hotel_detail.html:190
-msgid "Пляжный отдых"
-msgstr ""
+msgid "Beach vacation"
+msgstr "Жағажай демалысы"
 
 #: .\templates\hotel\hotel_detail.html:215
 #: .\templates\hotel\hotel_detail.html:284
@@ -734,58 +721,64 @@ msgid "Amenities"
 msgstr "Қызметтер"
 
 #: .\templates\hotel\hotel_detail.html:382
-msgid "Питание"
-msgstr ""
+msgid "Meals"
+msgstr "Тамақтану"
 
 #: .\templates\hotel\hotel_detail.html:391
-msgid "Включено в стоимость номера"
-msgstr ""
+msgid "Included in the room price"
+msgstr "Бөлме бағасына кіреді"
 
 #: .\templates\hotel\hotel_detail.html:393
-msgid "Дополнительно оплачивается при заселении"
-msgstr ""
+msgid "Additionally paid upon check-in"
+msgstr "Тіркелу кезінде қосымша төленеді"
 
 #: .\templates\hotel\hotel_detail.html:402
-msgid "Стоимость питания"
-msgstr ""
+msgid "Meal costs"
+msgstr "Тамақтану шығындары"
 
 #: .\templates\hotel\hotel_detail.html:410
 #: .\templates\hotel\hotel_detail.html:412
 #: .\templates\hotel\hotel_detail.html:414
 #: .\templates\hotel\hotel_detail.html:416
-msgid "Возраст"
-msgstr ""
+msgid "Age"
+msgstr "Жас"
 
 #: .\templates\hotel\hotel_detail.html:410
-msgid "от"
-msgstr ""
+msgid "from"
+msgstr " "
+
+#: .\templates\hotel\hotel_detail.html:410
+msgid "to"
+msgstr "жастан"
 
 #: .\templates\hotel\hotel_detail.html:410
 #: .\templates\hotel\hotel_detail.html:414
-msgid "до"
-msgstr ""
+msgid "years"
+msgstr "жасқа дейін"
 
-#: .\templates\hotel\hotel_detail.html:410
 #: .\templates\hotel\hotel_detail.html:412
+msgid "years old."
+msgstr "жас"
+
 #: .\templates\hotel\hotel_detail.html:414
-msgid "лет"
-msgstr ""
+msgid "up to"
+msgstr " "
 
 #: .\templates\hotel\hotel_detail.html:416
-msgid "любой"
-msgstr ""
+msgid "any"
+msgstr "кез келген жас"
 
 #: .\templates\hotel\hotel_detail.html:422
-msgid "тенге"
-msgstr ""
+msgid "tenge"
+msgstr "Теңге"
 
 #: .\templates\hotel\hotel_detail.html:423
-msgid "за день"
-msgstr ""
+msgid "per day"
+msgstr "күніне"
 
 #: .\templates\hotel\hotel_detail.html:434
-msgid "Питание не предоставляется"
-msgstr ""
+msgid "Meals are not provided"
+msgstr "Кешенді тамақтану жоқ"
 
 #: .\templates\hotel\hotel_detail.html:442
 msgid "FAQ's"
@@ -1272,7 +1265,7 @@ msgstr ""
 #: .\templates\partials\dashboard_base.html:146
 #: .\templates\partials\dashboard_sidebar.html:7
 msgid "Dashboard"
-msgstr "Басқару панелі"
+msgstr "Аккаунт"
 
 #: .\templates\partials\base.html:173
 msgid "Sign Out"
@@ -1919,44 +1912,42 @@ msgid "Hi there! Create a free account today."
 msgstr "Сәлеметсіз бе! Бүгін тегін аккаунт жасаңыз"
 
 #: .\user_dashboard\views.py:188
-#, fuzzy
-#| msgid "Password Changed Successfully"
 msgid "Profile Updated Successfully"
-msgstr "Құпиясөз сәтті өзгертілді"
+msgstr "Профиль cәтті өзгертілді"
 
 #: .\userauths\views.py:18
 #, python-format
 msgid "Hey %(username)s, you are already logged in"
-msgstr ""
+msgstr "Сәлем %(username)s, сіз әлдеқашан жүйеге кірдіңіз"
 
 #: .\userauths\views.py:35
 #, python-format
 msgid "Hi %(username)s, your account have been created successfully."
-msgstr ""
+msgstr "Сәлем %(username)s, сіздің есептік жазбаңыз сәтті құрылды."
 
 #: .\userauths\views.py:71 .\userauths\views.py:104
 msgid "You are Logged In"
-msgstr ""
+msgstr "Сіз жүйеге кірдіңіз"
 
 #: .\userauths\views.py:74 .\userauths\views.py:108
 msgid "Username or password does not exist."
-msgstr ""
+msgstr "Пайдаланушы аты немесе құпия сөз жоқ."
 
 #: .\userauths\views.py:77 .\userauths\views.py:97
 msgid "User does not exist"
-msgstr ""
+msgstr "Пайдаланушы жоқ"
 
 #: .\userauths\views.py:83
 msgid "You are already logged in"
-msgstr ""
+msgstr "Сіз әлдеқашан жүйеге кірдіңіз"
 
 #: .\userauths\views.py:111
 msgid "An error occurred during login"
-msgstr ""
+msgstr "Жүйеге кіру кезінде қате орын алды"
 
 #: .\userauths\views.py:117
 msgid "You have been logged out"
-msgstr ""
+msgstr "Сіз жүйеден шықтыңыз"
 
 #~ msgid "What Say Our Customers"
 #~ msgstr "Біздің клиеттеріміздің пікірі"
@@ -1971,16 +1962,11 @@ msgstr ""
 #~ msgid "Subscribe to Newsletter!"
 #~ msgstr "Жаңалықтарға жазылыңыз!"
 
-#, fuzzy
-#~| msgid "Alakol hotel booking"
 #~ msgid "Логотип Alakol Hotel Booking"
-#~ msgstr "Алакөл қонақ үйлеріне бронь жасау"
+#~ msgstr "Логотип Alakol Hotel Booking"
 
 #~ msgid "Book Now"
 #~ msgstr "Қазір брондау"
-
-#~ msgid "from"
-#~ msgstr "Басталады"
 
 #~ msgid "Book Unique Experiences"
 #~ msgstr "Керемет әсерге бронь жасаңыз"
@@ -2337,12 +2323,6 @@ msgstr ""
 
 #~ msgid "Custom Views"
 #~ msgstr "Жекелендірілген көріністер"
-
-#~ msgid "Recent actions"
-#~ msgstr "Соңғы іс-қимылдар"
-
-#~ msgid "My actions"
-#~ msgstr "Менің іс-қимылдарым"
 
 #~ msgid "None available"
 #~ msgstr "Қолжетімді емес"
