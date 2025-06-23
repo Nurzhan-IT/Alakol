@@ -9,17 +9,63 @@
         module.exports = e(i, a)
     } else t.daterangepicker = e(t.moment, t.jQuery)
 }(this, function(t, e) {
+    // Переводы для дней недели и месяцев
+    var localeTranslations = {
+        'ru': {
+            daysOfWeek: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+            monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+            applyLabel: "Применить",
+            cancelLabel: "Отмена",
+            weekLabel: "Н",
+            customRangeLabel: "Произвольный период"
+        },
+        'kk': {
+            daysOfWeek: ["Жс", "Дс", "Сс", "Ср", "Бс", "Жм", "Сб"],
+            monthNames: ["Қаңтар", "Ақпан", "Наурыз", "Сәуір", "Мамыр", "Маусым", "Шілде", "Тамыз", "Қыркүйек", "Қазан", "Қараша", "Желтоқсан"],
+            applyLabel: "Қолдану",
+            cancelLabel: "Болдырмау",
+            weekLabel: "А",
+            customRangeLabel: "Таңдамалы кезең"
+        },
+        'en': {
+            daysOfWeek: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+            monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            applyLabel: "Apply",
+            cancelLabel: "Cancel",
+            weekLabel: "W",
+            customRangeLabel: "Custom Range"
+        }
+    };
+
+    // Функция для определения текущего языка
+    function getCurrentLanguage() {
+        // Проверяем URL или другие способы определения языка
+        var currentPath = window.location.pathname;
+        if (currentPath.includes('/ru/') || document.documentElement.lang === 'ru') {
+            return 'ru';
+        } else if (currentPath.includes('/kk/') || document.documentElement.lang === 'kk') {
+            return 'kk';
+        }
+        return 'en'; // По умолчанию английский
+    }
+
     var a = function(a, i, s) {
-        if (this.parentEl = "body", this.element = e(a), this.startDate = t().startOf("day"), this.endDate = t().endOf("day"), this.minDate = !1, this.maxDate = !1, this.maxSpan = !1, this.autoApply = !1, this.singleDatePicker = !1, this.showDropdowns = !1, this.minYear = t().subtract(100, "year").format("YYYY"), this.maxYear = t().add(100, "year").format("YYYY"), this.showWeekNumbers = !1, this.showISOWeekNumbers = !1, this.showCustomRangeLabel = !0, this.timePicker = !1, this.timePicker24Hour = !1, this.timePickerIncrement = 1, this.timePickerSeconds = !1, this.linkedCalendars = !0, this.autoUpdateInput = !0, this.alwaysShowCalendars = !1, this.ranges = {}, this.opens = "right", this.element.hasClass("pull-right") && (this.opens = "left"), this.drops = "down", this.element.hasClass("dropup") && (this.drops = "up"), this.buttonClasses = "btn btn-sm", this.applyButtonClasses = "btn-primary", this.cancelButtonClasses = "btn-default", this.locale = {
+        if (this.parentEl = "body", this.element = e(a), this.startDate = t().startOf("day"), this.endDate = t().endOf("day"), this.minDate = !1, this.maxDate = !1, this.maxSpan = !1, this.autoApply = !1, this.singleDatePicker = !1, this.showDropdowns = !1, this.minYear = t().subtract(100, "year").format("YYYY"), this.maxYear = t().add(100, "year").format("YYYY"), this.showWeekNumbers = !1, this.showISOWeekNumbers = !1, this.showCustomRangeLabel = !0, this.timePicker = !1, this.timePicker24Hour = !1, this.timePickerIncrement = 1, this.timePickerSeconds = !1, this.linkedCalendars = !0, this.autoUpdateInput = !0, this.alwaysShowCalendars = !1, this.ranges = {}, this.opens = "right", this.element.hasClass("pull-right") && (this.opens = "left"), this.drops = "down", this.element.hasClass("dropup") && (this.drops = "up"), this.buttonClasses = "btn btn-sm", this.applyButtonClasses = "btn-primary", this.cancelButtonClasses = "btn-default", 
+        
+        // Определяем текущий язык и используем соответствующие переводы
+        this.currentLang = getCurrentLanguage(), 
+        this.translations = localeTranslations[this.currentLang] || localeTranslations['en'],
+        
+        this.locale = {
                 direction: "ltr",
                 format: t.localeData().longDateFormat("L"),
                 separator: " - ",
-                applyLabel: "Apply",
-                cancelLabel: "Cancel",
-                weekLabel: "W",
-                customRangeLabel: "Custom Range",
-                daysOfWeek: t.weekdaysMin(),
-                monthNames: t.monthsShort(),
+                applyLabel: this.translations.applyLabel,
+                cancelLabel: this.translations.cancelLabel,
+                weekLabel: this.translations.weekLabel,
+                customRangeLabel: this.translations.customRangeLabel,
+                daysOfWeek: this.translations.daysOfWeek,
+                monthNames: this.translations.monthNames,
                 firstDay: t.localeData().firstDayOfWeek()
             }, this.callback = function() {}, this.isShowing = !1, this.leftCalendar = {}, this.rightCalendar = {}, "object" == typeof i && null !== i || (i = {}), "string" == typeof(i = e.extend(this.element.data(), i)).template || i.template instanceof e || (i.template = '<div class="daterangepicker"><div class="ranges"></div><div class="drp-calendar left"><div class="calendar-table"></div><div class="calendar-time"></div></div><div class="drp-calendar right"><div class="calendar-table"></div><div class="calendar-time"></div></div><div class="drp-buttons"><span class="drp-selected"></span><button class="cancelBtn" type="button"></button><button class="applyBtn" disabled="disabled" type="button"></button> </div></div>'), this.parentEl = i.parentEl && e(i.parentEl).length ? e(i.parentEl) : e(this.parentEl), this.container = e(i.template).appendTo(this.parentEl), "object" == typeof i.locale && ("string" == typeof i.locale.direction && (this.locale.direction = i.locale.direction), "string" == typeof i.locale.format && (this.locale.format = i.locale.format), "string" == typeof i.locale.separator && (this.locale.separator = i.locale.separator), "object" == typeof i.locale.daysOfWeek && (this.locale.daysOfWeek = i.locale.daysOfWeek.slice()), "object" == typeof i.locale.monthNames && (this.locale.monthNames = i.locale.monthNames.slice()), "number" == typeof i.locale.firstDay && (this.locale.firstDay = i.locale.firstDay), "string" == typeof i.locale.applyLabel && (this.locale.applyLabel = i.locale.applyLabel), "string" == typeof i.locale.cancelLabel && (this.locale.cancelLabel = i.locale.cancelLabel), "string" == typeof i.locale.weekLabel && (this.locale.weekLabel = i.locale.weekLabel), "string" == typeof i.locale.customRangeLabel)) {
             (f = document.createElement("textarea")).innerHTML = i.locale.customRangeLabel;
