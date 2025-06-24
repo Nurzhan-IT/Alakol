@@ -120,6 +120,7 @@ class UserConsent(models.Model):
         ('marketing', 'Маркетинговые коммуникации'),
         ('booking_terms', 'Условия бронирования'),
         ('payment_terms', 'Условия оплаты'),
+        ('hotel_owner_agreement', 'Соглашение с владельцами отелей'),
     )
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
