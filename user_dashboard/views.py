@@ -113,7 +113,7 @@ def notification_mark_as_seen(request):
     notification.seen = True
     notification.save(update_fields=['seen'])
     
-    return JsonResponse({"data": "Marked As Seen"})
+    return JsonResponse({"data": _("Marked As Seen")})
 
 @login_required
 def wallet(request):
@@ -167,12 +167,12 @@ def add_to_bookmark(request):
         try:
             bookmark = Bookmark.objects.get(user=request.user, hotel=hotel)
             bookmark.delete()
-            return JsonResponse({"data": "Bookmark Deleted", "icon": "success"})
+            return JsonResponse({"data": _("Bookmark Deleted"), "icon": "success"})
         except Bookmark.DoesNotExist:
             Bookmark.objects.create(user=request.user, hotel=hotel)
-            return JsonResponse({"data": "Hotel Bookmarked", "icon": "success"})
+            return JsonResponse({"data": _("Hotel Bookmarked"), "icon": "success"})
     else:
-        return JsonResponse({"data": "Login To Bookmark Hotel", "icon": "warning"})
+        return JsonResponse({"data": _("Login To Bookmark Hotel"), "icon": "warning"})
 
 @login_required
 def profile(request):
@@ -213,7 +213,7 @@ def add_review(request):
     review_exists = Review.objects.filter(user=request.user, hotel=hotel).exists()
     
     if review_exists:
-        return JsonResponse({"data": "Review Already Exists", "icon": "warning"})
+        return JsonResponse({"data": _("Review Already Exists"), "icon": "warning"})
     else:
         Review.objects.create(
             user=request.user,
@@ -221,5 +221,5 @@ def add_review(request):
             hotel=hotel,
             review=review_text
         )
-        return JsonResponse({"data": "Review Submitted, Thank You.", "icon": "success"})
+        return JsonResponse({"data": _("Review Submitted, Thank You"), "icon": "success"})
     

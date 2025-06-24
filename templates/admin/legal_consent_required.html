@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Требуется согласие с соглашением - Alakol Admin</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/login.css">
+    <style>
+        .legal-consent-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .agreement-content {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 20px 0;
+            background-color: #f9f9f9;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .agreement-content h1 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .agreement-content h2 {
+            font-size: 16px;
+            color: #555;
+            margin: 15px 0 10px 0;
+        }
+        
+        .agreement-content p {
+            margin-bottom: 10px;
+        }
+        
+        .agreement-content ul {
+            margin: 10px 0 10px 20px;
+        }
+        
+        .agreement-content li {
+            margin-bottom: 5px;
+        }
+        
+        .consent-form {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+        
+        .consent-checkbox {
+            margin: 15px 0;
+        }
+        
+        .consent-checkbox label {
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .consent-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .error-message {
+            background-color: #ffeaa7;
+            border: 1px solid #fdcb6e;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            color: #2d3436;
+        }
+        
+        .submit-button {
+            background-color: #417690;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        
+        .submit-button:hover {
+            background-color: #205067;
+        }
+        
+        .submit-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .document-info {
+            background-color: #e8f4fd;
+            border: 1px solid #bee5eb;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .admin-header {
+            background-color: #417690;
+            color: white;
+            padding: 15px;
+            margin: -20px -20px 20px -20px;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .admin-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="legal-consent-container">
+        <div class="admin-header">
+            <h1>Административная панель Alakol</h1>
+            <p>Требуется согласие с соглашением</p>
+        </div>
+        
+        {% if error_message %}
+            <div class="error-message">
+                {{ error_message }}
+            </div>
+        {% endif %}
+        
+        <div class="document-info">
+            <strong>Документ:</strong> Соглашение с владельцами отелей<br>
+            <strong>Версия:</strong> {{ document_version|default:"1.0" }}<br>
+            <strong>Дата обновления:</strong> {{ agreement_context.last_updated|default:"19 июня 2025" }}
+        </div>
+        
+        <p>
+            Для доступа к административной панели необходимо ознакомиться и согласиться 
+            с актуальной версией <strong>Соглашения с владельцами отелей</strong>.
+        </p>
+        
+        <div class="agreement-content">
+            <h1>СОГЛАШЕНИЕ О СОТРУДНИЧЕСТВЕ С ПЛАТФОРМОЙ БРОНИРОВАНИЯ ОТЕЛЕЙ "ALAKOL BOOKING SYSTEM"</h1>
+            
+            <div class="document-meta">
+                <p><strong>Дата:</strong> 19 июня 2025 года</p>
+                <p><strong>Место:</strong> Алматы, Республика Казахстан</p>
+            </div>
+
+            <h2>1. ОБЩИЕ ПОЛОЖЕНИЯ</h2>
+            
+            <p><strong>1.1.</strong> Настоящее Соглашение регулирует отношения между Платформой бронирования отелей "Alakol Booking System" (далее - "Платформа") и владельцами гостиничных объектов размещения (далее - "Отель", "Партнер").</p>
+            
+            <p><strong>1.2.</strong> Реквизиты Платформы:</p>
+            <ul>
+                <li>Наименование: ТОО "Alakol Booking Ltd"</li>
+                <li>БИН: 123456789012 (предполагаемый)</li>
+                <li>Адрес: г. Алматы, Республика Казахстан</li>
+                <li>Email: support@alakol-booking.kz</li>
+                <li>Телефон: +7 (727) XXX-XX-XX</li>
+                <li><strong>Оператор персональных данных:</strong> ИП [Название ИП], БИН: [БИН]</li>
+            </ul>
+            
+            <p><strong>1.3.</strong> Платформа выступает в качестве посредника между Отелями и клиентами, обеспечивая технологическую инфраструктуру для бронирования номеров.</p>
+            
+            <p><strong>1.4.</strong> Данное Соглашение является публичной офертой в соответствии со статьей 395 Гражданского кодекса Республики Казахстан.</p>
+            
+            <h2>2. ПРЕДМЕТ СОГЛАШЕНИЯ</h2>
+            
+            <p><strong>2.1.</strong> Платформа предоставляет Отелю доступ к системе управления бронированием eKol (Hotel Management System), включающей:</p>
+            <ul>
+                <li>Веб-интерфейс для размещения информации об отеле</li>
+                <li>Систему онлайн-бронирования номеров</li>
+                <li>Интеграцию с платежной системой Robokassa</li>
+                <li>Многоязычную поддержку (казахский, русский, английский языки)</li>
+                <li>Систему уведомлений и отчетности</li>
+            </ul>
+            
+            <p>Полный текст соглашения доступен по ссылке: <a href="/legal/hotel-owner-agreement/" target="_blank">Соглашение с владельцами отелей</a></p>
+        </div>
+        
+        <form method="post" class="consent-form">
+            {% csrf_token %}
+            
+            <div class="consent-checkbox">
+                <label>
+                    <input type="checkbox" name="legal_consent_agreed" id="consent_checkbox" required>
+                    Я прочитал(а), понимаю и соглашаюсь с условиями <strong>Соглашения с владельцами отелей</strong> версии {{ document_version|default:"1.0" }}
+                </label>
+            </div>
+            
+            <div>
+                <button type="submit" class="submit-button" id="submit_button" disabled>
+                    Согласиться и войти в админ-панель
+                </button>
+            </div>
+            
+            <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                <strong>Примечание:</strong> Согласие записывается в системе с указанием даты, времени и версии документа. 
+                При обновлении соглашения потребуется повторное согласие.
+            </p>
+        </form>
+    </div>
+    
+    <script>
+        // Активируем кнопку только при установке чекбокса
+        document.getElementById('consent_checkbox').addEventListener('change', function() {
+            document.getElementById('submit_button').disabled = !this.checked;
+        });
+    </script>
+</body>
+</html> 
