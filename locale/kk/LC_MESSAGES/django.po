@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-23 15:23+0500\n"
+"POT-Creation-Date: 2025-06-24 16:19+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -788,11 +788,11 @@ msgstr "Жиі қойылатын сұрақтар"
 msgid "Not Rated Yet"
 msgstr "Әлі бағаланған жоқ"
 
-#: .\templates\hotel\hotel_detail.html:582
+#: .\templates\hotel\hotel_detail.html:583
 msgid "Room size"
 msgstr "Бөлме өлшемі"
 
-#: .\templates\hotel\hotel_detail.html:608
+#: .\templates\hotel\hotel_detail.html:609
 msgid "Close"
 msgstr "Жабық"
 
