@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 23:41+0500\n"
+"POT-Creation-Date: 2025-06-24 16:17+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -794,11 +794,11 @@ msgstr "Часто задаваемые вопросы"
 msgid "Not Rated Yet"
 msgstr "Еще не оценен"
 
-#: .\templates\hotel\hotel_detail.html:582
+#: .\templates\hotel\hotel_detail.html:583
 msgid "Room size"
 msgstr "Площадь номера"
 
-#: .\templates\hotel\hotel_detail.html:608
+#: .\templates\hotel\hotel_detail.html:609
 msgid "Close"
 msgstr "Закрыть"
 
@@ -1549,7 +1549,7 @@ msgstr "Для продолжения примите все необходимы
 #: .\templates\partials\legal_consent_component.html:99
 #, python-format
 msgid "including the 10%% prepayment policy and non-refundable terms"
-msgstr "включая 10%-ную предоплату и условия невозврата денег"
+msgstr "включая 10%%-ную предоплату и условия невозврата денег"
 
 #: .\templates\partials\legal_consent_component.html:152
 msgid "Please review our legal documents:"
