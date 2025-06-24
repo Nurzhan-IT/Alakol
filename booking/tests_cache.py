@@ -221,15 +221,19 @@ class BookingCacheTest(TestCase):
     
     def test_cache_ttl_settings(self):
         """Тест настроек TTL для кэша booking."""
-        # Проверяем, что настройки TTL существуют
-        self.assertIn('booking_availability_check', settings.CACHE_TTL)
+        # Проверяем, что активные настройки TTL существуют
         self.assertIn('room_unavailability', settings.CACHE_TTL)
-        self.assertIn('booking_session_data', settings.CACHE_TTL)
         
         # Проверяем, что значения разумные
-        self.assertGreater(settings.CACHE_TTL['booking_availability_check'], 0)
         self.assertGreater(settings.CACHE_TTL['room_unavailability'], 0)
-        self.assertGreater(settings.CACHE_TTL['booking_session_data'], 0)
+        
+        # Проверяем, что отключенные настройки действительно отключены
+        # (эти настройки закомментированы для обеспечения данных реального времени)
+        self.assertNotIn('booking_availability_check', settings.CACHE_TTL)
+        self.assertNotIn('booking_session_data', settings.CACHE_TTL)
+        self.assertNotIn('booking_data', settings.CACHE_TTL)
+        self.assertNotIn('user_bookings', settings.CACHE_TTL)
+        self.assertNotIn('dynamic_pricing', settings.CACHE_TTL)
     
     def tearDown(self):
         """Очистка после каждого теста."""

@@ -244,37 +244,68 @@
     document.addEventListener('DOMContentLoaded', function() {
         const checkInDate = document.getElementById('check_in_date');
         const checkOutDate = document.getElementById('check_out_date');
+        
+        // Устанавливаем минимальную дату для check-in как сегодня
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const minDate = `${year}-${month}-${day}`;
+        
+        checkInDate.min = minDate;
+        
+        // Устанавливаем минимальную дату для check-out как завтра
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowYear = tomorrow.getFullYear();
+        const tomorrowMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        const tomorrowDay = String(tomorrow.getDate()).padStart(2, '0');
+        const minCheckoutDate = `${tomorrowYear}-${tomorrowMonth}-${tomorrowDay}`;
+        
+        checkOutDate.min = minCheckoutDate;
+        
+        // Устанавливаем значения по умолчанию, если поля пустые
+        if (!checkInDate.value) {
+            checkInDate.value = minDate;
+        }
+        if (!checkOutDate.value) {
+            checkOutDate.value = minCheckoutDate;
+        }
 
         // При изменении даты заезда, обновляем минимальную дату выезда
         checkInDate.addEventListener('change', function() {
             if (checkInDate.value) {
-                const nextDay = new Date(checkInDate.value);
+                const checkinDate = new Date(checkInDate.value);
+                const nextDay = new Date(checkinDate);
                 nextDay.setDate(nextDay.getDate() + 1);
 
                 // Форматируем дату как YYYY-MM-DD для input type="date"
-                const year = nextDay.getFullYear();
-                const month = String(nextDay.getMonth() + 1).padStart(2, '0');
-                const day = String(nextDay.getDate()).padStart(2, '0');
+                const nextDayYear = nextDay.getFullYear();
+                const nextDayMonth = String(nextDay.getMonth() + 1).padStart(2, '0');
+                const nextDayDay = String(nextDay.getDate()).padStart(2, '0');
+                const nextDayFormatted = `${nextDayYear}-${nextDayMonth}-${nextDayDay}`;
 
-                checkOutDate.min = `${year}-${month}-${day}`;
+                checkOutDate.min = nextDayFormatted;
 
-                // Если текущая дата выезда раньше даты заезда, сбрасываем её
-                if (checkOutDate.value && new Date(checkOutDate.value) <= new Date(checkInDate.value)) {
-                    checkOutDate.value = `${year}-${month}-${day}`;
+                // Если текущая дата выезда раньше новой минимальной даты
+                if (new Date(checkOutDate.value) < nextDay) {
+                    checkOutDate.value = nextDayFormatted;
                 }
             }
         });
 
-        // Проверка при загрузке страницы
+        // Проверка при загрузке страницы для существующих значений
         if (checkInDate.value) {
-            const nextDay = new Date(checkInDate.value);
+            const checkinDate = new Date(checkInDate.value);
+            const nextDay = new Date(checkinDate);
             nextDay.setDate(nextDay.getDate() + 1);
 
-            const year = nextDay.getFullYear();
-            const month = String(nextDay.getMonth() + 1).padStart(2, '0');
-            const day = String(nextDay.getDate()).padStart(2, '0');
+            const nextDayYear = nextDay.getFullYear();
+            const nextDayMonth = String(nextDay.getMonth() + 1).padStart(2, '0');
+            const nextDayDay = String(nextDay.getDate()).padStart(2, '0');
+            const nextDayFormatted = `${nextDayYear}-${nextDayMonth}-${nextDayDay}`;
 
-            checkOutDate.min = `${year}-${month}-${day}`;
+            checkOutDate.min = nextDayFormatted;
         }
     });
 </script>

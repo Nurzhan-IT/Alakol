@@ -300,7 +300,7 @@ def add_to_selection(request):
             # Возвращаем сообщение с предложением очистить корзину
             return JsonResponse({
                 "error": True,
-                "message": "Вы можете бронировать номера только из одного отеля. Хотите очистить данные о уже выбранных номерах?",
+                "message": _("You can only book rooms from one hotel. Do you want to clear data about already selected rooms?"),
                 "hotel_id": current_hotel_id
             })
     

@@ -769,14 +769,14 @@ def check_session_data(request):
             logger.error(f"Session validation failed: {error_msg}")
             return JsonResponse({
                 'success': False,
-                'error': error_msg
+                'error': _("Missing session data: %(keys)s") % {'keys': ', '.join(missing_keys)}
             })
         
         # Проверяем содержимое selection_data_obj
         if not request.session['selection_data_obj']:
             return JsonResponse({
                 'success': False,
-                'error': 'Нет выбранных номеров для бронирования'
+                'error': _('No selected rooms for booking')
             })
         
         # Проверяем обязательные поля в user_data
@@ -791,7 +791,7 @@ def check_session_data(request):
         if missing_user_fields:
             return JsonResponse({
                 'success': False,
-                'error': f'Отсутствуют данные пользователя: {", ".join(missing_user_fields)}'
+                'error': _('Missing user data: %(fields)s') % {'fields': ', '.join(missing_user_fields)}
             })
         
         # Проверяем booking_common_data
@@ -806,7 +806,7 @@ def check_session_data(request):
         if missing_booking_fields:
             return JsonResponse({
                 'success': False,
-                'error': f'Отсутствуют данные бронирования: {", ".join(missing_booking_fields)}'
+                'error': _('Missing booking data: %(fields)s') % {'fields': ', '.join(missing_booking_fields)}
             })
         
         # Дополнительная проверка дат
@@ -818,7 +818,7 @@ def check_session_data(request):
             if checkin_date >= checkout_date:
                 return JsonResponse({
                     'success': False,
-                    'error': 'Дата заезда должна быть раньше даты выезда'
+                    'error': _('Check-in date must be earlier than check-out date')
                 })
             
             # Проверяем, что даты не в прошлом
@@ -827,13 +827,13 @@ def check_session_data(request):
             if checkin_date < today:
                 return JsonResponse({
                     'success': False,
-                    'error': 'Дата заезда не может быть в прошлом'
+                    'error': _('Check-in date cannot be in the past')
                 })
                 
         except ValueError as e:
             return JsonResponse({
                 'success': False,
-                'error': f'Некорректный формат дат: {str(e)}'
+                'error': _('Invalid date format: %(error)s') % {'error': str(e)}
             })
         
         # Проверяем существование номеров и отеля
@@ -843,7 +843,7 @@ def check_session_data(request):
                 if not all(key in item for key in ['hotel_id', 'room_id', 'room_type']):
                     return JsonResponse({
                         'success': False,
-                        'error': f'Некорректные данные номера {h_id}'
+                        'error': _('Invalid room data: %(room_id)s') % {'room_id': h_id}
                     })
                 
                 # Проверяем существование отеля
@@ -851,7 +851,7 @@ def check_session_data(request):
                 if not Hotel.objects.filter(id=hotel_id, status='Live').exists():
                     return JsonResponse({
                         'success': False,
-                        'error': f'Отель с ID {hotel_id} не найден или не активен'
+                        'error': _('Hotel with ID %(hotel_id)s not found or not active') % {'hotel_id': hotel_id}
                     })
                 
                 # Проверяем существование номера
@@ -859,7 +859,7 @@ def check_session_data(request):
                 if not Room.objects.filter(id=room_id).exists():
                     return JsonResponse({
                         'success': False,
-                        'error': f'Номер с ID {room_id} не найден'
+                        'error': _('Room with ID %(room_id)s not found') % {'room_id': room_id}
                     })
                 
                 # Проверяем существование типа номера
@@ -867,26 +867,26 @@ def check_session_data(request):
                 if not RoomType.objects.filter(id=room_type_id).exists():
                     return JsonResponse({
                         'success': False,
-                        'error': f'Тип номера с ID {room_type_id} не найден'
+                        'error': _('Room type with ID %(room_type_id)s not found') % {'room_type_id': room_type_id}
                     })
         
         except (ValueError, TypeError, KeyError) as e:
             return JsonResponse({
                 'success': False,
-                'error': f'Ошибка в данных номеров: {str(e)}'
+                'error': _('Error in room data: %(error)s') % {'error': str(e)}
             })
         
         logger.info("Session data validation successful")
         return JsonResponse({
             'success': True,
-            'message': 'Данные сессии корректны'
+            'message': _('Session data is valid')
         })
         
     except Exception as e:
         logger.error(f"Session validation error: {str(e)}")
         return JsonResponse({
             'success': False,
-            'error': f'Внутренняя ошибка проверки: {str(e)}'
+            'error': _('Internal validation error: %(error)s') % {'error': str(e)}
         })
 
 def process_booking(request):

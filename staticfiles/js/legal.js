@@ -55,16 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 
                 // Show alert in multiple languages
-                const language = document.documentElement.lang || 'en';
-                let message = 'Please confirm all required consents';
-                
-                if (language === 'ru') {
-                    message = 'Пожалуйста, подтвердите все обязательные согласия';
-                } else if (language === 'kk') {
-                    message = 'Барлық міндетті келісімдерді растаңыз';
-                }
-                
-                alert(message);
+                alert(gettext('Please confirm all required consents'));
                 
                 // Focus on first unchecked checkbox
                 if (firstUnchecked) {
@@ -153,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const legalDocument = document.querySelector('.legal-document');
     if (legalDocument && !document.querySelector('.print-button')) {
         const printButton = document.createElement('button');
-        printButton.innerHTML = '🖨️ Print Document';
+        printButton.innerHTML = '🖨️ ' + gettext('Print Document');
         printButton.className = 'btn btn-outline-secondary print-button';
         printButton.style.cssText = 'margin-bottom: 20px; padding: 10px 20px; border: 1px solid #6c757d; background: none; cursor: pointer;';
         printButton.addEventListener('click', printDocument);
@@ -240,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 
                 if (progressText) {
-                    progressText.textContent = `${checkedCount}/${totalCount} consents confirmed`;
+                    progressText.textContent = `${checkedCount}/${totalCount} ${gettext('consents confirmed')}`;
                 }
             }
         }
