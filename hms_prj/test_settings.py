@@ -7,6 +7,48 @@ from .production_settings import *
 DEBUG = False
 TEMPLATE_DEBUG = False
 
+# Упрощенный INSTALLED_APPS для тестирования (убираем зависимости, которых нет в test.txt)
+INSTALLED_APPS = [
+    'jazzmin',
+
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
+
+    # Custom Apps
+    'hotel',
+    'booking',
+    'addon',
+    'userauths',
+    'user_dashboard',
+    'search',
+    'robokassa',
+    'legal',
+
+    # Third Party Apps (только те, что есть в base.txt)
+    'import_export',
+    'crispy_forms',
+    'mathfilters',
+    'ckeditor',
+    'ckeditor_uploader',
+    'django_ckeditor_5',
+    'taggit',
+    # 'anymail',  # Убираем для тестов - нет в base.txt
+    'geoip2',   # Оставляем - есть в base.txt
+    'django_user_agents',
+    # 'storages', # Убираем для тестов - нет в base.txt
+    'channels',
+    'multiupload',
+    'modeltranslation',
+    'django.contrib.humanize',
+    'django_crontab',
+    'clearcache',
+]
+
 # Используем in-memory базу данных для скорости
 DATABASES = {
     'default': {
