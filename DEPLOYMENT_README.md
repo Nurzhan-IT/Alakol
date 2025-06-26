@@ -18,7 +18,7 @@
 ssh root@your-server-ip
 
 # Скачайте и запустите скрипт настройки
-wget https://raw.githubusercontent.com/your-username/alakol-hms/main/scripts/server_setup.sh
+wget https://raw.githubusercontent.com/12farit21/Alakol/main/scripts/server_setup.sh
 chmod +x server_setup.sh
 sudo ./server_setup.sh
 ```
@@ -49,7 +49,7 @@ ssh deploy@your-server-ip
 cd /opt/alakol-hms
 
 # Клонируйте репозиторий
-git clone https://github.com/your-username/alakol-hms.git .
+git clone https://github.com/12farit21/Alakol.git .
 ```
 
 ### 4. Настройка переменных окружения
@@ -69,7 +69,7 @@ python3 -c "import secrets; print(secrets.token_urlsafe(50))"
 
 # Вставьте в .env.prod
 SECRET_KEY=generated_secret_key_here
-DOMAIN_NAME=your-domain.com
+DOMAIN_NAME=ekol.kz
 
 # Настройте базу данных
 DB_NAME=alakol_hms_prod
@@ -103,7 +103,7 @@ sudo nano /opt/alakol-hms/nginx/nginx.conf
 sudo systemctl restart nginx
 
 # Получите SSL сертификат
-sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+sudo certbot --nginx -d ekol.kz -d www.ekol.kz
 ```
 
 ## 🔧 Конфигурационные файлы
@@ -131,7 +131,7 @@ sudo certbot --nginx -d your-domain.com -d www.your-domain.com
 HOST=your-server-ip
 SSH_USER=deploy
 DEPLOY_PATH=/opt/alakol-hms
-DOMAIN_NAME=your-domain.com
+DOMAIN_NAME=ekol.kz
 SSH_PRIVATE_KEY=содержимое_приватного_ключа
 ```
 
@@ -305,8 +305,8 @@ git pull origin main
 
 ## 🎉 Готово!
 
-После выполнения всех шагов ваш сайт будет доступен по адресу `https://your-domain.com`
+После выполнения всех шагов ваш сайт будет доступен по адресу `https://ekol.kz`
 
-- **Админка**: `https://your-domain.com/admin/`
-- **API здоровья**: `https://your-domain.com/health/`
-- **Готовность**: `https://your-domain.com/ready/` 
+- **Админка**: `https://ekol.kz/admin/`
+- **API здоровья**: `https://ekol.kz/health/`
+- **Готовность**: `https://ekol.kz/ready/` 
