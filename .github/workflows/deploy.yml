@@ -1,0 +1,194 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Тестирование
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: Install dependencies  
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Create logs directory
+      run: mkdir -p logs
+    
+    - name: Run Django checks
+      env:
+        SECRET_KEY: test-secret-key-for-ci
+        DB_NAME: test_db
+        DB_USER: postgres
+        DB_PASSWORD: postgres
+        DB_HOST: localhost
+        DB_PORT: 5432
+        REDIS_URL: redis://localhost:6379/1
+      run: |
+        python manage.py check --settings=hms_prj.production_settings
+    
+    - name: Run tests
+      env:
+        SECRET_KEY: test-secret-key-for-ci
+        DB_NAME: test_db
+        DB_USER: postgres
+        DB_PASSWORD: postgres
+        DB_HOST: localhost
+        DB_PORT: 5432
+        REDIS_URL: redis://localhost:6379/1
+      run: |
+        python manage.py test --settings=hms_prj.production_settings --verbosity=2
+
+  deploy:
+    name: Деплой в продакшн
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    
+    - name: Add server to known hosts
+      run: |
+        ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+    
+    - name: Deploy to server
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.HOST }} << 'EOF'
+          set -e
+          
+          echo "🚀 Начинаем деплой Alakol HMS..."
+          
+          # Переходим в директорию проекта
+          cd ${{ secrets.DEPLOY_PATH }}
+          
+          # Создаем резервную копию текущей версии
+          echo "📦 Создаем резервную копию..."
+          cp docker-compose.prod.yml docker-compose.backup.yml || true
+          
+          # Обновляем код
+          echo "📥 Обновляем код..."
+          git fetch origin
+          git pull origin main
+          
+          # Проверяем что все необходимые файлы на месте
+          if [ ! -f ".env.prod" ]; then
+            echo "❌ Файл .env.prod не найден!"
+            exit 1
+          fi
+          
+          # Создаем директории если их нет
+          mkdir -p logs backups
+          
+          # Останавливаем текущие контейнеры
+          echo "🔄 Останавливаем текущие контейнеры..."
+          docker-compose -f docker-compose.prod.yml down || true
+          
+          # Очищаем старые образы
+          echo "🧹 Очищаем старые образы..."
+          docker system prune -f
+          
+          # Собираем новые образы
+          echo "🔨 Собираем новые образы..."
+          docker-compose -f docker-compose.prod.yml build --no-cache
+          
+          # Запускаем сервисы
+          echo "🚀 Запускаем сервисы..."
+          docker-compose -f docker-compose.prod.yml up -d
+          
+          # Ждем запуска
+          echo "⏳ Ждем запуска сервисов..."
+          sleep 60
+          
+          # Проверяем работоспособность
+          echo "🏥 Проверяем работоспособность..."
+          
+          # Проверяем что контейнеры работают
+          if ! docker-compose -f docker-compose.prod.yml ps | grep -q "Up"; then
+            echo "❌ Контейнеры не запустились!"
+            echo "Логи:"
+            docker-compose -f docker-compose.prod.yml logs --tail=50
+            exit 1
+          fi
+          
+          # Проверяем health check
+          if ! curl -f http://localhost:8000/health/ > /dev/null 2>&1; then
+            echo "❌ Health check не прошел!"
+            echo "Логи web сервиса:"
+            docker-compose -f docker-compose.prod.yml logs web --tail=50
+            
+            # Откатываем изменения
+            echo "🔄 Откатываем изменения..."
+            docker-compose -f docker-compose.prod.yml down
+            if [ -f "docker-compose.backup.yml" ]; then
+              mv docker-compose.backup.yml docker-compose.prod.yml
+              docker-compose -f docker-compose.prod.yml up -d
+            fi
+            exit 1
+          fi
+          
+          # Успешное завершение
+          echo "✅ Деплой завершен успешно!"
+          echo "🌐 Сайт доступен по адресу: https://${{ secrets.DOMAIN_NAME }}"
+          
+          # Показываем статус сервисов
+          echo "📊 Статус сервисов:"
+          docker-compose -f docker-compose.prod.yml ps
+          
+          # Удаляем резервную копию
+          rm -f docker-compose.backup.yml
+          
+        EOF
+    
+    - name: Notify deployment result
+      if: always()
+      run: |
+        if [ "${{ job.status }}" == "success" ]; then
+          echo "✅ Деплой успешно завершен!"
+        else
+          echo "❌ Деплой завершился с ошибкой!"
+        fi 
