@@ -2,10 +2,12 @@ from django.contrib import admin
 from .models import RoomUnavailability
 from django.core.exceptions import ValidationError
 from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 from hotel.models import Room, Hotel, RoomType
-from hotel.admin import custom_admin_site
+from hotel.admin import custom_admin_site, RussianModelAdminMixin
+
 class RoomFilter(admin.SimpleListFilter):
-    title = 'Room'
+    title = 'Номер'
     parameter_name = 'room'
 
     def lookups(self, request, model_admin):
@@ -22,7 +24,7 @@ class RoomFilter(admin.SimpleListFilter):
         return queryset
 
 class RoomTypeFilter(admin.SimpleListFilter):
-    title = 'Room Type'
+    title = 'Тип номера'
     parameter_name = 'room_type'
 
     def lookups(self, request, model_admin):
@@ -39,10 +41,24 @@ class RoomTypeFilter(admin.SimpleListFilter):
         return queryset
 
 # @admin.register(RoomUnavailability)
-class RoomUnavailabilityAdmin(admin.ModelAdmin):
-    list_display = ('room', 'start_date', 'end_date', 'reason', 'created_at')
+class RoomUnavailabilityAdmin(RussianModelAdminMixin, admin.ModelAdmin):
+    list_display = ('get_room', 'start_date', 'end_date', 'reason', 'created_at')
     list_filter = (RoomFilter, RoomTypeFilter)  # Добавляем RoomTypeFilter
     # date_hierarchy = 'start_date'
+
+    def _setup_russian_verbose_names(self):
+        """Устанавливает русские названия для модели"""
+        self.model._meta.verbose_name = 'Недоступность номера'
+        self.model._meta.verbose_name_plural = 'Недоступность номеров'
+
+    def get_room(self, obj):
+        """Отображает только название типа номера"""
+        if obj.room:
+            return f"{obj.room.room_type.type} - № {obj.room.room_number}"
+        return None
+    
+    get_room.short_description = 'Номер'
+    get_room.admin_order_field = 'room__room_number'
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)

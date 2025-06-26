@@ -1,0 +1,2744 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-18 10:31+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: .\templates\admin\input_filter.html:21
+#: .\templates\admin\input_filter.html:41
+msgctxt "admin"
+msgid "Filter"
+msgstr "Фильтр"
+
+#: .\templates\admin\input_filter.html:47
+msgctxt "admin"
+msgid "Remove"
+msgstr "Удалить"
+
+#: .\templates\booking\booking_data.html:9
+msgid "Select Booking Data"
+msgstr "Заполните данные для бронирования"
+
+#: .\templates\booking\booking_data.html:22
+#: .\templates\hotel\hotel_detail.html:45
+#: .\templates\hotel\hotel_detail.html:264
+#: .\templates\hotel\room_type_detail.html:189
+#: .\templates\partials\dashboard_base.html:102
+#: .\templates\partials\dashboard_base.html:148
+#: .\templates\user_dashboard\dashboard.html:48
+msgid "Booking"
+msgstr "Бронирование"
+
+#: .\templates\booking\booking_data.html:27
+#: .\templates\hotel\hotel_detail.html:269
+#: .\templates\hotel\payment_method_selection.html:150
+#: .\templates\hotel\room_type_detail.html:194
+#: .\templates\search\search_results.html:26
+msgid "Check-in Date"
+msgstr "Дата заезда"
+
+#: .\templates\booking\booking_data.html:28
+#: .\templates\booking\booking_data.html:32
+msgid "Select Date"
+msgstr "Выбрать дату"
+
+#: .\templates\booking\booking_data.html:31
+#: .\templates\hotel\hotel_detail.html:273
+#: .\templates\hotel\payment_method_selection.html:151
+#: .\templates\hotel\room_type_detail.html:198
+#: .\templates\search\search_results.html:30
+msgid "Check-out Date"
+msgstr "Дата выезда"
+
+#: .\templates\booking\booking_data.html:36 .\templates\hotel\index.html:31
+#: .\templates\hotel\room_type_detail.html:203
+msgid "Guests"
+msgstr "Гости"
+
+#: .\templates\booking\booking_data.html:39
+#: .\templates\email\booking_completed.html:519
+#: .\templates\hotel\async\selected_rooms.html:162
+#: .\templates\hotel\checkout.html:93 .\templates\hotel\hotel_detail.html:281
+#: .\templates\hotel\payment_method_selection.html:153
+#: .\templates\hotel\room_type_detail.html:206
+#: .\templates\hotel\selected_rooms.html:153
+#: .\templates\user_dashboard\booking_detail.html:68
+#: .\templates\user_dashboard\booking_detail.html:70
+#: .\templates\user_dashboard\booking_detail.html:76
+#: .\templates\user_dashboard\bookings.html:61
+#: .\templates\user_dashboard\bookings.html:63
+#: .\templates\user_dashboard\bookings.html:69
+msgid "Adults"
+msgstr "Взрослые"
+
+#: .\templates\booking\booking_data.html:43
+#: .\templates\hotel\hotel_detail.html:285
+#: .\templates\hotel\room_type_detail.html:210
+msgid "Childrens"
+msgstr "Дети"
+
+#: .\templates\booking\booking_data.html:52
+#: .\templates\hotel\hotel_detail.html:293
+#: .\templates\hotel\room_type_detail.html:219
+msgid "Select Room Type"
+msgstr "Выберите тип номера"
+
+#: .\templates\booking\booking_data.html:54
+#: .\templates\hotel\hotel_detail.html:295
+msgid "Select Room"
+msgstr "Выберите номер"
+
+#: .\templates\booking\booking_data.html:62
+#: .\templates\hotel\hotel_detail.html:302
+#: .\templates\hotel\room_type_detail.html:231
+msgid "Check Availability"
+msgstr "Проверить свободные номера"
+
+#: .\templates\booking\booking_data.html:64
+msgid "Add to Wishlist"
+msgstr "Добавить в избранные"
+
+#: .\templates\email\booking_completed.html:144
+msgid "Hey"
+msgstr "Привет"
+
+#: .\templates\email\booking_completed.html:197
+msgid "Your booked order"
+msgstr "Ваш забронированный номер"
+
+#: .\templates\email\booking_completed.html:197
+msgid "has been successfully confirmed."
+msgstr "был успешно подтвержден."
+
+#: .\templates\email\booking_completed.html:273
+#: .\templates\hotel\async\selected_rooms.html:157
+#: .\templates\hotel\checkout.html:89
+#: .\templates\hotel\payment_method_selection.html:148
+#: .\templates\hotel\selected_rooms.html:148
+msgid "Booking Summary"
+msgstr "Краткое описание"
+
+#: .\templates\email\booking_completed.html:483
+#: .\templates\user_dashboard\booking_detail.html:50
+#: .\templates\user_dashboard\bookings.html:43
+msgid "Checkin Date"
+msgstr "Дата въезда"
+
+#: .\templates\email\booking_completed.html:495
+#: .\templates\user_dashboard\booking_detail.html:56
+#: .\templates\user_dashboard\bookings.html:49
+msgid "Checkout Date"
+msgstr "Дата выезда"
+
+#: .\templates\email\booking_completed.html:507
+#: .\templates\hotel\async\selected_rooms.html:161
+#: .\templates\hotel\payment_method_selection.html:152
+#: .\templates\hotel\selected_rooms.html:152
+#: .\templates\user_dashboard\booking_detail.html:62
+#: .\templates\user_dashboard\bookings.html:55
+msgid "Total Days"
+msgstr "Всего дней"
+
+#: .\templates\email\booking_completed.html:531
+#: .\templates\hotel\async\selected_rooms.html:163
+#: .\templates\hotel\checkout.html:94
+#: .\templates\hotel\payment_method_selection.html:154
+#: .\templates\hotel\selected_rooms.html:154
+#: .\templates\user_dashboard\booking_detail.html:74
+#: .\templates\user_dashboard\bookings.html:67
+msgid "Children"
+msgstr "Ребенок"
+
+#: .\templates\email\booking_completed.html:543
+msgid "Vat"
+msgstr "НДС"
+
+#: .\templates\email\booking_completed.html:555
+#: .\templates\hotel\checkout.html:99
+msgid "Discount"
+msgstr "Скидка"
+
+#: .\templates\email\booking_completed.html:567
+msgid "Total"
+msgstr "Итого"
+
+#: .\templates\email\booking_completed.html:666
+msgid "Hotel Details"
+msgstr "Информация об отеле"
+
+#: .\templates\email\booking_completed.html:668
+#: .\templates\search\search_results.html:92
+#: .\venv\Lib\site-packages\grappelli\templates\admin\constance\includes\results_list.html:8
+msgid "Name"
+msgstr "Имя"
+
+#: .\templates\email\booking_completed.html:670
+#: .\templates\user_dashboard\profile.html:59
+msgid "Address"
+msgstr "Адрес"
+
+#: .\templates\email\booking_completed.html:672
+#: .\templates\hotel\payment_method_selection.html:129
+#: .\templates\partials\base.html:184
+#: .\templates\user_dashboard\profile.html:39
+msgid "Email"
+msgstr "Электронная почта"
+
+#: .\templates\email\booking_completed.html:674
+#: .\templates\user_dashboard\profile.html:43
+msgid "Mobile"
+msgstr "Мобильный"
+
+#: .\templates\email\booking_completed.html:768
+msgid "Feel free to contact us if you have any questions!"
+msgstr ""
+"Не стесняйтесь обращаться к нам, если у вас возникнут какие-либо вопросы!"
+
+#: .\templates\email\booking_completed.html:770
+msgid "Sincerely"
+msgstr "Искренне"
+
+#: .\templates\email\booking_completed.html:775
+msgid "eKol Team"
+msgstr ""
+
+#: .\templates\email\booking_completed.html:840
+msgid "Terms"
+msgstr "Условия"
+
+#: .\templates\email\booking_completed.html:857
+msgid "Privacy"
+msgstr "Конфиденциальность"
+
+#: .\templates\email\booking_completed.html:874
+msgid "Preferences"
+msgstr "Предпочтения"
+
+#: .\templates\email\booking_completed.html:891
+msgid "Help center"
+msgstr "Справочный центр"
+
+#: .\templates\hotel\async\selected_rooms.html:38
+#: .\templates\hotel\checkout.html:12 .\templates\hotel\selected_rooms.html:23
+msgid "All Room Selections"
+msgstr "Все выбранные номера"
+
+#: .\templates\hotel\async\selected_rooms.html:41
+#: .\templates\hotel\checkout.html:15 .\templates\hotel\payment_failed.html:15
+#: .\venv\Lib\site-packages\grappelli\dashboard\templates\admin\index.html:25
+#: .\venv\Lib\site-packages\grappelli\templates\admin\500.html:9
+#: .\venv\Lib\site-packages\grappelli\templates\admin\app_index.html:11
+#: .\venv\Lib\site-packages\grappelli\templates\admin\auth\user\change_password.html:7
+#: .\venv\Lib\site-packages\grappelli\templates\admin\base.html:136
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_form.html:153
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list.html:141
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm.html:141
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm_sidebar.html:142
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_sidebar.html:142
+#: .\venv\Lib\site-packages\grappelli\templates\admin\constance\change_list.html:72
+#: .\venv\Lib\site-packages\grappelli\templates\admin\csv_export_selected_confirmation.html:9
+#: .\venv\Lib\site-packages\grappelli\templates\admin\delete_confirmation.html:13
+#: .\venv\Lib\site-packages\grappelli\templates\admin\delete_selected_confirmation.html:13
+#: .\venv\Lib\site-packages\grappelli\templates\admin\index.html:18
+#: .\venv\Lib\site-packages\grappelli\templates\admin\invalid_setup.html:9
+#: .\venv\Lib\site-packages\grappelli\templates\admin\object_history.html:9
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\bookmarklets.html:8
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\index.html:9
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\missing_docutils.html:8
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\model_detail.html:20
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\model_index.html:23
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\template_filter_index.html:25
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\template_tag_index.html:27
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\view_detail.html:7
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\view_index.html:23
+#: .\venv\Lib\site-packages\grappelli\templates\grp_doc\basic_page_structure.html:132
+#: .\venv\Lib\site-packages\grappelli\templates\grp_doc\context_navigation.html:55
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_change_done.html:6
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_change_form.html:6
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\recover_form.html:7
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\recover_list.html:6
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\revision_form.html:7
+#: .\venv\Lib\site-packages\grappelli\templates\smuggler\load_data_form.html:24
+msgid "Home"
+msgstr "На главную"
+
+#: .\templates\hotel\async\selected_rooms.html:42
+#: .\templates\hotel\checkout.html:16 .\templates\hotel\payment_failed.html:16
+#: .\templates\hotel\payment_method_selection.html:18
+#: .\templates\hotel\room_type_detail.html:28
+#: .\templates\hotel\selected_rooms.html:26
+#: .\templates\user_dashboard\bookings.html:37
+msgid "Hotel"
+msgstr "Отель"
+
+#: .\templates\hotel\async\selected_rooms.html:43
+#: .\templates\hotel\checkout.html:17 .\templates\hotel\hotel_detail.html:172
+#: .\templates\hotel\payment_method_selection.html:19
+#: .\templates\hotel\room_type_detail.html:29
+#: .\templates\hotel\selected_rooms.html:27
+msgid "Rooms"
+msgstr "Номеров"
+
+#: .\templates\hotel\async\selected_rooms.html:44
+#: .\templates\hotel\checkout.html:18
+#: .\templates\hotel\payment_method_selection.html:20
+#: .\templates\hotel\selected_rooms.html:28
+msgid "My selected rooms"
+msgstr "Мои выбранные номера"
+
+#: .\templates\hotel\async\selected_rooms.html:57
+#: .\templates\hotel\checkout.html:34 .\templates\hotel\selected_rooms.html:41
+msgid "Selected Rooms"
+msgstr "Выбранные Номера"
+
+#: .\templates\hotel\async\selected_rooms.html:64
+#: .\templates\hotel\checkout.html:41 .\templates\hotel\hotel_detail.html:172
+#: .\templates\hotel\room_type_detail.html:79
+#: .\templates\hotel\selected_rooms.html:50
+msgid "Beds"
+msgstr "Кровати"
+
+#: .\templates\hotel\async\selected_rooms.html:65
+#: .\templates\hotel\selected_rooms.html:51
+msgid "Capacity"
+msgstr "Вместимость Номера"
+
+#: .\templates\hotel\async\selected_rooms.html:66
+#: .\templates\hotel\async\selected_rooms.html:165
+#: .\templates\hotel\async\selected_rooms.html:172
+#: .\templates\hotel\checkout.html:42 .\templates\hotel\checkout.html:99
+#: .\templates\hotel\checkout.html:105 .\templates\hotel\hotel_detail.html:176
+#: .\templates\hotel\payment_failed.html:38
+#: .\templates\hotel\payment_method_selection.html:53
+#: .\templates\hotel\payment_method_selection.html:57
+#: .\templates\hotel\payment_method_selection.html:158
+#: .\templates\hotel\payment_method_selection.html:165
+#: .\templates\hotel\room_type_detail.html:75
+#: .\templates\hotel\selected_rooms.html:54
+#: .\templates\hotel\selected_rooms.html:156
+#: .\templates\hotel\selected_rooms.html:163
+#: .\templates\user_dashboard\booking_detail.html:102
+#: .\templates\user_dashboard\booking_detail.html:145
+#: .\templates\user_dashboard\bookings.html:76
+#: .\templates\user_dashboard\dashboard.html:27
+#: .\templates\user_dashboard\dashboard.html:37
+#: .\templates\user_dashboard\wallet.html:19
+#: .\templates\user_dashboard\wallet.html:29
+#: .\templates\user_dashboard\wallet.html:44
+#: .\templates\user_dashboard\wallet.html:48
+msgid "Tenge"
+msgstr "Тенге"
+
+#: .\templates\hotel\async\selected_rooms.html:75
+#: .\templates\hotel\async\selected_rooms.html:105
+#: .\templates\hotel\selected_rooms.html:65
+#: .\templates\hotel\selected_rooms.html:89
+msgid "Update Selection"
+msgstr "Обновить бронирование"
+
+#: .\templates\hotel\async\selected_rooms.html:100
+#: .\templates\hotel\selected_rooms.html:94
+msgid "No rooms selected. Please select a room to update."
+msgstr ""
+"Не выбрано ни одного номера. Пожалуйста, выберите номер для обновления "
+"данных."
+
+#: .\templates\hotel\async\selected_rooms.html:112
+#: .\templates\hotel\checkout.html:51 .\templates\hotel\selected_rooms.html:102
+msgid "Billing Information"
+msgstr "Платежная Информация"
+
+#: .\templates\hotel\async\selected_rooms.html:117
+#: .\templates\hotel\checkout.html:54 .\templates\hotel\selected_rooms.html:107
+msgid "First Name"
+msgstr "Имя"
+
+#: .\templates\hotel\async\selected_rooms.html:123
+#: .\templates\hotel\checkout.html:59 .\templates\hotel\selected_rooms.html:113
+msgid "E-Mail"
+msgstr "Электронная почта"
+
+#: .\templates\hotel\async\selected_rooms.html:130
+#: .\templates\hotel\checkout.html:65
+#: .\templates\hotel\payment_method_selection.html:137
+#: .\templates\hotel\selected_rooms.html:120
+msgid "Phone"
+msgstr "Телефон"
+
+#: .\templates\hotel\async\selected_rooms.html:131
+#: .\templates\hotel\selected_rooms.html:121
+msgid "Enter phone number"
+msgstr "Введите номер телефона"
+
+#: .\templates\hotel\async\selected_rooms.html:137
+#: .\templates\hotel\selected_rooms.html:127
+msgid "Continue to checkout"
+msgstr "Оформить бронирование"
+
+#: .\templates\hotel\async\selected_rooms.html:151
+#: .\templates\hotel\hotel_detail.html:36
+#: .\templates\hotel\hotel_detail.html:104
+#: .\templates\hotel\hotel_detail.html:217
+#: .\templates\hotel\selected_rooms.html:142
+msgid "Reviews"
+msgstr "Отзывы"
+
+#: .\templates\hotel\async\selected_rooms.html:159
+#: .\templates\hotel\checkout.html:91 .\templates\hotel\selected_rooms.html:150
+msgid "Check-in"
+msgstr "Заселение"
+
+#: .\templates\hotel\async\selected_rooms.html:160
+#: .\templates\hotel\checkout.html:92 .\templates\hotel\selected_rooms.html:151
+msgid "Check-out"
+msgstr "Выезд"
+
+#: .\templates\hotel\async\selected_rooms.html:161
+#: .\templates\hotel\payment_method_selection.html:152
+#: .\templates\hotel\selected_rooms.html:152
+#: .\templates\user_dashboard\booking_detail.html:64
+#: .\templates\user_dashboard\bookings.html:57
+msgid "Days"
+msgstr "Дни"
+
+#: .\templates\hotel\async\selected_rooms.html:162
+#: .\templates\hotel\payment_method_selection.html:153
+#: .\templates\hotel\selected_rooms.html:153
+msgid "Adult"
+msgstr "Взрослых"
+
+#: .\templates\hotel\async\selected_rooms.html:165
+#: .\templates\hotel\checkout.html:105
+#: .\templates\hotel\payment_method_selection.html:52
+#: .\templates\hotel\payment_method_selection.html:158
+#: .\templates\hotel\selected_rooms.html:156
+msgid "Total Cost"
+msgstr "Общая стоимость"
+
+#: .\templates\hotel\async\selected_rooms.html:170
+#: .\templates\hotel\payment_method_selection.html:56
+#: .\templates\hotel\payment_method_selection.html:163
+#: .\templates\hotel\selected_rooms.html:161
+#, python-format
+msgid "Prepayment (10%%)"
+msgstr "Предоплата (10%%)"
+
+#: .\templates\hotel\async\selected_rooms.html:176
+#: .\templates\hotel\payment_method_selection.html:169
+#: .\templates\hotel\selected_rooms.html:167
+#, python-format
+msgid "The remaining 90%% will be paid upon check-in at the hotel"
+msgstr "Оставшиеся 90%% будут оплачены при заселении в отель"
+
+#: .\templates\hotel\async\selected_rooms.html:229
+#: .\templates\hotel\async\selected_rooms.html:230
+#: .\templates\hotel\async\selected_rooms.html:410
+#: .\templates\hotel\selected_rooms.html:234
+#: .\templates\hotel\selected_rooms.html:235
+#: .\templates\hotel\selected_rooms.html:353
+msgid "Please enter a valid phone number"
+msgstr "Пожалуйста, введите действительный номер телефона"
+
+#: .\templates\hotel\async\selected_rooms.html:234
+#: .\templates\hotel\selected_rooms.html:239
+msgid "Phone number is required"
+msgstr "Требуется номер телефона"
+
+#: .\templates\hotel\async\selected_rooms.html:390
+#: .\templates\hotel\selected_rooms.html:334
+msgid "Please enter your full name"
+msgstr "Пожалуйста, введите ваше полное ФИО"
+
+#: .\templates\hotel\async\selected_rooms.html:400
+#: .\templates\hotel\selected_rooms.html:344
+msgid "Please enter a valid email address"
+msgstr "Пожалуйста, введите действительный адрес электронной почты"
+
+#: .\templates\hotel\checkout.html:30
+msgid "NOTE!"
+msgstr "ВНИМАНИЕ!"
+
+#: .\templates\hotel\checkout.html:30
+msgid "Review your order before payment."
+msgstr "Ознакомьтесь с вашим бронированием перед оплатой."
+
+#: .\templates\hotel\checkout.html:40
+#: .\templates\hotel\room_type_detail.html:20
+#: .\templates\user_dashboard\booking_detail.html:134
+msgid "Room"
+msgstr "Номер"
+
+#: .\templates\hotel\checkout.html:111
+msgid "Continue to Payment"
+msgstr "К оплате"
+
+#: .\templates\hotel\hotel_detail.html:34
+#: .\templates\hotel\hotel_detail.html:102
+#: .\templates\hotel\hotel_detail.html:252
+msgid "No Reviews Yet"
+msgstr "Отзывов пока нет"
+
+#: .\templates\hotel\hotel_detail.html:42
+msgid "Book Now"
+msgstr "Забронировать!"
+
+#: .\templates\hotel\hotel_detail.html:56
+#: .\templates\hotel\hotel_detail.html:116
+msgid "Add Review"
+msgstr "Добавить Отзыв"
+
+#: .\templates\hotel\hotel_detail.html:59
+#: .\templates\hotel\hotel_detail.html:119
+msgid "Write a review"
+msgstr "Написать отзыв"
+
+#: .\templates\hotel\hotel_detail.html:62
+#: .\templates\hotel\hotel_detail.html:122
+msgid "Your Message..."
+msgstr "Ваше сообщение..."
+
+#: .\templates\hotel\hotel_detail.html:70
+#: .\templates\hotel\hotel_detail.html:130
+msgid "Reply Message"
+msgstr "Отправить сообщение"
+
+#: .\templates\hotel\hotel_detail.html:75
+#: .\templates\hotel\hotel_detail.html:135
+msgid "Login to Write Review"
+msgstr "Войдите в систему, чтобы написать отзыв"
+
+#: .\templates\hotel\hotel_detail.html:77
+#: .\templates\hotel\hotel_detail.html:137
+msgid "Share"
+msgstr "Поделиться"
+
+#: .\templates\hotel\hotel_detail.html:142
+msgid "Description"
+msgstr "Описание"
+
+#: .\templates\hotel\hotel_detail.html:146
+msgid "Check-in Time"
+msgstr "Время заезда"
+
+#: .\templates\hotel\hotel_detail.html:147
+msgid "Check-out Time"
+msgstr "Время выезда"
+
+#: .\templates\hotel\hotel_detail.html:163
+msgid "Pricing"
+msgstr "Цены"
+
+#: .\templates\hotel\hotel_detail.html:166
+msgid "Room Types"
+msgstr "Типы номеров"
+
+#: .\templates\hotel\hotel_detail.html:174
+msgid "Photo"
+msgstr "Фото"
+
+#: .\templates\hotel\hotel_detail.html:176
+msgid "from"
+msgstr "от"
+
+#: .\templates\hotel\hotel_detail.html:189
+msgid "Amenities"
+msgstr "Удобства"
+
+#: .\templates\hotel\hotel_detail.html:202
+msgid "FAQ's"
+msgstr "Часто задаваемые вопросы"
+
+#: .\templates\hotel\hotel_detail.html:224
+msgid "Not Rated Yet"
+msgstr "Еще не оценен"
+
+#: .\templates\hotel\hotel_detail.html:342
+msgid "Room size"
+msgstr "Площадь номера"
+
+#: .\templates\hotel\hotel_detail.html:368
+msgid "Close"
+msgstr "Закрыть"
+
+#: .\templates\hotel\index.html:17
+msgid "Alakol vacation bases"
+msgstr "Базы отдыха Алаколь"
+
+#: .\templates\hotel\index.html:18
+msgid "Discover top rated hotels of Alakol"
+msgstr "Откройте для себя лучшие отели Алаколя"
+
+#: .\templates\hotel\index.html:22 .\templates\hotel\index_translated.html:16
+msgid "Hotel..."
+msgstr "Отель..."
+
+#: .\templates\hotel\index.html:25 .\templates\hotel\index_translated.html:19
+msgid "Select Booking Date"
+msgstr "Выберите даты бронирования"
+
+#: .\templates\hotel\index.html:31 .\templates\hotel\index.html:41
+#: .\templates\search\search_results.html:46
+msgid "Number of Guests"
+msgstr "Количество гостей"
+
+#: .\templates\hotel\index.html:32
+msgid "1 Guest"
+msgstr "1 гость"
+
+#: .\templates\hotel\index.html:33
+msgid "2 Guests"
+msgstr "2 гостей"
+
+#: .\templates\hotel\index.html:34
+msgid "3 Guests"
+msgstr "3 гостей"
+
+#: .\templates\hotel\index.html:35
+msgid "4 Guests"
+msgstr "4 гостей"
+
+#: .\templates\hotel\index.html:36
+msgid "5+ Guests"
+msgstr "5+ гостей"
+
+#: .\templates\hotel\index.html:49 .\templates\hotel\index_translated.html:31
+#: .\templates\search\search_results.html:100
+msgid "Search"
+msgstr "Поиск"
+
+#: .\templates\hotel\index.html:62
+msgid "Our Popular Bases"
+msgstr "Наши Популярные базы"
+
+#: .\templates\hotel\index.html:62
+msgid "Explore the greates places in the Alakol"
+msgstr "Исследуйте самые замечательные места на Алаколе"
+
+#: .\templates\hotel\index.html:73 .\templates\hotel\index_translated.html:54
+msgid "Open Now"
+msgstr "Открыто сейчас"
+
+#: .\templates\hotel\index.html:87 .\templates\hotel\index_translated.html:68
+msgid "No Rating Yet"
+msgstr "Рейтинга пока нет"
+
+#: .\templates\hotel\index.html:89 .\templates\hotel\index_translated.html:70
+msgid "reviews"
+msgstr "отзывов"
+
+#: .\templates\hotel\index.html:138
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm.html:195
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm_sidebar.html:179
+msgid "Apply"
+msgstr "Применить"
+
+#: .\templates\hotel\index.html:139
+#: .\venv\Lib\site-packages\grappelli\templates\admin\delete_confirmation.html:55
+#: .\venv\Lib\site-packages\grappelli\templates\admin\delete_selected_confirmation.html:58
+msgid "Cancel"
+msgstr "Отменить"
+
+#: .\templates\hotel\index.html:140 .\templates\search\search_results.html:172
+msgid "From"
+msgstr "От"
+
+#: .\templates\hotel\index.html:141
+msgid "To"
+msgstr "по"
+
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:178
+msgid "Su"
+msgstr "Вс"
+
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:172
+msgid "Mo"
+msgstr "Пн"
+
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:173
+msgid "Tu"
+msgstr "ВТ"
+
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:174
+msgid "We"
+msgstr "Ср"
+
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:175
+msgid "Th"
+msgstr "Чт"
+
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:176
+msgid "Fr"
+msgstr "Пт"
+
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:177
+msgid "Sa"
+msgstr "Сб"
+
+#: .\templates\hotel\index.html:143
+msgid "January"
+msgstr "Январь"
+
+#: .\templates\hotel\index.html:143
+msgid "February"
+msgstr "Февраль"
+
+#: .\templates\hotel\index.html:143
+msgid "March"
+msgstr "Март"
+
+#: .\templates\hotel\index.html:143
+msgid "April"
+msgstr "Апрель"
+
+#: .\templates\hotel\index.html:143
+msgid "May"
+msgstr "Май"
+
+#: .\templates\hotel\index.html:143
+msgid "June"
+msgstr "Июнь"
+
+#: .\templates\hotel\index.html:143
+msgid "July"
+msgstr "Июль"
+
+#: .\templates\hotel\index.html:143
+msgid "August"
+msgstr "Август"
+
+#: .\templates\hotel\index.html:143
+msgid "September"
+msgstr "Сентябрь"
+
+#: .\templates\hotel\index.html:143
+msgid "October"
+msgstr "Октябрь"
+
+#: .\templates\hotel\index.html:143
+msgid "November"
+msgstr "Ноябрь"
+
+#: .\templates\hotel\index.html:143
+msgid "December"
+msgstr "Декабрь"
+
+#: .\templates\hotel\index_translated.html:12
+msgid "Book Unique Experiences"
+msgstr "Закажите уникальные впечатления"
+
+#: .\templates\hotel\index_translated.html:13
+msgid "Discover top rated hotels, shops and restaurants around the world"
+msgstr "Откройте для себя лучшие отели, магазины и рестораны по всей стране"
+
+#: .\templates\hotel\index_translated.html:24
+msgid "Food & Restaurants"
+msgstr "Еда и рестораны"
+
+#: .\templates\hotel\index_translated.html:25
+msgid "Shop & Education"
+msgstr "Магазин и образование"
+
+#: .\templates\hotel\index_translated.html:26
+msgid "Education"
+msgstr "Образование"
+
+#: .\templates\hotel\index_translated.html:27
+msgid "Business"
+msgstr "Бизнес"
+
+#: .\templates\hotel\index_translated.html:28
+msgid "Events"
+msgstr "События"
+
+#: .\templates\hotel\index_translated.html:43
+msgid "Our Popular Tours"
+msgstr "Наши популярные туры"
+
+#: .\templates\hotel\index_translated.html:43
+msgid "Explore the greatest places in the city"
+msgstr "Исследуйте самые интересные места в городе"
+
+#: .\templates\hotel\index_translated.html:96
+msgid "How It Works?"
+msgstr "Как Это работает?"
+
+#: .\templates\hotel\index_translated.html:96
+msgid "Discover & connect with great local businesses"
+msgstr "Откройте для себя замечательные местные предприятия и общайтесь с ними"
+
+#: .\templates\hotel\index_translated.html:128
+msgid "What Say Our Customers"
+msgstr "Что говорят наши клиенты"
+
+#: .\templates\hotel\index_translated.html:128
+msgid ""
+"Lorem Ipsum is simply dummy text of the printing and type setting industry. "
+"Lorem Ipsum has been the industry's standard dummy text ever since..."
+msgstr ""
+"Lorem Ipsum is simply dummy text of the printing and type setting industry. "
+
+#: .\templates\hotel\index_translated.html:178
+msgid "Latest Tips & Blog"
+msgstr "Последние Советы и Блог"
+
+#: .\templates\hotel\index_translated.html:178
+msgid "Discover & connect with top-rated local businesses"
+msgstr "Откройте для себя лучшие местные предприятия и общайтесь с ними"
+
+#: .\templates\hotel\index_translated.html:281
+msgid "Subscribe to Newsletter!"
+msgstr "Подпишитесь на рассылку новостей!"
+
+#: .\templates\hotel\payment_failed.html:12
+#: .\templates\hotel\payment_failed.html:17
+msgid "Payment Failed"
+msgstr "Платеж не прошел"
+
+#: .\templates\hotel\payment_failed.html:29
+msgid "Payment Failed!"
+msgstr "Платеж не прошел!"
+
+#: .\templates\hotel\payment_failed.html:29
+msgid "We're sorry, but your payment was not successful."
+msgstr "К сожалению, но ваш платеж не прошел."
+
+#: .\templates\hotel\payment_failed.html:34
+msgid "Details"
+msgstr "Подробности"
+
+#: .\templates\hotel\payment_failed.html:36
+msgid ""
+"Your booking has not been confirmed because the payment could not be "
+"processed."
+msgstr ""
+"Ваше бронирование не подтверждено, так как платеж не удалось обработать."
+
+#: .\templates\hotel\payment_failed.html:37
+#: .\templates\user_dashboard\booking_detail.html:17
+#: .\templates\user_dashboard\dashboard.html:87
+#: .\templates\user_dashboard\wallet.html:46
+msgid "Booking ID"
+msgstr "ID бронирования"
+
+#: .\templates\hotel\payment_failed.html:38
+msgid "Total Amount"
+msgstr "Общая стоимость"
+
+#: .\templates\hotel\payment_failed.html:41
+msgid "Try Again"
+msgstr "Попробовать снова"
+
+#: .\templates\hotel\payment_failed.html:42
+msgid "Return to Home"
+msgstr "Вернуться на главную"
+
+#: .\templates\hotel\payment_method_selection.html:15
+msgid "Payment Method Selection"
+msgstr "Выбор способа оплаты"
+
+#: .\templates\hotel\payment_method_selection.html:21
+msgid "Payment Method"
+msgstr "Способ оплаты"
+
+#: .\templates\hotel\payment_method_selection.html:33
+msgid "Choose Payment Method"
+msgstr "Выберите способ оплаты"
+
+#: .\templates\hotel\payment_method_selection.html:38
+#: .\templates\hotel\payment_method_selection.html:110
+msgid "Pay with Robokassa"
+msgstr "Оплатить через Робокассу"
+
+#: .\templates\hotel\payment_method_selection.html:39
+msgid ""
+"Process your payment securely through Robokassa. Multiple payment methods "
+"available."
+msgstr "Безопасная оплата через Robokassa. Доступны различные способы оплаты."
+
+#: .\templates\hotel\payment_method_selection.html:47
+msgid ""
+"Please complete your payment within 10 minutes after clicking the payment "
+"button."
+msgstr ""
+"Пожалуйста, завершите оплату в течение 10 минут после нажатия на кнопку "
+"оплаты."
+
+#: .\templates\hotel\payment_method_selection.html:64
+#: .\templates\partials\legal_consent_component.html:10
+#: .\templates\partials\legal_consent_component.html:65
+#: .\templates\userauths\sign-up.html:33
+msgid "Legal Agreements"
+msgstr "Пользовательские соглашения"
+
+#: .\templates\hotel\payment_method_selection.html:70
+#: .\templates\partials\legal_consent_component.html:71
+msgid "I accept the terms of the"
+msgstr "Я принимаю условия"
+
+#: .\templates\hotel\payment_method_selection.html:72
+#: .\templates\partials\base.html:282
+#: .\templates\partials\legal_consent_component.html:73
+#: .\templates\partials\legal_consent_component.html:161
+msgid "Public Offer"
+msgstr "Публичная Оферта"
+
+#: .\templates\hotel\payment_method_selection.html:74
+#: .\templates\partials\legal_consent_component.html:75
+msgid "for eKol booking services"
+msgstr "от системы бронирования eKol"
+
+#: .\templates\hotel\payment_method_selection.html:82
+#: .\templates\partials\legal_consent_component.html:16
+#: .\templates\partials\legal_consent_component.html:28
+#: .\templates\partials\legal_consent_component.html:83
+#: .\templates\userauths\sign-up.html:40 .\templates\userauths\sign-up.html:52
+msgid "I agree to the"
+msgstr "Я соглашаюсь с"
+
+#: .\templates\hotel\payment_method_selection.html:84
+#: .\templates\partials\legal_consent_component.html:85
+msgid "Booking and Cancellation Rules"
+msgstr "Правила Бронирования и Отмен"
+
+#: .\templates\hotel\payment_method_selection.html:86
+#: .\templates\partials\legal_consent_component.html:87
+msgid "including cancellation policies"
+msgstr "включая правила отмены"
+
+#: .\templates\hotel\payment_method_selection.html:94
+#: .\templates\partials\legal_consent_component.html:95
+msgid "I understand and accept the"
+msgstr "Я понимаю и принимаю"
+
+#: .\templates\hotel\payment_method_selection.html:96
+#: .\templates\partials\legal_consent_component.html:97
+msgid "Payment and Refund Rules"
+msgstr "Правила оплаты и возврата средств"
+
+#: .\templates\hotel\payment_method_selection.html:98
+#, python-format
+msgid "including the 10%% prepayment policy and refundable terms"
+msgstr "включая политику предоплаты в размере 10%% и условия возврата средств"
+
+#: .\templates\hotel\payment_method_selection.html:104
+#: .\templates\partials\legal_consent_component.html:105
+msgid "Please accept all required legal documents to proceed with payment."
+msgstr ""
+"Пожалуйста, примите все необходимые юридические документы для продолжения "
+"оплаты."
+
+#: .\templates\hotel\payment_method_selection.html:113
+msgid "Please accept all legal agreements above to enable payment"
+msgstr ""
+"Пожалуйста, примите все юридические соглашения выше, чтобы разрешить оплату"
+
+#: .\templates\hotel\payment_method_selection.html:121
+msgid "Order Information"
+msgstr "Платежная Информация"
+
+#: .\templates\hotel\payment_method_selection.html:125
+#: .\templates\user_dashboard\booking_detail.html:81
+#: .\templates\user_dashboard\profile.html:34
+msgid "Full Name"
+msgstr "ФИО"
+
+#: .\templates\hotel\payment_method_selection.html:133
+msgid "Country Code"
+msgstr "Код страны"
+
+#: .\templates\hotel\payment_method_selection.html:422
+msgid "Please accept all legal agreements before proceeding with payment."
+msgstr ""
+"Пожалуйста, примите все юридические соглашения перед совершением оплаты."
+
+#: .\templates\hotel\payment_method_selection.html:462
+msgid "Processing..."
+msgstr "В процессе..."
+
+#: .\templates\hotel\payment_success.html:13
+msgid "Checkout & Payment Successfull!"
+msgstr "Оформление бронирования и оплата прошли успешно!"
+
+#: .\templates\hotel\payment_success.html:15
+msgid "We have sent your booking summary to"
+msgstr "Мы отправили инфо вашего бронирования на"
+
+#: .\templates\hotel\payment_success.html:15
+msgid "Thank you."
+msgstr "Спасибо"
+
+#: .\templates\hotel\payment_success.html:17
+#: .\templates\user_dashboard\booking_detail.html:115
+msgid "View Invoice"
+msgstr "Посмотреть чек"
+
+#: .\templates\hotel\room_type_detail.html:23
+msgid "Available Rooms"
+msgstr "Свободные номера"
+
+#: .\templates\hotel\room_type_detail.html:64
+msgid "All Available Rooms"
+msgstr "Все свободные номера"
+
+#: .\templates\hotel\room_type_detail.html:64
+#, python-format
+msgid "The %(room_type)s room has %(rooms_count)s available room(s)"
+msgstr "Тип комнат %(room_type)s имеет %(rooms_count)s свободных комнат"
+
+#: .\templates\hotel\room_type_detail.html:74
+msgid "Room No."
+msgstr "Комната №"
+
+#: .\templates\hotel\room_type_detail.html:75
+msgid "For"
+msgstr "За"
+
+#: .\templates\hotel\room_type_detail.html:75
+msgid "night(s)"
+msgstr "ночь(ей)"
+
+#: .\templates\hotel\room_type_detail.html:80
+msgid "Room Capacity"
+msgstr "Вместимость Номера"
+
+#: .\templates\hotel\room_type_detail.html:89
+msgid "Added To Selection"
+msgstr "Уже в корзине"
+
+#: .\templates\hotel\room_type_detail.html:94
+msgid "Update"
+msgstr "Обновить"
+
+#: .\templates\hotel\room_type_detail.html:99
+msgid "Add To Selection"
+msgstr "Добавить в корзину"
+
+#: .\templates\hotel\room_type_detail.html:123
+msgid "Select Dates"
+msgstr "Выбрать даты"
+
+#: .\templates\hotel\room_type_detail.html:133
+#: .\templates\hotel\room_type_detail.html:841
+msgid "Select your dates"
+msgstr "Выбрать даты"
+
+#: .\templates\hotel\room_type_detail.html:136
+msgid "Click on calendar to select dates"
+msgstr "Нажмите на календарь, чтобы выбрать даты"
+
+#: .\templates\hotel\room_type_detail.html:141
+msgid "for"
+msgstr "За"
+
+#: .\templates\hotel\room_type_detail.html:141
+msgid "nights"
+msgstr "ночь(ей)"
+
+#: .\templates\hotel\room_type_detail.html:150
+msgid "Prices & Calendar"
+msgstr "Цены и Календарь"
+
+#: .\templates\hotel\room_type_detail.html:167
+msgid "Approximate prices in tenge"
+msgstr "Округленные цены в тенге"
+
+#: .\templates\hotel\room_type_detail.html:838
+msgid "Select checkout"
+msgstr "Выберите оформление брони"
+
+#: .\templates\partials\async_base.html:11 .\templates\partials\base.html:11
+msgid "Alakol hotel booking"
+msgstr "Бронирование отеля в Алаколе"
+
+#: .\templates\partials\base.html:119
+#: .\templates\partials\dashboard_base.html:11
+#: .\templates\partials\dashboard_base.html:64
+#: .\templates\partials\dashboard_base.html:100
+#: .\templates\partials\dashboard_base.html:146
+#: .\templates\partials\dashboard_sidebar.html:7
+msgid "Dashboard"
+msgstr "Аккаунт"
+
+#: .\templates\partials\base.html:120
+msgid "Sign Out"
+msgstr "Выход"
+
+#: .\templates\partials\base.html:123 .\templates\partials\base.html:132
+#: .\templates\userauths\sign-in.html:9 .\templates\userauths\sign-in.html:39
+msgid "Sign In"
+msgstr "Вход"
+
+#: .\templates\partials\base.html:124 .\templates\userauths\sign-up.html:9
+msgid "Sign Up"
+msgstr "Регистрация"
+
+#: .\templates\partials\base.html:136
+msgid "Log In"
+msgstr "Войдите"
+
+#: .\templates\partials\base.html:137 .\templates\partials\base.html:236
+#: .\templates\userauths\sign-up.html:86
+msgid "Register"
+msgstr "Зарегистрироваться"
+
+#: .\templates\partials\base.html:144 .\templates\partials\base.html:179
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: .\templates\partials\base.html:149 .\templates\partials\base.html:189
+#: .\templates\userauths\sign-in.html:36
+msgid "Password"
+msgstr "Пароль"
+
+#: .\templates\partials\base.html:152
+msgid "Forgot Password?"
+msgstr "Забыли пароль?"
+
+#: .\templates\partials\base.html:155
+msgid "Remember Me"
+msgstr "Запомни Меня"
+
+#: .\templates\partials\base.html:159
+msgid "Login"
+msgstr "Войти"
+
+#: .\templates\partials\base.html:162
+msgid "Or Login in With"
+msgstr "Или войдите с помощью"
+
+#: .\templates\partials\base.html:166
+msgid "Facebook"
+msgstr "Facebook"
+
+#: .\templates\partials\base.html:169
+msgid "Google"
+msgstr "Google"
+
+#: .\templates\partials\base.html:194
+msgid "Confirm Password"
+msgstr "Повторите пароль:"
+
+#: .\templates\partials\base.html:205 .\templates\partials\base.html:216
+#: .\templates\partials\legal_consent_component.html:117
+#: .\templates\partials\legal_consent_component.html:128
+msgid "I agree to"
+msgstr "Я соглашаюсь с"
+
+#: .\templates\partials\base.html:207 .\templates\partials\base.html:276
+#: .\templates\partials\legal_consent_component.html:18
+#: .\templates\partials\legal_consent_component.html:119
+#: .\templates\partials\legal_consent_component.html:155
+#: .\templates\userauths\sign-up.html:42
+msgid "Terms of Use"
+msgstr "Пользовательское соглашение"
+
+#: .\templates\partials\base.html:218 .\templates\partials\base.html:279
+#: .\templates\partials\legal_consent_component.html:30
+#: .\templates\partials\legal_consent_component.html:130
+#: .\templates\partials\legal_consent_component.html:158
+#: .\templates\userauths\sign-up.html:54
+msgid "Privacy Policy"
+msgstr "Политика Конфиденциальности"
+
+#: .\templates\partials\base.html:227
+#: .\templates\partials\legal_consent_component.html:139
+msgid "I consent to"
+msgstr "Я согласен (а) на"
+
+#: .\templates\partials\base.html:229
+#: .\templates\partials\legal_consent_component.html:141
+msgid "Data Processing"
+msgstr "Обработка данных"
+
+#: .\templates\partials\base.html:258
+msgid "Contacts"
+msgstr "Контакты"
+
+#: .\templates\partials\base.html:260
+msgid "Phone:"
+msgstr "Телефон"
+
+#: .\templates\partials\base.html:261
+msgid "E-mail:"
+msgstr "Электронная почта"
+
+#: .\templates\partials\base.html:262
+msgid "Address:"
+msgstr "Адрес"
+
+#: .\templates\partials\base.html:263
+msgid "BIN/IIN:"
+msgstr "БИН/ИИН"
+
+#: .\templates\partials\base.html:272
+#: .\templates\partials\legal_consent_component.html:151
+msgid "Legal Information"
+msgstr "Информация соглашения"
+
+#: .\templates\partials\base.html:285
+#: .\templates\partials\legal_consent_component.html:164
+msgid "Booking Rules"
+msgstr "Правила бронирования"
+
+#: .\templates\partials\base.html:288
+#: .\templates\partials\legal_consent_component.html:167
+msgid "Data Processing Consent"
+msgstr "Согласие на обработку данных"
+
+#: .\templates\partials\base.html:291
+#: .\templates\partials\legal_consent_component.html:170
+msgid "Payment Rules"
+msgstr "Правила оплаты"
+
+#: .\templates\partials\base.html:410
+msgid ""
+"By continuing to use this site, you acknowledge that you consent to the "
+"collection and use of data stored in cookies. This helps us to improve the "
+"site and provide you with a better service."
+msgstr ""
+"Продолжая использовать этот сайт, вы подтверждаете свое согласие на сбор и "
+"использование данных, хранящихся в файлах cookie. Это помогает нам улучшать "
+"сайт и предоставлять вам более качественные услуги."
+
+#: .\templates\partials\base.html:411
+msgid "Read more about our privacy policy"
+msgstr "Узнайте больше о политике конфиденциальности"
+
+#: .\templates\partials\base.html:414
+msgid "Reject"
+msgstr "Отклонить"
+
+#: .\templates\partials\base.html:415
+msgid "Accept"
+msgstr "Принять"
+
+#: .\templates\partials\dashboard_base.html:72
+#: .\templates\partials\dashboard_base.html:118
+#, python-format
+msgid "You have %(count)s notification(s)"
+msgstr "У вас %(count)s уведомлений"
+
+#: .\templates\partials\dashboard_base.html:83
+#: .\templates\partials\dashboard_base.html:129
+#: .\templates\user_dashboard\async\notifications.html:20
+#: .\templates\user_dashboard\async\notifications.html:24
+#: .\templates\user_dashboard\notifications.html:34
+#: .\templates\user_dashboard\notifications.html:38
+msgid "Your booking"
+msgstr "Ваш заказ"
+
+#: .\templates\partials\dashboard_base.html:83
+#: .\templates\partials\dashboard_base.html:129
+#: .\templates\user_dashboard\async\notifications.html:20
+#: .\templates\user_dashboard\notifications.html:34
+msgid "has been placed successfully."
+msgstr "был успешно размещен."
+
+#: .\templates\partials\dashboard_base.html:85
+#: .\templates\partials\dashboard_base.html:131
+msgid "ago"
+msgstr "недавно"
+
+#: .\templates\partials\dashboard_base.html:92
+#: .\templates\partials\dashboard_base.html:138
+msgid "View All Notifications"
+msgstr "Просмотр всех уведомлений"
+
+#: .\templates\partials\dashboard_base.html:98
+#: .\templates\partials\dashboard_base.html:144
+msgid "Hi"
+msgstr "Привет"
+
+#: .\templates\partials\dashboard_base.html:101
+#: .\templates\partials\dashboard_base.html:147
+#: .\templates\partials\dashboard_sidebar.html:12
+msgid "My Profile"
+msgstr "Мой профиль"
+
+#: .\templates\partials\dashboard_base.html:103
+#: .\templates\partials\dashboard_base.html:149
+#: .\templates\partials\dashboard_sidebar.html:10
+msgid "Wallet"
+msgstr "Кошелек"
+
+#: .\templates\partials\dashboard_base.html:104
+#: .\templates\partials\dashboard_base.html:150
+msgid "Bookmarks"
+msgstr "Закладки"
+
+#: .\templates\partials\dashboard_base.html:105
+#: .\templates\partials\dashboard_base.html:151
+#: .\templates\partials\dashboard_sidebar.html:9
+#: .\templates\user_dashboard\async\notifications.html:13
+#: .\templates\user_dashboard\notifications.html:27
+msgid "Notifications"
+msgstr "Уведомления"
+
+#: .\templates\partials\dashboard_base.html:106
+#: .\templates\partials\dashboard_base.html:152
+#: .\templates\partials\dashboard_sidebar.html:14
+msgid "Logout"
+msgstr "Выйти"
+
+#: .\templates\partials\dashboard_sidebar.html:8
+#: .\templates\user_dashboard\bookings.html:27
+msgid "All Bookings"
+msgstr "Все заказы"
+
+#: .\templates\partials\dashboard_sidebar.html:11
+msgid "Bookmark"
+msgstr "Избранные"
+
+#: .\templates\partials\dashboard_sidebar.html:13
+#: .\templates\user_dashboard\password-reset\change-password.html:14
+#: .\templates\user_dashboard\password-reset\change-password.html:28
+msgid "Change Password"
+msgstr "Изменить Пароль"
+
+#: .\templates\partials\legal_consent_component.html:20
+#: .\templates\userauths\sign-up.html:44
+msgid "of eKol"
+msgstr "от eKol"
+
+#: .\templates\partials\legal_consent_component.html:32
+#: .\templates\userauths\sign-up.html:56
+msgid "and understand how my data will be processed"
+msgstr "и понимаю как будут обрабатываться мои данные"
+
+#: .\templates\partials\legal_consent_component.html:40
+#: .\templates\userauths\sign-up.html:64
+msgid "I consent to the processing of my personal data as described in the"
+msgstr "Я даю согласие на обработку моих персональных данных, как описано в"
+
+#: .\templates\partials\legal_consent_component.html:42
+#: .\templates\userauths\sign-up.html:66
+msgid "Personal Data Processing Consent"
+msgstr "Согласие на обработку персональных данных"
+
+#: .\templates\partials\legal_consent_component.html:51
+#: .\templates\userauths\sign-up.html:75
+msgid ""
+"I agree to receive marketing communications about eKol services and special "
+"offers"
+msgstr ""
+"Я согласен получать маркетинговые сообщения о сервисах и специальных "
+"предложениях eKol"
+
+#: .\templates\partials\legal_consent_component.html:52
+#: .\templates\userauths\sign-up.html:76
+msgid "optional"
+msgstr "опционально"
+
+#: .\templates\partials\legal_consent_component.html:58
+#: .\templates\userauths\sign-up.html:82
+msgid "Please accept all required legal documents to continue."
+msgstr "Для продолжения примите все необходимые пользовательские соглашения"
+
+#: .\templates\partials\legal_consent_component.html:99
+#, python-format
+msgid "including the 10%% prepayment policy and non-refundable terms"
+msgstr "включая 10%-ную предоплату и условия невозврата денег"
+
+#: .\templates\partials\legal_consent_component.html:152
+msgid "Please review our legal documents:"
+msgstr "Ознакомьтесь с пользовательскими соглашениями:"
+
+#: .\templates\search\search_results.html:5
+msgid "Hotel Search Results"
+msgstr "Результаты поиска"
+
+#: .\templates\search\search_results.html:14
+msgid "Filters"
+msgstr "Фильтры"
+
+#: .\templates\search\search_results.html:20
+#: .\templates\user_dashboard\booking_detail.html:25
+#: .\templates\user_dashboard\dashboard.html:54
+msgid "Hotel Name"
+msgstr "Название отеля"
+
+#: .\templates\search\search_results.html:36
+msgid "Min Price"
+msgstr "Мин. цена"
+
+#: .\templates\search\search_results.html:40
+msgid "Max Price"
+msgstr "Макс. цена"
+
+#: .\templates\search\search_results.html:52
+msgid "Minimum Rating"
+msgstr "Минимальный рейтинг"
+
+#: .\templates\search\search_results.html:54
+msgid "Any"
+msgstr "Любой"
+
+#: .\templates\search\search_results.html:55
+msgid "1+ Star"
+msgstr "1+ Звезд"
+
+#: .\templates\search\search_results.html:56
+msgid "2+ Stars"
+msgstr "2+ Звезды"
+
+#: .\templates\search\search_results.html:57
+msgid "3+ Stars"
+msgstr "3+ Звезды"
+
+#: .\templates\search\search_results.html:58
+msgid "4+ Stars"
+msgstr "4+ Звезды"
+
+#: .\templates\search\search_results.html:59
+msgid "5 Stars"
+msgstr "5 Звезд"
+
+#: .\templates\search\search_results.html:90
+msgid "Sort By"
+msgstr "Сортировать по"
+
+#: .\templates\search\search_results.html:93
+msgid "Price: Low to High"
+msgstr "Цена: от низкой к высокой"
+
+#: .\templates\search\search_results.html:94
+msgid "Price: High to Low"
+msgstr "Цена: от высокой к низкой"
+
+#: .\templates\search\search_results.html:95
+msgid "Rating"
+msgstr "Рейтинг"
+
+#: .\templates\search\search_results.html:96
+msgid "Popularity"
+msgstr "Популярность"
+
+#: .\templates\search\search_results.html:109
+msgid "Search Results"
+msgstr "Результаты поиска"
+
+#: .\templates\search\search_results.html:111
+#, python-format
+msgid "Found %(count)s hotel"
+msgid_plural "Found %(count)s hotels"
+msgstr[0] "Найдено %(count)s отель"
+msgstr[1] "Найдено %(count)s отеля"
+msgstr[2] "Найдено %(count)s отелей"
+msgstr[3] "Найдено %(count)s отелей"
+
+#: .\templates\search\search_results.html:127
+msgid "No Image"
+msgstr "Нет изображения"
+
+#: .\templates\search\search_results.html:141
+msgid "No ratings"
+msgstr "Нет отзывов"
+
+#: .\templates\search\search_results.html:149
+msgid "Amenities:"
+msgstr "Удобства"
+
+#: .\templates\search\search_results.html:154
+msgid "No amenities listed"
+msgstr "Удобства не указаны"
+
+#: .\templates\search\search_results.html:157
+msgid "more"
+msgstr "ещё"
+
+#: .\templates\search\search_results.html:163
+msgid "Available Rooms:"
+msgstr "Доступные номера:"
+
+#: .\templates\search\search_results.html:168
+msgid "views"
+msgstr "просмотров"
+
+#: .\templates\search\search_results.html:172
+msgid "per night"
+msgstr "за ночь"
+
+#: .\templates\search\search_results.html:174
+msgid "Price not available"
+msgstr "Цена недоступна"
+
+#: .\templates\search\search_results.html:176
+msgid "View Details"
+msgstr "Подробнее"
+
+#: .\templates\search\search_results.html:191
+msgid "First"
+msgstr "1"
+
+#: .\templates\search\search_results.html:194
+msgid "Previous"
+msgstr "Предыдущая"
+
+#: .\templates\search\search_results.html:210
+msgid "Next"
+msgstr "Следующая"
+
+#: .\templates\search\search_results.html:213
+msgid "Last"
+msgstr "Последняя"
+
+#: .\templates\search\search_results.html:222
+msgid ""
+"No hotels found matching your search criteria. Try adjusting your filters."
+msgstr ""
+"Не найдено отелей, соответствующих критериям поиска. Попробуйте изменить "
+"фильтры."
+
+#: .\templates\user_dashboard\async\notifications.html:6
+#: .\templates\user_dashboard\notifications.html:20
+msgid "All Notifications"
+msgstr "Все уведомления"
+
+#: .\templates\user_dashboard\async\notifications.html:7
+#: .\templates\user_dashboard\notifications.html:21
+msgid "Read Notifications"
+msgstr "Прочитанные уведомления"
+
+#: .\templates\user_dashboard\async\notifications.html:8
+#: .\templates\user_dashboard\notifications.html:22
+msgid "Unread Notifications"
+msgstr "Непрочитанные уведомления"
+
+#: .\templates\user_dashboard\async\notifications.html:24
+#: .\templates\user_dashboard\notifications.html:38
+msgid "has been cancelled."
+msgstr "был отменен."
+
+#: .\templates\user_dashboard\async\notifications.html:29
+#: .\templates\user_dashboard\notifications.html:43
+msgid "No Notifications Yet"
+msgstr "Уведомлений нет"
+
+#: .\templates\user_dashboard\booking_detail.html:9
+#: .\templates\user_dashboard\bookings.html:9
+#: .\templates\user_dashboard\bookmark.html:7
+#: .\templates\user_dashboard\dashboard.html:9
+#: .\templates\user_dashboard\notifications.html:10
+#: .\templates\user_dashboard\password-reset\change-password.html:8
+#: .\templates\user_dashboard\password_changed.html:8
+#: .\templates\user_dashboard\profile.html:8
+#: .\templates\user_dashboard\wallet.html:9
+msgid "Dashboard Sidebar Menu"
+msgstr "Боковое меню панели"
+
+#: .\templates\user_dashboard\booking_detail.html:31
+msgid "Hotel Address"
+msgstr "Адрес отеля"
+
+#: .\templates\user_dashboard\booking_detail.html:37
+msgid "Hotel Email"
+msgstr "Еmail отеля"
+
+#: .\templates\user_dashboard\booking_detail.html:43
+msgid "Hotel Phone"
+msgstr "Телефон отеля"
+
+#: .\templates\user_dashboard\booking_detail.html:87
+#: .\templates\userauths\sign-in.html:31
+msgid "Email Address"
+msgstr "Адрес email"
+
+#: .\templates\user_dashboard\booking_detail.html:93
+msgid "Phone Number"
+msgstr "Номер Телефона"
+
+#: .\templates\user_dashboard\booking_detail.html:100
+#: .\templates\user_dashboard\bookings.html:74
+msgid "Price"
+msgstr "Цена"
+
+#: .\templates\user_dashboard\booking_detail.html:107
+msgid "Date Booked"
+msgstr "Забронированная дата"
+
+#: .\templates\user_dashboard\booking_detail.html:116
+msgid "Cancel Booking"
+msgstr "Отменить бронирование"
+
+#: .\templates\user_dashboard\booking_detail.html:124
+msgid "Booked Rooms"
+msgstr "Забронированные номера"
+
+#: .\templates\user_dashboard\booking_detail.html:136
+msgid "Room Number"
+msgstr "Номер комнаты"
+
+#: .\templates\user_dashboard\booking_detail.html:143
+msgid "Room Price"
+msgstr "Стоимость номера"
+
+#: .\templates\user_dashboard\bookings.html:20
+msgid "All Orders"
+msgstr "Все заказы"
+
+#: .\templates\user_dashboard\bookings.html:21
+msgid "Paid Orders"
+msgstr "Оплаченные заказы"
+
+#: .\templates\user_dashboard\bookings.html:22
+msgid "Unpaid Orders"
+msgstr "Неоплаченные заказы"
+
+#: .\templates\user_dashboard\bookings.html:82
+msgid "View Booking Detail"
+msgstr "Подробнее"
+
+#: .\templates\user_dashboard\bookmark.html:15
+msgid "All Bookmarked Hotels"
+msgstr "Избранные отели"
+
+#: .\templates\user_dashboard\bookmark.html:40
+#: .\venv\Lib\site-packages\grappelli\templates\admin\delete_confirmation.html:19
+#: .\venv\Lib\site-packages\grappelli\templates\admin\submit_line.html:7
+#: .\venv\Lib\site-packages\grappelli\templates\related_widget_wrapper.html:26
+msgid "Delete"
+msgstr "Удалить"
+
+#: .\templates\user_dashboard\bookmark.html:45
+msgid "No Bookmarks Yet"
+msgstr "Нету избранных отелей"
+
+#: .\templates\user_dashboard\dashboard.html:18
+msgid "Total Paid Bookings"
+msgstr "Кол-во оплаченных бронирований"
+
+#: .\templates\user_dashboard\dashboard.html:28
+#: .\templates\user_dashboard\wallet.html:20
+msgid "Total Spent"
+msgstr "Общие затраты"
+
+#: .\templates\user_dashboard\dashboard.html:38
+#: .\templates\user_dashboard\wallet.html:30
+msgid "Wallet Balance"
+msgstr "Баланс кошелька"
+
+#: .\templates\user_dashboard\dashboard.html:53
+msgid "S/N"
+msgstr "№"
+
+#: .\templates\user_dashboard\dashboard.html:55
+msgid "Total Rooms"
+msgstr "Кол-во номеров"
+
+#: .\templates\user_dashboard\dashboard.html:56
+msgid "Booking Date"
+msgstr "Дата бронирования"
+
+#: .\templates\user_dashboard\dashboard.html:57
+msgid "Payment Status"
+msgstr "Статус платежа"
+
+#: .\templates\user_dashboard\dashboard.html:58
+msgid "View Booking"
+msgstr "Посмотреть бронь"
+
+# Оставил специально
+#: .\templates\user_dashboard\dashboard.html:70
+msgid "View"
+msgstr "Подробнее"
+
+#: .\templates\user_dashboard\dashboard.html:81
+msgid "All Booking Invoices"
+msgstr "Все чеки за бронирование"
+
+#: .\templates\user_dashboard\dashboard.html:88
+#: .\templates\user_dashboard\wallet.html:47
+msgid "Date"
+msgstr "Дата"
+
+#: .\templates\user_dashboard\dashboard.html:90
+msgid "Invoice"
+msgstr "Чек"
+
+#: .\templates\user_dashboard\password_changed.html:14
+msgid "Password Changed Successfully"
+msgstr "Пароль успешно изменен"
+
+#: .\templates\user_dashboard\profile.html:14
+msgid "Profile Details"
+msgstr "Мой профиль"
+
+#: .\templates\user_dashboard\profile.html:27
+msgid "Upload Photo"
+msgstr "Загрузить фотографию"
+
+#: .\templates\user_dashboard\profile.html:47
+msgid "Gender"
+msgstr "Пол"
+
+#: .\templates\user_dashboard\profile.html:51
+msgid "Country"
+msgstr "Страна"
+
+#: .\templates\user_dashboard\profile.html:55
+msgid "City"
+msgstr "Город"
+
+#: .\templates\user_dashboard\profile.html:64
+msgid "Save Changes"
+msgstr "Сохранить изменения"
+
+#: .\templates\user_dashboard\wallet.html:40
+msgid "Spending History"
+msgstr "История расходов"
+
+#: .\templates\user_dashboard\wallet.html:48
+msgid "Spent"
+msgstr "Расход"
+
+#: .\templates\userauths\sign-in.html:9
+msgid "Hi there! Welcome Back"
+msgstr "Привет! С возвращением"
+
+#: .\templates\userauths\sign-up.html:9
+msgid "Hi there! Create a free account today."
+msgstr "Привет! Создайте бесплатную учетную запись сегодня."
+
+#: .\venv\Lib\site-packages\ckeditor_uploader\templates\ckeditor\browse.html:5
+msgid "Select an image to embed"
+msgstr "Выберите изображение"
+
+#: .\venv\Lib\site-packages\ckeditor_uploader\templates\ckeditor\browse.html:27
+msgid "Browse for the image you want, then click 'Embed Image' to continue..."
+msgstr ""
+"Найдите нужное изображение, затем нажмите 'Вставить изображение' для "
+"продолжения..."
+
+#: .\venv\Lib\site-packages\ckeditor_uploader\templates\ckeditor\browse.html:29
+msgid ""
+"No images found. Upload images using the 'Image Button' dialog's 'Upload' "
+"tab."
+msgstr ""
+"Изображения не найдены. Загрузите изображения, используя вкладку 'Загрузить' "
+"в диалоговом окне 'Кнопка изображения'."
+
+#: .\venv\Lib\site-packages\ckeditor_uploader\templates\ckeditor\browse.html:50
+msgid "Images in: "
+msgstr "Изображения в: "
+
+#: .\venv\Lib\site-packages\ckeditor_uploader\templates\ckeditor\browse.html:62
+#: .\venv\Lib\site-packages\ckeditor_uploader\templates\ckeditor\browse.html:80
+msgid "Embed Image"
+msgstr "Вставить изображение"
+
+#: .\venv\Lib\site-packages\ckeditor_uploader\templates\ckeditor\browse.html:146
+msgid "Play Slideshow"
+msgstr "Начать слайдшоу"
+
+#: .\venv\Lib\site-packages\ckeditor_uploader\templates\ckeditor\browse.html:147
+msgid "Pause Slideshow"
+msgstr "Приостановить слайдшоу"
+
+#: .\venv\Lib\site-packages\ckeditor_uploader\templates\ckeditor\browse.html:148
+msgid "&lsaquo; Previous Photo"
+msgstr "&lsaquo; Предыдущее фото"
+
+#: .\venv\Lib\site-packages\ckeditor_uploader\templates\ckeditor\browse.html:149
+msgid "Next Photo &rsaquo;"
+msgstr "Следующее фото &rsaquo;"
+
+#: .\venv\Lib\site-packages\ckeditor_uploader\templates\ckeditor\browse.html:150
+msgid "Next &rsaquo;"
+msgstr "Следующий &rsaquo;"
+
+#: .\venv\Lib\site-packages\ckeditor_uploader\templates\ckeditor\browse.html:151
+msgid "&lsaquo; Prev"
+msgstr "&lsaquo; Пред."
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:7
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:220
+msgid "The install worked successfully! Congratulations!"
+msgstr "Установка прошла успешно! Поздравляю!"
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:206
+#, python-format
+msgid ""
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:221
+#, python-format
+msgid ""
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" "
+"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
+"configured any URLs."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:229
+msgid "Django Documentation"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:230
+msgid "Topics, references, &amp; how-to’s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:238
+msgid "Tutorial: A Polling App"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:239
+msgid "Get started with Django"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:247
+msgid "Django Community"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:248
+msgid "Connect, get help, or contribute"
+msgstr ""
+
+#: .\venv\Lib\site-packages\grappelli\dashboard\templates\grappelli\dashboard\modules\app_list.html:19
+#: .\venv\Lib\site-packages\grappelli\dashboard\templates\grappelli\dashboard\modules\model_list.html:9
+#: .\venv\Lib\site-packages\grappelli\templates\admin\app_index.html:30
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_form.html:159
+#: .\venv\Lib\site-packages\grappelli\templates\admin\index.html:44
+#: .\venv\Lib\site-packages\grappelli\templates\related_widget_wrapper.html:18
+msgid "Add"
+msgstr "Создать"
+
+#: .\venv\Lib\site-packages\grappelli\dashboard\templates\grappelli\dashboard\modules\recent_actions.html:18
+msgid "None Available"
+msgstr "Недоступно"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\404.html:7
+#: .\venv\Lib\site-packages\grappelli\templates\admin\404.html:11
+msgid "Page not found"
+msgstr "Страница не найдена"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\404.html:12
+msgid "We're sorry, but the requested page could not be found."
+msgstr "Приносим извенения, но запрошенная страница не найдена"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\500.html:10
+msgid "Server error"
+msgstr ""
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\500.html:15
+msgid "Server error (500)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\500.html:19
+msgid "Server Error <em>(500)</em>"
+msgstr ""
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\500.html:20
+msgid ""
+"There's been an error. It's been reported to the site administrators via e-"
+"mail and should be fixed shortly. Thanks for your patience."
+msgstr ""
+"Произошла ошибка. Она была сообщена администраторам сайта по электронной "
+"почте и должна быть исправлена в ближайшее время. Спасибо за ваше терпение."
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\actions.html:4
+msgid "Run the selected action"
+msgstr "Выполнить выбранные действия"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\actions.html:4
+msgid "Go"
+msgstr "Выполнить"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\actions.html:11
+msgid "Click here to select the objects across all pages"
+msgstr "Нажмите здесь, чтобы выбрать объекты на всех страницах."
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\actions.html:11
+#, python-format
+msgid "Select all %(total_count)s %(module_name)s"
+msgstr "Выбрать все %(total_count)s %(module_name)s"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\actions.html:12
+msgid "Clear selection"
+msgstr "Очистить бронирование"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\app_index.html:13
+#, python-format
+msgid "<li>%(name)s</li>"
+msgstr ""
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\app_index.html:37
+#: .\venv\Lib\site-packages\grappelli\templates\admin\index.html:52
+msgid "You don´t have permission to edit anything."
+msgstr "У вас не хватает прав для внесения изменений."
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\auth\user\change_password.html:11
+#: .\venv\Lib\site-packages\grappelli\templates\admin\auth\user\change_password.html:57
+#: .\venv\Lib\site-packages\grappelli\templates\admin\base.html:103
+msgid "Change password"
+msgstr "Изменить Пароль"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\auth\user\change_password.html:15
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_change_done.html:7
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_change_form.html:7
+msgid "Password change"
+msgstr "Пароль успешно изменен"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\auth\user\change_password.html:24
+#, python-format
+msgid "Enter a new password for the user <strong>%(username)s</strong>."
+msgstr "Введите новый пароль для пользователя <strong>%(username)s</strong>."
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\auth\user\change_password.html:27
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_form.html:190
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list.html:222
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm.html:230
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm_sidebar.html:227
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_sidebar.html:221
+#: .\venv\Lib\site-packages\grappelli\templates\admin\login.html:31
+#: .\venv\Lib\site-packages\grappelli\templates\smuggler\load_data_form.html:40
+msgid "Please correct the error below."
+msgstr "Пожалуйста, исправьте ошибку ниже."
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\auth\user\change_password.html:27
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_form.html:190
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list.html:222
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm.html:230
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm_sidebar.html:227
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_sidebar.html:221
+#: .\venv\Lib\site-packages\grappelli\templates\admin\login.html:31
+#: .\venv\Lib\site-packages\grappelli\templates\smuggler\load_data_form.html:42
+msgid "Please correct the errors below."
+msgstr "Пожалуйста, исправьте ошибки ниже."
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\auth\user\change_password.html:34
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_change_form.html:30
+msgid "New password"
+msgstr "Изменить Пароль"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\auth\user\change_password.html:46
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_change_form.html:37
+msgid "Password (again)"
+msgstr "Пароль (снова)"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\auth\user\change_password.html:50
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_confirm.html:29
+msgid "Enter the same password as above, for verification."
+msgstr "Введите тот же пароль, что и выше, для проверки."
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\base.html:82
+msgid "Django administration"
+msgstr ""
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\base.html:106
+msgid "Log out"
+msgstr "Выйти"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\base.html:113
+msgid "View site"
+msgstr "Открыть"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\base.html:118
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\bookmarklets.html:9
+msgid "Documentation"
+msgstr "Документация"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_form.html:143
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\stacked.html:9
+msgid "Open All Items"
+msgstr "Открыть"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_form.html:144
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\stacked.html:10
+msgid "Close All Items"
+msgstr "Закрыть"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_form.html:171
+#: .\venv\Lib\site-packages\grappelli\templates\admin\object_history.html:15
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\revision_form.html:11
+msgid "History"
+msgstr "История"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_form.html:172
+msgid "View on site"
+msgstr "Открыть"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list.html:159
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm.html:159
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm_sidebar.html:160
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_sidebar.html:160
+#: .\venv\Lib\site-packages\grappelli\templates\smuggler\change_list.html:15
+#, python-format
+msgid "Add %(name)s"
+msgstr "Добавить %(name)s"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list.html:188
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm.html:188
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm_sidebar.html:175
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_sidebar.html:175
+msgid "Filter"
+msgstr "Фильтр"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list.html:249
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm.html:257
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm_sidebar.html:254
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_sidebar.html:248
+#: .\venv\Lib\site-packages\grappelli\templates\admin\constance\change_list.html:108
+#: .\venv\Lib\site-packages\grappelli\templates\admin\submit_line.html:10
+msgid "Save"
+msgstr "Сохранить"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm.html:196
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_filter_confirm_sidebar.html:180
+msgid "Reset"
+msgstr "Сбросить"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_results.html:18
+msgid "Toggle sorting"
+msgstr "Переключить сортировку"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_results.html:19
+#, python-format
+msgid "Sorting priority: %(priority_number)s"
+msgstr "Приоритет сортировки : %(priority_number)s"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\change_list_results.html:20
+msgid "Remove from sorting"
+msgstr "Удалить из сортировки"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\constance\includes\results_list.html:13
+msgid "Default"
+msgstr "По умолчанию"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\constance\includes\results_list.html:18
+msgid "Value"
+msgstr "Значение"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\constance\includes\results_list.html:23
+msgid "Is modified"
+msgstr "Изменено"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\constance\includes\results_list.html:67
+msgid "Reset to default"
+msgstr "Сбросить настройки по умолчанию"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\csv_export_selected_confirmation.html:12
+msgid "Export selection as CSV"
+msgstr "Экспортировать выбранное в формате CSV"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\csv_export_selected_confirmation.html:31
+msgid "Export following fields:"
+msgstr "Экспортировать следующие поля:"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\csv_export_selected_confirmation.html:34
+msgid "Select all"
+msgstr "Выберите все"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\csv_export_selected_confirmation.html:54
+msgid "Back"
+msgstr "Назад"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\csv_export_selected_confirmation.html:55
+#: .\venv\Lib\site-packages\grappelli\templates\admin\import_export\change_list_export_item.html:4
+msgid "Export"
+msgstr "Экспорт"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\delete_confirmation.html:29
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
+"related objects, but your account doesn't have permission to delete the "
+"following types of objects:"
+msgstr ""
+"Удаление %(object_name)s '%(escaped_object)s' приведёт к удалению связанных "
+"объектов, но у вашей учетной записи нет прав для удаления следующих типов "
+"объектов:"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\delete_confirmation.html:37
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
+"following protected related objects:"
+msgstr ""
+"Удаление %(object_name)s '%(escaped_object)s' потребует удаления следующих "
+"защищённых связанных объектов:"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\delete_confirmation.html:47
+#, python-format
+msgid ""
+"Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
+"All of the following related items will be deleted:"
+msgstr ""
+"Вы уверены, что хотите удалить %(object_name)s \"%(escaped_object)s\"? Все "
+"следующие связанные элементы будут удалены:"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\delete_confirmation.html:56
+#: .\venv\Lib\site-packages\grappelli\templates\admin\delete_selected_confirmation.html:59
+msgid "Yes, I'm sure"
+msgstr "Да, я уверен"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\delete_selected_confirmation.html:16
+msgid "Delete multiple objects"
+msgstr "Удалить выбранные данные"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\delete_selected_confirmation.html:26
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would result in deleting related "
+"objects, but your account doesn't have permission to delete the following "
+"types of objects:"
+msgstr ""
+"Удаление выбранных %(objects_name)s приведёт к удалению связанных объектов, "
+"но у вашей учетной записи нет прав для удаления следующих типов объектов:"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\delete_selected_confirmation.html:34
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would require deleting the following "
+"protected related objects:"
+msgstr ""
+"Удаление выбранных %(objects_name)s потребует удаления следующих защищённых "
+"связанных объектов:"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\delete_selected_confirmation.html:44
+#, python-format
+msgid ""
+"Are you sure you want to delete the selected %(objects_name)s? All of the "
+"following objects and their related items will be deleted:"
+msgstr ""
+"Вы уверены, что хотите удалить выбранные %(objects_name)s? Все следующие "
+"объекты и их связанные элементы будут удалены:"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\stacked.html:11
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\stacked.html:60
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\tabular.html:108
+msgid "Add Item"
+msgstr "Добавить"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\stacked.html:26
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\tabular.html:78
+#: .\venv\Lib\site-packages\grappelli\templates\related_widget_wrapper.html:10
+msgid "Change"
+msgstr "Изменить"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\stacked.html:29
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\tabular.html:81
+msgid "View on Site"
+msgstr "Открыть"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\stacked.html:31
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\tabular.html:83
+msgid "Move Item"
+msgstr "Переместить"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\stacked.html:35
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\stacked.html:40
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\tabular.html:87
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\tabular.html:92
+msgid "Delete Item"
+msgstr "Удалить"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\stacked.html:58
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\tabular.html:106
+#, python-format
+msgid "Add another %(verbose_name)s"
+msgstr "Добавить еще %(verbose_name)s "
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\edit_inline\tabular.html:9
+msgid "Add Another"
+msgstr "Добавить еще"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\filter.html:4
+#: .\venv\Lib\site-packages\grappelli\templates\admin\filter_listing.html:3
+#, python-format
+msgid "%(filter_title)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\import_export\change_list_import_item.html:4
+msgid "Import"
+msgstr "Импорт"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\includes\object_delete_summary.html:3
+msgid "Summary"
+msgstr "Краткое описание"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\index.html:57
+msgid "Custom Views"
+msgstr "Пользовательские представления"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\index.html:69
+msgid "Recent actions"
+msgstr "Последние действия"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\index.html:71
+msgid "My actions"
+msgstr "Мои дейтсвия"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\index.html:74
+msgid "None available"
+msgstr "недоступно"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\invalid_setup.html:16
+msgid ""
+"Something's wrong with your database installation. Make sure the appropriate "
+"database tables have been created, and make sure the database is readable by "
+"the appropriate user."
+msgstr ""
+"Что-то не так с вашей установкой базы данных. Убедитесь, что соответствующие "
+"таблицы базы данных созданы, и что база данных доступна для чтения "
+"соответствующему пользователю."
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\login.html:26
+#: .\venv\Lib\site-packages\grappelli\templates\admin\login.html:67
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_complete.html:17
+msgid "Log in"
+msgstr "Вход"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\login.html:60
+msgid "Forgotten your password or username?"
+msgstr "Забыли пароль или имя пользователя?"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\object_history.html:26
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\object_history.html:13
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\recover_list.html:22
+msgid "Date/time"
+msgstr "Дата/Время"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\object_history.html:27
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\object_history.html:14
+msgid "User"
+msgstr "Пользователь"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\object_history.html:28
+msgid "Action"
+msgstr "Действие"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\object_history.html:34
+msgid "DATETIME_FORMAT"
+msgstr "ФОРМАТ_ДАТА_ВРЕМЯ"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\object_history.html:42
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\object_history.html:36
+msgid ""
+"This object doesn't have a change history. It probably wasn't added via this "
+"admin site."
+msgstr ""
+"У этого объекта нет истории изменений. Вероятно, он не был добавлен через "
+"этот административный сайт."
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\pagination.html:9
+#, python-format
+msgid "%(counter)s result"
+msgid_plural "%(counter)s results"
+msgstr[0] "%(counter)s результат"
+msgstr[1] "%(counter)s результата"
+msgstr[2] "%(counter)s результатов"
+msgstr[3] "%(counter)s результатов"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\pagination.html:14
+#: .\venv\Lib\site-packages\grappelli\templates\admin\pagination.html:16
+#, python-format
+msgid "%(full_result_count)s total"
+msgstr "Всего %(full_result_count)s"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\pagination.html:22
+#, python-format
+msgid ""
+"\n"
+"                        %(counter)s result\n"
+"                    "
+msgid_plural ""
+"\n"
+"                        %(counter)s results\n"
+"                    "
+msgstr[0] ""
+"\n"
+"                        %(counter)s результат\n"
+"                    "
+msgstr[1] ""
+"\n"
+"                        %(counter)s результата\n"
+"                    "
+msgstr[2] ""
+"\n"
+"                        %(counter)s результатов\n"
+"                    "
+msgstr[3] ""
+"\n"
+"                        %(counter)s результатов\n"
+"                    "
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\pagination.html:31
+#: .\venv\Lib\site-packages\grappelli\templates\admin\pagination.html:44
+msgid "Show all"
+msgstr "Показать все"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\popup_response.html:3
+msgid "Popup closing..."
+msgstr "Popup закрывается..."
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\related_widget_wrapper.html:24
+#: .\venv\Lib\site-packages\grappelli\templates\admin\widgets\related_widget_wrapper.html:18
+#: .\venv\Lib\site-packages\grappelli\templates\related_widget_wrapper.html:16
+#, python-format
+msgid "Add another %(model)s"
+msgstr "Добавить еще %(model)s"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\submit_line.html:13
+msgid "Save as new"
+msgstr "Сохранить как новое"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\submit_line.html:16
+msgid "Save and add another"
+msgstr "Сохранить и добавить еще"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\submit_line.html:19
+msgid "Save and continue editing"
+msgstr "Сохранить и продолжить редактирование"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\widgets\related_widget_wrapper.html:11
+#: .\venv\Lib\site-packages\grappelli\templates\related_widget_wrapper.html:8
+#, python-format
+msgid "Change selected %(model)s"
+msgstr "Изменить выбранные %(model)s"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin\widgets\related_widget_wrapper.html:25
+#: .\venv\Lib\site-packages\grappelli\templates\related_widget_wrapper.html:24
+#, python-format
+msgid "Delete selected %(model)s"
+msgstr "Удалить выбранные %(model)s"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\bookmarklets.html:10
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\bookmarklets.html:16
+msgid "Bookmarklets"
+msgstr "Закладки"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\bookmarklets.html:13
+msgid "Documentation bookmarklets"
+msgstr "Закладки документации"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\bookmarklets.html:18
+msgid ""
+"\n"
+"            <p>To install bookmarklets, drag the link to your bookmarks\n"
+"    toolbar, or right-click the link and add it to your bookmarks. Now you "
+"can\n"
+"    select the bookmarklet from any page in the site.  Note that some of "
+"these\n"
+"    bookmarklets require you to be viewing the site from a computer "
+"designated\n"
+"    as \"internal\" (talk to your system administrator if you aren't sure "
+"if\n"
+"    your computer is \"internal\").</p>\n"
+"        "
+msgstr ""
+"\n"
+"            <p>Чтобы установить закладки, перетащите ссылку на панель "
+"закладок\n"
+"    или щёлкните правой кнопкой мыши по ссылке и добавьте её в закладки. "
+"Теперь\n"
+"    вы можете выбрать закладку с любой страницы сайта. Обратите внимание, "
+"что\n"
+"    некоторые из этих закладок требуют просмотра сайта с компьютера, "
+"обозначенного\n"
+"    как «внутренний» (обратитесь к системному администратору, если не "
+"уверены,\n"
+"    является ли ваш компьютер «внутренним»).</p>\n"
+"        "
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\bookmarklets.html:27
+msgid "Documentation for this page"
+msgstr "Документация для этой страницы"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\bookmarklets.html:28
+msgid ""
+"Jumps you from any page to the documentation for the view that generates "
+"that page."
+msgstr ""
+"Переносит вас с любой страницы на документацию для представления, которое "
+"генерирует эту страницу."
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\bookmarklets.html:31
+msgid "Show object ID"
+msgstr "Показать ID объекта"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\bookmarklets.html:32
+msgid ""
+"Shows the content-type and unique ID for pages that represent a single "
+"object."
+msgstr ""
+"Показывает тип содержимого и уникальный ID для страниц, представляющих "
+"единичный объект."
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\bookmarklets.html:35
+msgid "Edit this object (current window)"
+msgstr "Редактировать этот объект (в текущем окне)"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\bookmarklets.html:36
+msgid "Jumps to the admin page for pages that represent a single object."
+msgstr ""
+"Переносит на страницу администрирования для страниц, представляющих "
+"единичный объект."
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\bookmarklets.html:39
+msgid "Edit this object (new window)"
+msgstr "Редактировать этот объект (в новом окне)"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\bookmarklets.html:40
+msgid "As above, but opens the admin page in a new window."
+msgstr ""
+"Как указано выше, но открывает страницу администрирования в новом окне."
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\view_index.html:43
+msgid "Empty namespace"
+msgstr "Пустое пространство имён"
+
+#: .\venv\Lib\site-packages\grappelli\templates\admin_doc\view_index.html:57
+msgid "Views by empty namespace"
+msgstr "Представления по пустому пространству имён"
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\logged_out.html:16
+msgid "Log in again"
+msgstr "Войти снова"
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_change_done.html:16
+msgid "Your password was changed."
+msgstr "Ваш пароль был изменён."
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_change_form.html:18
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+"Пожалуйста, введите ваш старый пароль для безопасности, а затем введите "
+"новый пароль дважды, чтобы мы могли проверить, что вы ввели его правильно."
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_change_form.html:23
+msgid "Old password"
+msgstr "Старый пароль"
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_change_form.html:46
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_confirm.html:35
+msgid "Change my password"
+msgstr "Изменить мой пароль"
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_complete.html:16
+msgid "Your password has been set. You may go ahead and log in now."
+msgstr "Ваш пароль установлен. Теперь вы можете войти."
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_confirm.html:18
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+"Пожалуйста, введите ваш новый пароль дважды, чтобы мы могли проверить, что "
+"вы ввели его правильно."
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_confirm.html:21
+msgid "New password:"
+msgstr "Новый пароль:"
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_confirm.html:26
+msgid "Confirm password:"
+msgstr "Повторите пароль:"
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_confirm.html:47
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used. Please request a new password reset."
+msgstr ""
+"Ссылка для сброса пароля недействительна, возможно, потому что она уже была "
+"использована. Пожалуйста, запросите новый сброс пароля."
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_done.html:5
+msgid "Password reset successful"
+msgstr "Пароль успешно изменен"
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_done.html:16
+msgid ""
+"We've emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+"Мы отправили вам инструкции по установке пароля на указанный email, если "
+"учётная запись с этим адресом существует. Вы должны получить их в ближайшее "
+"время."
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_done.html:17
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+"Если вы не получили письмо, убедитесь, что вы ввели адрес, с которым "
+"регистрировались, и проверьте папку со спамом."
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+"Вы получили это письмо, потому что запросили сброс пароля для вашей учётной "
+"записи на сайте %(site_name)s."
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr "Пожалуйста, перейдите на следующую страницу и выберите новый пароль:"
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_email.html:8
+msgid "Your username, in case you've forgotten:"
+msgstr "Ваше имя пользователя, на случай, если вы забыли:"
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_email.html:10
+msgid "Thanks for using our site!"
+msgstr "Спасибо за использование нашего сайта!"
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "Команда %(site_name)s"
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_form.html:5
+msgid "Password reset"
+msgstr "Сброс пароля"
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_form.html:17
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll email "
+"instructions for setting a new one."
+msgstr ""
+"Забыли пароль? Введите ваш email ниже, и мы отправим инструкции для "
+"установки нового."
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_form.html:20
+msgid "Email address:"
+msgstr "Email:"
+
+#: .\venv\Lib\site-packages\grappelli\templates\registration\password_reset_form.html:28
+msgid "Reset my password"
+msgstr "Сбросить мой пароль"
+
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\change_list.html:6
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\recover_form.html:10
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\recover_list.html:9
+#, python-format
+msgid "Recover deleted %(name)s"
+msgstr "Восстановить удалённые %(name)s"
+
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\object_history.html:7
+msgid ""
+"Choose a date from the list below to revert to a previous version of this "
+"object."
+msgstr ""
+"Выберите дату из списка ниже, чтобы вернуться к предыдущей версии этого "
+"объекта."
+
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\object_history.html:15
+msgid "Comment"
+msgstr "Комментарий"
+
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\recover_form.html:20
+msgid "Press the save button below to recover this version of the object."
+msgstr "Нажмите кнопку сохранения ниже, чтобы восстановить эту версию объекта."
+
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\recover_list.html:16
+msgid ""
+"Choose a date from the list below to recover a deleted version of an object."
+msgstr ""
+"Выберите дату из списка ниже, чтобы восстановить удалённую версию объекта."
+
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\recover_list.html:36
+msgid "There are no deleted objects to recover."
+msgstr "Нет удалённых объектов для восстановления."
+
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\revision_form.html:12
+#, python-format
+msgid "Revert %(verbose_name)s"
+msgstr "Вернуть %(verbose_name)s"
+
+#: .\venv\Lib\site-packages\grappelli\templates\reversion\revision_form.html:21
+msgid "Press the save button below to revert to this version of the object."
+msgstr "Нажмите кнопку сохранения ниже, чтобы вернуться к этой версии объекта."
+
+#: .\venv\Lib\site-packages\grappelli\templates\smuggler\change_list.html:7
+msgid "Dump data"
+msgstr "Выгрузить данные"
+
+#: .\venv\Lib\site-packages\grappelli\templates\smuggler\change_list.html:11
+#: .\venv\Lib\site-packages\grappelli\templates\smuggler\load_data_form.html:6
+#: .\venv\Lib\site-packages\grappelli\templates\smuggler\load_data_form.html:25
+#: .\venv\Lib\site-packages\grappelli\templates\smuggler\load_data_form.html:35
+msgid "Load data"
+msgstr "Загрузить данные"
+
+#: .\venv\Lib\site-packages\grappelli\templates\smuggler\load_data_form.html:46
+msgid ""
+"Existing items with same <strong>primary key</strong> will be overwritten."
+msgstr ""
+"Существующие элементы с одинаковым <strong>первичным ключом</strong> будут "
+"перезаписаны."
+
+#: .\venv\Lib\site-packages\grappelli\templates\smuggler\load_data_form.html:53
+msgid "Load"
+msgstr "Загрузить"
+
+
+#~ msgid "HMS Team"
+#~ msgstr "Команда системы управления отелем"
+
+
+#~ msgctxt "admin"
+#~ msgid "Check-In Date"
+#~ msgstr "Дата заезда"
+
+#~ msgctxt "admin"
+#~ msgid "Check-Out Date"
+#~ msgstr "Дата выезда"
+
+#~ msgid "check in time:"
+#~ msgstr "Время заезда:"
+
+#~ msgid "check out time:"
+#~ msgstr "Время выезда:"
+
+#~ msgid "Bookmark Listing"
+#~ msgstr "Избранные"
+
+#~ msgid "People Bookmarked This Hotel"
+#~ msgstr "людей добавили этот отель в избранные"
+
+#~ msgid "Rating Average"
+#~ msgstr "Средний рейтинг"
+
+#~ msgid "Quality"
+#~ msgstr "Качество"
+
+#~ msgid "Location"
+#~ msgstr "Место"
+
+#~ msgid "Space"
+#~ msgstr "Площадь"
+
+#~ msgid "Service"
+#~ msgstr "Услуга"
+
+#~ msgid "No description available."
+#~ msgstr "Описание недоступно."
+
+#~ msgid "Contact Info"
+#~ msgstr "Контактная информация"
+
+#~ msgid "Posted on"
+#~ msgstr "Создано"
+
+#~ msgid "Hotels"
+#~ msgstr "Отели"
+
+#~ msgid "Luxury"
+#~ msgstr "Люкс"
+
+#~ msgid "Classic"
+#~ msgstr "Стандарт"
+
+#~ msgid "Economy"
+#~ msgstr "Эконом"
+
+#~ msgid "Account"
+#~ msgstr "Аккаунт"
+
+#~ msgid "Blog"
+#~ msgstr "Блог"
+
+#~ msgid "Pages"
+#~ msgstr "Страницы"
+
+#~ msgid "About Us"
+#~ msgstr "О нас"
+
+#~ msgid "Contact"
+#~ msgstr "Контакты"
+
+#~ msgid "Useful Links"
+#~ msgstr "Полезные ссылки"
+
+#~ msgid "Listing"
+#~ msgstr "Список"
+
+#~ msgid "My Account"
+#~ msgstr "Мой аккаунт"
+
+#~ msgid "Profile"
+#~ msgstr "Профиль"
+
+#~ msgid "My Listing"
+#~ msgstr "Мой список"
+
+#~ msgid "Favorites"
+#~ msgstr "Избранное"
+
+#~ msgid "Our Partners"
+#~ msgstr "Наши партнеры"
+
+#~ msgid "How It Work"
+#~ msgstr "Как это работает"
+
+#~ msgid "Help"
+#~ msgstr "Помощь"
+
+#~ msgid "Add Listing"
+#~ msgstr "Добавить список"
+
+#~ msgid "Contact Us"
+#~ msgstr "Связаться с нами"
+
+#~ msgid "Features:"
+#~ msgstr "Особенности:"
+
+#~ msgid "Select Room Type (*required)"
+#~ msgstr "Выберите тип номера (*обязательно)"
+
+#~ msgid "Pay with Flutterwave"
+#~ msgstr "Оплатить через Flutterwave"
+
+#~ msgid "Pay with Stripe"
+#~ msgstr "Оплатить через Stripe"
+
+#~ msgid "Twitter"
+#~ msgstr "Твиттер"
+
+#~ msgid "Instagram"
+#~ msgstr "Инстаграм"
+
+#~ msgid "Linkedin"
+#~ msgstr "Линкедин"
+
+#~ msgid "Youtube"
+#~ msgstr "Ютуб"
+
+#~ msgid "Tags"
+#~ msgstr "Теги"
+
+#~ msgid "State"
+#~ msgstr "Регион"
+
+#~ msgid "Value-added tax"
+#~ msgstr "Налог на добавленную стоимость"
+
+# JavaScript переводы для кнопок
+#~ msgid "Adding room..."
+#~ msgstr "Добавляем номер..."
+
+#~ msgid "Added to selection"
+#~ msgstr "Добавлено в выборку"
+
+#~ msgid "Updated"
+#~ msgstr "Обновлено"

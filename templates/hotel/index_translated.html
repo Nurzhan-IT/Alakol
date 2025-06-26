@@ -1,34 +1,156 @@
-
 {% extends 'partials/base.html' %}
 {% load static %}
 {% load i18n %}
+
+{% block title %}{% trans "Алаколь - Лучшие отели и базы отдыха на озере | Бронирование онлайн" %}{% endblock %}
+
+{% block meta_description %}{% trans "Забронируйте лучшие отели и базы отдыха на озере Алаколь, Казахстан. Более 10 отелей и баз отдыха с мгновенным подтверждением, лучшие цены, отзывы гостей. Откройте для себя красоту Алаколя!" %}{% endblock %}
+
+{% block meta_keywords %}{% trans "Алаколь отели, базы отдыха, бронирование Алаколь, озеро Алаколь, отдых Казахстан, гостиницы ВКО, Восточно-Казахстанская область, Абайская область, курорт Алаколь, базы отдыха Алаколь" %}{% endblock %}
+
+{% block og_title %}{% trans "Алаколь - Лучшие отели и базы отдыха на озере | Бронирование онлайн" %}{% endblock %}
+{% block og_description %}{% trans "Забронируйте лучшие отели и базы отдыха на озере Алаколь, Казахстан. Более 10 отелей и баз отдыха с мгновенным подтверждением, лучшие цены, отзывы гостей." %}{% endblock %}
+{% block og_image %}{% static 'images/alakol-og-image.jpg' %}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "{% trans 'Алаколь - Бронирование отелей и баз отдыха' %}",
+    "url": "{{ request.build_absolute_uri }}",
+    "description": "{% trans 'Бронирование отелей и баз отдыха на озере Алаколь, Казахстан. Лучшие цены, удобный поиск, мгновенное подтверждение бронирования.' %}",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ request.scheme }}://{{ request.get_host }}/search/?name={search_term_string}",
+        "query-input": "required name=search_term_string"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Alakol Hotel Booking",
+        "url": "{{ request.scheme }}://{{ request.get_host }}",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo.png' %}"
+        }
+    }
+}
+</script>
+
+{% if hotel %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "{% trans 'Популярные отели и базы отдыха Алаколь' %}",
+    "description": "{% trans 'Список лучших отелей и баз отдыха на озере Алаколь с рейтингами и отзывами' %}",
+    "numberOfItems": {{ hotel|length }},
+    "itemListElement": [
+        {% for h in hotel %}
+        {
+            "@type": "ListItem",
+            "position": {{ forloop.counter }},
+            "item": {
+                "@type": "Hotel",
+                "@id": "{{ request.scheme }}://{{ request.get_host }}{% url 'hotel:detail' h.slug %}",
+                "name": "{{ h.name|escapejs }}",
+                "description": "{{ h.description|truncatechars:160|escapejs }}",
+                "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'hotel:detail' h.slug %}",
+                "image": "{{ request.scheme }}://{{ request.get_host }}{{ h.image.url }}",
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "{{ h.address|escapejs }}",
+                    "addressLocality": "{% trans 'Алаколь' %}",
+                    "addressRegion": "{% trans 'Восточно-Казахстанская область' %}",
+                    "addressCountry": "KZ"
+                },
+                "telephone": "{{ h.mobile }}",
+                {% if h.average_rating %}
+                "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": "{{ h.average_rating }}",
+                    "reviewCount": "{{ h.rating_count }}",
+                    "bestRating": "5",
+                    "worstRating": "1"
+                },
+                {% endif %}
+                "priceRange": "$",
+                "amenityFeature": [
+                    {% for feature in h.features.all %}
+                    {
+                        "@type": "LocationFeatureSpecification",
+                        "name": "{{ feature.name|escapejs }}"
+                    }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            }
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>
+{% endif %}
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "TouristDestination",
+    "name": "{% trans 'Озеро Алаколь' %}",
+    "description": "{% trans 'Алаколь - прекрасное соленое озеро в Восточно-Казахстанской и Абайской областях Казахстана, известное своими лечебными свойствами и красивыми пейзажами.' %}",
+    "url": "{{ request.build_absolute_uri }}",
+    "image": "{{ request.scheme }}://{{ request.get_host }}{% static 'images/alakol-destination.jpg' %}",
+    "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "{% trans 'Алаколь' %}",
+        "addressRegion": "{% trans 'Восточно-Казахстанская область' %}",
+        "addressCountry": "KZ"
+    },
+    "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "46.1167",
+        "longitude": "81.8167"
+    },
+    "touristType": [
+        "{% trans 'Семейный отдых' %}",
+        "{% trans 'Оздоровительный туризм' %}",
+        "{% trans 'Пляжный отдых' %}"
+    ]
+}
+</script>
+{% endblock %}
+
 {% block content %}
         <!-- Banner -->
-        <div class="search_container_block main_search_block" data-background-image="{% static 'images/home_section_1.jpg' %}">
+        <div class="search_container_block main_search_block" data-background-image="{% static 'images/john-wood-KkXf7lxXS78-unsplash.jpg' %}">
             <div class="main_inner_search_block">
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            {% trans "Book Unique Experiences" %}
-                            {% trans "Discover top rated hotels, shops and restaurants around the world" %}
+                            <h1>{% trans "Базы отдыха Алаколь" %}</h1>
+                            <h2>{% trans "Откройте для себя лучшие отели Алаколя" %}</h2>
                             <div class="main_input_search_part">
-                                <div class="main_input_search_part_item">
-                                    <input type="text" placeholder="{% trans 'Hotel...' %}" value="" />
-                                </div>
-                                <div class="main_input_search_part_item main-search-input-item search-input-icon">
-                                    <input type="text" placeholder="Select Booking Date" id="booking-date-search">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <div class="main_input_search_part_item intro-search-field">
-                                    <select data-placeholder="All Categories" class="selectpicker default" title="All Categories" data-live-search="true" data-selected-text-format="count" data-size="5">
-							  <option>{% trans "Food & Restaurants" %} </option>
-							  <option>{% trans "Shop & Education" %}</option>
-							  <option>{% trans "Education" %}</option>
-							  <option>{% trans "Business" %}</option>
-							  <option>{% trans "Events" %}</option>
-							</select>
-                                </div>
-                                <button class="button" >{% trans "Search" %}</button>
+                                <form action="{% url 'hotel:search' %}" method="get" class="main_input_search_part_form">
+                                    <div class="main_input_search_part_item">
+                                        <input type="text" placeholder="{% trans 'Отель...' %}" name="name" value="" />
+                                    </div>
+                                    <div class="main_input_search_part_item main-search-input-item search-input-icon">
+                                        <input type="text" placeholder="{% trans 'Выберите даты бронирования' %}" id="booking-date-search">
+                                        <i class="fa fa-calendar"></i>
+                                        <input type="hidden" name="check_in_date" id="check_in_date">
+                                        <input type="hidden" name="check_out_date" id="check_out_date">
+                                    </div>
+                                    <div class="main_input_search_part_item guests-count">
+                                        <div class="guest-stepper-base">
+                                            <span for="guests">{% trans "Количество гостей" %}</span>
+                                            <div class="guest-stepper">
+                                                <button type="button" class="stepper-btn decrement">−</button>
+                                                <input class="guest-stepper-value" type="number" id="guests" name="guests" min="1" max="99" value="1" />
+                                                <button type="button" class="stepper-btn increment">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="button" type="submit">{% trans "Поиск" %}</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -40,7 +162,7 @@
             <div class="container">
                 <div class="row slick_carousel_slider">
                     <div class="col-md-12">
-                        <h3 class="headline_part centered margin-bottom-45">{% trans "Our Popular Tours" %} <span>{% trans "Explore the greatest places in the city" %}</span></h3>
+                        <h3 class="headline_part centered margin-bottom-45">{% trans "Наши Популярные базы" %} <span>{% trans "Исследуйте самые замечательные места на Алаколе" %}</span></h3>
                     </div>
 
                     <div class="row">
@@ -48,32 +170,35 @@
                                 {% for h in hotel %}
                                     <div class="col-lg-4">
                                         <a href="{% url 'hotel:detail' h.slug %}" class="utf_listing_item-container compact">
-                                            <div class="utf_listing_item"> <img src="{{h.image.url}}" alt=""> 
-                                                <!-- <span class="tag"> <i class="im im-icon-Chef-Hat"></i> Restaurant </span>  -->
-                                                <!-- <span class="featured_tag">Featured</span> -->
-                                                <span class="utf_open_now">{% trans "Open Now" %}</span>
+                                            <div class="utf_listing_item"> 
+                                                <img src="{{h.image.url}}" alt="{% trans 'Отель' %} {{ h.name }} - {% trans 'Алаколь' %}" loading="lazy"> 
+                                                <span class="utf_open_now">{% trans "Открыто сейчас" %}</span>
                                                 <div class="utf_listing_item_content">
                                                     <div class="utf_listing_prige_block">
-                                                        <!-- <span class="utf_meta_listing_price"><i class="fa fa-tag"></i> $25 - $55</span> -->
-                                                        <!-- <span class="utp_approve_item"><i class="utf_approve_listing"></i></span> -->
+                                                        <!-- Pricing can be added here -->
                                                     </div>
-                                                    <h3>{{h.name|truncatechars:20}}</h3>
-                                                    <span><i class="fas fa-location-arrow"></i> {{h.address}}</span>
-                                                    <span><i class="fas fa-phone"></i> {{h.mobile}}</span>
+                                                    <h4>{{h.name|truncatechars:20}}</h4>
+                                                    <span><i class="fa fa-map-marker"></i> {{h.address}}</span>
+                                                    {% if h.mobile %}
+                                                    <span><i class="fa fa-phone"></i> {{h.mobile}}</span>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                             <div class="utf_star_rating_section" data-rating="{{h.average_rating}}">
                                                 
                                                 {% if h.average_rating == None %}
-                                                <div class="utf_counter_star_rating">{% trans "No Rating Yet" %}</div>
+                                                <div class="utf_counter_star_rating">{% trans "Нет рейтинга" %}</div>
                                                 {% else %}
-                                                <div class="utf_counter_star_rating">{{h.average_rating}}/5 ({{h.rating_count}} {% trans "reviews" %}) </div>
+                                                <div class="utf_counter_star_rating">{{h.average_rating}}/5 ({{h.rating_count}} {% trans "отзывов" %}) </div>
                                                 {% endif %}
                                                     
-                                                <span class="utf_view_count"> {{h.views}}</span>
                                                 <span class="like-icon add-to-bookmark-{{h.id}}" data-hotel="{{h.id}}" id="add-to-bookmark"></span>
                                             </div>
                                         </a>
+                                    </div>
+                                {% empty %}
+                                    <div class="col-md-12">
+                                        <p class="text-center">{% trans "В настоящее время отели недоступны. Пожалуйста, проверьте позже." %}</p>
                                     </div>
                                 {% endfor %}
 
@@ -84,16 +209,49 @@
             </div>
         </section>
 
+        <!-- How It Works Section -->
+        <section class="fullwidth_block padding-bottom-75">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <h3 class="headline_part centered margin-top-80">{% trans "Как это работает?" %} <span class="margin-top-10">{% trans "Простое бронирование в 3 шага" %}</span></h3>
+                    </div>
+                </div>
+                <div class="row container_icon">
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="box_icon_two box_icon_with_line"> 
+                            <i class="im im-icon-Map-Marker2"></i>
+                            <h4>{% trans "Найдите отель" %}</h4>
+                            <p>{% trans "Выберите идеальный отель из нашего каталога проверенных заведений на Алаколе" %}</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="box_icon_two box_icon_with_line"> 
+                            <i class="im im-icon-Mail-Add"></i>
+                            <h4>{% trans "Выберите даты" %}</h4>
+                            <p>{% trans "Укажите даты заезда и выезда, количество гостей и получите актуальные цены" %}</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <div class="box_icon_two"> 
+                            <i class="im im-icon-Administrator"></i>
+                            <h4>{% trans "Забронируйте" %}</h4>
+                            <p>{% trans "Подтвердите бронирование и получите мгновенное подтверждение на email" %}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <div class="clearfix"></div>
-
-       
 
         <section class="fullwidth_block padding-bottom-75">
             <div class="container">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
-                        <h2 class="headline_part centered margin-top-80">{% trans "How It Works?" %} <span class="margin-top-10">{% trans "Discover & connect with great local businesses" %}</span></h2>
+                        <h2 class="headline_part centered margin-top-80">{% trans "What Say Our Customers" %} <span class="margin-top-15">{% trans "Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the industry's standard dummy text ever since..." %}</span></h2>
                     </div>
                 </div>
                 <div class="row container_icon">
@@ -300,4 +458,11 @@
         </section>
 
 {% endblock content %}
+
+{% block special_header_links %}
+<script src="{% static 'scripts/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'scripts/moment.min.js' %}"></script>
+<script src="{% static 'scripts/daterangepicker.js' %}"></script>
+<script src="{% static 'scripts/guest-stepper.js' %}"></script>
+{% endblock %}
     

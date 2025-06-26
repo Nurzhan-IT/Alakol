@@ -135,3 +135,27 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+# Production files
+.env.prod
+.env.local
+.env.*.local
+
+# Docker volumes and logs
+logs/
+backups/
+docker-compose.backup.yml
+
+# Legacy booking processor
+booking_cleanup.log
+booking_processor_legacy.log
+
+# SSL certificates
+*.pem
+*.key
+*.crt
+
+# System monitoring
+system-monitor.log
+
+

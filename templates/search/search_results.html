@@ -1,182 +1,199 @@
 {% extends 'partials/base.html' %}
 {% load static %}
 {% load i18n %}
-
+{% load price_format %}
 {% block title %}{% trans "Hotel Search Results" %}{% endblock %}
 
+
+
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
+<div class="search-base">
+    <div class="filters-and-results">
         <!-- Search Filters Sidebar -->
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-header">
-                    <h4>{% trans "Filters" %}</h4>
+
+        <div class="filters-card">
+            <div class="card-header">
+                <h4>{% trans "Filters" %}</h4>
+            </div>
+            <div class="card-body">
+                <form class="filters-form" method="get" action="{% url 'search:search_results' %}">
+                    <!-- Hotel Name -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label">{% trans "Hotel Name" %}</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ search_params.name }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="min_rating" class="form-label">{% trans "Minimum Rating" %}</label>
+                        <select class="form-select" id="min_rating" name="min_rating">
+                            <option value="">{% trans "Any" %}</option>
+                            <option value="1" {% if search_params.min_rating == '1' %}selected{% endif %}>{% trans "1+ Star" %}</option>
+                            <option value="2" {% if search_params.min_rating == '2' %}selected{% endif %}>{% trans "2+ Stars" %}</option>
+                            <option value="3" {% if search_params.min_rating == '3' %}selected{% endif %}>{% trans "3+ Stars" %}</option>
+                            <option value="4" {% if search_params.min_rating == '4' %}selected{% endif %}>{% trans "4+ Stars" %}</option>
+                            <option value="5" {% if search_params.min_rating == '5' %}selected{% endif %}>{% trans "5 Stars" %}</option>
+                        </select>
+                    </div>
+
+                    <!-- Check-in & Check-out Date -->
+                    <div class="mb-3">
+                        <label for="check_in_date" class="form-label">{% trans "Check-in Date" %}</label>
+                        <input type="date" class="check-in-out-input form-control" id="check_in_date" name="check_in_date" value="{{ search_params.check_in_date }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="check_out_date" class="form-label">{% trans "Check-out Date" %}</label>
+                        <input type="date" class="check-in-out-input form-control" id="check_out_date" name="check_out_date" value="{{ search_params.check_out_date }}">
+                    </div>
+
+                    <!-- Price Range -->
+                    <div class="mb-3">
+                        <label for="min_price" class="form-label">{% trans "Min Price" %}</label>
+                        <input type="number" class="form-control" id="min_price" name="min_price" value="{{ search_params.min_price }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="max_price" class="form-label">{% trans "Max Price" %}</label>
+                        <input type="number" class="form-control" id="max_price" name="max_price" value="{{ search_params.max_price }}">
+                    </div>
+
+                    <!-- Guest Count -->
+                    <div class="mb-3">
+                        <label for="guests" class="form-label">{% trans "Number of Guests" %}</label>
+                        <input type="number" class="form-control" id="guests" name="guests" value="{{ search_params.guests }}">
+                    </div>
+
+                    <!-- Rating -->
+                    <!--                        <div class="mb-3">-->
+                    <!--                            <label for="min_rating" class="form-label">{% trans "Minimum Rating" %}</label>-->
+                    <!--                            <select class="form-select" id="min_rating" name="min_rating">-->
+                    <!--                                <option value="">{% trans "Any" %}</option>-->
+                    <!--                                <option value="1" {% if search_params.min_rating == '1' %}selected{% endif %}>{% trans "1+ Star" %}</option>-->
+                    <!--                                <option value="2" {% if search_params.min_rating == '2' %}selected{% endif %}>{% trans "2+ Stars" %}</option>-->
+                    <!--                                <option value="3" {% if search_params.min_rating == '3' %}selected{% endif %}>{% trans "3+ Stars" %}</option>-->
+                    <!--                                <option value="4" {% if search_params.min_rating == '4' %}selected{% endif %}>{% trans "4+ Stars" %}</option>-->
+                    <!--                                <option value="5" {% if search_params.min_rating == '5' %}selected{% endif %}>{% trans "5 Stars" %}</option>-->
+                    <!--                            </select>-->
+                    <!--                        </div>-->
+
+                    <!-- Room Type -->
+                    {% comment %} <div class="mb-3">
+                    <label for="room_type" class="form-label">Room Type</label>
+                    <select class="form-select" id="room_type" name="room_type">
+                        <option value="">Any</option>
+                        {% for type in room_types %}
+                        <option value="{{ type }}" {% if search_params.room_type == type %}selected{% endif %}>{{ type }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
-                <div class="card-body">
-                    <form method="get" action="{% url 'search:search_results' %}">
-                        <!-- Hotel Name -->
-                        <div class="mb-3">
-                            <label for="name" class="form-label">{% trans "Hotel Name" %}</label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{ search_params.name }}">
-                        </div>
-                        
-                        <!-- Check-in & Check-out Date -->
-                        <div class="mb-3">
-                            <label for="check_in_date" class="form-label">{% trans "Check-in Date" %}</label>
-                            <input type="date" class="form-control" id="check_in_date" name="check_in_date" value="{{ search_params.check_in_date }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="check_out_date" class="form-label">{% trans "Check-out Date" %}</label>
-                            <input type="date" class="form-control" id="check_out_date" name="check_out_date" value="{{ search_params.check_out_date }}">
-                        </div>
-                        
-                        <!-- Price Range -->
-                        <div class="mb-3">
-                            <label for="min_price" class="form-label">{% trans "Min Price" %}</label>
-                            <input type="number" class="form-control" id="min_price" name="min_price" value="{{ search_params.min_price }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="max_price" class="form-label">{% trans "Max Price" %}</label>
-                            <input type="number" class="form-control" id="max_price" name="max_price" value="{{ search_params.max_price }}">
-                        </div>
-                        
-                        <!-- Guest Count -->
-                        <div class="mb-3">
-                            <label for="guests" class="form-label">{% trans "Number of Guests" %}</label>
-                            <input type="number" class="form-control" id="guests" name="guests" value="{{ search_params.guests }}">
-                        </div>
-                        
-                        <!-- Rating -->
-                        <div class="mb-3">
-                            <label for="min_rating" class="form-label">{% trans "Minimum Rating" %}</label>
-                            <select class="form-select" id="min_rating" name="min_rating">
-                                <option value="">{% trans "Any" %}</option>
-                                <option value="1" {% if search_params.min_rating == '1' %}selected{% endif %}>{% trans "1+ Star" %}</option>
-                                <option value="2" {% if search_params.min_rating == '2' %}selected{% endif %}>{% trans "2+ Stars" %}</option>
-                                <option value="3" {% if search_params.min_rating == '3' %}selected{% endif %}>{% trans "3+ Stars" %}</option>
-                                <option value="4" {% if search_params.min_rating == '4' %}selected{% endif %}>{% trans "4+ Stars" %}</option>
-                                <option value="5" {% if search_params.min_rating == '5' %}selected{% endif %}>{% trans "5 Stars" %}</option>
-                            </select>
-                        </div>
-                        
-                        <!-- Room Type -->
-                        {% comment %} <div class="mb-3">
-                            <label for="room_type" class="form-label">Room Type</label>
-                            <select class="form-select" id="room_type" name="room_type">
-                                <option value="">Any</option>
-                                {% for type in room_types %}
-                                <option value="{{ type }}" {% if search_params.room_type == type %}selected{% endif %}>{{ type }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                         {% endcomment %}
-                        <!-- Hotel Features -->
-                        {% comment %} <div class="mb-3">
-                            <label class="form-label">Features</label>
-                            {% for feature in all_features %}
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="feature_{{ forloop.counter }}" name="features" value="{{ feature }}" 
-                                       {% if feature in search_params.features %}checked{% endif %}>
-                                <label class="form-check-label" for="feature_{{ forloop.counter }}">{{ feature }}</label>
-                            </div>
-                            {% endfor %}
-                        </div> {% endcomment %}
-                        
-                        <!-- Sort By -->
-                        <div class="mb-3">
-                            <label for="sort_by" class="form-label">{% trans "Sort By" %}</label>
-                            <select class="form-select" id="sort_by" name="sort_by">
-                                <option value="name" {% if search_params.sort_by == 'name' %}selected{% endif %}>{% trans "Name" %}</option>
-                                <option value="price_asc" {% if search_params.sort_by == 'price_asc' %}selected{% endif %}>{% trans "Price: Low to High" %}</option>
-                                <option value="price_desc" {% if search_params.sort_by == 'price_desc' %}selected{% endif %}>{% trans "Price: High to Low" %}</option>
-                                <option value="rating" {% if search_params.sort_by == 'rating' %}selected{% endif %}>{% trans "Rating" %}</option>
-                                <option value="popularity" {% if search_params.sort_by == 'popularity' %}selected{% endif %}>{% trans "Popularity" %}</option>
-                            </select>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary w-100">{% trans "Search" %}</button>
-                    </form>
-                </div>
+                    {% endcomment %}
+                    <!-- Hotel Features -->
+                    {% comment %} <div class="mb-3">
+                    <label class="form-label">Features</label>
+                    {% for feature in all_features %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="feature_{{ forloop.counter }}" name="features" value="{{ feature }}"
+                               {% if feature in search_params.features %}checked{% endif %}>
+                        <label class="form-check-label" for="feature_{{ forloop.counter }}">{{ feature }}</label>
+                    </div>
+                    {% endfor %}
+                </div> {% endcomment %}
+
+                    <!-- Sort By -->
+                    <div class="mb-3">
+                        <label for="sort_by" class="form-label">{% trans "Sort By" %}</label>
+                        <select class="form-select" id="sort_by" name="sort_by">
+                            <option value="name" {% if search_params.sort_by == 'name' %}selected{% endif %}>{% trans "Name" %}</option>
+                            <option value="price_asc" {% if search_params.sort_by == 'price_asc' %}selected{% endif %}>{% trans "Price: Low to High" %}</option>
+                            <option value="price_desc" {% if search_params.sort_by == 'price_desc' %}selected{% endif %}>{% trans "Price: High to Low" %}</option>
+                            <option value="rating" {% if search_params.sort_by == 'rating' %}selected{% endif %}>{% trans "Rating" %}</option>
+                            <option value="popularity" {% if search_params.sort_by == 'popularity' %}selected{% endif %}>{% trans "Popularity" %}</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="submit-filters">{% trans "Search" %}</button>
+                </form>
             </div>
         </div>
-        
+
         <!-- Search Results -->
-        <div class="col-md-9">
-            <div class="mb-3 d-flex justify-content-between align-items-center">
+        <div>
+
+            <div class="search-results-header">
                 <h2>{% trans "Search Results" %}</h2>
-                <div>
-                    {% trans "Found {{ paginator.count }} hotels" %}
+                <div class="found-label">
+                    {% blocktrans count count=paginator.count %}Found {{ count }} hotel{% plural %}Found {{ count }} hotels{% endblocktrans %}
                 </div>
             </div>
-            
-            {% if hotels %}
+
+
+            <div class="search-results-container">
+                <div class="fade-top"></div>
+
+                {% if hotels %}
                 {% for hotel in hotels %}
-                <div class="card mb-4 hotel-card">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            {% if hotel.image %}
-                            <img src="{{ hotel.image.url }}" class="img-fluid rounded-start h-100" alt="{{ hotel.name }}" style="object-fit: cover;">
-                            {% else %}
-                            <div class="bg-secondary h-100 w-100 d-flex align-items-center justify-content-center text-white">
-                                <span>{% trans "No Image" %}</span>
-                            </div>
-                            {% endif %}
+                <div class="results-hotel-card mb-4 hotel-card">
+                    <div class="results-hotel-card-left-part">
+                        {% if hotel.image %}
+                        <img src="{{ hotel.image.url }}" class="search-results-hotel-image" alt="{{ hotel.name }}" style="object-fit: cover;">
+                        {% else %}
+                        <div class="bg-secondary h-100 w-100 d-flex align-items-center justify-content-center text-white">
+                            <span>{% trans "No Image" %}</span>
                         </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <h4 class="card-title">{{ hotel.name }}</h4>
-                                    <div>
-                                        {% if hotel.avg_rating %}
-                                        <span class="badge bg-success p-2">
+                        {% endif %}
+                    </div>
+                    <div class="results-hotel-card-right-part">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h4 class="card-title">{{ hotel.name }}</h4>
+                                <div>
+                                    {% if hotel.avg_rating %}
+                                    <span class="badge bg-success p-2">
                                             {{ hotel.avg_rating|floatformat:1 }} ★
                                         </span>
-                                        {% else %}
-                                        <span class="badge bg-secondary p-2">{% trans "No ratings" %}</span>
-                                        {% endif %}
-                                    </div>
+                                    {% else %}
+                                    <span class="badge bg-secondary p-2">{% trans "No ratings" %}</span>
+                                    {% endif %}
                                 </div>
-                                
-                                <p class="card-text"><i class="bi bi-geo-alt"></i> {{ hotel.address }}</p>
-                                
-                                <div class="mb-2">
-                                    <strong>{% trans "Features:" %}</strong>
-                                    <div class="mt-1">
-                                        {% for feature in hotel.hotelfeatures_set.all|slice:":5" %}
-                                        <span class="badge bg-info text-dark me-1">{{ feature.name }}</span>
-                                        {% empty %}
-                                        <span class="text-muted">{% trans "No features listed" %}</span>
-                                        {% endfor %}
-                                        {% if hotel.hotelfeatures_set.all.count > 5 %}
-                                        <span class="badge bg-secondary">+{{ hotel.hotelfeatures_set.all.count|add:"-5" }} {% trans "more" %}</span>
-                                        {% endif %}
-                                    </div>
+                            </div>
+
+                            <p class="card-text"><i class="bi bi-geo-alt"></i> {{ hotel.address }}</p>
+
+                            <div class="hotel-card-amenities mb-2">
+                                <strong>{% trans "Amenities:" %}</strong>
+                                <div class="amenities_list">    
+                                    {% for feature in hotel.hotelfeatures_set.all|slice:":5" %}
+                                    <span>{{ feature.name }}</span>
+                                    {% empty %}
+                                    <span class="text-muted">{% trans "No amenities listed" %}</span>
+                                    {% endfor %}
+                                    {% if hotel.hotelfeatures_set.all.count > 5 %}
+                                    <span class="badge">+{{ hotel.hotelfeatures_set.all.count|add:"-5" }} {% trans "more" %}</span>
+                                    {% endif %}
                                 </div>
-                                
-                                <div class="mb-3">
-                                    <strong>{% trans "Available Rooms:" %}</strong> {{ hotel.rooms_count }}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <strong>{% trans "Available Rooms:" %}</strong> {{ hotel.rooms_count }}
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-end">
+                                <div>
+                                    <small class="text-muted">{{ hotel.views }} {% trans "views" %}</small>
                                 </div>
-                                
-                                <div class="d-flex justify-content-between align-items-end">
-                                    <div>
-                                        <small class="text-muted">{{ hotel.views }} {% trans "views" %}</small>
-                                    </div>
-                                    <div class="text-end">
-                                        {% if hotel.min_price %}
-                                        <div class="fs-5 fw-bold text-success">{{ hotel.min_price }} <small class="text-muted">{% trans "/ night" %}</small></div>
-                                        {% else %}
-                                        <div class="text-muted">{% trans "Price not available" %}</div>
-                                        {% endif %}
-                                        <a href="{% url 'hotel:detail' hotel.slug %}" class="btn btn-primary mt-2">{% trans "View Details" %}</a>
-                                    </div>
+                                <div class="text-end">
+                                    {% if hotel.min_price %}
+                                    <div class="fs-5 fw-bold text-success">{% trans "From" %} {{ hotel.min_price|price_format }} <small class="text-muted">{% trans "per night" %}</small></div>
+                                    {% else %}
+                                    <div class="text-muted">{% trans "Price not available" %}</div>
+                                    {% endif %}
+                                    <a href="{% url 'hotel:detail' hotel.slug %}" class="view-details-button">{% trans "View Details" %}</a>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
                 {% endfor %}
-                
+
                 <!-- Pagination -->
                 {% if is_paginated %}
                 <nav aria-label="Page navigation">
@@ -189,17 +206,17 @@
                             <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
                         </li>
                         {% endif %}
-                        
+
                         {% for num in paginator.page_range %}
-                            {% if page_obj.number == num %}
-                                <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
-                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a>
-                                </li>
-                            {% endif %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
                         {% endfor %}
-                        
+
                         {% if page_obj.has_next %}
                         <li class="page-item">
                             <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
@@ -211,12 +228,13 @@
                     </ul>
                 </nav>
                 {% endif %}
-                
-            {% else %}
+
+                {% else %}
                 <div class="alert alert-info">
                     {% trans "No hotels found matching your search criteria. Try adjusting your filters." %}
                 </div>
-            {% endif %}
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
@@ -227,48 +245,68 @@
         const checkInDate = document.getElementById('check_in_date');
         const checkOutDate = document.getElementById('check_out_date');
         
+        // Устанавливаем минимальную дату для check-in как сегодня
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const minDate = `${year}-${month}-${day}`;
+        
+        checkInDate.min = minDate;
+        
+        // Устанавливаем минимальную дату для check-out как завтра
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowYear = tomorrow.getFullYear();
+        const tomorrowMonth = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        const tomorrowDay = String(tomorrow.getDate()).padStart(2, '0');
+        const minCheckoutDate = `${tomorrowYear}-${tomorrowMonth}-${tomorrowDay}`;
+        
+        checkOutDate.min = minCheckoutDate;
+        
+        // Устанавливаем значения по умолчанию, если поля пустые
+        if (!checkInDate.value) {
+            checkInDate.value = minDate;
+        }
+        if (!checkOutDate.value) {
+            checkOutDate.value = minCheckoutDate;
+        }
+
         // При изменении даты заезда, обновляем минимальную дату выезда
         checkInDate.addEventListener('change', function() {
             if (checkInDate.value) {
-                const nextDay = new Date(checkInDate.value);
+                const checkinDate = new Date(checkInDate.value);
+                const nextDay = new Date(checkinDate);
                 nextDay.setDate(nextDay.getDate() + 1);
-                
+
                 // Форматируем дату как YYYY-MM-DD для input type="date"
-                const year = nextDay.getFullYear();
-                const month = String(nextDay.getMonth() + 1).padStart(2, '0');
-                const day = String(nextDay.getDate()).padStart(2, '0');
-                
-                checkOutDate.min = `${year}-${month}-${day}`;
-                
-                // Если текущая дата выезда раньше даты заезда, сбрасываем её
-                if (checkOutDate.value && new Date(checkOutDate.value) <= new Date(checkInDate.value)) {
-                    checkOutDate.value = `${year}-${month}-${day}`;
+                const nextDayYear = nextDay.getFullYear();
+                const nextDayMonth = String(nextDay.getMonth() + 1).padStart(2, '0');
+                const nextDayDay = String(nextDay.getDate()).padStart(2, '0');
+                const nextDayFormatted = `${nextDayYear}-${nextDayMonth}-${nextDayDay}`;
+
+                checkOutDate.min = nextDayFormatted;
+
+                // Если текущая дата выезда раньше новой минимальной даты
+                if (new Date(checkOutDate.value) < nextDay) {
+                    checkOutDate.value = nextDayFormatted;
                 }
             }
         });
-        
-        // Проверка при загрузке страницы
+
+        // Проверка при загрузке страницы для существующих значений
         if (checkInDate.value) {
-            const nextDay = new Date(checkInDate.value);
+            const checkinDate = new Date(checkInDate.value);
+            const nextDay = new Date(checkinDate);
             nextDay.setDate(nextDay.getDate() + 1);
-            
-            const year = nextDay.getFullYear();
-            const month = String(nextDay.getMonth() + 1).padStart(2, '0');
-            const day = String(nextDay.getDate()).padStart(2, '0');
-            
-            checkOutDate.min = `${year}-${month}-${day}`;
+
+            const nextDayYear = nextDay.getFullYear();
+            const nextDayMonth = String(nextDay.getMonth() + 1).padStart(2, '0');
+            const nextDayDay = String(nextDay.getDate()).padStart(2, '0');
+            const nextDayFormatted = `${nextDayYear}-${nextDayMonth}-${nextDayDay}`;
+
+            checkOutDate.min = nextDayFormatted;
         }
     });
 </script>
-
-<style>
-    .hotel-card {
-        transition: transform 0.2s;
-    }
-    
-    .hotel-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-</style>
 {% endblock %} 
