@@ -10,15 +10,26 @@ python-dotenv==1.1.0
 whitenoise==5.2.0
 pytz==2025.2
 
-# Django пакеты
+# Django основные пакеты из INSTALLED_APPS
 django-modeltranslation==0.19.9
 django-jazzmin==2.6.0
 django-import-export==3.2.0
 django-ckeditor==6.7.1
+django-ckeditor-5==0.1.6
 django-crispy-forms==2.0
 django-widget-tweaks==1.4.8
 django-allauth==0.54.0
 django-environ==0.9.0
+django-mathfilters==1.0.0
+django-taggit==3.0.0
+django-user-agents==0.4.0
+django-multiupload==0.6.1
+django-crontab==0.7.1
+django-clearcache==1.2.1
+geoip2==5.1.0
+maxminddb==2.7.0
+channels==4.2.2
+asgiref==3.7.2
 
 # Celery
 celery==5.5.3
@@ -34,4 +45,8 @@ djangorestframework-simplejwt==5.2.0
 shortuuid==1.0.11
 requests==2.32.4
 python-dateutil==2.9.0.post0
-PyYAML==6.0.2 
+PyYAML==6.0.2
+python3-openid==3.2.0
+oauthlib==3.3.1
+requests-oauthlib==2.0.0
+six==1.17.0 
