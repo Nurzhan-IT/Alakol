@@ -23,11 +23,19 @@ class UserRegisterForm(UserCreationForm):
             visible.field.widget.attrs['class'] = 'with-border'
             # visible.field.widget.attrs['placeholder'] = visible.field.label
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        return email.lower() if email else email
+
 
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['email']
+        
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        return email.lower() if email else email
 
 
 class ProfileUpdateForm(forms.ModelForm):

@@ -11,14 +11,14 @@
             {% endfor %}
             <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
                 <div>
-                    <label for="check_in_date">{% trans 'Check-In Date' %}</label>
+                    <label for="check_in_date">Дата заселения</label>
                     <input type="date"
                            id="check_in_date"
                            name="check_in_date"
                            value="{{ cl.get_filters_params.check_in_date|default_if_none:'' }}"
                            style="margin-right: 20px;"/>
                 </div>
-                <button type="submit" class="button" style="width: 100px; height: 40px; padding: 10px 20px; font-size: 12px;">{% trans 'Filter' %}</button>
+                <button type="submit" class="button" style="width: 100px; height: 40px; padding: 10px 20px; font-size: 12px;">{% trans 'Filter' context 'admin' %}</button>
             </div>
         </form>
 
@@ -31,20 +31,20 @@
             {% endfor %}
             <div style="display: flex; align-items: center; gap: 20px;">
                 <div>
-                    <label for="check_out_date">{% trans 'Check-Out Date' %}</label>
+                    <label for="check_out_date">Дата выезда</label>
                     <input type="date"
                            id="check_out_date"
                            name="check_out_date"
                            value="{{ cl.get_filters_params.check_out_date|default_if_none:'' }}"
                            style="margin-right: 20px;"/>
                 </div>
-                <button type="submit" class="button" style="width: 100px; height: 40px; padding: 10px 20px; font-size: 12px;">{% trans 'Filter' %}</button>
+                <button type="submit" class="button" style="width: 100px; height: 40px; padding: 10px 20px; font-size: 12px;">{% trans 'Filter' context 'admin' %}</button>
             </div>
         </form>
 
         {% if cl.get_filters_params.check_in_date or cl.get_filters_params.check_out_date %}
             <strong>
-                <a href="?{% for k, v in cl.get_filters_params.items %}{% if k != 'check_in_date' and k != 'check_out_date' %}{{ k }}={{ v }}&{% endif %}{% endfor %}">x {% trans 'Remove' %}</a>
+                <a href="?{% for k, v in cl.get_filters_params.items %}{% if k != 'check_in_date' and k != 'check_out_date' %}{{ k }}={{ v }}&{% endif %}{% endfor %}">x {% trans 'Remove' context 'admin' %}</a>
             </strong>
         {% endif %}
     </li>

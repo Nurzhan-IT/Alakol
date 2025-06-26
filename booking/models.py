@@ -3,12 +3,12 @@ from django.core.exceptions import ValidationError
 from hotel.models import Room, Booking
 
 class RoomUnavailability(models.Model):
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    reason = models.CharField(max_length=255, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, verbose_name='Номер')
+    start_date = models.DateField(verbose_name='Дата начала')
+    end_date = models.DateField(verbose_name='Дата окончания')
+    reason = models.CharField(max_length=255, blank=True, verbose_name='Причина')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
 
     class Meta:
         verbose_name = 'Недоступность номера'

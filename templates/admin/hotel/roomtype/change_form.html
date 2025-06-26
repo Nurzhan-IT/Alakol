@@ -89,9 +89,9 @@
 {% block after_field_sets %}
 {{ block.super }}
 
-{% if original %} {# Проверяем, что это страница редактирования существующего объекта #}
+{% if original %}
 <fieldset class="module aligned dynamic-pricing-container">
-      <h2>Динамические цены</h2>
+      <h2>Цены по датам</h2>
   
   <div class="pricing-controls">
     <div class="pricing-field">
@@ -118,7 +118,7 @@
   <hr>
   
   <div class="pricing-table-container">
-    <h3>Текущие динамические цены</h3>
+    <h3>Текущие цены по датам</h3>
     <p id="pricing_info" style="margin-bottom: 10px; font-style: italic;"></p>
     <table id="pricing_table" class="pricing-table">
       <thead>
@@ -149,10 +149,10 @@
   document.addEventListener('DOMContentLoaded', function() {
     // Находим все поля с именем dynamic_pricing_input
     const inputs = document.querySelectorAll('input[name="dynamic_pricing_input"], textarea[name="dynamic_pricing_input"]');
-    console.log('Найдено полей dynamic_pricing_input:', inputs.length);
+    // Removed console.log for found dynamic_pricing_input fields count
     
-    if (inputs.length > 1) {
-      console.log('Обнаружены дублирующиеся поля dynamic_pricing_input, оставляю только наше основное поле');
+          if (inputs.length > 1) {
+        // Removed console.log for duplicate dynamic_pricing_input fields detection
       
       // Оставляем только наше отмеченное поле
       let mainField = null;
@@ -160,7 +160,7 @@
         if (input.getAttribute('data-is-main-field') === 'true') {
           mainField = input;
         } else {
-          console.log('Удаляю дублирующее поле:', input);
+          // Removed console.log for duplicate field removal
           // Удаляем родительскую строку, если она есть
           let row = input.closest('.form-row');
           if (row) {
@@ -182,7 +182,7 @@
     const saveButtons = document.querySelectorAll('input[name="_save"], button[name="_save"]');
     saveButtons.forEach(button => {
       button.addEventListener('click', function() {
-        console.log('Сохранение формы с dynamic_pricing_input:', document.getElementById('id_dynamic_pricing_input').value);
+        // Removed console.log for form save with dynamic_pricing_input value
       });
     });
   });
@@ -214,9 +214,7 @@
     }
   }
   
-  // Добавляем отладочную информацию
-  console.log('Form found:', form !== null);
-  console.log('Initial dynamic_pricing value:', dynamicPricingInput.value);
+  // Removed console.log for form found status and initial dynamic_pricing value
   
   // Устанавливаем минимальную дату как сегодня
   const today = new Date().toISOString().split('T')[0];
@@ -226,7 +224,7 @@
   // Глобальная функция для обновления значения поля формы
   window.updateDynamicPricingField = function() {
     const hiddenField = document.getElementById('id_dynamic_pricing_input');
-    console.log('Dynamic pricing field updated:', hiddenField.value);
+    // Removed console.log for dynamic pricing field update
   };
   
   // Если форма найдена, добавляем обработчик отправки
@@ -237,12 +235,12 @@
         try {
           const pricing = JSON.parse(dynamicPricingInput.value);
           // Данные корректны, можно отправлять форму
-          console.log('Submitting form with dynamic pricing:', pricing);
+          // Removed console.log for form submission with dynamic pricing
         } catch (err) {
           // Если JSON некорректный, предотвращаем отправку
           e.preventDefault();
           alert('Ошибка в данных динамических цен. Пожалуйста, проверьте формат.');
-          console.error('Error parsing dynamic pricing JSON:', err);
+          // Removed console.error for JSON parsing error - alert provides user feedback
         }
       }
     });
@@ -320,7 +318,7 @@
     try {
       pricing = JSON.parse(dynamicPricingInput.value || '{}');
     } catch (e) {
-      console.error('Ошибка при разборе JSON динамических цен:', e);
+      // Removed console.error for JSON parsing error - function returns gracefully
       return;
     }
     
@@ -374,8 +372,7 @@
         
         // Обновляем скрытое поле и таблицу
         dynamicPricingInput.value = JSON.stringify(pricing);
-        console.log('Updated dynamic_pricing_input value:', dynamicPricingInput.value);
-        console.log('Form field name:', dynamicPricingInput.name);
+        // Removed console.log for updated dynamic_pricing_input value and form field name
         updatePricingTable();
       });
       
@@ -447,8 +444,7 @@
 
     // Обновляем скрытое поле и таблицу
     dynamicPricingInput.value = JSON.stringify(pricing);
-    console.log('Updated dynamic_pricing_input value:', dynamicPricingInput.value);
-    console.log('Form field name:', dynamicPricingInput.name);
+    // Removed console.log for updated dynamic_pricing_input value and form field name
     updatePricingTable();
     
     // Очищаем поля ввода
@@ -465,9 +461,9 @@
         // Проверяем, что это валидный JSON
         try {
           JSON.parse(dynamicPricingInput.value);
-          console.log('Form submitting with valid JSON value:', dynamicPricingInput.value);
+          // Removed console.log for valid JSON form submission
         } catch (e) {
-          console.error('Invalid JSON in dynamic pricing field:', e);
+          // Removed console.error for invalid JSON - silent error handling
         }
       }
     });

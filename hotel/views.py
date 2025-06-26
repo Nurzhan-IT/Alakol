@@ -3,16 +3,24 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_headers, vary_on_cookie
 from django.utils import timezone
 from django.conf import settings
 from django.urls import reverse
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
-from django.db.models import Q, Count, OuterRef
+from django.db.models import Q, Count, OuterRef, Prefetch
+from django.core.cache import cache
+from django.utils.translation import gettext_lazy as _
 import uuid
 
-from hotel.models import Coupon, CouponUsers, Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType, RoomTypeGallery, Notification, Bookmark, Review
+from hotel.models import Coupon, CouponUsers, Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType, RoomTypeGallery, Notification, Bookmark, Review, HotelMealPlan
 from booking.models import RoomUnavailability
+from hotel.cache_utils import (
+    CacheKeyGenerator, CacheInvalidator, cache_function, 
+    cache_queryset, CacheHelper
+)
 
 from datetime import datetime, timedelta
 from decimal import Decimal
@@ -23,41 +31,305 @@ import string
 # Импорт модуля Робокассы
 from robokassa.robokassa import generate_payment_link, result_payment, check_success_payment
 
+from hotel.decorators import require_selection_data
 
+@cache_page(settings.CACHE_TTL['hotels_list'])
+@vary_on_headers('User-Agent', 'Accept-Language')
 def index(request):
-    hotel = Hotel.objects.filter(status="Live")
+    """Главная страница с кэшированием списка рекомендуемых отелей."""
+    
+    # Используем кэш для получения списка отелей
+    cache_key = CacheKeyGenerator.hotel_list(featured=True, status="Live")
+    
+    def get_featured_hotels():
+        queryset = Hotel.objects.filter(
+            status="Live", 
+            featured=True
+        ).prefetch_related(
+            'hotelfeatures_set',
+            'roomtype_set',
+            'reviews'
+        ).select_related('user')
+        # Возвращаем список для совместимости с кэшем
+        return list(queryset)
+    
+    hotels = CacheHelper.get_or_set_complex(
+        cache_key, 
+        get_featured_hotels, 
+        timeout=settings.CACHE_TTL['hotels_list']
+    )
+    
+    # Передаем список отелей в шаблон (шаблон ожидает итерируемый объект)
     context = {
-        "hotel":hotel
+        "hotel": hotels  # Передаем весь список
     }
     return render(request, "hotel/index.html", context)
 
 
+def get_selected_items_count(request):
+    """
+    API endpoint для получения количества выбранных номеров.
+    Возвращает данные в реальном времени без кэширования.
+    """
+    if 'selection_data_obj' in request.session:
+        total_selected_items = len(request.session['selection_data_obj'])
+    else:
+        total_selected_items = 0
+    
+    return JsonResponse({
+        'total_selected_items': total_selected_items
+    })
+
+
+def get_messages(request):
+    """
+    API endpoint для получения Django messages.
+    КРИТИЧНО: Messages НЕ кэшируются из соображений безопасности!
+    Возвращает сообщения в реальном времени и очищает их после получения.
+    """
+    from django.contrib.messages import get_messages
+    
+    # Получаем все messages для текущего пользователя
+    storage = get_messages(request)
+    messages_data = []
+    
+    # Определяем соответствие уровней Django messages с SweetAlert2 иконками
+    level_map = {
+        'debug': 'info',
+        'info': 'info', 
+        'success': 'success',
+        'warning': 'warning',
+        'error': 'error'
+    }
+    
+    for message in storage:
+        messages_data.append({
+            'message': str(message),
+            'level_tag': level_map.get(message.tags, 'info'),
+            'tags': message.tags
+        })
+    
+    return JsonResponse({
+        'messages': messages_data
+    })
+
+
+@vary_on_cookie
 def hotel_detail(request, slug):
-    hotel = Hotel.objects.get(status="Live", slug=slug)
-    room_type_images = RoomTypeGallery.objects.filter(hotel=hotel)
-    try:
-        reviews = Review.objects.filter(user=request.user, hotel=hotel)
-    except:
+    """Детальная страница отеля с комплексным кэшированием."""
+    
+    # Кэшируем основную информацию об отеле
+    cache_key = CacheKeyGenerator.hotel_detail(slug)
+    
+    def get_hotel_data():
+        from django.db.models import Case, When, IntegerField
+        return get_object_or_404(
+            Hotel.objects.prefetch_related(
+                'roomtype_set',
+                'hotelgallery_set',
+                'hotelfeatures_set',
+                Prefetch('hotelmealplan_set', 
+                        queryset=HotelMealPlan.objects.annotate(
+                            # Создаем приоритет сортировки для правильного порядка
+                            sort_priority=Case(
+                                # Только age_min (например, 12+ лет) - используем age_min как приоритет
+                                When(age_min__isnull=False, age_max__isnull=True, then='age_min'),
+                                # Диапазон age_min-age_max (например, от 3 до 12 лет) - используем age_min как приоритет
+                                When(age_min__isnull=False, age_max__isnull=False, then='age_min'),
+                                # Только age_max (например, до 3 лет) - используем age_max как приоритет
+                                When(age_min__isnull=True, age_max__isnull=False, then='age_max'),
+                                # Без ограничений по возрасту - минимальный приоритет
+                                default=0,
+                                output_field=IntegerField()
+                            ),
+                            # Категория для группировки типов возрастных ограничений
+                            category=Case(
+                                When(age_min__gt=0, age_max__isnull=True, then=1),  # Только age_min (12+ лет)
+                                When(age_min__gt=0, age_max__isnull=False, then=2), # Диапазон (от X до Y лет)
+                                When(age_min__isnull=True, age_max__isnull=False, then=3),  # Только age_max (до X лет)
+                                When(age_min=0, age_max__isnull=True, then=3),  # age_min=0 тоже считаем как "только age_max"
+                                default=4,  # Без ограничений или прочее
+                                output_field=IntegerField()
+                            )
+                        ).order_by('category', '-sort_priority'))
+            ), 
+            status="Live", 
+            slug=slug
+        )
+    
+    hotel = CacheHelper.get_or_set_complex(
+        cache_key,
+        get_hotel_data,
+        timeout=settings.CACHE_TTL['hotel_detail']
+    )
+    
+    # Кэшируем изображения типов номеров
+    gallery_cache_key = CacheKeyGenerator.hotel_gallery(hotel.id)
+    
+    def get_room_type_images():
+        return RoomTypeGallery.objects.select_related('hotel', 'room_type').filter(hotel=hotel)
+    
+    room_type_images = CacheHelper.get_or_set_complex(
+        gallery_cache_key,
+        get_room_type_images,
+        timeout=settings.CACHE_TTL['features_and_amenities']
+    )
+    
+    # Кэширование отзывов пользователя отключено для данных реального времени
+    if request.user.is_authenticated:
+        # Убираем кэширование для пользовательских отзывов - они должны обновляться мгновенно
+        reviews = Review.objects.select_related('user', 'hotel').filter(user=request.user, hotel=hotel)
+    else:
         reviews = None
-    all_reviews = Review.objects.filter(hotel=hotel, active=True)
+        
+    # Кэшируем все активные отзывы отеля
+    all_reviews_key = CacheKeyGenerator.hotel_reviews(hotel.id, active_only=True)
+    
+    def get_all_reviews():
+        return Review.objects.select_related('user', 'hotel').filter(hotel=hotel, active=True)
+    
+    all_reviews = CacheHelper.get_or_set_complex(
+        all_reviews_key,
+        get_all_reviews,
+        timeout=settings.CACHE_TTL['hotel_reviews']
+    )
     
     if request.user.is_authenticated:
-        bookmark = Bookmark.objects.filter(user=request.user, hotel=hotel)
+        bookmark = Bookmark.objects.select_related('user', 'hotel').filter(user=request.user, hotel=hotel)
     else:
         bookmark = None
+        
+    # Подготовка данных для таблицы динамических цен
+    # Оптимизация: уже получили room_types через prefetch_related для hotel
+    room_types = hotel.roomtype_set.all()
+    
+    # Собираем все даты из dynamic_pricing всех типов номеров
+    all_dates = []
+    for room_type in room_types:
+        if room_type.dynamic_pricing and isinstance(room_type.dynamic_pricing, dict):
+            all_dates.extend([date for date in room_type.dynamic_pricing.keys()])
+    
+    # Сортируем и удаляем дубликаты
+    unique_dates = sorted(set(all_dates))
+    
+    # Группируем даты по неделям или другим интервалам
+    date_ranges = []
+    range_prices = {}
+    
+    if unique_dates:
+        from datetime import datetime
+        
+        # Преобразуем строки в даты для сортировки
+        date_objects = []
+        for date_str in unique_dates:
+            try:
+                date_obj = datetime.strptime(date_str, "%Y-%m-%d").date()
+                date_objects.append((date_str, date_obj))
+            except ValueError:
+                continue
+        
+        # Сортируем даты
+        date_objects.sort(key=lambda x: x[1])
+        
+        # Получаем первую и последнюю даты в отсортированном списке
+        if date_objects:
+            # Группируем даты по интервалам (например, неделям)
+            from datetime import timedelta
+            
+            step = 7  # Количество дней в одном интервале
+            current_date_index = 0
+            
+            while current_date_index < len(date_objects):
+                start_date = date_objects[current_date_index][1]
+                end_date = start_date + timedelta(days=step-1)
+                
+                # Находим конечную дату в интервале
+                end_index = current_date_index
+                while end_index < len(date_objects) and date_objects[end_index][1] <= end_date:
+                    end_index += 1
+                
+                # Если достигли конца списка, используем последнюю доступную дату
+                if end_index > len(date_objects) - 1:
+                    end_index = len(date_objects) - 1
+                
+                actual_end_date = date_objects[end_index][1]
+                
+                # Форматируем интервал для отображения
+                date_range = f"{start_date.strftime('%d.%m.%Y')} - {actual_end_date.strftime('%d.%m.%Y')}"
+                date_ranges.append(date_range)
+                
+                # Сохраняем цены для каждого типа номера в этом интервале
+                range_prices[date_range] = {}
+                
+                # Для каждого типа номера вычисляем среднюю цену в этом интервале
+                for room_type in room_types:
+                    if room_type.dynamic_pricing and isinstance(room_type.dynamic_pricing, dict):
+                        # Собираем цены для дат в интервале
+                        prices_in_range = []
+                        current_index = current_date_index
+                        
+                        while current_index <= end_index:
+                            date_str = date_objects[current_index][0]
+                            if date_str in room_type.dynamic_pricing:
+                                try:
+                                    price = float(room_type.dynamic_pricing[date_str])
+                                    prices_in_range.append(price)
+                                except (ValueError, TypeError):
+                                    pass
+                            current_index += 1
+                        
+                        # Если есть цены в интервале, вычисляем среднюю
+                        if prices_in_range:
+                            avg_price = sum(prices_in_range) / len(prices_in_range)
+                            range_prices[date_range][room_type.id] = int(avg_price)
+                
+                # Переходим к следующему интервалу
+                current_date_index = end_index + 1
+    
     context = {
-        "hotel":hotel,
-        "bookmark":bookmark,
-        "reviews":reviews,
-        "all_reviews":all_reviews,
-        "room_type_images":room_type_images,
+        "hotel": hotel,
+        "bookmark": bookmark,
+        "reviews": reviews,
+        "all_reviews": all_reviews,
+        "room_type_images": room_type_images,
+        "date_ranges": date_ranges,
+        "range_prices": range_prices,
     }
     return render(request, "hotel/hotel_detail.html", context)
 
 
 def room_type_detail(request, slug, rt_slug):
-    hotel = Hotel.objects.get(status="Live", slug=slug)
-    room_type = RoomType.objects.get(hotel=hotel, slug=rt_slug)
+    """Детальная страница типа номера с кэшированием доступности."""
+    
+    # Кэшируем отель
+    hotel_cache_key = CacheKeyGenerator.hotel_detail(slug)
+    def get_hotel_data():
+        return get_object_or_404(
+            Hotel.objects.prefetch_related('roomtype_set'),
+            status="Live", 
+            slug=slug
+        )
+    
+    hotel = CacheHelper.get_or_set_complex(
+        hotel_cache_key,
+        get_hotel_data,
+        timeout=settings.CACHE_TTL['hotel_detail']
+    )
+    
+    # Кэшируем тип номера
+    room_type_cache_key = f"room_type_detail:{hotel.id}:{rt_slug}"
+    def get_room_type_data():
+        return get_object_or_404(
+            RoomType.objects.select_related('hotel'),
+            hotel=hotel, 
+            slug=rt_slug
+        )
+    
+    room_type = CacheHelper.get_or_set_complex(
+        room_type_cache_key,
+        get_room_type_data,
+        timeout=settings.CACHE_TTL['hotel_detail']
+    )
     
     id = request.GET.get("hotel-id")
     checkin = request.GET.get("checkin")
@@ -75,7 +347,7 @@ def room_type_detail(request, slug, rt_slug):
         children = booking_data.get('children', children)
     
     if not all([checkin, checkout]):
-        messages.warning(request, "Please enter your booking data to check availability.")
+        messages.warning(request, _("Please enter your booking data to check availability."))
         return redirect("booking:booking_data", hotel.slug)
     
     # Конвертируем строки с датами в объекты datetime
@@ -83,28 +355,60 @@ def room_type_detail(request, slug, rt_slug):
     user_checkin_date = datetime.strptime(checkin, date_format).date()
     user_checkout_date = datetime.strptime(checkout, date_format).date()
     
-    # Получаем все доступные номера данного типа
-    rooms = Room.objects.filter(room_type=room_type, is_available=True)
+    # Проверяем, активен ли отель на выбранные даты
+    hotel_available = hotel.is_active_for_dates(user_checkin_date, user_checkout_date)
+    if not hotel_available:
+        messages.warning(request, _("Hotel is not available for booking on selected dates."))
+        return redirect("hotel:detail", hotel.slug)
     
-    # Получаем ID номеров, которые уже забронированы на указанные даты
-    # Учитываем, что в день выезда номер уже доступен (за счет -1 день)
-    booked_room_ids = Booking.objects.filter(
-        Q(check_in_date__lt=user_checkout_date, check_out_date__gt=user_checkin_date),
-        is_active=True,
-        payment_status__in=["paid", "processing", "pending"]
-    ).values_list('room__id', flat=True).distinct()
+    # Кэшируем доступность номеров для конкретных дат
+    availability_cache_key = CacheKeyGenerator.room_availability(
+        hotel.id, 
+        checkin, 
+        checkout
+    )
+    
+    def get_room_availability():
+        # Получаем все номера с предварительно загруженными типами
+        rooms = Room.objects.select_related('room_type').filter(room_type=room_type, is_available=True)
+        
+        # Получаем ID забронированных номеров за один запрос
+        booked_room_ids = Booking.objects.filter(
+            Q(check_in_date__lt=user_checkout_date, check_out_date__gt=user_checkin_date),
+            is_active=True,
+            payment_status__in=["paid", "processing", "pending"]
+        ).values_list('room__id', flat=True).distinct()
 
-    # Получаем ID номеров, которые находятся в RoomUnavailability на указанные даты
-    unavailable_room_ids = RoomUnavailability.objects.filter(
-        Q(start_date__lt=user_checkout_date, end_date__gt=user_checkin_date)
-    ).values_list('room__id', flat=True).distinct()
+        # Получаем ID недоступных номеров за один запрос
+        unavailable_room_ids = RoomUnavailability.objects.filter(
+            Q(start_date__lt=user_checkout_date, end_date__gt=user_checkin_date)
+        ).values_list('room__id', flat=True).distinct()
+        
+        # Исключаем забронированные и недоступные номера
+        available_rooms = rooms.exclude(
+            id__in=list(set(list(booked_room_ids) + list(unavailable_room_ids)))
+        )
+        
+        return {
+            'available_rooms': list(available_rooms),
+            'booked_count': len(booked_room_ids),
+            'unavailable_count': len(unavailable_room_ids)
+        }
     
-    # Исключаем забронированные номера из списка доступных
-    available_rooms = rooms.exclude(id__in=booked_room_ids).exclude(id__in=unavailable_room_ids)
+    # Для доступности номеров используем короткое время кэширования (3 минуты)
+    availability_data = CacheHelper.get_or_set_complex(
+        availability_cache_key,
+        get_room_availability,
+        timeout=settings.CACHE_TTL['room_availability']
+    )
+    
+    available_rooms = availability_data['available_rooms']
     
     # Рассчитываем стоимость с учетом динамических цен
     total_days = (user_checkout_date - user_checkin_date).days
     dynamic_price = calculate_total_price(room_type, user_checkin_date, user_checkout_date)
+
+    dynamic_price_json_data = room_type.dynamic_pricing
     
     # Проверяем статусы комнат в selection_data_obj
     room_statuses = {}
@@ -145,6 +449,7 @@ def room_type_detail(request, slug, rt_slug):
         "children": children,
         "room_type_": room_type_,
         "dynamic_price": dynamic_price,  # Добавляем динамическую цену в контекст
+        "dynamic_price_json_data": dynamic_price_json_data,
         "total_days": total_days,        # Добавляем общее количество дней
         "room_statuses": room_statuses,  # Добавляем статусы кнопок для комнат
     }
@@ -158,6 +463,7 @@ def get_visitor_id(request):
     return request.session['visitor_id']
 
 
+@require_selection_data
 def selected_rooms(request):
     # request.session.pop('selection_data_obj', None)
 
@@ -169,8 +475,8 @@ def selected_rooms(request):
     checkin = "0" 
     checkout = "" 
     children = 0 
-    if request.session['selection_data_obj'] == {}:
-        messages.warning(request, "You don't have any room selections yet!")
+    if request.session['selection_data_obj'] == {} or 'selection_data_obj' not in request.session :
+        messages.warning(request, _("You don't have any room selections yet!"))
         return redirect("/")
     # Если пришли данные POST с датами, обновим booking_common_data
     if request.method == "POST" and 'selection_data_obj' in request.session:
@@ -256,37 +562,61 @@ def selected_rooms(request):
                 first_item = request.session['selection_data_obj'][first_item_id]
                 hotel_id = int(first_item['hotel_id'])
                 try:
-                    hotel = Hotel.objects.get(id=hotel_id)
+                    # Оптимизация: используем select_related для загрузки связанных данных отеля
+                    hotel = Hotel.objects.select_related().get(id=hotel_id)
                 except Hotel.DoesNotExist:
                     print(f"Отель с ID {hotel_id} не найден")
         
+        # Оптимизация N+1: получаем все room_type_ids и room_ids из сессии
+        room_type_ids = []
+        room_ids = []
         for h_id, item in request.session['selection_data_obj'].items():
-                
-            room_type_ = item["room_type"]
+            room_type_ids.append(item["room_type"])
+            room_ids.append(int(item["room_id"]))
+        
+        # Получаем все типы номеров и комнаты за один запрос
+        room_types = {}
+        rooms = {}
+        
+        if room_type_ids:
+            # Оптимизация: загружаем все типы номеров одним запросом
+            room_types_query = RoomType.objects.filter(id__in=room_type_ids)
+            room_types = {str(rt.id): rt for rt in room_types_query}
+            
+            # Оптимизация: загружаем все комнаты одним запросом
+            rooms_query = Room.objects.select_related('room_type').filter(id__in=room_ids)
+            rooms = {str(r.id): r for r in rooms_query}
+        
+        # Теперь обрабатываем данные из сессии, используя предварительно загруженные объекты
+        for h_id, item in request.session['selection_data_obj'].items():
+            room_type_id = item["room_type"]
             room_id = int(item["room_id"])
             
-            room_type = RoomType.objects.get(id=room_type_)
-            room = Room.objects.get(id=room_id)
-
-            # Используем динамические цены вместо фиксированной цены
-            # Рассчитываем стоимость с учетом динамических цен
-            room_total = calculate_total_price(room_type, checkin_date, checkout_date)
-            total += room_total
+            # Используем предварительно загруженные объекты вместо отдельных запросов
+            room_type = room_types.get(room_type_id)
+            room = rooms.get(str(room_id))
             
-            # Сохраняем данные о комнате и добавляем информацию о slug типа комнаты
-            request.session['selection_data_obj'][h_id]['room_number'] = room.room_number
-            request.session['selection_data_obj'][h_id]['room_type_slug'] = room_type.slug
-            
-            # Обновляем хранимую цену в сессии с учетом динамического ценообразования
-            request.session['selection_data_obj'][h_id]['room_price'] = str(room_total)
-            request.session.modified = True
-            
-            # Сохраняем данные о типе номера для последующего использования
-            room_types_data[room_type_] = {
-                'id': room_type.id,
-                'slug': room_type.slug,
-                'name': room_type.type if hasattr(room_type, 'type') else str(room_type)
-            }
+            if room_type and room:
+                # Используем динамические цены вместо фиксированной цены
+                # Рассчитываем стоимость с учетом динамических цен
+                room_total = calculate_total_price(room_type, checkin_date, checkout_date)
+                total += room_total
+                
+                # Сохраняем данные о комнате и добавляем информацию о slug типа комнаты
+                request.session['selection_data_obj'][h_id]['room_number'] = room.room_number
+                request.session['selection_data_obj'][h_id]['room_type_slug'] = room_type.slug
+                request.session['selection_data_obj'][h_id]['room_capacity'] = room_type.room_capacity
+                
+                # Обновляем хранимую цену в сессии с учетом динамического ценообразования
+                request.session['selection_data_obj'][h_id]['room_price'] = str(room_total)
+                request.session.modified = True
+                
+                # Сохраняем данные о типе номера для последующего использования
+                room_types_data[room_type_id] = {
+                    'id': room_type.id,
+                    'slug': room_type.slug,
+                    'name': room_type.type if hasattr(room_type, 'type') else str(room_type)
+                }
 
         # Обновляем room_types_data в сессии для использования в JavaScript
         request.session['room_types_data'] = room_types_data
@@ -323,10 +653,11 @@ def selected_rooms(request):
             # Пересчитываем total с новыми значениями дат
             total = 0
             for h_id, item in request.session['selection_data_obj'].items():
-                room_type_ = item["room_type"]
-                room_type = RoomType.objects.get(id=room_type_)
-                price = room_type.price
-                total += price * total_days
+                room_type_id = item["room_type"]
+                room_type = room_types.get(room_type_id)
+                if room_type:
+                    price = room_type.price
+                    total += price * total_days
             print("booking_common_data ===", request.session['booking_common_data'])
         
         
@@ -345,10 +676,7 @@ def selected_rooms(request):
         if len(request.session['selection_data_obj']) > 0:
             first_id = next(iter(request.session['selection_data_obj']))
             first_room_type_id = request.session['selection_data_obj'][first_id]['room_type']
-            try:
-                first_room_type = RoomType.objects.get(id=first_room_type_id)
-            except RoomType.DoesNotExist:
-                pass
+            first_room_type = room_types.get(first_room_type_id)
 
         # Преобразуем room_types_data в формат, подходящий для JSON
         room_types_json = {}
@@ -378,7 +706,7 @@ def payment_method_selection(request):
     """Страница выбора способа оплаты"""
     
     if 'selection_data_obj' not in request.session or 'user_data' not in request.session:
-        messages.warning(request, "You don't have any room selections or missing user information!")
+        messages.warning(request, _("You don't have any room selections or missing user information!"))
         return redirect("/")
     
     # Расчет итоговой суммы для отображения
@@ -415,9 +743,151 @@ def payment_method_selection(request):
         "checkin": checkin,
         "checkout": checkout,
         "total_days": total_days,
+        "adult": request.session.get('booking_common_data', {}).get('adult', 1),
+        "children": request.session.get('booking_common_data', {}).get('children', 0),
     }
     
     return render(request, "hotel/payment_method_selection.html", context)
+
+@csrf_exempt
+def check_session_data(request):
+    """API endpoint для проверки данных сессии перед оплатой"""
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    try:
+        # Проверяем наличие всех необходимых данных в сессии
+        required_session_keys = ['selection_data_obj', 'user_data', 'booking_common_data']
+        missing_keys = []
+        
+        for key in required_session_keys:
+            if key not in request.session:
+                missing_keys.append(key)
+        
+        if missing_keys:
+            error_msg = f"Отсутствуют данные в сессии: {', '.join(missing_keys)}"
+            logger.error(f"Session validation failed: {error_msg}")
+            return JsonResponse({
+                'success': False,
+                'error': _("Missing session data: %(keys)s") % {'keys': ', '.join(missing_keys)}
+            })
+        
+        # Проверяем содержимое selection_data_obj
+        if not request.session['selection_data_obj']:
+            return JsonResponse({
+                'success': False,
+                'error': _('No selected rooms for booking')
+            })
+        
+        # Проверяем обязательные поля в user_data
+        user_data = request.session['user_data']
+        required_user_fields = ['full_name', 'email', 'phone']
+        missing_user_fields = []
+        
+        for field in required_user_fields:
+            if field not in user_data or not user_data[field]:
+                missing_user_fields.append(field)
+        
+        if missing_user_fields:
+            return JsonResponse({
+                'success': False,
+                'error': _('Missing user data: %(fields)s') % {'fields': ', '.join(missing_user_fields)}
+            })
+        
+        # Проверяем booking_common_data
+        booking_data = request.session['booking_common_data']
+        required_booking_fields = ['checkin', 'checkout', 'adult']
+        missing_booking_fields = []
+        
+        for field in required_booking_fields:
+            if field not in booking_data or not booking_data[field]:
+                missing_booking_fields.append(field)
+        
+        if missing_booking_fields:
+            return JsonResponse({
+                'success': False,
+                'error': _('Missing booking data: %(fields)s') % {'fields': ', '.join(missing_booking_fields)}
+            })
+        
+        # Дополнительная проверка дат
+        try:
+            date_format = "%Y-%m-%d"
+            checkin_date = datetime.strptime(booking_data['checkin'], date_format).date()
+            checkout_date = datetime.strptime(booking_data['checkout'], date_format).date()
+            
+            if checkin_date >= checkout_date:
+                return JsonResponse({
+                    'success': False,
+                    'error': _('Check-in date must be earlier than check-out date')
+                })
+            
+            # Проверяем, что даты не в прошлом
+            from datetime import date
+            today = date.today()
+            if checkin_date < today:
+                return JsonResponse({
+                    'success': False,
+                    'error': _('Check-in date cannot be in the past')
+                })
+                
+        except ValueError as e:
+            return JsonResponse({
+                'success': False,
+                'error': _('Invalid date format: %(error)s') % {'error': str(e)}
+            })
+        
+        # Проверяем существование номеров и отеля
+        try:
+            for h_id, item in request.session['selection_data_obj'].items():
+                # Проверяем что все необходимые поля есть
+                if not all(key in item for key in ['hotel_id', 'room_id', 'room_type']):
+                    return JsonResponse({
+                        'success': False,
+                        'error': _('Invalid room data: %(room_id)s') % {'room_id': h_id}
+                    })
+                
+                # Проверяем существование отеля
+                hotel_id = int(item['hotel_id'])
+                if not Hotel.objects.filter(id=hotel_id, status='Live').exists():
+                    return JsonResponse({
+                        'success': False,
+                        'error': _('Hotel with ID %(hotel_id)s not found or not active') % {'hotel_id': hotel_id}
+                    })
+                
+                # Проверяем существование номера
+                room_id = int(item['room_id'])
+                if not Room.objects.filter(id=room_id).exists():
+                    return JsonResponse({
+                        'success': False,
+                        'error': _('Room with ID %(room_id)s not found') % {'room_id': room_id}
+                    })
+                
+                # Проверяем существование типа номера
+                room_type_id = int(item['room_type'])
+                if not RoomType.objects.filter(id=room_type_id).exists():
+                    return JsonResponse({
+                        'success': False,
+                        'error': _('Room type with ID %(room_type_id)s not found') % {'room_type_id': room_type_id}
+                    })
+        
+        except (ValueError, TypeError, KeyError) as e:
+            return JsonResponse({
+                'success': False,
+                'error': _('Error in room data: %(error)s') % {'error': str(e)}
+            })
+        
+        logger.info("Session data validation successful")
+        return JsonResponse({
+            'success': True,
+            'message': _('Session data is valid')
+        })
+        
+    except Exception as e:
+        logger.error(f"Session validation error: {str(e)}")
+        return JsonResponse({
+            'success': False,
+            'error': _('Internal validation error: %(error)s') % {'error': str(e)}
+        })
 
 def process_booking(request):
     """Создает бронирование из данных сессии и возвращает booking_id"""
@@ -425,7 +895,7 @@ def process_booking(request):
     logger = logging.getLogger(__name__)
     
     if 'selection_data_obj' not in request.session or 'user_data' not in request.session or 'booking_common_data' not in request.session:
-        messages.warning(request, "Missing booking information!")
+        messages.warning(request, _("Missing booking information!"))
         return None
     
     booking = None
@@ -444,15 +914,45 @@ def process_booking(request):
         first_item_id = next(iter(request.session['selection_data_obj']))
         first_item = request.session['selection_data_obj'][first_item_id]
         hotel_id = int(first_item['hotel_id'])
-        hotel = Hotel.objects.get(id=hotel_id)
+        
+        # Оптимизация: загружаем отель и связанные данные за один запрос
+        hotel = Hotel.objects.select_related().get(id=hotel_id)
+        
         room_type_id = first_item["room_type"]
-        room_type = RoomType.objects.get(id=room_type_id)
+        
+        # Оптимизация: загружаем все типы номеров и комнаты за один запрос
+        room_ids = [int(item["room_id"]) for item_id, item in request.session['selection_data_obj'].items()]
+        room_type_ids = [item["room_type"] for item_id, item in request.session['selection_data_obj'].items()]
+        
+        # Получаем все комнаты одним запросом
+        rooms_dict = {}
+        if room_ids:
+            rooms = Room.objects.select_related('room_type').filter(id__in=room_ids)
+            rooms_dict = {str(room.id): room for room in rooms}
+        
+        # Получаем все типы номеров одним запросом
+        room_types_dict = {}
+        if room_type_ids:
+            room_types = RoomType.objects.filter(id__in=room_type_ids)
+            room_types_dict = {str(rt.id): rt for rt in room_types}
+        
+        # Получаем тип комнаты для основного бронирования
+        room_type = room_types_dict.get(room_type_id)
+        if not room_type:
+            # Если не нашли в кэше, делаем отдельный запрос
+            room_type = RoomType.objects.get(id=room_type_id)
         
         date_format = "%Y-%m-%d"
         checkin_date = datetime.strptime(checkin, date_format).date()
         checkout_date = datetime.strptime(checkout, date_format).date()
         time_difference = checkout_date - checkin_date
         total_days = time_difference.days
+        
+        # Проверяем, активен ли отель на выбранные даты
+        hotel_available = hotel.is_active_for_dates(checkin_date, checkout_date)
+        if not hotel_available:
+            messages.warning(request, _("Hotel is not available for booking on selected dates."))
+            return None
         
         # Получаем данные пользователя из сессии
         user_data = request.session['user_data']
@@ -474,7 +974,8 @@ def process_booking(request):
             email=email,
             phone=phone,
             country_code=country_code,  # Сохраняем код страны
-            payment_status="initiated"  # Статус "инициировано"
+            payment_status="initiated",  # Статус "инициировано"
+            selection_data=request.session['selection_data_obj']  # Сохраняем данные о выбранных номерах
         )
         
         if request.user.is_authenticated:
@@ -484,26 +985,43 @@ def process_booking(request):
         # Добавляем комнаты к бронированию и рассчитываем общую стоимость
         for h_id, item in request.session['selection_data_obj'].items():
             room_id = int(item["room_id"])
-            room = Room.objects.get(id=room_id)
+            
+            # Используем кэшированные данные вместо обращения к БД
+            room = rooms_dict.get(str(room_id))
+            if not room:
+                # Если комната не была найдена в кэше, делаем отдельный запрос
+                room = Room.objects.get(id=room_id)
+                
             booking.room.add(room)
             
-            # Получаем тип комнаты для текущей комнаты
-            room_type_id = item["room_type"]
-            room_type = RoomType.objects.get(id=room_type_id)
+            # Получаем тип комнаты из кэша
+            item_room_type_id = item["room_type"]
+            item_room_type = room_types_dict.get(item_room_type_id)
+            if not item_room_type:
+                # Если тип комнаты не был найден в кэше, делаем отдельный запрос
+                item_room_type = RoomType.objects.get(id=item_room_type_id)
             
             # Рассчитываем стоимость с учетом динамических цен
-            room_total = calculate_total_price(room_type, checkin_date, checkout_date)
+            room_total = calculate_total_price(item_room_type, checkin_date, checkout_date)
             total += room_total
         
         # Обновляем сумму бронирования
         from decimal import Decimal
         booking.total = Decimal(str(total))
         booking.before_discount = Decimal(str(total))
-        booking.save()
+        
+        # Сохраняем согласия при бронировании
+        from userauths.utils import save_booking_consents
+        consent_data = {
+            'public_offer_consent': request.POST.get('public_offer_consent'),
+            'booking_rules_consent': request.POST.get('booking_rules_consent'),
+            'payment_rules_consent': request.POST.get('payment_rules_consent'),
+        }
+        save_booking_consents(booking, request, consent_data)
         
         logger.info(f"Создано бронирование {booking.booking_id} на сумму {booking.total}")
-        logger.info (f"{booking.booking_id}: selection_data_obj ===", request.session['selection_data_obj'])
-        logger.info (f"{booking.booking_id}: booking_common_data ===", request.session['booking_common_data'])
+        logger.info(f"{booking.booking_id}: selection_data_obj === {request.session['selection_data_obj']}")
+        logger.info(f"{booking.booking_id}: booking_common_data === {request.session['booking_common_data']}")
         return booking
         
     except Exception as e:
@@ -534,6 +1052,18 @@ def create_robokassa_payment(request, payment_key=None):
             date_format = "%Y-%m-%d"
             checkin_date = datetime.strptime(booking_data['checkin'], date_format).date()
             checkout_date = datetime.strptime(booking_data['checkout'], date_format).date()
+            
+            # Получаем информацию об отеле
+            first_item_id = next(iter(request.session['selection_data_obj']))
+            first_item = request.session['selection_data_obj'][first_item_id]
+            hotel_id = int(first_item['hotel_id'])
+            hotel = Hotel.objects.get(id=hotel_id)
+            
+            # Проверяем, активен ли отель на выбранные даты
+            hotel_available = hotel.is_active_for_dates(checkin_date, checkout_date)
+            if not hotel_available:
+                messages.warning(request, _("Hotel is not available for booking on selected dates."))
+                return redirect("/")
             
             for h_id, item in request.session['selection_data_obj'].items():
                 room_id = int(item["room_id"])
@@ -592,20 +1122,20 @@ def create_robokassa_payment(request, payment_key=None):
                         request.session.modified = True
                         
                         if reason == 'not_available':
-                            messages.error(request, f"Номер {room_number} недоступен для бронирования и был удален из списка.")
+                            messages.error(request, _("Room %(room_number)s is not available for booking and has been removed from the list.") % {'room_number': room_number})
                         elif reason == 'marked_unavailable':
-                            messages.error(request, f"Номер {room_number} отмечен как недоступный на выбранные даты и был удален из списка.")
+                            messages.error(request, _("Room %(room_number)s is marked as unavailable for selected dates and has been removed from the list.") % {'room_number': room_number})
                         else:
-                            messages.error(request, f"Номер {room_number} уже забронирован на выбранные даты и был удален из списка.")
+                            messages.error(request, _("Room %(room_number)s is already booked for selected dates and has been removed from the list.") % {'room_number': room_number})
                 
                 # Если после удаления недоступных номеров в сессии не осталось выбранных номеров,
                 # перенаправляем на страницу выбора номеров
                 if not request.session['selection_data_obj']:
-                    messages.error(request, "Все выбранные номера недоступны для бронирования.")
+                    messages.error(request, _("All selected rooms are not available for booking."))
                     return redirect("/")
                 else:
                     # Если остались доступные номера, перенаправляем на страницу выбранных номеров
-                    messages.warning(request, "Некоторые выбранные номера недоступны. Пожалуйста, проверьте список и продолжите бронирование.")
+                    messages.warning(request, _("Some selected rooms are not available. Please check the list and continue booking."))
                     return redirect("hotel:selected_rooms")
         
         # Если бронирование еще не создано
@@ -614,7 +1144,7 @@ def create_robokassa_payment(request, payment_key=None):
             # Создаем бронирование из данных в сессии
             booking = process_booking(request)
             if not booking:
-                messages.error(request, "Failed to create booking!")
+                messages.error(request, _("Failed to create booking!"))
                 return redirect("/")
         else:
             # Если уже есть ID бронирования, получаем его
@@ -697,14 +1227,14 @@ def create_robokassa_payment(request, payment_key=None):
                     logger.error(f"Ошибка при удалении бронирования: {str(del_err)}")
             
             # Сообщаем об ошибке пользователю
-            messages.error(request, f"Ошибка при создании платежа: {str(e)}")
+            messages.error(request, _("Error creating payment: %(error)s") % {'error': str(e)})
             return redirect("/")
             
     except Exception as e:
         logger.error(f"Ошибка при создании платежа: {str(e)}")
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({'error': str(e)}, status=500)
-        messages.error(request, f"Error: {str(e)}")
+        messages.error(request, _("Error: %(error)s") % {'error': str(e)})
         return redirect("/")
 
 @csrf_exempt
@@ -741,26 +1271,48 @@ def robokassa_result(request):
                         noti.user = request.user
                         noti.save()
                     
-                    # Отправляем электронное письмо клиенту - с обработкой ошибок
+                    # Отправляем электронные письма через AWS SES
                     try:
-                        merge_data = {
-                            'booking': booking, 
-                            'booking_rooms': booking.room.all(), 
-                            'full_name': booking.full_name, 
-                            'subject': f"Booking Completed - Invoice & Summary - ID: #{booking.booking_id}", 
-                        }
-                        subject = f"Booking Completed - Invoice & Summary - ID: #{booking.booking_id}"
-                        text_body = render_to_string("email/booking_completed.txt", merge_data)
-                        html_body = render_to_string("email/booking_completed.html", merge_data)
+                        from hotel.aws_ses import AWSSESEmailSender
                         
-                        msg = EmailMultiAlternatives(
-                            subject=subject, 
-                            from_email=settings.DEFAULT_FROM_EMAIL,
-                            to=[booking.email], 
-                            body=text_body
-                        )
-                        msg.attach_alternative(html_body, "text/html")
-                        msg.send(fail_silently=True)  # fail_silently=True для игнорирования ошибок отправки
+                        # Проверяем, что настройки AWS SES заданы
+                        if all([settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY, settings.AWS_REGION]):
+                            ses_sender = AWSSESEmailSender()
+                            email_results = ses_sender.send_booking_confirmation_emails(booking)
+                            
+                            # Логируем результаты отправки
+                            if email_results.get('user_email', {}).get('success'):
+                                logger.info(f"Успешно отправлен email пользователю для бронирования {booking.booking_id}")
+                            else:
+                                logger.error(f"Ошибка отправки email пользователю: {email_results.get('user_email', {}).get('error_message', 'Unknown error')}")
+                            
+                            if email_results.get('hotel_email', {}).get('success'):
+                                logger.info(f"Успешно отправлен email отелю для бронирования {booking.booking_id}")
+                            else:
+                                logger.error(f"Ошибка отправки email отелю: {email_results.get('hotel_email', {}).get('error_message', 'Unknown error')}")
+                        else:
+                            logger.warning("AWS SES credentials не настроены, email не отправлены")
+                            
+                            # Fallback на старый способ отправки email
+                            merge_data = {
+                                'booking': booking, 
+                                'booking_rooms': booking.room.all(), 
+                                'full_name': booking.full_name, 
+                                'subject': f"Booking Completed - Invoice & Summary - ID: #{booking.booking_id}", 
+                            }
+                            subject = f"Booking Completed - Invoice & Summary - ID: #{booking.booking_id}"
+                            text_body = render_to_string("email/booking_completed.txt", merge_data)
+                            html_body = render_to_string("email/booking_completed.html", merge_data)
+                            
+                            msg = EmailMultiAlternatives(
+                                subject=subject, 
+                                from_email=settings.DEFAULT_FROM_EMAIL,
+                                to=[booking.email], 
+                                body=text_body
+                            )
+                            msg.attach_alternative(html_body, "text/html")
+                            msg.send(fail_silently=True)
+                            
                     except Exception as email_error:
                         # Логируем ошибку, но не отменяем успешную обработку платежа
                         logger.error(f"Ошибка при отправке email: {str(email_error)}")
@@ -827,7 +1379,7 @@ def robokassa_success(request, booking_id):
                 # Попытка доступа к success без прямых параметров и без предварительной обработки Result URL
                 # Вероятная попытка обойти оплату
                 logger.warning(f"Попытка доступа к странице успешной оплаты без верификации: {booking_id}")
-                messages.error(request, "Ошибка: Оплата не подтверждена системой. Если вы произвели оплату, обратитесь в службу поддержки.")
+                messages.error(request, _("Error: Payment not confirmed by the system. If you have made a payment, please contact support."))
                 return redirect("/")
         
         # Если оплата подтверждена, обновляем статус и очищаем сессию
@@ -835,7 +1387,7 @@ def robokassa_success(request, booking_id):
             if booking.payment_status != "paid":
                 booking.payment_status = "paid"
                 booking.save()
-                messages.success(request, f'Ваше бронирование успешно оплачено!')
+                messages.success(request, _('Your booking was successfully paid!'))
                 logger.info(f"Статус бронирования {booking_id} обновлен на 'paid'")
             
             # Удаляем данные из сессии
@@ -855,12 +1407,12 @@ def robokassa_success(request, booking_id):
             return render(request, "hotel/payment_success.html", context)
         else:
             # На всякий случай, хотя мы должны были перенаправить раньше
-            messages.error(request, "Ошибка: Оплата не подтверждена системой.")
+            messages.error(request, _("Error: Payment not confirmed by the system."))
             return redirect("/")
         
     except Exception as e:
         logger.error(f"Ошибка при обработке успешного платежа: {str(e)}")
-        messages.error(request, f"Произошла ошибка: {str(e)}")
+        messages.error(request, _("An error occurred: %(error)s") % {'error': str(e)})
         return redirect("/")
 
 @csrf_exempt
@@ -913,7 +1465,7 @@ def robokassa_success_direct(request):
     # Проверяем, есть ли необходимые параметры в запросе
     if not all(param in request.GET for param in ['OutSum', 'InvId', 'SignatureValue']):
         logger.warning("Отсутствуют обязательные параметры в запросе success от Робокассы")
-        messages.error(request, "Ошибка: Недостаточно данных для проверки платежа")
+        messages.error(request, _("Error: Insufficient data to verify payment"))
         return redirect('/')
     
     inv_id = request.GET.get('InvId')
@@ -921,7 +1473,7 @@ def robokassa_success_direct(request):
     # Проверяем подпись
     if not check_success_payment(request.GET):
         logger.warning(f"Неверная подпись платежа в запросе success от Робокассы: InvId={inv_id}")
-        messages.error(request, "Ошибка: Верификация платежа не пройдена")
+        messages.error(request, _("Error: Payment verification failed"))
         return redirect('/')
     
     # Если подпись правильная, находим бронирование и обновляем его статус
@@ -952,7 +1504,7 @@ def robokassa_success_direct(request):
         return redirect('hotel:robokassa_success', booking_id=booking.booking_id)
     except Exception as e:
         logger.error(f"Ошибка при обработке прямого success URL: {str(e)}")
-        messages.error(request, "Ошибка при обработке платежа")
+        messages.error(request, _("Error processing payment"))
         return redirect('/')
 
 @csrf_exempt
@@ -1014,17 +1566,38 @@ def invoice(request, booking_id):
         # Проверяем статус оплаты
         if booking.payment_status != "paid":
             logger.warning(f"Попытка доступа к неоплаченной квитанции: {booking_id}, статус: {booking.payment_status}")
-            messages.error(request, "Доступ к квитанции возможен только для оплаченных бронирований.")
+            messages.error(request, _("Access to receipt is only available for paid bookings."))
             return redirect("/")
+        
+        # Преобразуем selection_data из JSON в словарь Python для использования в шаблоне
+        selection_data = booking.selection_data or {}
+        
+        # Подготавливаем информацию о комнатах с ценами
+        rooms_with_prices = []
+        for room in booking.room.all():
+            room_data = {
+                'room': room,
+                'price': room.room_type.price  # Цена по умолчанию
+            }
+            
+            # Ищем цену в selection_data
+            for item_id, item in selection_data.items():
+                if str(item.get('room_id')) == str(room.id):
+                    room_data['price'] = item.get('room_price', room.room_type.price)
+                    break
+            
+            rooms_with_prices.append(room_data)
         
         context = {
             "booking": booking,  
-            "room": booking.room.all(),  
+            "room": booking.room.all(),
+            "selection_data": selection_data,
+            "rooms_with_prices": rooms_with_prices,
         }
         return render(request, "hotel/invoice.html", context)
     except Exception as e:
         logger.error(f"Ошибка при доступе к квитанции {booking_id}: {str(e)}")
-        messages.error(request, f"Произошла ошибка при получении квитанции: {str(e)}")
+        messages.error(request, _("An error occurred while retrieving the receipt: %(error)s") % {'error': str(e)})
         return redirect("/")
 
 # Добавим вспомогательную функцию для расчета общей стоимости с учетом динамических цен
@@ -1056,3 +1629,150 @@ def calculate_total_price(room_type, checkin_date, checkout_date):
         current_date += timedelta(days=1)
     
     return total
+
+def robots_txt(request):
+    """
+    Генерация robots.txt для SEO оптимизации
+    """
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /admin/",
+        "Disallow: /dashboard/", 
+        "Disallow: /api/",
+        "Disallow: /ckeditor/",
+        "Disallow: /user/",
+        "",
+        "# Языковые версии",
+        "Allow: /ru/",
+        "Allow: /kk/",
+        "Allow: /en/",
+        "",
+        f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
+# ==============================================
+# HEALTH CHECK ENDPOINTS
+# ==============================================
+
+import time
+from django.db import connection
+from django.core.cache import cache
+
+def health_check(request):
+    """
+    Health check endpoint для мониторинга работоспособности приложения
+    """
+    start_time = time.time()
+    health_data = {
+        'status': 'healthy',
+        'timestamp': timezone.now().isoformat(),
+        'services': {},
+        'version': getattr(settings, 'VERSION', '1.0.0')
+    }
+    
+    # Проверка базы данных
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+        health_data['services']['database'] = {
+            'status': 'healthy',
+            'response_time': round((time.time() - start_time) * 1000, 2)
+        }
+    except Exception as e:
+        health_data['services']['database'] = {
+            'status': 'unhealthy',
+            'error': str(e)
+        }
+        health_data['status'] = 'unhealthy'
+    
+    # Проверка Redis/кеша
+    cache_start = time.time()
+    try:
+        cache.set('health_check', 'test', 10)
+        cache.get('health_check')
+        health_data['services']['cache'] = {
+            'status': 'healthy',
+            'response_time': round((time.time() - cache_start) * 1000, 2)
+        }
+    except Exception as e:
+        health_data['services']['cache'] = {
+            'status': 'unhealthy',
+            'error': str(e)
+        }
+        health_data['status'] = 'unhealthy'
+    
+    # Проверка booking processor (если есть метрики в кеше)
+    try:
+        last_run = cache.get('booking_processor_last_run')
+        last_error = cache.get('booking_processor_last_error')
+        error_count = cache.get('booking_processor_error_count', 0)
+        
+        if last_run:
+            last_run_time = timezone.datetime.fromisoformat(last_run)
+            time_since_last_run = (timezone.now() - last_run_time).total_seconds()
+            
+            # Считаем сервис нездоровым, если он не работал более 5 минут
+            if time_since_last_run > 300:
+                health_data['services']['booking_processor'] = {
+                    'status': 'unhealthy',
+                    'error': f'No activity for {int(time_since_last_run)}s'
+                }
+                health_data['status'] = 'unhealthy'
+            elif error_count > 5:
+                health_data['services']['booking_processor'] = {
+                    'status': 'unhealthy',
+                    'error': f'Too many errors: {error_count}',
+                    'last_error': last_error
+                }
+                health_data['status'] = 'unhealthy'
+            else:
+                health_data['services']['booking_processor'] = {
+                    'status': 'healthy',
+                    'last_run': last_run,
+                    'seconds_since_last_run': int(time_since_last_run)
+                }
+        else:
+            health_data['services']['booking_processor'] = {
+                'status': 'unknown',
+                'error': 'No metrics available'
+            }
+    except Exception as e:
+        health_data['services']['booking_processor'] = {
+            'status': 'error',
+            'error': str(e)
+        }
+    
+    # Общее время ответа
+    health_data['response_time'] = round((time.time() - start_time) * 1000, 2)
+    
+    # Определяем HTTP статус
+    if health_data['status'] == 'healthy':
+        status_code = 200
+    else:
+        status_code = 503
+    
+    return JsonResponse(health_data, status=status_code)
+
+def ready_check(request):
+    """
+    Readiness probe - проверяет готовность приложения принимать трафик
+    """
+    try:
+        # Простая проверка базы данных
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+        
+        return JsonResponse({'status': 'ready'}, status=200)
+    except Exception as e:
+        return JsonResponse({'status': 'not ready', 'error': str(e)}, status=503)
+
+def live_check(request):
+    """
+    Liveness probe - проверяет что приложение живо
+    """
+    return JsonResponse({'status': 'alive'}, status=200)

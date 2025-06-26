@@ -14,7 +14,7 @@ from hotel.models import (
     Booking, Hotel, HotelFeatures, HotelGallery, Room, RoomType, 
     RoomTypeGallery, RoomTypeFeatures, Review, Coupon
 )
-from hotel.services import handle_bookings_payment_status_processing_to_cancelled
+from hotel.services import handle_bookings_payment_status_processing_to_unpaid
 from hotel.forms import RoomTypeAdminForm
 from hotel.views import hotel_detail, index  # Импортируем тестируемые представления
 
@@ -24,7 +24,7 @@ class BookingTestCase(TestCase):
     def test_handle_expired_bookings(self):
         # Создаём просроченное бронирование
         booking = Booking.objects.create(
-            payment_status='Processing',
+            payment_status='processing',
             created_at=timezone.now() - timedelta(minutes=15),
             expires_at=timezone.now() - timedelta(minutes=5),
             check_in_date=date.today(),
@@ -36,10 +36,10 @@ class BookingTestCase(TestCase):
             total_days=1
         )
         # Выполняем очистку
-        result = handle_bookings_payment_status_processing_to_cancelled()
+        result = handle_bookings_payment_status_processing_to_unpaid()
         booking.refresh_from_db()
-        self.assertEqual(booking.payment_status, 'Cancelled')
-        self.assertEqual(result, 'Cancelled 1 expired bookings.')
+        self.assertEqual(booking.payment_status, 'unpaid')
+        self.assertEqual(result, 'unpaid 1 expired bookings.')
 
 
 class HotelModelTestCase(TestCase):
@@ -278,7 +278,7 @@ class BookingModelTestCase(TestCase):
         
         self.booking = Booking.objects.create(
             user=self.user,
-            payment_status='Processing',
+            payment_status='processing',
             full_name='Test User',
             email='test@example.com',
             hotel=self.hotel,
@@ -299,7 +299,7 @@ class BookingModelTestCase(TestCase):
     def test_booking_creation(self):
         """Тест создания бронирования"""
         self.assertEqual(self.booking.full_name, 'Test User')
-        self.assertEqual(self.booking.payment_status, 'Processing')
+        self.assertEqual(self.booking.payment_status, 'processing')
         self.assertEqual(self.booking.hotel, self.hotel)
         self.assertEqual(self.booking.room_type, self.room_type)
         self.assertEqual(self.booking.total_days, 1)
@@ -417,6 +417,10 @@ class HotelViewsTestCase(TestCase):
         
     def test_index_view(self):
         """Тест маршрутизации к главной странице с учетом i18n"""
+        # Очищаем кэш перед тестом
+        from django.core.cache import cache
+        cache.clear()
+        
         # Проверяем правильность URL-маршрутизации
         url = reverse('hotel:index')
         
@@ -428,10 +432,10 @@ class HotelViewsTestCase(TestCase):
         request = self.factory.get(url)
         request.user = self.user  # Устанавливаем пользователя
         
-        # Патчим вызов базы данных в представлении index
-        with patch('hotel.views.Hotel.objects.filter') as mock_filter:
+        # Патчим весь механизм кэширования для тестов
+        with patch('hotel.cache_utils.CacheHelper.get_or_set_complex') as mock_cache:
             # Настраиваем мок для возврата списка с нашим тестовым отелем
-            mock_filter.return_value = [self.hotel]
+            mock_cache.return_value = [self.hotel]
             
             # Патчим вызов render
             with patch('hotel.views.render') as mock_render:
@@ -452,6 +456,8 @@ class HotelViewsTestCase(TestCase):
                 # В представлении index контекст передается как третий позиционный аргумент,
                 # а не как именованный аргумент context
                 self.assertIn("hotel", args[2])
+                # Проверяем, что hotel в контексте является списком
+                self.assertIsInstance(args[2]["hotel"], list)
     
     def test_hotel_detail_view(self):
         """Тест маршрутизации к детальной странице отеля с учетом i18n"""
@@ -553,7 +559,7 @@ class BookingServiceTestCase(TestCase):
     def setUp(self):
         # Создаём действительное бронирование с expires_at в будущем
         self.active_booking = Booking.objects.create(
-            payment_status='Processing',
+            payment_status='processing',
             created_at=timezone.now() - timedelta(minutes=15),
             expires_at=timezone.now() + timedelta(minutes=15),
             check_in_date=date.today(),
@@ -567,7 +573,7 @@ class BookingServiceTestCase(TestCase):
         
         # Создаём просроченное бронирование
         self.expired_booking = Booking.objects.create(
-            payment_status='Processing',
+            payment_status='processing',
             created_at=timezone.now() - timedelta(minutes=30),
             expires_at=timezone.now() - timedelta(minutes=5),
             check_in_date=date.today(),
@@ -581,12 +587,12 @@ class BookingServiceTestCase(TestCase):
         
     def test_handle_expired_bookings(self):
         """Тест обработки просроченных бронирований"""
-        result = handle_bookings_payment_status_processing_to_cancelled()
+        result = handle_bookings_payment_status_processing_to_unpaid()
         
         # Проверяем, что только просроченное бронирование было отменено
         self.expired_booking.refresh_from_db()
         self.active_booking.refresh_from_db()
         
-        self.assertEqual(self.expired_booking.payment_status, 'Cancelled')
-        self.assertEqual(self.active_booking.payment_status, 'Processing')
-        self.assertEqual(result, 'Cancelled 1 expired bookings.')
+        self.assertEqual(self.expired_booking.payment_status, 'unpaid')
+        self.assertEqual(self.active_booking.payment_status, 'processing')
+        self.assertEqual(result, 'unpaid 1 expired bookings.')

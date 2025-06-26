@@ -1,7 +1,35 @@
+{% extends 'partials/async_base.html' %}
 {% load static %}
 {% load i18n %}
 {% load humanize %}
 {% load mathfilters %}
+{% load price_format %}
+{% load hotel_extras %}
+
+{% block special_header_links %}
+  <!-- Добавляем CSS и JS для International Telephone Input -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
+
+  <style>
+    /* Стили для телефонного поля */
+    .iti {
+      width: 100%;
+    }
+    .error-message {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    input.phone-input.error {
+      border-color: #e74c3c;
+    }
+  </style>
+  <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
+    <link rel="stylesheet" href="{% static 'css/selected-rooms.css' %}">
+{% endblock special_header_links %}
+
+{% block content %}
 <div id="main_wrapper" class="selection-list">
   
   <div id="titlebar" class="gradient">
@@ -25,50 +53,58 @@
   <div class="container margin-bottom-75">
     <div class="row">
       <div class="col-lg-8 col-md-8 utf_listing_payment_section">
-	    
-        <div class="utf_booking_listing_section_form margin-bottom-40">
-            <h3><i class="fas fa-bed"></i> {% trans "Selected Rooms" %}</h3>
-            <div class="utf_listing_section">
-                    <div class="utf_pricing_list_section">
-                        <ul>
-                            {% for id, item in data.items %}
-                                <li>
-                                    <h5>{% trans "Room" %}: {{item.room_name}}  №{{item.room_number}} <small><a style="cursor: pointer;" class="delete-item" data-item="{{ id }}"><i class="fas fa-trash" style="color: red;"></i></a></small> </h5>
-                                    <p><strong>{% trans "Beds" %} :</strong> {{item.number_of_beds}}  </p>
-                                    <span>{{item.room_price}} {% trans "Tenge" %} </span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-            </div>
-        </div>
+
+          <div class="utf_booking_listing_section_form margin-bottom-40">
+              <h3><i class="fas fa-bed"></i> {% trans "Selected Rooms" %}</h3>
+              <div class="utf_listing_section">
+                  <div class="utf_pricing_list_section">
+                      <ul>
+                          {% for id, item in data.items %}
+                          <li class="room_item_container">
+                              <div class="room_item_main">
+                                  <h5 class="room_name_number_and_delete">{{item.room_name}}  №{{item.room_number}} <small class="delete_room_button"><a style="cursor: pointer;" class="delete-item" data-item="{{ id }}"><i class="fas fa-trash" style="color: red;"></i></a></small> </h5>
+                                  <div class="beds_and_capacity">
+                                      <p><strong>{% trans "Beds" %} :</strong> {{item.number_of_beds}}  </p>
+                                      <p><strong>{% trans "Capacity" %} :</strong> {{item.room_capacity}}  </p>
+                                  </div>
+                              </div>
+                              <span class="room_item_price"> {{item.room_price | price_format}} {% trans "Tenge" %} </span>
+
+                          </li>
+                          {% endfor %}
+                      </ul>
+                  </div>
+              </div>
+          </div>
 
         <div class="utf_booking_listing_section_form margin-bottom-40">
           <h3><i class="fas fa-check-circle"></i> {% trans "Update Selection" %}</h3>
           <div class="utf_listing_section">
                   <div class="utf_pricing_list_section">
-
-
-                    {% with first_item=data|dictsort:"0"|first %}
-                    {% with room_type_id=first_item.1.room_type %}
-                    <!-- Скрытая форма для отправки данных -->
-                    <form id="update-selection-form" class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}" style="display:none;">
-                      {% csrf_token %}
-                      <input type="hidden" value="{{hotel.id}}" name="hotel-id">
-                      <input type="hidden" id="checkin-input" value="{{checkin}}" name="checkin">
-                      <input type="hidden" id="checkout-input" value="{{checkout}}" name="checkout">
-                      <input type="hidden" value="{{ adult }}" name="adult">
-                      <input type="hidden" value="{{ children }}" name="children">
-                      <!-- Явное установление обоих полей -->
-                      <input type="hidden" value="{{ room_type_id }}" name="room-type-id">
-                      {% if first_room_type %}
-                          <input type="hidden" id="room-type-input" name="room-type" value="{{ first_room_type.slug }}">
+                      {% if data %}
+                          {% with first_item=data|dictsort:"0"|first %}
+                              {% with room_type_id=first_item.1.room_type %}
+                                   <!-- Форма обновления выбора -->
+                                   <form id="update-selection-form" class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}" style="display:none;">
+                                       {% csrf_token %}
+                                       <input type="hidden" value="{{ hotel.id }}" name="hotel-id">
+                                       <input type="hidden" id="checkin-input" value="{{ checkin }}" name="checkin">
+                                       <input type="hidden" id="checkout-input" value="{{ checkout }}" name="checkout">
+                                       <input type="hidden" value="{{ adult }}" name="adult">
+                                       <input type="hidden" value="{{ children }}" name="children">
+                                       <!-- Явное установление обоих полей -->
+                                       <input type="hidden" value="{{ room_type_id }}" name="room-type-id">
+                                       {% if first_room_type %}
+                                           <input type="hidden" id="room-type-input" name="room-type" value="{{ first_room_type.slug }}">
+                                       {% else %}
+                                           <input type="hidden" id="room-type-input" name="room-type" value="{{ first_item.1.room_type_slug|default:room_type_id }}">
+                                       {% endif %}
+                                   </form>
+                              {% endwith %}
+                          {% endwith %}
                       {% else %}
-                          <input type="hidden" id="room-type-input" name="room-type" value="{{ first_item.1.room_type_slug|default:room_type_id }}">
+                          <p>{% trans "No rooms selected. Please select a room to update." %}</p>
                       {% endif %}
-                    </form>
-                    {% endwith %}
-                    {% endwith %}
                     
                     <!-- Кнопка для отправки формы -->
                     <button type="button" id="async-update-selection-btn" class="utf_progress_button button fullwidth_block margin-top-5">
@@ -85,20 +121,21 @@
             <div class="row">
               <div class="col-md-12">
                 <label>{% trans "First Name" %}</label>
-                <input name="full_name" type="text" value="" placeholder="First Name" required>
+                <input name="full_name" type="text" value="{{request.user.profile.full_name|title}}" placeholder="First Name" required>
                 <div class="error-message" id="fullNameError"></div>
               </div>
               <div class="col-md-6">
                 <div class="medium-icons">
                   <label>{% trans "E-Mail" %}</label>
-                  <input name="email" type="email" value="" placeholder="Email" required>
+                  <input name="email" type="email" value="{{request.user.email}}" placeholder="Email" required>
                   <div class="error-message" id="emailError"></div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="medium-icons">
                   <label>{% trans "Phone" %}</label>
-                  <input name="phone" type="tel" value="" placeholder="Phone" required pattern="[0-9+\s()-]{10,}">
+                  <input name="phone" type="tel" class="phone-input" placeholder="{% trans 'Enter phone number' %}" required>
+                  <input type="hidden" name="country_code" id="country_code" value="">
                   <div class="error-message" id="phoneError"></div>
                 </div>
               </div>
@@ -115,32 +152,30 @@
           <div class="listing-item"> <img src="{{hotel.image.url}}" alt="">
             <div class="utf_listing_item_content">              
               <h3>{{hotel.name}}</h3>
-              <span><i class="fa fa-map-marker"></i> The Ritz-Carlton, Hong Kong</span>
-              <span><i class="fa fa-phone"></i> (+15) 124-796-3633</span>											
-              <div class="utf_star_rating_section" data-rating="4.5">
-                <div class="utf_counter_star_rating">(18) Reviews</div>
-              </div>
+              <span><i class="fa fa-map-marker"></i> {{hotel.address}}</span>											
+			  <div class="utf_star_rating_section" data-rating="{{hotel.average_rating|to_decimal_dot}}">
+				<div class="utf_counter_star_rating">({{hotel.reviews.count}}) {% trans "Reviews" %}</div>
+			  </div>
             </div>
           </div>
         </div>
         <div class="boxed-widget opening-hours summary margin-top-0">
-          <h3><i class="fa fa-calendar-check-o"></i> Booking Summary</h3>
+          <h3><i class="fa fa-calendar-check-o"></i> {% trans "Booking Summary" %}</h3>
           <ul>
-            <li>Check-in <span>{{checkin}}</span></li>
-            <li>Check-out <span>{{checkout}}</span></li>            
-            <li>Total Days <span>{{total_days}} Days</span></li>            
-            <li>Adults <span>{{ adult }} Adult</span></li>
-            <li>Children <span>{{ children }} Children</span></li>
-			      {% comment %} <li>V.A.T <span>0 {% trans "Tenge" %}</span></li> {% endcomment %}
+            <li>{% trans "Check-in" %} <span>{{checkin}}</span></li>
+            <li>{% trans "Check-out" %} <span>{{checkout}}</span></li>            
+            <li>{% trans "Total Days" %} <span>{{total_days}} {% trans "Days" %}</span></li>            
+            <li>{% trans "Adults" %} <span>{{ adult }} {% trans "Adult" %}</span></li>
+            <li>{% trans "Children" %} <span>{{ children }} {% trans "Children" %}</span></li>
             <li class="total-costs" style="border-top: 1px dashed #ddd; padding-top: 10px;">
-              <strong>{% trans "Total Cost" %}</strong> <span>{{total|floatformat:0}} {% trans "Tenge" %}</span>
+              <strong>{% trans "Total Cost" %}</strong> <span>{{total|price_format}} {% trans "Tenge" %}</span>
             </li>
             <li class="prepayment" style="background-color: #f0f9ff; padding: 12px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                 <span style="display: flex; align-items: center; gap: 8px;">
                   <i class="fas fa-credit-card" style="color: #007bff; font-size: 16px;"></i>
                   <strong style="font-weight: bold;">{% trans "Prepayment (10%)" %}</strong>
                 </span>
-                <span style="color: #007bff; font-weight: bold; font-size: 1.1em; white-space: nowrap;">{{total|div:10|floatformat:0}} {% trans "Tenge" %}</span>
+                <span style="color: #007bff; font-weight: bold; font-size: 1.1em; white-space: nowrap;">{{total|div:10|price_format}} {% trans "Tenge" %}</span>
             </li>
             <li class="payment-info" style="background-color: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #6c757d; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
                 <i class="fas fa-info-circle" style="color: #6c757d; margin-right: 8px; font-size: 16px;"></i>
@@ -153,10 +188,68 @@
   </div>
 </div>
 
+{% endblock content %}
+
+{% block script_links %}
+
 <script>
 // Функция инициализации интерфейса, которая будет вызываться как при загрузке страницы, 
 // так и после AJAX-обновления
 function initAsyncInterface() {
+    // Инициализация телефонного поля
+    const phoneInput = document.querySelector('input[name="phone"]');
+    if (phoneInput) {
+        // Проверяем, не было ли уже инициализировано телефонное поле
+        if (!phoneInput.classList.contains('iti__phone-initialized')) {
+            const iti = window.intlTelInput(phoneInput, {
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.js",
+                initialCountry: "kz",
+                preferredCountries: ["kz", "ru", "cn", "us"],
+                separateDialCode: true,
+                autoPlaceholder: "aggressive"
+            });
+            
+            // Отмечаем телефонное поле как инициализированное
+            phoneInput.classList.add('iti__phone-initialized');
+
+            // Сохраняем код страны при изменении
+            const countryCodeInput = document.getElementById('country_code');
+            if (countryCodeInput) {
+                // Сохраняем начальное значение
+                countryCodeInput.value = "+" + iti.getSelectedCountryData().dialCode;
+                
+                // Обновляем при изменении страны
+                phoneInput.addEventListener("countrychange", function() {
+                    countryCodeInput.value = "+" + iti.getSelectedCountryData().dialCode;
+                });
+            }
+
+            // Обновляем валидацию телефона
+            phoneInput.addEventListener("blur", function() {
+                if (phoneInput.value.trim()) {
+                    if (iti.isValidNumber()) {
+                        document.getElementById('phoneError').textContent = '';
+                        phoneInput.setCustomValidity('');
+                        phoneInput.classList.remove('error');
+                    } else {
+                        document.getElementById('phoneError').textContent = '{% trans "Please enter a valid phone number" %}';
+                        phoneInput.setCustomValidity('{% trans "Please enter a valid phone number" %}');
+                        phoneInput.classList.add('error');
+                    }
+                } else {
+                    document.getElementById('phoneError').textContent = '{% trans "Phone number is required" %}';
+                    phoneInput.classList.add('error');
+                }
+            });
+            
+            // Сохраняем экземпляр intlTelInput в глобальную переменную или в data-атрибут
+            phoneInput.setAttribute('data-iti-instance', 'initialized');
+            window.itiInstance = iti;
+        } else {
+            // Если поле уже инициализировано, используем существующий экземпляр
+            const iti = window.itiInstance;
+        }
+    }
     
     // Поля формы
     const updateButton = document.getElementById('async-update-selection-btn');
@@ -168,7 +261,6 @@ function initAsyncInterface() {
     const displayCheckoutInput = document.getElementById('display-checkout');
     const checkinInput = document.getElementById('checkin-input');
     const checkoutInput = document.getElementById('checkout-input');
-    
     
     // Обновляем реальные даты при изменении отображаемых дат
     if (displayCheckinInput && checkinInput) {
@@ -243,7 +335,7 @@ function initAsyncInterface() {
         const roomTypeIdValue = formData.get('room-type-id');
         
         if (!roomTypeValue && !roomTypeIdValue) {
-            console.error("ОШИБКА: Отсутствуют обязательные поля room-type и room-type-id!");
+                            // Removed console.error for missing required fields - error handling preserved
             alert("Ошибка: Не удалось получить информацию о типе номера. Пожалуйста, обновите страницу и попробуйте снова.");
             return; // Прерываем отправку формы
         }
@@ -278,7 +370,7 @@ function initAsyncInterface() {
                     // Повторно инициализируем скрипты
                     initAsyncInterface();
                 } catch (e) {
-                    console.error("Ошибка при обработке ответа:", e);
+                    // Removed console.error for response processing error - error handling preserved
                 }
             }
         };
@@ -317,14 +409,19 @@ function initAsyncInterface() {
             document.getElementById('emailError').textContent = '';
         }
 
-        // Phone Validation
-        const phone = billingForm.querySelector('input[name="phone"]');
-        const phoneRegex = /^[0-9+\s()-]{10,}$/;
-        if (!phoneRegex.test(phone.value)) {
-            document.getElementById('phoneError').textContent = '{% trans "Please enter a valid phone number" %}';
-            isValid = false;
-        } else {
-            document.getElementById('phoneError').textContent = '';
+        // Phone Validation с использованием intl-tel-input
+        if (phoneInput && phoneInput.classList.contains('iti__phone-initialized')) {
+            const iti = window.itiInstance;
+            if (!iti.isValidNumber()) {
+                document.getElementById('phoneError').textContent = '{% trans "Please enter a valid phone number" %}';
+                phoneInput.classList.add('error');
+                isValid = false;
+            } else {
+                document.getElementById('phoneError').textContent = '';
+                phoneInput.classList.remove('error');
+                // Сохраняем полный номер телефона в международном формате
+                phoneInput.value = iti.getNumber();
+            }
         }
 
         if (isValid) {
@@ -341,7 +438,7 @@ if (window.parent && window.parent.initAsyncComplete) {
     window.parent.initAsyncComplete();
 }
 </script>
-
+{% endblock script_links %}
   
 
 

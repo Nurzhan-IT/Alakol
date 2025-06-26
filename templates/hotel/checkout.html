@@ -70,7 +70,6 @@
 			  </div>
 			</div>
 		</div>
-
 		
 	  </div>
       <div class="col-lg-4 col-md-4 margin-top-0 utf_listing_payment_section">
@@ -106,44 +105,15 @@
             </li>
           </ul>
           
-          <!-- Кнопки оплаты -->
+          <!-- Simple Continue Button - Updated 2025-05-31 12:39 PM +05 -->
           <div class="payment-options margin-top-20">
-            <button class="button" id="robokassa-button">{% trans "Pay with Robokassa" %}</button>
+            <a href="{% url 'hotel:payment_method_selection' %}" class="button">{% trans "Continue to Payment" %}</a>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-{% block scripts %}
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Кнопка оплаты через Робокассу
-    document.getElementById('robokassa-button').addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      // Запрос на создание платежа
-      fetch('{% url "hotel:api_robokassa_payment" booking.booking_id %}', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: JSON.stringify({})
-      })
-      .then(response => response.json())
-      .then(data => {
-        // Перенаправляем на страницу оплаты
-        window.location.href = data.payment_url;
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-    });
-  });
-</script>
-{% endblock %}
   
 {% endblock content %}
 

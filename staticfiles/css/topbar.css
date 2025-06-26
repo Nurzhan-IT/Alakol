@@ -1,0 +1,17 @@
+.lang-button-topbar {
+    border-radius: 5px;
+    padding: 2px 5px;
+    border: 1px solid lightgrey;
+    background: transparent;
+}
+
+.lang-code {
+    margin-left: 50px;
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .lang-code {
+
+    }
+}

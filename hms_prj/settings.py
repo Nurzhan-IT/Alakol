@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import secrets
 
 from django.utils.translation import gettext
 
@@ -26,7 +27,8 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-m*t5wynyhd=2udczig6#n&0337+m=ga!p=cglnd-+srqdpq4r2'
+# Use environment variable or generate a secure key
+SECRET_KEY = os.getenv('SECRET_KEY', secrets.token_urlsafe(50))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',  # Добавлено для SEO
 
     # Custom Apps
     'hotel',
@@ -54,6 +57,7 @@ INSTALLED_APPS = [
     'user_dashboard',
     'search',
     'robokassa',
+    'legal',
 
     # Third Party Apps
     'import_export',
@@ -72,6 +76,7 @@ INSTALLED_APPS = [
     'modeltranslation',
     'django.contrib.humanize',
     'django_crontab',
+    'clearcache',
 
     
 ]
@@ -79,10 +84,12 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'hotel.middleware.AdminRussianLanguageMiddleware',  # Принудительно устанавливает русский для админки
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'legal.middleware.AdminLegalConsentMiddleware',  # Проверка согласия с legal agreements для админки
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
@@ -99,10 +106,12 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.i18n',
                 'hotel.context_processor.default',
+                'hotel.context_processor.admin_russian_language',  # Принудительно русский для админки
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'legal.context_processors.legal_documents',
             ],
         },
     },
@@ -155,7 +164,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'ru-ru'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'Asia/Yekaterinburg'  # UTC+5, Алматы не обновленый там +6 до сих пор
 
@@ -163,7 +172,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_THOUSAND_SEPARATOR = True
+USE_THOUSAND_SEPARATOR = False
 
 USE_TZ = True
 
@@ -178,6 +187,15 @@ LANGUAGES = (
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
 )
+
+# Настройки для языкового cookie
+LANGUAGE_COOKIE_NAME = 'django_language'
+LANGUAGE_COOKIE_AGE = None  # Действует до закрытия браузера
+LANGUAGE_COOKIE_DOMAIN = None
+LANGUAGE_COOKIE_PATH = '/'
+LANGUAGE_COOKIE_SECURE = False
+LANGUAGE_COOKIE_HTTPONLY = False
+LANGUAGE_COOKIE_SAMESITE = None
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -202,6 +220,11 @@ LOGOUT_REDIRECT_URL = "userauths:sign-in"
 
 AUTH_USER_MODEL = 'userauths.User'
 
+AUTHENTICATION_BACKENDS = [
+    'userauths.backends.CaseInsensitiveEmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 # Website Address
 WEBSITE_ADDRESS = os.getenv("WEBSITE_ADDRESS")
 
@@ -213,6 +236,13 @@ ANYMAIL = {
     "MAILGUN_API_KEY": os.getenv("MAILGUN_API_KEY"),
     "MAILGUN_SENDER_DOMAIN": os.getenv("MAILGUN_SENDER_DOMAIN"),  
 }
+
+# AWS SES Configuration
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_REGION = os.getenv("AWS_REGION", "ap-south-1")
+AWS_SES_REGION_NAME = AWS_REGION
+AWS_SES_REGION_ENDPOINT = f'email.{AWS_REGION}.amazonaws.com'
 
 
 # Default primary key field type
@@ -226,13 +256,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 JAZZMIN_SETTINGS = {
     'site_header': "Alakol",
-    'site_brand': "Your #1 marketplace for collectibles.",
+    'site_brand': ".",
     'site_logo': "/images/logo.png",
-    'copyright':  "All Right Reserved 2024",
-    "welcome_sign": "Welcome to Alakol HMS, Login Now.",
+    'copyright':  "Все права защищены 2025",
+    "welcome_sign": "Добро пожаловать в Alakol HMS, войдите сейчас.",
+    
+    "language_chooser": False,
+    
     "topmenu_links": [
-
-        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Главная",  "url": "admin:index", "permissions": ["auth.view_user"]},
         # {"name": "Company", "url": "/admin/addons/company/"},
         # {"name": "Users", "url": "/admin/userauths/user/"},
 
@@ -270,7 +302,6 @@ JAZZMIN_SETTINGS = {
         "hotel.Coupon":"fas fa-tag",
         "hotel.Bookmark":"fas fa-heart",
     },
-
 
     "show_ui_builder" : True
 }
@@ -488,6 +519,75 @@ CSRF_TRUSTED_ORIGINS = [
     'https://b855-2a0d-b201-c0-774-907e-b5d8-ed29-207b.ngrok-free.app',
 ]
 
+# Redis Configuration for Caching
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.getenv("REDIS_URL", "redis://127.0.0.1:6379/1"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_POOL_KWARGS": {
+                "max_connections": 50,
+                "health_check_interval": 30,
+            },
+            "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
+            "SERIALIZER": "django_redis.serializers.pickle.PickleSerializer",
+        },
+        "KEY_PREFIX": "hms_alakol",
+        "TIMEOUT": 300,  # 5 минут по умолчанию 300
+    },
+
+    "long_term": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.getenv("REDIS_URL", "redis://127.0.0.1:6379/3"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_POOL_KWARGS": {
+                "max_connections": 20,
+                "health_check_interval": 60,
+            },
+            "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
+        },
+        "KEY_PREFIX": "hms_longterm",
+        "TIMEOUT": 3600,  # 1 час для долгосрочных данных 3600
+    }
+}
+
+# Session Configuration - используем базу данных для сессий (без кэширования)
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SESSION_COOKIE_AGE = 86400  # 24 часа
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_SAVE_EVERY_REQUEST = True
+
+
+# Cache Middleware Configuration - ОТКЛЮЧЕНО для данных реального времени
+# MIDDLEWARE.insert(1, 'django.middleware.cache.UpdateCacheMiddleware')
+# MIDDLEWARE.append('django.middleware.cache.FetchFromCacheMiddleware')
+
+# Cache времена жизни для различных типов данных
+CACHE_TTL = {
+    'hotels_list': 900,         # 15 минут - список отелей
+    'hotel_detail': 1800,       # 30 минут - детали отеля
+    'search_results': 300,      # 5 минут - результаты поиска
+    'room_availability': 60,    # 1 минута - доступность номеров (сокращено для реального времени)
+    'hotel_reviews': 3600,      # 1 час - отзывы отеля
+    'features_and_amenities': 7200,  # 2 часа - удобства и особенности
+    'static_content': 86400,    # 24 часа - статический контент
+    # Настройки для booking приложения
+    'room_unavailability': 60,      # 1 минута - недоступность номеров (сокращено для реального времени)
+    
+    # ОТКЛЮЧЕННЫЕ ТИПЫ КЭШИРОВАНИЯ для данных реального времени:
+    # 'booking_data': 0,              # ОТКЛЮЧЕНО - данные бронирования должны обновляться мгновенно
+    # 'user_bookings': 0,             # ОТКЛЮЧЕНО - бронирования пользователя должны обновляться мгновенно  
+    # 'dynamic_pricing': 0,           # ОТКЛЮЧЕНО - динамические цены должны обновляться мгновенно
+    # 'booking_availability_check': 0, # ОТКЛЮЧЕНО - проверка доступности должна быть в реальном времени
+    # 'booking_session_data': 0,      # ОТКЛЮЧЕНО - данные сессии бронирования должны обновляться мгновенно
+    # 'user_notifications': 0,        # ОТКЛЮЧЕНО - уведомления пользователей должны отображаться мгновенно
+    # 'user_profile_data': 0,         # ОТКЛЮЧЕНО - профильные данные пользователя могут изменяться часто
+    # 'live_inventory': 0,            # ОТКЛЮЧЕНО - текущие остатки номеров должны быть точными
+    # 'payment_status': 0,            # ОТКЛЮЧЕНО - статусы платежей должны обновляться немедленно
+    # 'cart_data': 0,                 # ОТКЛЮЧЕНО - корзина пользователя должна отражать актуальное состояние
+}
 
 CRONJOBS = [
     ('*/5 * * * *', 'hotel.cron.handle_bookings_payment_status_processing'),

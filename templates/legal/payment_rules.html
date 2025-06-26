@@ -1,0 +1,257 @@
+{% extends 'legal/base_legal.html' %}
+
+{% block title %}Payment and Refund Rules{% endblock %}
+
+{% block content %}
+<h1>PAYMENT AND REFUND RULES</h1>
+<h2>ALAKOL HOTEL BOOKING SYSTEM</h2>
+
+<div class="document-meta">
+    <strong>Effective Date:</strong> 19.06.2025<br>
+    <strong>Document Version:</strong> 1.0
+</div>
+
+<h2>1. GENERAL PROVISIONS</h2>
+<p><strong>1.1.</strong> These Rules govern the payment procedures for booking services and refund procedures in the Alakol hotel booking system.</p>
+
+<p><strong>1.2.</strong> The Rules are an integral part of the User Agreement and are mandatory for all system users.</p>
+
+<p><strong>1.3.</strong> By making a payment, the user confirms agreement with these Rules.</p>
+
+<p>1.4. The eKol system supports multilingual functionality (Kazakh, Russian, English languages) and operates in the Kazakhstan/Astana time zone (UTC+5).</p>
+
+<h2>2. PAYMENT METHODS</h2>
+
+<h3>2.1. Available payment methods:</h3>
+<ul>
+    <li>Bank cards (Visa, MasterCard, MIR)</li>
+    <li>Electronic wallets</li>
+    <li>Bank transfers</li>
+    <li>Mobile payments</li>
+    <li>Other methods supported by the Robokassa payment system</li>
+</ul>
+
+<h3>2.2. Payment currencies:</h3>
+<ul>
+    <li>Primary currency: Kazakhstani tenge (KZT)</li>
+    <li>Supported: Russian ruble (RUB), US dollar (USD), Euro (EUR)</li>
+    <li>Conversion is performed at the payment system's rate at the time of transaction</li>
+</ul>
+
+<h3>2.3. Payment security:</h3>
+<ul>
+    <li>All payments are processed through the certified Robokassa system</li>
+    <li>Compliance with PCI DSS security standards</li>
+    <li>Data encryption using SSL protocol</li>
+    <li>The system does not store bank card data</li>
+</ul>
+
+<h2>3. PAYMENT STRUCTURE</h2>
+
+<h3>3.1. Flexible prepayment system:</h3>
+<div class="alert alert-info">
+    <p>The prepayment amount is determined by each hotel's policy and can be:</p>
+    <ul>
+        <li><strong>10%</strong> of the total accommodation cost</li>
+        <li><strong>30%</strong> of the total accommodation cost</li>
+        <li><strong>50%</strong> of the total accommodation cost</li>
+        <li><strong>70%</strong> of the total accommodation cost</li>
+        <li><strong>100%</strong> of the total accommodation cost (full prepayment)</li>
+    </ul>
+</div>
+
+<h3>3.2. Payment at hotel:</h3>
+<ul>
+    <li>The additional payment amount is (100% - N%), where N is the prepayment percentage</li>
+    <li>When N = 100%, no additional payment at the hotel is required</li>
+    <li>Additional payment is made directly at the hotel upon check-in</li>
+    <li>Payment methods for additional payment are determined by the hotel's policy</li>
+</ul>
+
+<h3>3.3. Platform commission:</h3>
+<ul>
+    <li>When booking a room through the eKol platform, a prepayment of 10%, 30%, 50%, 70%, or 100% of the total booking cost is charged, depending on the conditions selected by the hotel</li>
+    <li>A booking service commission of 10% of the total booking cost is included in the prepayment amount (including online acquiring commission)</li>
+    <li>The commission covers order processing costs, platform administration, and technical support</li>
+    <li>The booking service commission (10%) is non-refundable, as the service is considered provided upon booking confirmation</li>
+</ul>
+
+<div class="alert alert-warning">
+    <strong>IMPORTANT NOTICE ABOUT ROUNDING:</strong> Due to percentage calculations when calculating prepayment, additional payment, and commissions, all monetary amounts may be rounded with an error of up to 1 (one) tenge in either direction.
+</div>
+
+<h2>4. PAYMENT PROCEDURE</h2>
+
+<h3>4.1. Payment stages:</h3>
+<ol>
+    <li>Hotel selection and booking parameters</li>
+    <li>Review of payment and cancellation terms</li>
+    <li>Filling in booking data</li>
+    <li>Redirect to Robokassa payment system</li>
+    <li>Payment method selection and payment data entry</li>
+    <li>Payment confirmation</li>
+    <li>Receiving booking confirmation</li>
+</ol>
+
+<h3>4.2. Payment confirmation:</h3>
+<ul>
+    <li>Successful payment is confirmed instantly</li>
+    <li>Confirmation is sent to the specified email</li>
+    <li>The confirmation includes booking number and payment details</li>
+    <li>In case of unsuccessful payment, funds are not charged</li>
+</ul>
+
+<h3>4.3. Payment receipt:</h3>
+<ul>
+    <li>Electronic receipt is sent to email within 24 hours</li>
+    <li>Receipt contains all necessary details for reporting</li>
+    <li>Receipt duplicate can be requested from support service</li>
+</ul>
+
+<h2>5. REFUNDS</h2>
+
+<h3>5.1. Grounds for refund:</h3>
+<ul>
+    <li>Booking cancellation initiated by client (partial refund)</li>
+    <li>Booking cancellation due to force majeure circumstances (full refund)</li>
+    <li>Hotel's inability to provide services (full refund)</li>
+    <li>Technical error during payment (full refund)</li>
+</ul>
+
+<h3>5.2. Refund conditions upon cancellation:</h3>
+
+<h4>For 10% prepayment:</h4>
+<ul>
+    <li>Booking service commission (10%) is non-refundable</li>
+    <li>No additional refund is provided as prepayment consists entirely of commission</li>
+    <li>Refund for any cancellation: 0%</li>
+</ul>
+
+<h4>For 30% prepayment:</h4>
+<ul>
+    <li>Cancellation 15+ days in advance: 20% refund</li>
+    <li>Cancellation less than 15 days in advance: 0% refund</li>
+</ul>
+
+<h4>For 50% prepayment:</h4>
+<ul>
+    <li>Cancellation 15+ days in advance: 40% refund</li>
+    <li>Cancellation 10-14 days in advance: 20% refund</li>
+    <li>Cancellation less than 10 days in advance: 0% refund</li>
+</ul>
+
+<h4>For 70% prepayment:</h4>
+<ul>
+    <li>Cancellation 15+ days in advance: 60% refund</li>
+    <li>Cancellation 10-14 days in advance: 40% refund</li>
+    <li>Cancellation 7-9 days in advance: 10% refund</li>
+    <li>Cancellation less than 36 hours in advance: 0% refund</li>
+</ul>
+
+<h4>For 100% prepayment:</h4>
+<ul>
+    <li>Cancellation 15+ days in advance: 90% refund</li>
+    <li>Cancellation 10-14 days in advance: 70% refund</li>
+    <li>Cancellation 7-9 days in advance: 40% refund</li>
+    <li>Cancellation 36+ hours in advance: 20% refund</li>
+    <li>Cancellation less than 36 hours in advance: 0% refund</li>
+</ul>
+
+<h3>5.3. Refund procedure:</h3>
+<ol>
+    <li>Submitting refund request through system or support service</li>
+    <li>Request review within 3 business days</li>
+    <li>Making refund decision and notifying client</li>
+    <li>Initiating refund through payment system</li>
+    <li>Refund is processed within 10 business days from cancellation request approval</li>
+    <li>In case of booking cancellation, the consumer may submit a request for partial or full refund of booking service commission</li>
+    <li>Decision is made by eKol platform and hotel based on provided documents</li>
+</ol>
+
+<h3>5.4. Refund timeframes:</h3>
+<ul>
+    <li>To bank card: 5-10 business days</li>
+    <li>To electronic wallet: 1-3 business days</li>
+    <li>By bank transfer: 3-7 business days</li>
+    <li>Timeframes may increase depending on the issuing bank</li>
+</ul>
+
+<h2>6. DISPUTE SITUATIONS</h2>
+
+<h3>6.1. Unsuccessful payments:</h3>
+<ul>
+    <li>During technical failures, funds are not charged</li>
+    <li>If funds were charged but booking was not created - automatic refund</li>
+    <li>Automatic refund timeframe: 1-3 business days</li>
+</ul>
+
+<h3>6.2. Double charges:</h3>
+<ul>
+    <li>In case of double charging, one transaction is automatically cancelled</li>
+    <li>If automatic cancellation did not occur - contact support service</li>
+    <li>Duplicate payment refund within 5 business days</li>
+</ul>
+
+<h3>6.3. Payment disputes:</h3>
+<ul>
+    <li>All disputes are resolved through pre-trial procedure</li>
+    <li>Complaint review period: 10 business days</li>
+    <li>Decisions are made based on documents and system data</li>
+</ul>
+
+<h2>7. COMMISSIONS AND ADDITIONAL EXPENSES</h2>
+
+<h3>7.1. Payment system commissions:</h3>
+<ul>
+    <li>Payment processing commissions are included in the cost</li>
+    <li>Additional commissions from issuing banks are paid by the client</li>
+    <li>Commissions are not refunded</li>
+</ul>
+
+<h3>7.2. Currency conversion:</h3>
+<ul>
+    <li>Conversion is performed at payment system rate</li>
+    <li>Rate is fixed at the time of transaction</li>
+    <li>Exchange rate difference during refund is not compensated</li>
+</ul>
+
+<h2>8. SECURITY AND DATA PROTECTION</h2>
+
+<h3>8.1. Payment data protection:</h3>
+<ul>
+    <li>System does not store bank card data</li>
+    <li>All operations are conducted through secure connection</li>
+    <li>Compliance with international security standards</li>
+</ul>
+
+<h3>8.2. Transaction monitoring:</h3>
+<ul>
+    <li>Automatic monitoring of suspicious transactions</li>
+    <li>Additional verification when necessary</li>
+    <li>Blocking fraudulent transactions</li>
+</ul>
+
+<h2>9. CONTACT INFORMATION</h2>
+
+<div class="contact-info">
+    <h3>For payment and refund inquiries:</h3>
+    <ul>
+        <li><strong>Email:</strong> payments@alakol-booking.kz</li>
+        <li><strong>Phone:</strong> +7 (727) XXX-XX-XX</li>
+        <li><strong>Working hours:</strong> Mon-Fri 9:00-18:00</li>
+        <li><strong>Support service:</strong> support@alakol-booking.kz</li>
+    </ul>
+</div>
+
+<div class="alert alert-info">
+    <strong>Important:</strong> For payment or refund issues, contact support service with booking number and transaction details.
+</div>
+
+<div class="document-meta">
+    <h2>FINAL PROVISIONS</h2>
+    <p>These Rules are an integral part of the User Agreement and Public Offer. All disputes are resolved in accordance with the legislation of the Republic of Kazakhstan.</p>
+    
+    <p><strong>System operates in time zone:</strong> Kazakhstan/Astana (UTC+5)<br>
+    <strong>Payment system:</strong> Robokassa with PCI DSS standards support</p>
+</div>
+{% endblock %}

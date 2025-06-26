@@ -3,6 +3,7 @@
 {% load i18n %}
 {% load mathfilters %}
 {% load humanize %}
+{% load price_format %}
 {% block content %}
   
 <div id="main_wrapper" class="selection-list">
@@ -14,9 +15,9 @@
           <h2>{% trans "Payment Method Selection" %}</h2>
           <nav id="breadcrumbs">
             <ul>
-              <li><a>{% trans "Home" %}</a></li>
               <li><a>{% trans "Hotel" %}</a></li>
               <li><a>{% trans "Rooms" %}</a></li>
+              <li><a>{% trans "My selected rooms" %}</a></li>
               <li>{% trans "Payment Method" %}</li>
             </ul>
           </nav>
@@ -49,18 +50,68 @@
                   <div class="payment-summary" style="background-color: #e8f4fd; padding: 15px; border-radius: 8px; margin: 15px 0;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
                       <span style="font-weight: 500;">{% trans "Total Cost" %}:</span>
-                      <span style="font-weight: 600;">{{total|floatformat:0}} {% trans "Tenge" %}</span>
+                      <span style="font-weight: 600;">{{total|price_format}} {% trans "Tenge" %}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; color: #007bff; font-weight: 500;">
                       <span>{% trans "Prepayment (10%)" %}:</span>
-                      <span>{{total|div:10|floatformat:0}} {% trans "Tenge" %}</span>
+                      <span>{{total|div:10|price_format}} {% trans "Tenge" %}</span>
                     </div>
                   </div>
                 </div>
+
+                <!-- Legal Consent Section for Booking - Moved from checkout.html 2025-05-31 12:39 PM +05 -->
+                <div class="legal-consent-section">
+                    <h4><i class="fas fa-shield-alt"></i> {% trans "Legal Agreements" %}</h4>
+                    <div class="legal-checkbox-group">
+                        <!-- Public Offer - Required -->
+                        <div class="legal-checkbox required">
+                            <input type="checkbox" id="public_offer_consent" name="public_offer_consent" required>
+                            <label for="public_offer_consent">
+                                {% trans "I accept the terms of the" %}
+                                <a href="{% url 'legal:public_offer' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                                    {% trans "Public Offer" %}
+                                </a>
+                                {% trans "for eKol booking services" %}
+                            </label>
+                        </div>
+                        
+                        <!-- Booking Rules - Required -->
+                        <div class="legal-checkbox required">
+                            <input type="checkbox" id="booking_rules_consent" name="booking_rules_consent" required>
+                            <label for="booking_rules_consent">
+                                {% trans "I agree to the" %}
+                                <a href="{% url 'legal:booking_rules' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                                    {% trans "Booking and Cancellation Rules" %}
+                                </a>
+                                {% trans "including cancellation policies" %}
+                            </label>
+                        </div>
+                        
+                        <!-- Payment Rules - Required -->
+                        <div class="legal-checkbox required">
+                            <input type="checkbox" id="payment_rules_consent" name="payment_rules_consent" required>
+                            <label for="payment_rules_consent">
+                                {% trans "I understand and accept the" %}
+                                <a href="{% url 'legal:payment_rules' %}" class="legal-link" target="_blank" rel="noopener noreferrer">
+                                    {% trans "Payment and Refund Rules" %}
+                                </a>
+                                {% trans "including the 10% prepayment policy and refundable terms" %}
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="legal-validation-error">
+                        {% trans "Please accept all required legal documents to proceed with payment." %}
+                    </div>
+                </div>
                 
-                <a href="{% url 'hotel:api_robokassa_payment' %}" class="button booking-confirmation" style="background-color: #007bff; width: 100%; text-align: center; font-weight: 600; padding: 12px; margin-top: 10px; transition: all 0.3s ease;">
+                <!-- Updated Robokassa Button with JavaScript validation - 2025-05-31 12:39 PM +05 -->
+                <button class="button booking-confirmation" id="robokassa-button" disabled style="background-color: #007bff; width: 100%; text-align: center; font-weight: 600; padding: 12px; margin-top: 10px; transition: all 0.3s ease;">
                   <i class="fas fa-credit-card" style="margin-right: 10px;"></i>{% trans "Pay with Robokassa" %}
-                </a>
+                </button>
+                <small class="text-muted" id="robokassa-help-text" style="display: block; margin-top: 10px; text-align: center;">
+                    {% trans "Please accept all legal agreements above to enable payment" %}
+                </small>
               </div>
             </div>
           </div>
@@ -94,23 +145,23 @@
       
       <div class="col-lg-4 col-md-4 margin-top-0 utf_listing_payment_section">
         <div class="boxed-widget opening-hours summary margin-top-0">
-          <h3><i class="fa fa-calendar-check-o"></i> Booking Summary</h3>
+          <h3><i class="fa fa-calendar-check-o"></i> {% trans "Booking Summary" %}</h3>
           <ul>
-            <li>Check-in <span>{{checkin}}</span></li>
-            <li>Check-out <span>{{checkout}}</span></li>            
-            <li>Total Days <span>{{total_days}} Days</span></li>            
-            <li>Adults <span>{{ adult }} Adult</span></li>
-            <li>Children <span>{{ children }} Children</span></li>
+            <li>{% trans "Check-in Date" %} <span>{{checkin}}</span></li>
+            <li>{% trans "Check-out Date" %} <span>{{checkout}}</span></li>            
+            <li>{% trans "Total Days" %} <span>{{total_days}} {% trans "Days" %}</span></li>            
+            <li>{% trans "Adults" %} <span>{{ adult }} {% trans "Adult" %}</span></li>
+            <li>{% trans "Children" %} <span>{{ children }} {% trans "Children" %}</span></li>
 			      {% comment %} <li>V.A.T <span>0 {% trans "Tenge" %}</span></li> {% endcomment %}
             <li class="total-costs" style="border-top: 1px dashed #ddd; padding-top: 10px;">
-              <strong>{% trans "Total Cost" %}</strong> <span>{{total|floatformat:0}} {% trans "Tenge" %}</span>
+              <strong>{% trans "Total Cost" %}</strong> <span>{{total|price_format}} {% trans "Tenge" %}</span>
             </li>
             <li class="prepayment" style="background-color: #f0f9ff; padding: 12px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                 <span style="display: flex; align-items: center; gap: 8px;">
                   <i class="fas fa-credit-card" style="color: #007bff; font-size: 16px;"></i>
                   <strong style="font-weight: bold;">{% trans "Prepayment (10%)" %}</strong>
                 </span>
-                <span style="color: #007bff; font-weight: bold; font-size: 1.1em; white-space: nowrap;">{{total|div:10|floatformat:0}} {% trans "Tenge" %}</span>
+                <span style="color: #007bff; font-weight: bold; font-size: 1.1em; white-space: nowrap;">{{total|div:10|price_format}} {% trans "Tenge" %}</span>
             </li>
             <li class="payment-info" style="background-color: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #6c757d; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
                 <i class="fas fa-info-circle" style="color: #6c757d; margin-right: 8px; font-size: 16px;"></i>
@@ -163,5 +214,258 @@
     background: #f9f9f9;
     margin-bottom: 15px;
   }
+  
+  /* Legal Agreement Styles - Added 2025-05-31 12:39 PM +05 */
+  .legal-consent-section {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .legal-consent-section h4 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 8px;
+  }
+  
+  .legal-checkbox-group {
+    margin-bottom: 15px;
+  }
+  
+  .legal-checkbox {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    padding: 8px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+  }
+  
+  .legal-checkbox:hover {
+    border-color: #3498db;
+    background: #f1f8ff;
+  }
+  
+  .legal-checkbox input[type="checkbox"] {
+    margin-right: 12px;
+    margin-top: 2px;
+    width: 18px;
+    height: 18px;
+    accent-color: #3498db;
+  }
+  
+  .legal-checkbox label {
+    flex: 1;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #495057;
+    cursor: pointer;
+  }
+  
+  .legal-checkbox.required {
+    border-left: 4px solid #e74c3c;
+  }
+  
+  .legal-link {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .legal-link:hover {
+    color: #2980b9;
+    text-decoration: underline;
+  }
+  
+  .legal-validation-error {
+    color: #e74c3c;
+    font-size: 13px;
+    margin-top: 8px;
+    display: none;
+  }
+  
+  .legal-validation-error.show {
+    display: block;
+  }
+  
+  /* Button disabled state - Fixed to allow interaction */
+  .button.disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    background-color: #6c757d !important;
+    pointer-events: none !important;
+  }
+  
+  /* Remove pointer-events: none to allow JavaScript interaction */
+  .button:not(.disabled) {
+    opacity: 1 !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+  }
 </style>
+
+<!-- Legal Validation JavaScript - Fixed for Django 2025-05-31 12:39 PM +05 -->
+<script>
+// Ждем полной загрузки всех ресурсов, включая external JS
+window.addEventListener('load', function() {
+  // Removed console.log for window load and payment validation initialization
+  
+  // Небольшая задержка для уверенности что все DOM элементы готовы
+  setTimeout(function() {
+    initializePaymentValidation();
+  }, 100);
+});
+
+function initializePaymentValidation() {
+  // Removed console.log for payment validation initialization
+  
+  const paymentButton = document.getElementById('robokassa-button');
+  // Изменяем селектор чтобы проверять только конкретные чекбоксы для оплаты
+  const requiredCheckboxes = [
+    document.getElementById('public_offer_consent'),
+    document.getElementById('booking_rules_consent'),
+    document.getElementById('payment_rules_consent')
+  ].filter(checkbox => checkbox !== null);
+  
+  const helpText = document.getElementById('robokassa-help-text');
+  
+  // Removed console.log for payment button, checkboxes and help text found status
+  
+  if (!paymentButton) {
+    // Removed console.error for payment button not found - function returns gracefully
+    return;
+  }
+  
+  if (requiredCheckboxes.length !== 3) {
+    // Removed console.error for insufficient checkboxes - function returns gracefully
+    return;
+  }
+  
+  // Функция проверки состояния чекбоксов
+  function updatePaymentButtonState() {
+    const allChecked = requiredCheckboxes.every(checkbox => checkbox && checkbox.checked);
+    // Removed console.log for checkbox states debugging
+    
+    if (allChecked) {
+      // Активируем кнопку - ПРИНУДИТЕЛЬНО убираем все блокировки
+      paymentButton.disabled = false;
+      paymentButton.classList.remove('disabled');
+      paymentButton.removeAttribute('disabled');
+      
+      // Принудительно устанавливаем стили
+      paymentButton.style.opacity = '1';
+      paymentButton.style.cursor = 'pointer';
+      paymentButton.style.pointerEvents = 'auto';
+      paymentButton.style.backgroundColor = '#007bff';
+      
+      if (helpText) helpText.style.display = 'none';
+      // Removed console.log for button enabled status
+    } else {
+      // Блокируем кнопку
+      paymentButton.disabled = true;
+      paymentButton.classList.add('disabled');
+      paymentButton.setAttribute('disabled', 'disabled');
+      
+      // Принудительно устанавливаем стили
+      paymentButton.style.opacity = '0.6';
+      paymentButton.style.cursor = 'not-allowed';
+      paymentButton.style.pointerEvents = 'none';
+      paymentButton.style.backgroundColor = '#6c757d';
+      
+      if (helpText) helpText.style.display = 'block';
+      // Removed console.log for button disabled status
+    }
+  }
+  
+  // Привязываем событие изменения к каждому чекбоксу
+  requiredCheckboxes.forEach((checkbox, index) => {
+    if (checkbox) {
+      // Removed console.log for binding payment checkbox
+      
+      // Используем несколько типов событий для надежности
+      ['change', 'click', 'input'].forEach(eventType => {
+        checkbox.addEventListener(eventType, function() {
+          // Removed console.log for payment checkbox event
+          // Небольшая задержка для обработки состояния
+          setTimeout(updatePaymentButtonState, 10);
+        });
+      });
+    }
+  });
+  
+  // Инициальная проверка состояния
+  updatePaymentButtonState();
+  
+  // Кнопка оплаты через Робокассу
+  paymentButton.addEventListener('click', function(e) {
+    // Removed console.log for payment button clicked
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Дополнительная проверка перед отправкой
+    if (paymentButton.disabled || paymentButton.classList.contains('disabled')) {
+      // Removed console.log for disabled button alert
+      alert('{% trans "Please accept all legal agreements before proceeding with payment." %}');
+      return false;
+    }
+    
+    // Removed console.log for processing payment status
+    
+    // Проверим данные через AJAX перед переходом на оплату
+    fetch('/check-session-data/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Removed console.log for session data check result
+      
+      if (!data.success) {
+        // Removed console.error for session validation failure - alert provides user feedback
+        alert('Ошибка: ' + data.error + '. Пожалуйста, начните процесс бронирования заново.');
+        window.location.href = '/';
+        return;
+      }
+      
+      // Если данные корректны, продолжаем с оплатой
+      // Removed console.log for session data validation success
+      proceedToPayment();
+    })
+    .catch(error => {
+      // Removed console.error for session validation error - fallback behavior preserved
+      // Если проверка не удалась, всё равно пробуем перейти к оплате
+      proceedToPayment();
+    });
+    
+    function proceedToPayment() {
+      // Показываем индикатор загрузки
+      paymentButton.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i>{% trans "Processing..." %}';
+      paymentButton.disabled = true;
+      
+      // Простое перенаправление на URL вместо сложного fetch запроса
+      setTimeout(function() {
+        // Removed console.log for payment URL redirection
+        window.location.href = '{% url "hotel:api_robokassa_payment" %}';
+      }, 500); // Небольшая задержка для показа индикатора загрузки
+    }
+    
+    return false;
+  });
+  
+  // Removed console.log for payment validation initialization success
+}
+</script>
 {% endblock script_links %} 

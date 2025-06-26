@@ -1,0 +1,251 @@
+{% extends 'legal/base_legal.html' %}
+
+{% block title %}Privacy Policy{% endblock %}
+
+{% block content %}
+<div class="generation-info">
+    <!-- Generated on 2025-06-19 04:45 AM +05 -->
+    Document updated: June 19, 2025, 4:45 UTC+5 for eKol Alakol
+</div>
+
+<h1>PRIVACY POLICY</h1>
+<h2>ALAKOL HOTEL BOOKING SYSTEM</h2>
+
+<div class="document-meta">
+    <strong>Effective Date:</strong> June 19, 2025<br>
+    <strong>Document Version:</strong> 1.0<br><br>
+    <strong>System:</strong> eKol - Hotel Management System<br>
+    <strong>Payment System:</strong> Robokassa (official integration)<br>
+    <strong>Region:</strong> Alakol, Republic of Kazakhstan<br>
+    <strong>Time Zone:</strong> Kazakhstan/Astana (UTC+5)
+</div>
+
+<h2>1. GENERAL PROVISIONS</h2>
+<p>1.1. This Privacy Policy (hereinafter - "Policy") defines the procedure for processing personal data of users of the eKol system, located at [WEBSITE ADDRESS] (hereinafter - "Website").</p>
+
+<p>1.2. The personal data operator is IP [IP Name], BIN: [BIN], legal address: [ADDRESS] (hereinafter - "Operator", "Company", "we").</p>
+
+<p>1.3. Personal data processing is carried out in accordance with the Law of the Republic of Kazakhstan "On Personal Data and their Protection" and other regulatory legal acts of RK.</p>
+
+<p>1.4. By using the eKol system, you consent to the processing of your personal data in accordance with this Policy.</p>
+
+<h2>2. LEGAL GROUNDS FOR PERSONAL DATA PROCESSING</h2>
+<p>2.1. The legal grounds for personal data processing are:</p>
+<ul>
+    <li>consent of the personal data subject;</li>
+    <li>necessity of contract performance to which the personal data subject is a party;</li>
+    <li>necessity of compliance with the Operator's legal obligations;</li>
+    <li>protection of vital interests of the personal data subject.</li>
+</ul>
+
+<h2>3. CATEGORIES OF PERSONAL DATA</h2>
+<p>3.1. We process the following categories of personal data according to the eKol system User model:</p>
+
+<h3>3.1.1. Account data:</h3>
+<ul>
+    <li>last name, first name, patronymic (full_name);</li>
+    <li>email address (email) - used as username, unique;</li>
+    <li>phone number (phone);</li>
+    <li>gender (gender) - male/female;</li>
+    <li>country and city of residence (country, city);</li>
+    <li>residential address (address);</li>
+    <li>password (in encrypted form);</li>
+    <li>profile photo (image);</li>
+    <li>OTP code for verification;</li>
+    <li>electronic wallet (wallet) - for future bonus programs;</li>
+    <li>verification status (verified).</li>
+</ul>
+
+<h3>3.1.2. Booking data according to the Booking model:</h3>
+<ul>
+    <li>guest's full name (full_name);</li>
+    <li>guest's email (email);</li>
+    <li>country code (country_code);</li>
+    <li>phone number (phone);</li>
+    <li>selected hotel (hotel);</li>
+    <li>room type (room_type);</li>
+    <li>specific rooms (room) - many-to-many relationship;</li>
+    <li>selection data (selection_data) - JSON field;</li>
+    <li>check-in and check-out dates (check_in_date, check_out_date);</li>
+    <li>number of days (total_days);</li>
+    <li>number of adults and children (num_adults, num_children);</li>
+    <li>check-in/check-out statuses (checked_in, checked_out);</li>
+    <li>unique booking ID (booking_id);</li>
+    <li>Robokassa transaction ID (robokassa_inv_id);</li>
+    <li>preferences and special requests.</li>
+</ul>
+
+<h3>3.1.3. Payment information:</h3>
+<ul>
+    <li>bank card data (processed by Robokassa payment system);</li>
+    <li>payment and transaction information;</li>
+    <li>payment identifiers;</li>
+    <li>amount before discount (before_discount);</li>
+    <li>total amount (total);</li>
+    <li>savings amount (saved);</li>
+    <li>payment status (payment_status);</li>
+    <li><strong>IMPORTANT ROUNDING NOTICE:</strong> Due to percentage calculations when calculating advance payments, additional payments, and refunds, all monetary amounts may be rounded with an error of up to 1 (one) tenge in either direction;</li>
+    <li>applied coupons (coupons).</li>
+</ul>
+
+<h3>3.1.4. Technical data:</h3>
+<ul>
+    <li>browser and device information;</li>
+    <li>cookie files;</li>
+    <li>user visit and action logs;</li>
+    <li>session times;</li>
+    <li>system fields: booking activity (is_active), creation time (created_at), expiration time (expires_at).</li>
+</ul>
+
+<h3>3.1.5. Behavioral data:</h3>
+<ul>
+    <li>hotel search history;</li>
+    <li>room selection preferences;</li>
+    <li>service usage frequency;</li>
+    <li>eKol system interface interaction analytics.</li>
+</ul>
+
+<h2>4. PURPOSES OF PERSONAL DATA PROCESSING</h2>
+<p>4.1. Personal data is processed for the following purposes:</p>
+
+<h3>4.1.1. Providing booking services:</h3>
+<ul>
+    <li>processing booking requests through the eKol system booking module;</li>
+    <li>confirming and modifying bookings (modification possible only 15 days before check-in);</li>
+    <li>communication with hotels for accommodation organization.</li>
+</ul>
+
+<h3>4.1.2. Ensuring eKol system operation:</h3>
+<ul>
+    <li>user registration and authentication through the userauths module;</li>
+    <li>OTP system for verification;</li>
+    <li>interface personalization;</li>
+    <li>security provision;</li>
+    <li>management through the user_dashboard module.</li>
+</ul>
+
+<h3>4.1.3. Communications:</h3>
+<ul>
+    <li>sending booking confirmations;</li>
+    <li>informing about order changes;</li>
+    <li>technical support in Kazakh, Russian, and English languages;</li>
+    <li>marketing messages (with consent).</li>
+</ul>
+
+<h3>4.1.4. Analytics and service improvement:</h3>
+<ul>
+    <li>analyzing eKol system usage through search and addon modules;</li>
+    <li>functionality improvement;</li>
+    <li>statistical research.</li>
+</ul>
+
+<h3>4.1.5. Compliance with legal obligations:</h3>
+<ul>
+    <li>fulfilling RK legislation requirements;</li>
+    <li>fraud prevention;</li>
+    <li>dispute resolution.</li>
+</ul>
+
+<h2>5. METHODS OF PERSONAL DATA PROCESSING</h2>
+<p>5.1. Personal data processing is carried out using automation tools and without their use.</p>
+<p>5.2. Processing methods include: collection, systematization, accumulation, database storage; clarification, modification, use; distribution, transfer, anonymization, blocking, deletion.</p>
+
+<h2>6. PERSONAL DATA PROCESSING TERMS</h2>
+<p>6.1. Personal data is processed for the following terms:</p>
+<ul>
+    <li>6.1.1. Account data - until submission of consent withdrawal request or account deletion.</li>
+    <li>6.1.2. Booking data - for 5 years after completion of the last booking for accounting reporting and dispute resolution purposes.</li>
+    <li>6.1.3. Technical data - for 1 year from the last visit to the eKol system.</li>
+    <li>6.1.4. Payment information - in accordance with RK financial legislation requirements and Robokassa policy.</li>
+    <li>6.1.5. Unpaid bookings - automatically deleted 10 minutes after payment deadline expiration.</li>
+</ul>
+
+<h2>7. TRANSFER OF PERSONAL DATA TO THIRD PARTIES</h2>
+<p>7.1. We may transfer personal data to the following third parties:</p>
+<ul>
+    <li>7.1.1. Partner hotels in the Alakol region to ensure booking and accommodation.</li>
+    <li>7.1.2. Robokassa payment system for payment processing using secure SHA256 digital signatures.</li>
+    <li>7.1.3. IT service providers to ensure eKol system operation on the platform.</li>
+    <li>7.1.4. AWS email provider for notification sending.</li>
+    <li>7.1.5. Hosting providers to ensure website operation.</li>
+    <li>7.1.6. Government agencies in cases provided by RK legislation.</li>
+</ul>
+
+<h2>8. CROSS-BORDER TRANSFER OF PERSONAL DATA</h2>
+<p>8.1. Cross-border transfer of personal data may be carried out to countries providing adequate level of personal data protection.</p>
+<p>8.2. When transferring data to other countries, we use appropriate protection guarantees in accordance with RK legislation requirements.</p>
+
+<h2>9. SECURITY MEASURES</h2>
+<p>9.1. We apply technical and organizational measures to protect personal data:</p>
+
+<h3>9.1.1. Technical measures:</h3>
+<ul>
+    <li>data encryption during transmission (SSL/TLS);</li>
+    <li>password hashing;</li>
+    <li>regular backup;</li>
+    <li>protection against unauthorized access;</li>
+    <li>security monitoring;</li>
+    <li>CSRF attack protection;</li>
+    <li>user input validation and sanitization.</li>
+</ul>
+
+<h3>9.1.2. Organizational measures:</h3>
+<ul>
+    <li>access restriction to personal data;</li>
+    <li>staff training on personal data protection issues;</li>
+    <li>internal security policies;</li>
+    <li>security system audits;</li>
+    <li>limited access to personal data;</li>
+    <li>administrator action logging.</li>
+</ul>
+
+<h2>10. PERSONAL DATA SUBJECT RIGHTS</h2>
+<p>10.1. Personal data subjects have the right to:</p>
+<ul>
+    <li>obtain information about personal data processing;</li>
+    <li>request access to their personal data;</li>
+    <li>request correction of inaccurate data;</li>
+    <li>request deletion of personal data;</li>
+    <li>request restriction of processing;</li>
+    <li>object to processing;</li>
+    <li>data portability;</li>
+    <li>withdraw consent to processing;</li>
+    <li>file complaints with supervisory authorities.</li>
+</ul>
+
+<h2>11. EXERCISING RIGHTS</h2>
+<p>11.1. To exercise your rights, you can contact us:</p>
+<ul>
+    <li>by email: privacy@alakol-booking.kz;</li>
+    <li>through the feedback form on the website;</li>
+    <li>by phone: +7 (727) XXX-XX-XX;</li>
+    <li>by mail to the legal address.</li>
+</ul>
+
+<p>11.2. We will respond to your request within 30 days from the date of receipt.</p>
+
+<h2>12. DATA RETENTION</h2>
+<p>12.1. We retain personal data only for as long as necessary to achieve the processing purposes.</p>
+<p>12.2. After the retention period expires, personal data is securely deleted or anonymized.</p>
+
+<h2>13. PRIVACY POLICY CHANGES</h2>
+<p>13.1. We may update this Privacy Policy from time to time.</p>
+<p>13.2. The updated Policy is posted on our website and takes effect immediately upon posting.</p>
+<p>13.3. We recommend that you regularly review this Policy to stay informed about our data processing practices.</p>
+
+<div class="contact-info">
+    <h2>CONTACT INFORMATION</h2>
+    <p><strong>For privacy-related questions:</strong><br>
+    Email: privacy@alakol-booking.kz<br>
+    Phone: +7 (727) XXX-XX-XX<br>
+    Address: Almaty, Republic of Kazakhstan</p>
+</div>
+
+<div class="document-meta">
+    <h2>FINAL PROVISIONS</h2>
+    <p>This Privacy Policy is prepared in accordance with the current legislation of the Republic of Kazakhstan and international standards for personal data protection.</p>
+    
+    <p><strong>Last updated:</strong> June 19, 2025<br>
+    <strong>System time zone:</strong> Kazakhstan/Astana (UTC+5)</p>
+</div>
+{% endblock %}

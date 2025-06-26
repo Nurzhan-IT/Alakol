@@ -19,10 +19,32 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from django.conf.urls.i18n import i18n_patterns
-from hotel.views import robokassa_result, robokassa_success_direct, robokassa_failed_direct
+from django.views.i18n import JavaScriptCatalog
+from django.contrib.sitemaps.views import sitemap
+from hotel.views import robokassa_result, robokassa_success_direct, robokassa_failed_direct, robots_txt, health_check, ready_check, live_check
 from hotel.admin import custom_admin_site
+from hotel.sitemaps import HotelSitemap, RoomTypeSitemap, StaticViewSitemap, SearchPagesSitemap, LegalPagesSitemap
+
+# Настройка sitemaps для SEO
+sitemaps = {
+    'hotels': HotelSitemap,
+    'room_types': RoomTypeSitemap,
+    'static': StaticViewSitemap,
+    'search': SearchPagesSitemap,
+    'legal': LegalPagesSitemap,
+}
+
 urlpatterns = [
     path('admin/', custom_admin_site.urls),
+
+    # Health check endpoints
+    path('health/', health_check, name='health_check'),
+    path('ready/', ready_check, name='ready_check'),
+    path('live/', live_check, name='live_check'),
+
+    # SEO URLs
+    path('robots.txt', robots_txt, name='robots_txt'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 
     # Apps Routes
     # path("booking/", include("booking.urls")),
@@ -46,6 +68,8 @@ urlpatterns += i18n_patterns(
     path("user/", include("userauths.urls")),
     path("dashboard/", include("user_dashboard.urls")),
     path("search/", include("search.urls")),
+    path("legal/", include("legal.urls")),
+    path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript_catalog'),
 )
 
 if settings.DEBUG:
