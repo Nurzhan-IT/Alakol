@@ -1651,3 +1651,128 @@ def robots_txt(request):
         f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
+# ==============================================
+# HEALTH CHECK ENDPOINTS
+# ==============================================
+
+import time
+from django.db import connection
+from django.core.cache import cache
+
+def health_check(request):
+    """
+    Health check endpoint для мониторинга работоспособности приложения
+    """
+    start_time = time.time()
+    health_data = {
+        'status': 'healthy',
+        'timestamp': timezone.now().isoformat(),
+        'services': {},
+        'version': getattr(settings, 'VERSION', '1.0.0')
+    }
+    
+    # Проверка базы данных
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+        health_data['services']['database'] = {
+            'status': 'healthy',
+            'response_time': round((time.time() - start_time) * 1000, 2)
+        }
+    except Exception as e:
+        health_data['services']['database'] = {
+            'status': 'unhealthy',
+            'error': str(e)
+        }
+        health_data['status'] = 'unhealthy'
+    
+    # Проверка Redis/кеша
+    cache_start = time.time()
+    try:
+        cache.set('health_check', 'test', 10)
+        cache.get('health_check')
+        health_data['services']['cache'] = {
+            'status': 'healthy',
+            'response_time': round((time.time() - cache_start) * 1000, 2)
+        }
+    except Exception as e:
+        health_data['services']['cache'] = {
+            'status': 'unhealthy',
+            'error': str(e)
+        }
+        health_data['status'] = 'unhealthy'
+    
+    # Проверка booking processor (если есть метрики в кеше)
+    try:
+        last_run = cache.get('booking_processor_last_run')
+        last_error = cache.get('booking_processor_last_error')
+        error_count = cache.get('booking_processor_error_count', 0)
+        
+        if last_run:
+            last_run_time = timezone.datetime.fromisoformat(last_run)
+            time_since_last_run = (timezone.now() - last_run_time).total_seconds()
+            
+            # Считаем сервис нездоровым, если он не работал более 5 минут
+            if time_since_last_run > 300:
+                health_data['services']['booking_processor'] = {
+                    'status': 'unhealthy',
+                    'error': f'No activity for {int(time_since_last_run)}s'
+                }
+                health_data['status'] = 'unhealthy'
+            elif error_count > 5:
+                health_data['services']['booking_processor'] = {
+                    'status': 'unhealthy',
+                    'error': f'Too many errors: {error_count}',
+                    'last_error': last_error
+                }
+                health_data['status'] = 'unhealthy'
+            else:
+                health_data['services']['booking_processor'] = {
+                    'status': 'healthy',
+                    'last_run': last_run,
+                    'seconds_since_last_run': int(time_since_last_run)
+                }
+        else:
+            health_data['services']['booking_processor'] = {
+                'status': 'unknown',
+                'error': 'No metrics available'
+            }
+    except Exception as e:
+        health_data['services']['booking_processor'] = {
+            'status': 'error',
+            'error': str(e)
+        }
+    
+    # Общее время ответа
+    health_data['response_time'] = round((time.time() - start_time) * 1000, 2)
+    
+    # Определяем HTTP статус
+    if health_data['status'] == 'healthy':
+        status_code = 200
+    else:
+        status_code = 503
+    
+    return JsonResponse(health_data, status=status_code)
+
+def ready_check(request):
+    """
+    Readiness probe - проверяет готовность приложения принимать трафик
+    """
+    try:
+        # Простая проверка базы данных
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+        
+        return JsonResponse({'status': 'ready'}, status=200)
+    except Exception as e:
+        return JsonResponse({'status': 'not ready', 'error': str(e)}, status=503)
+
+def live_check(request):
+    """
+    Liveness probe - проверяет что приложение живо
+    """
+    return JsonResponse({'status': 'alive'}, status=200)

@@ -157,11 +157,13 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
-        'CONN_MAX_AGE': 60,  # Connection pooling for better performance
+        'HOST': os.getenv('DB_HOST', 'db'),  # Docker service name as default
+        'PORT': os.getenv('DB_PORT', '5432'),
+        'CONN_MAX_AGE': 600,  # 10 минут connection pooling для production
         'OPTIONS': {
             'connect_timeout': 10,
+            # Оптимизация для PostgreSQL в Docker
+            'options': '-c default_transaction_isolation=read committed'
         }
     }
 }
@@ -441,36 +443,38 @@ AWS_SES_REGION_ENDPOINT = f'email.{AWS_REGION}.amazonaws.com'
 # CACHING CONFIGURATION
 # ==============================================
 
-# Redis Configuration for Production Caching
+# Redis Configuration for Docker Production Caching
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": os.getenv("REDIS_URL", "redis://127.0.0.1:6379/1"),
+        "LOCATION": os.getenv("REDIS_URL", "redis://redis:6379/1"),  # Docker service name
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "CONNECTION_POOL_KWARGS": {
-                "max_connections": 50,
+                "max_connections": 20,  # Оптимизировано для VPS 8GB RAM
+                "retry_on_timeout": True,
                 "health_check_interval": 30,
             },
             "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
             "SERIALIZER": "django_redis.serializers.pickle.PickleSerializer",
         },
-        "KEY_PREFIX": "hms_alakol_prod",
+        "KEY_PREFIX": "alakol",
         "TIMEOUT": 300,  # 5 минут по умолчанию
     },
 
     "long_term": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": os.getenv("REDIS_URL", "redis://127.0.0.1:6379/3"),
+        "LOCATION": os.getenv("REDIS_URL", "redis://redis:6379/3"),  # Docker service name
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "CONNECTION_POOL_KWARGS": {
-                "max_connections": 20,
+                "max_connections": 10,  # Меньше соединений для долгосрочного кеша
+                "retry_on_timeout": True,
                 "health_check_interval": 60,
             },
             "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
         },
-        "KEY_PREFIX": "hms_longterm_prod",
+        "KEY_PREFIX": "alakol_longterm",
         "TIMEOUT": 3600,  # 1 час для долгосрочных данных
     }
 }
@@ -700,5 +704,53 @@ REST_FRAMEWORK = {
 
 # Performance settings
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+
+# ==============================================
+# DOCKER PRODUCTION OPTIMIZATIONS
+# ==============================================
+
+# Application version for monitoring
+VERSION = "1.0.0"
+
+# Gunicorn settings (referenced in Dockerfile)
+import multiprocessing
+GUNICORN_WORKERS = min(4, (multiprocessing.cpu_count() * 2) + 1)
+GUNICORN_THREADS = 2
+GUNICORN_WORKER_CLASS = 'gthread'
+GUNICORN_MAX_REQUESTS = 1000
+GUNICORN_MAX_REQUESTS_JITTER = 100
+
+# Session optimization for production
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
+
+# File upload settings
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+FILE_UPLOAD_TEMP_DIR = '/tmp'
+
+# Security enhancements
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+
+# Disable Django's own static file serving in production
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = False
+
+# Email backend for production (using AWS SES)
+if os.getenv('AWS_SES_REGION_NAME'):
+    EMAIL_BACKEND = 'anymail.backends.amazon_ses.EmailBackend'
+    ANYMAIL = {
+        'AMAZON_SES_REGION': os.getenv('AWS_SES_REGION_NAME', 'us-east-1'),
+        'AMAZON_SES_CLIENT_PARAMS': {
+            'aws_access_key_id': os.getenv('AWS_ACCESS_KEY_ID'),
+            'aws_secret_access_key': os.getenv('AWS_SECRET_ACCESS_KEY'),
+        },
+    }
+    DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@ekol.kz')
+    SERVER_EMAIL = os.getenv('SERVER_EMAIL', 'server@ekol.kz')
+else:
+    # Fallback to console email backend
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 print("🚀 Alakol HMS Production settings loaded successfully!") 
