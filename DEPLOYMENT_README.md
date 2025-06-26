@@ -17,8 +17,11 @@
 # Подключитесь к серверу
 ssh root@your-server-ip
 
-# Скачайте и запустите скрипт настройки
-wget https://raw.githubusercontent.com/12farit21/Alakol/main/scripts/server_setup.sh
+# Поскольку репозиторий приватный, создайте скрипт вручную:
+nano server_setup.sh
+
+# Скопируйте содержимое из scripts/server_setup.sh вашего локального репозитория
+# Затем сделайте файл исполняемым и запустите:
 chmod +x server_setup.sh
 sudo ./server_setup.sh
 ```
@@ -39,6 +42,22 @@ chown deploy:deploy /home/deploy/.ssh/authorized_keys
 chmod 600 /home/deploy/.ssh/authorized_keys
 ```
 
+### 2.1. Настройка SSH ключей для GitHub (приватный репозиторий)
+
+```bash
+# На сервере как пользователь deploy
+ssh deploy@your-server-ip
+
+# Сгенерируйте SSH ключ для GitHub
+ssh-keygen -t rsa -b 4096 -C "deploy@your-server"
+
+# Выведите публичный ключ
+cat ~/.ssh/id_rsa.pub
+
+# Скопируйте вывод и добавьте в GitHub:
+# Settings → SSH and GPG keys → New SSH key
+```
+
 ### 3. Клонирование проекта
 
 ```bash
@@ -48,8 +67,13 @@ ssh deploy@your-server-ip
 # Перейдите в директорию проекта
 cd /opt/alakol-hms
 
-# Клонируйте репозиторий
-git clone https://github.com/12farit21/Alakol.git .
+# Для приватного репозитория используйте SSH или Personal Access Token:
+
+# Вариант 1: SSH (рекомендуется)
+git clone git@github.com:12farit21/Alakol.git .
+
+# Вариант 2: HTTPS с Personal Access Token
+# git clone https://ghp_YOUR_TOKEN@github.com/12farit21/Alakol.git .
 ```
 
 ### 4. Настройка переменных окружения
