@@ -98,9 +98,22 @@ LOGGING = {
     },
 }
 
-# Статические файлы
+# Статические файлы для тестов
 STATIC_ROOT = '/tmp/staticfiles'
 MEDIA_ROOT = '/tmp/media'
+
+# Отключаем сжатие статических файлов для тестов
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
+# Простое хранилище статических файлов без манифеста
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+# Отключаем WhiteNoise для тестов
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_MANIFEST_STRICT = False
 
 # Секретный ключ для тестов
 SECRET_KEY = os.getenv('SECRET_KEY', 'test-secret-key-for-ci-only-not-for-production')
