@@ -316,7 +316,7 @@ class AddReviewViewTest(UserDashboardViewsTest):
         
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
-        self.assertEqual(data['data'], 'Review Submitted, Thank You.')
+        self.assertEqual(data['data'], 'Review Submitted, Thank You')
         self.assertEqual(data['icon'], 'success')
 
 
