@@ -17,11 +17,16 @@
 # Подключитесь к серверу
 ssh root@your-server-ip
 
+<<<<<<< dev
 # Поскольку репозиторий приватный, создайте скрипт вручную:
 nano server_setup.sh
 
 # Скопируйте содержимое из scripts/server_setup.sh вашего локального репозитория
 # Затем сделайте файл исполняемым и запустите:
+=======
+# Скачайте и запустите скрипт настройки
+wget https://raw.githubusercontent.com/12farit21/Alakol/main/scripts/server_setup.sh
+>>>>>>> main
 chmod +x server_setup.sh
 sudo ./server_setup.sh
 ```
@@ -67,6 +72,7 @@ ssh deploy@your-server-ip
 # Перейдите в директорию проекта
 cd /opt/alakol-hms
 
+<<<<<<< dev
 # Для приватного репозитория используйте SSH или Personal Access Token:
 
 # Вариант 1: SSH (рекомендуется)
@@ -74,6 +80,10 @@ git clone git@github.com:12farit21/Alakol.git .
 
 # Вариант 2: HTTPS с Personal Access Token
 # git clone https://ghp_YOUR_TOKEN@github.com/12farit21/Alakol.git .
+=======
+# Клонируйте репозиторий
+git clone https://github.com/12farit21/Alakol.git .
+>>>>>>> main
 ```
 
 ### 4. Настройка переменных окружения
