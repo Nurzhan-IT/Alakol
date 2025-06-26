@@ -1,0 +1,5 @@
+# Windows-специфичные зависимости
+-r base.txt
+
+# Только для Windows
+pywin32==310; sys_platform == "win32" 
