@@ -106,13 +106,13 @@ setup_ssh() {
     # Создаем резервную копию
     cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
     
-    # Отключаем root login
-    sed -i 's/#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
-    sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+    # # Отключаем root login
+    # sed -i 's/#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+    # sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
     
-    # Отключаем аутентификацию по паролю
-    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
-    sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+    # # Отключаем аутентификацию по паролю
+    # sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+    # sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
     
     # Перезапускаем SSH
     systemctl restart ssh

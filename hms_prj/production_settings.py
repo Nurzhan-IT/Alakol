@@ -484,11 +484,11 @@ CACHE_TTL = {
     'hotels_list': 1800,         # 30 минут - список отелей (увеличено для продакшена)
     'hotel_detail': 3600,        # 1 час - детали отеля
     'search_results': 600,       # 10 минут - результаты поиска
-    'room_availability': 300,    # 5 минут - доступность номеров
+    'room_availability': 30,    # 30 секунд - доступность номеров
     'hotel_reviews': 7200,       # 2 часа - отзывы отеля
     'features_and_amenities': 14400,  # 4 часа - удобства и особенности
     'static_content': 86400,     # 24 часа - статический контент
-    'room_unavailability': 300,  # 5 минут - недоступность номеров
+    'room_unavailability': 30,  # 30 секунд - недоступность номеров
 }
 
 # ==============================================
@@ -522,7 +522,7 @@ ROBOKASSA_MERCHANT_PASSWORD_1 = os.getenv('ROBOKASSA_MERCHANT_PASSWORD_1')
 ROBOKASSA_MERCHANT_PASSWORD_2 = os.getenv('ROBOKASSA_MERCHANT_PASSWORD_2')
 ROBOKASSA_TEST_PASSWORD_1 = os.getenv('ROBOKASSA_TEST_PASSWORD_1')
 ROBOKASSA_TEST_PASSWORD_2 = os.getenv('ROBOKASSA_TEST_PASSWORD_2')
-ROBOKASSA_USE_TEST_MODE = False  # Always False in production
+ROBOKASSA_USE_TEST_MODE = os.getenv('ROBOKASSA_USE_TEST_MODE', False)  # Always False in production
 
 # ==============================================
 # CRONJOBS
@@ -537,11 +537,11 @@ CRONJOBS = [
 # ==============================================
 
 JAZZMIN_SETTINGS = {
-    'site_header': "Alakol HMS - Продакшен",
+    'site_header': "Alakol HMS",
     'site_brand': ".",
     'site_logo': "/images/logo.png",
     'copyright':  "Все права защищены 2025",
-    "welcome_sign": "Добро пожаловать в Alakol HMS (Продакшен), войдите сейчас.",
+    "welcome_sign": "Добро пожаловать в Alakol HMS, войдите сейчас.",
     
     "language_chooser": False,
     
@@ -747,8 +747,8 @@ if os.getenv('AWS_SES_REGION_NAME'):
             'aws_secret_access_key': os.getenv('AWS_SECRET_ACCESS_KEY'),
         },
     }
-    DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@ekol.kz')
-    SERVER_EMAIL = os.getenv('SERVER_EMAIL', 'server@ekol.kz')
+    DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'info@ekol.kz')
+    SERVER_EMAIL = os.getenv('SERVER_EMAIL', 'info@ekol.kz')
 else:
     # Fallback to console email backend
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
