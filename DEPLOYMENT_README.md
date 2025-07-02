@@ -340,3 +340,6 @@ git pull origin main
 - **Админка**: `https://ekol.kz/admin/`
 - **API здоровья**: `https://ekol.kz/health/`
 - **Готовность**: `https://ekol.kz/ready/` 
+
+Создать суперпользователя
+docker-compose -f docker-compose.prod.yml exec web python manage.py createsuperuser --settings=hms_prj.production_settings
