@@ -126,11 +126,14 @@ chmod +x scripts/deploy.sh
 sudo nano /opt/alakol-hms/nginx/nginx.conf
 # Замените YOUR_DOMAIN.com на ваш домен
 
-# Перезапустите nginx
-sudo systemctl restart nginx
+# 1. Остановите nginx для получения сертификата
+docker-compose -f docker-compose.prod.yml stop nginx
 
-# Получите SSL сертификат
-sudo certbot --nginx -d ekol.kz -d www.ekol.kz
+# 2. Получите SSL сертификат
+certbot certonly --standalone -d ekol.kz -d www.ekol.kz
+
+# 3. Запустите nginx обратно
+docker-compose -f docker-compose.prod.yml start nginx
 ```
 
 ## 🔧 Конфигурационные файлы
