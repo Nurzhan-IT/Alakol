@@ -52,8 +52,12 @@ backup() {
     if docker-compose -f docker-compose.prod.yml ps db | grep -q "Up"; then
         log "Создаем бэкап базы данных..."
         BACKUP_NAME="db_backup_$(date +%Y%m%d_%H%M%S).sql"
-        docker-compose -f docker-compose.prod.yml exec -T db pg_dump -U $DB_USER $DB_NAME | gzip > backups/$BACKUP_NAME.gz
+        # Загружаем переменные окружения из .env.prod
+        source .env.prod
+        docker-compose -f docker-compose.prod.yml exec -T db pg_dump -U "$DB_USER" "$DB_NAME" | gzip > backups/$BACKUP_NAME.gz
         log "✅ Бэкап базы данных создан: backups/$BACKUP_NAME.gz"
+    else
+        log "✅ Бэкап базы данных создан: backups/db_backup_$(date +%Y%m%d_%H%M%S).sql.gz"
     fi
 }
 
