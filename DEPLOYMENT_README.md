@@ -343,3 +343,31 @@ git pull origin main
 
 Создать суперпользователя
 docker-compose -f docker-compose.prod.yml exec web python manage.py createsuperuser --settings=hms_prj.production_settings
+
+
+
+## 🔧 Настройка Rate Limiting
+
+**ВНИМАНИЕ**: Rate limiting отключен для поддержки высокой нагрузки (1000+ пользователей в день, 80-100 администраторов).
+
+Если потребуется включить обратно, раскомментируйте строки в `nginx/nginx.conf`:
+```nginx
+# Раскомментируйте эти строки для включения rate limiting:
+# limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+# limit_req_zone $binary_remote_addr zone=login:10m rate=5r/m;
+# limit_req zone=api burst=20 nodelay;
+# limit_req zone=login burst=5 nodelay;
+```
+
+## 🚀 Применение изменений nginx
+
+```bash
+# Перезапустите nginx контейнер
+docker-compose -f docker-compose.prod.yml restart nginx
+
+# Проверьте, что конфигурация корректна
+docker-compose -f docker-compose.prod.yml exec nginx nginx -t
+
+# Проверьте логи nginx
+docker-compose -f docker-compose.prod.yml logs nginx
+```
