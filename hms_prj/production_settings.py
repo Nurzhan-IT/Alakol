@@ -35,6 +35,8 @@ ALLOWED_HOSTS = [
     'ekol.kz',
     'www.ekol.kz',
     os.getenv('DOMAIN_NAME', ''),
+    '46.8.43.15',
+    'localhost',
 ]
 # Remove empty strings
 ALLOWED_HOSTS = [host for host in ALLOWED_HOSTS if host]
@@ -160,11 +162,6 @@ DATABASES = {
         'HOST': os.getenv('DB_HOST', 'db'),  # Docker service name as default
         'PORT': os.getenv('DB_PORT', '5432'),
         'CONN_MAX_AGE': 600,  # 10 минут connection pooling для production
-        'OPTIONS': {
-            'connect_timeout': 10,
-            # Оптимизация для PostgreSQL в Docker
-            'options': '-c default_transaction_isolation=read committed'
-        }
     }
 }
 
