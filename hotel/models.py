@@ -122,7 +122,7 @@ RATING = (
 )
 
 ROOM_TYPE_FEATURES_DETAILED = [
-    ('private_bathroom', 'В частной ванной'),
+    ('private_bathroom', 'В частном санузле'),
     ('view', 'Вид'),
     ('services_amenities', 'Услуги и удобства'),
 ]
