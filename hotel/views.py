@@ -408,7 +408,8 @@ def room_type_detail(request, slug, rt_slug):
     total_days = (user_checkout_date - user_checkin_date).days
     dynamic_price = calculate_total_price(room_type, user_checkin_date, user_checkout_date)
 
-    dynamic_price_json_data = room_type.dynamic_pricing
+    # Заполняем пустые даты базовой ценой в диапазоне работы отеля
+    dynamic_price_json_data = fill_missing_dates_with_base_price(room_type, hotel)
     
     # Проверяем статусы комнат в selection_data_obj
     room_statuses = {}
@@ -1629,6 +1630,48 @@ def calculate_total_price(room_type, checkin_date, checkout_date):
         current_date += timedelta(days=1)
     
     return total
+
+def fill_missing_dates_with_base_price(room_type, hotel):
+    """
+    Заполняет пустые даты в календаре цен базовой ценой из RoomType.price
+    в диапазоне от start_date до end_date отеля.
+    
+    Args:
+        room_type: Объект модели RoomType
+        hotel: Объект модели Hotel
+    
+    Returns:
+        dict: Словарь с ценами для всех дат в диапазоне работы отеля
+    """
+    from datetime import date, timedelta
+    
+    # Получаем существующие динамические цены или создаем пустой словарь
+    dynamic_pricing = room_type.dynamic_pricing or {}
+    
+    # Определяем диапазон дат для заполнения
+    start_date = hotel.start_date
+    end_date = hotel.end_date
+    
+    # Если даты не заданы, используем разумные значения по умолчанию
+    if not start_date:
+        start_date = date.today()
+    
+    if not end_date:
+        # Если конечная дата не задана, берем год вперед от start_date
+        end_date = start_date + timedelta(days=365)
+    
+    # Заполняем пустые даты базовой ценой
+    current_date = start_date
+    while current_date <= end_date:
+        date_str = current_date.strftime("%Y-%m-%d")
+        
+        # Если для этой даты нет динамической цены, используем базовую цену
+        if date_str not in dynamic_pricing:
+            dynamic_pricing[date_str] = float(room_type.price)
+        
+        current_date += timedelta(days=1)
+    
+    return dynamic_pricing
 
 def robots_txt(request):
     """

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 16:19+0500\n"
+"POT-Creation-Date: 2025-07-05 02:52+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,6 +36,26 @@ msgid ""
 "The selected room type is not available. Please choose another room type."
 msgstr "Таңдалған бөлме түрі қолжетімді емес. Басқа бөлме түрін таңдаңыз."
 
+#: .\booking\views.py:303
+msgid ""
+"You can only book rooms from one hotel. Do you want to clear data about "
+"already selected rooms?"
+msgstr ""
+"Сіз тек бір қонақ үйден бөлме брондай аласыз. Таңдалған бөлмелер туралы "
+"деректерді өшіруді қалайсыз ба?"
+
+#: .\hms_prj\production_settings.py:202
+msgid "Kazakh"
+msgstr ""
+
+#: .\hms_prj\production_settings.py:203
+msgid "Russia"
+msgstr ""
+
+#: .\hms_prj\production_settings.py:204
+msgid "English"
+msgstr ""
+
 #: .\hotel\admin.py:548
 msgid "Check-In Date"
 msgstr "Тіркелу күні"
@@ -55,6 +75,72 @@ msgstr "Қонақ үй таңдалған күндерде брондауға �
 #: .\hotel\views.py:709
 msgid "You don't have any room selections or missing user information!"
 msgstr "Сізде бөлме таңдаулары жоқ немесе пайдаланушы ақпараты жетіспейді!"
+
+#: .\hotel\views.py:772
+#, python-format
+msgid "Missing session data: %(keys)s"
+msgstr "Сессия деректері жетіспейді: %(keys)s"
+
+#: .\hotel\views.py:779
+msgid "No selected rooms for booking"
+msgstr "Брондауға таңдалған бөлмелер жоқ"
+
+#: .\hotel\views.py:794
+#, python-format
+msgid "Missing user data: %(fields)s"
+msgstr "Пайдаланушы деректері жетіспейді: %(fields)s"
+
+#: .\hotel\views.py:809
+#, python-format
+msgid "Missing booking data: %(fields)s"
+msgstr "Брондау деректері жетіспейді: %(fields)s"
+
+#: .\hotel\views.py:821
+msgid "Check-in date must be earlier than check-out date"
+msgstr "Орналасу күні шығу күнінен ерте болуы керек"
+
+#: .\hotel\views.py:830
+msgid "Check-in date cannot be in the past"
+msgstr "Орналасу күні өткен уақытта болмайды"
+
+#: .\hotel\views.py:836
+#, python-format
+msgid "Invalid date format: %(error)s"
+msgstr "Дұрыс емес күн форматы: %(error)s"
+
+#: .\hotel\views.py:846
+#, python-format
+msgid "Invalid room data: %(room_id)s"
+msgstr "Дұрыс емес бөлме деректері: %(room_id)s"
+
+#: .\hotel\views.py:854
+#, python-format
+msgid "Hotel with ID %(hotel_id)s not found or not active"
+msgstr "%(hotel_id)s ID-мен қонақ үй табылмады немесе белсенді емес"
+
+#: .\hotel\views.py:862
+#, python-format
+msgid "Room with ID %(room_id)s not found"
+msgstr "%(room_id)s ID-мен бөлме табылмады"
+
+#: .\hotel\views.py:870
+#, python-format
+msgid "Room type with ID %(room_type_id)s not found"
+msgstr "%(room_type_id)s ID-мен бөлме түрі табылмады"
+
+#: .\hotel\views.py:876
+#, python-format
+msgid "Error in room data: %(error)s"
+msgstr "Бөлме деректерінде қате: %(error)s"
+
+#: .\hotel\views.py:882
+msgid "Session data is valid"
+msgstr "Сессия деректері дұрыс"
+
+#: .\hotel\views.py:889
+#, python-format
+msgid "Internal validation error: %(error)s"
+msgstr "Ішкі тексеру қатесі: %(error)s"
 
 #: .\hotel\views.py:898
 msgid "Missing booking information!"
@@ -792,7 +878,20 @@ msgstr "Әлі бағаланған жоқ"
 msgid "Room size"
 msgstr "Бөлме өлшемі"
 
-#: .\templates\hotel\hotel_detail.html:609
+#: .\templates\hotel\hotel_detail.html:601
+msgid "Private Bathroom"
+msgstr "Жеке ванна бөлмесінде"
+
+#: .\templates\hotel\hotel_detail.html:603
+msgctxt "room type features"
+msgid "View"
+msgstr "Терезеден көрініс"
+
+#: .\templates\hotel\hotel_detail.html:605
+msgid "Services and Amenities"
+msgstr "Қызметтер Мен Ыңғайлылықтар"
+
+#: .\templates\hotel\hotel_detail.html:622
 msgid "Close"
 msgstr "Жабық"
 
@@ -1911,9 +2010,33 @@ msgstr "Сәлеметсіз бе! Қайта оралғаныңызға қуа�
 msgid "Hi there! Create a free account today."
 msgstr "Сәлеметсіз бе! Бүгін тегін аккаунт жасаңыз"
 
+#: .\user_dashboard\views.py:116
+msgid "Marked As Seen"
+msgstr "Оқылды деп белгіленді"
+
+#: .\user_dashboard\views.py:170
+msgid "Bookmark Deleted"
+msgstr "Белгіше жойылды"
+
+#: .\user_dashboard\views.py:173
+msgid "Hotel Bookmarked"
+msgstr "Қонақ үй белгішеге қосылды"
+
+#: .\user_dashboard\views.py:175
+msgid "Login To Bookmark Hotel"
+msgstr "Қонақ үйді белгішеге қосу үшін кіріңіз"
+
 #: .\user_dashboard\views.py:188
 msgid "Profile Updated Successfully"
 msgstr "Профиль cәтті өзгертілді"
+
+#: .\user_dashboard\views.py:216
+msgid "Review Already Exists"
+msgstr "Пікір қазірдің өзінде бар"
+
+#: .\user_dashboard\views.py:224
+msgid "Review Submitted, Thank You"
+msgstr "Пікір жіберілді, рахмет"
 
 #: .\userauths\views.py:18
 #, python-format
@@ -2743,97 +2866,3 @@ msgstr "Сіз жүйеден шықтыңыз"
 
 #~ msgid "State"
 #~ msgstr "Аймақ"
-
-#: .\booking\views.py:310
-msgid "You can only book rooms from one hotel. Do you want to clear data about already selected rooms?"
-msgstr "Сіз тек бір қонақ үйден бөлме брондай аласыз. Таңдалған бөлмелер туралы деректерді өшіруді қалайсыз ба?"
-
-#: .\user_dashboard\views.py:82
-msgid "Marked As Seen"
-msgstr "Оқылды деп белгіленді"
-
-#: .\user_dashboard\views.py:124
-msgid "Bookmark Deleted"
-msgstr "Белгіше жойылды"
-
-#: .\user_dashboard\views.py:126
-msgid "Hotel Bookmarked"
-msgstr "Қонақ үй белгішеге қосылды"
-
-#: .\user_dashboard\views.py:128
-msgid "Login To Bookmark Hotel"
-msgstr "Қонақ үйді белгішеге қосу үшін кіріңіз"
-
-#: .\user_dashboard\views.py:214
-msgid "Review Already Exists"
-msgstr "Пікір қазірдің өзінде бар"
-
-#: .\user_dashboard\views.py:221
-msgid "Review Submitted, Thank You"
-msgstr "Пікір жіберілді, рахмет"
-
-#: .\hotel\views.py:874
-#, python-format
-msgid "Missing session data: %(keys)s"
-msgstr "Сессия деректері жетіспейді: %(keys)s"
-
-#: .\hotel\views.py:881
-msgid "No selected rooms for booking"
-msgstr "Брондауға таңдалған бөлмелер жоқ"
-
-#: .\hotel\views.py:891
-#, python-format
-msgid "Missing user data: %(fields)s"
-msgstr "Пайдаланушы деректері жетіспейді: %(fields)s"
-
-#: .\hotel\views.py:901
-#, python-format
-msgid "Missing booking data: %(fields)s"
-msgstr "Брондау деректері жетіспейді: %(fields)s"
-
-#: .\hotel\views.py:911
-msgid "Check-in date must be earlier than check-out date"
-msgstr "Орналасу күні шығу күнінен ерте болуы керек"
-
-#: .\hotel\views.py:918
-msgid "Check-in date cannot be in the past"
-msgstr "Орналасу күні өткен уақытта болмайды"
-
-#: .\hotel\views.py:922
-#, python-format
-msgid "Invalid date format: %(error)s"
-msgstr "Дұрыс емес күн форматы: %(error)s"
-
-#: .\hotel\views.py:930
-#, python-format
-msgid "Invalid room data: %(room_id)s"
-msgstr "Дұрыс емес бөлме деректері: %(room_id)s"
-
-#: .\hotel\views.py:936
-#, python-format
-msgid "Hotel with ID %(hotel_id)s not found or not active"
-msgstr "%(hotel_id)s ID-мен қонақ үй табылмады немесе белсенді емес"
-
-#: .\hotel\views.py:942
-#, python-format
-msgid "Room with ID %(room_id)s not found"
-msgstr "%(room_id)s ID-мен бөлме табылмады"
-
-#: .\hotel\views.py:948
-#, python-format
-msgid "Room type with ID %(room_type_id)s not found"
-msgstr "%(room_type_id)s ID-мен бөлме түрі табылмады"
-
-#: .\hotel\views.py:952
-#, python-format
-msgid "Error in room data: %(error)s"
-msgstr "Бөлме деректерінде қате: %(error)s"
-
-#: .\hotel\views.py:956
-msgid "Session data is valid"
-msgstr "Сессия деректері дұрыс"
-
-#: .\hotel\views.py:961
-#, python-format
-msgid "Internal validation error: %(error)s"
-msgstr "Ішкі тексеру қатесі: %(error)s"
