@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 16:17+0500\n"
+"POT-Creation-Date: 2025-07-05 02:52+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,6 +39,26 @@ msgid ""
 msgstr ""
 "Выбранный тип номера недоступен. Пожалуйста, выберите другой тип номера."
 
+#: .\booking\views.py:303
+msgid ""
+"You can only book rooms from one hotel. Do you want to clear data about "
+"already selected rooms?"
+msgstr ""
+"Вы можете бронировать номера только из одного отеля. Хотите очистить данные "
+"о уже выбранных номерах?"
+
+#: .\hms_prj\production_settings.py:202
+msgid "Kazakh"
+msgstr ""
+
+#: .\hms_prj\production_settings.py:203
+msgid "Russia"
+msgstr ""
+
+#: .\hms_prj\production_settings.py:204
+msgid "English"
+msgstr ""
+
 #: .\hotel\admin.py:548
 msgid "Check-In Date"
 msgstr "Дата заезда"
@@ -60,6 +80,72 @@ msgstr "Отель недоступен для бронирования в вы�
 msgid "You don't have any room selections or missing user information!"
 msgstr ""
 "У вас нет выбранных комнат или отсутствуют необходимые данные бронировния!"
+
+#: .\hotel\views.py:772
+#, python-format
+msgid "Missing session data: %(keys)s"
+msgstr "Отсутствуют данные в сессии: %(keys)s"
+
+#: .\hotel\views.py:779
+msgid "No selected rooms for booking"
+msgstr "Нет выбранных номеров для бронирования"
+
+#: .\hotel\views.py:794
+#, python-format
+msgid "Missing user data: %(fields)s"
+msgstr "Отсутствуют данные пользователя: %(fields)s"
+
+#: .\hotel\views.py:809
+#, python-format
+msgid "Missing booking data: %(fields)s"
+msgstr "Отсутствуют данные бронирования: %(fields)s"
+
+#: .\hotel\views.py:821
+msgid "Check-in date must be earlier than check-out date"
+msgstr "Дата заезда должна быть раньше даты выезда"
+
+#: .\hotel\views.py:830
+msgid "Check-in date cannot be in the past"
+msgstr "Дата заезда не может быть в прошлом"
+
+#: .\hotel\views.py:836
+#, python-format
+msgid "Invalid date format: %(error)s"
+msgstr "Некорректный формат дат: %(error)s"
+
+#: .\hotel\views.py:846
+#, python-format
+msgid "Invalid room data: %(room_id)s"
+msgstr "Некорректные данные номера: %(room_id)s"
+
+#: .\hotel\views.py:854
+#, python-format
+msgid "Hotel with ID %(hotel_id)s not found or not active"
+msgstr "Отель с ID %(hotel_id)s не найден или не активен"
+
+#: .\hotel\views.py:862
+#, python-format
+msgid "Room with ID %(room_id)s not found"
+msgstr "Номер с ID %(room_id)s не найден"
+
+#: .\hotel\views.py:870
+#, python-format
+msgid "Room type with ID %(room_type_id)s not found"
+msgstr "Тип номера с ID %(room_type_id)s не найден"
+
+#: .\hotel\views.py:876
+#, python-format
+msgid "Error in room data: %(error)s"
+msgstr "Ошибка в данных номеров: %(error)s"
+
+#: .\hotel\views.py:882
+msgid "Session data is valid"
+msgstr "Данные сессии корректны"
+
+#: .\hotel\views.py:889
+#, python-format
+msgid "Internal validation error: %(error)s"
+msgstr "Внутренняя ошибка проверки: %(error)s"
 
 #: .\hotel\views.py:898
 msgid "Missing booking information!"
@@ -157,100 +243,6 @@ msgstr "Доступ к квитанции предоставляется тол
 #, python-format
 msgid "An error occurred while retrieving the receipt: %(error)s"
 msgstr "Произошла ошибка при получении квитанции: %(error)s"
-
-#: .\booking\views.py:310
-msgid "You can only book rooms from one hotel. Do you want to clear data about already selected rooms?"
-msgstr "Вы можете бронировать номера только из одного отеля. Хотите очистить данные о уже выбранных номерах?"
-
-#: .\user_dashboard\views.py:82
-msgid "Marked As Seen"
-msgstr "Отмечено как прочитанное"
-
-#: .\user_dashboard\views.py:124
-msgid "Bookmark Deleted"
-msgstr "Закладка удалена"
-
-#: .\user_dashboard\views.py:126
-msgid "Hotel Bookmarked"
-msgstr "Отель добавлен в закладки"
-
-#: .\user_dashboard\views.py:128
-msgid "Login To Bookmark Hotel"
-msgstr "Войдите, чтобы добавить отель в закладки"
-
-#: .\user_dashboard\views.py:214
-msgid "Review Already Exists"
-msgstr "Отзыв уже существует"
-
-#: .\user_dashboard\views.py:221
-msgid "Review Submitted, Thank You"
-msgstr "Отзыв отправлен, спасибо"
-
-#: .\hotel\views.py:874
-#, python-format
-msgid "Missing session data: %(keys)s"
-msgstr "Отсутствуют данные в сессии: %(keys)s"
-
-#: .\hotel\views.py:881
-msgid "No selected rooms for booking"
-msgstr "Нет выбранных номеров для бронирования"
-
-#: .\hotel\views.py:891
-#, python-format
-msgid "Missing user data: %(fields)s"
-msgstr "Отсутствуют данные пользователя: %(fields)s"
-
-#: .\hotel\views.py:901
-#, python-format
-msgid "Missing booking data: %(fields)s"
-msgstr "Отсутствуют данные бронирования: %(fields)s"
-
-#: .\hotel\views.py:911
-msgid "Check-in date must be earlier than check-out date"
-msgstr "Дата заезда должна быть раньше даты выезда"
-
-#: .\hotel\views.py:918
-msgid "Check-in date cannot be in the past"
-msgstr "Дата заезда не может быть в прошлом"
-
-#: .\hotel\views.py:922
-#, python-format
-msgid "Invalid date format: %(error)s"
-msgstr "Некорректный формат дат: %(error)s"
-
-#: .\hotel\views.py:930
-#, python-format
-msgid "Invalid room data: %(room_id)s"
-msgstr "Некорректные данные номера: %(room_id)s"
-
-#: .\hotel\views.py:936
-#, python-format
-msgid "Hotel with ID %(hotel_id)s not found or not active"
-msgstr "Отель с ID %(hotel_id)s не найден или не активен"
-
-#: .\hotel\views.py:942
-#, python-format
-msgid "Room with ID %(room_id)s not found"
-msgstr "Номер с ID %(room_id)s не найден"
-
-#: .\hotel\views.py:948
-#, python-format
-msgid "Room type with ID %(room_type_id)s not found"
-msgstr "Тип номера с ID %(room_type_id)s не найден"
-
-#: .\hotel\views.py:952
-#, python-format
-msgid "Error in room data: %(error)s"
-msgstr "Ошибка в данных номеров: %(error)s"
-
-#: .\hotel\views.py:956
-msgid "Session data is valid"
-msgstr "Данные сессии корректны"
-
-#: .\hotel\views.py:961
-#, python-format
-msgid "Internal validation error: %(error)s"
-msgstr "Внутренняя ошибка проверки: %(error)s"
 
 #: .\templates\admin\input_filter.html:21
 #: .\templates\admin\input_filter.html:41
@@ -892,7 +884,21 @@ msgstr "Еще не оценен"
 msgid "Room size"
 msgstr "Площадь номера"
 
-#: .\templates\hotel\hotel_detail.html:609
+#: .\templates\hotel\hotel_detail.html:601
+msgid "Private Bathroom"
+msgstr "В частном санузле"
+
+# Оставил специально
+#: .\templates\hotel\hotel_detail.html:603
+msgctxt "room type features"
+msgid "View"
+msgstr "Вид"
+
+#: .\templates\hotel\hotel_detail.html:605
+msgid "Services and Amenities"
+msgstr "Услуги и удобства"
+
+#: .\templates\hotel\hotel_detail.html:622
 msgid "Close"
 msgstr "Закрыть"
 
@@ -2009,9 +2015,33 @@ msgstr "Привет! С возвращением"
 msgid "Hi there! Create a free account today."
 msgstr "Привет! Создайте бесплатную учетную запись сегодня."
 
+#: .\user_dashboard\views.py:116
+msgid "Marked As Seen"
+msgstr "Отмечено как прочитанное"
+
+#: .\user_dashboard\views.py:170
+msgid "Bookmark Deleted"
+msgstr "Закладка удалена"
+
+#: .\user_dashboard\views.py:173
+msgid "Hotel Bookmarked"
+msgstr "Отель добавлен в закладки"
+
+#: .\user_dashboard\views.py:175
+msgid "Login To Bookmark Hotel"
+msgstr "Войдите, чтобы добавить отель в закладки"
+
 #: .\user_dashboard\views.py:188
 msgid "Profile Updated Successfully"
 msgstr "Профиль успешно обновлен"
+
+#: .\user_dashboard\views.py:216
+msgid "Review Already Exists"
+msgstr "Отзыв уже существует"
+
+#: .\user_dashboard\views.py:224
+msgid "Review Submitted, Thank You"
+msgstr "Отзыв отправлен, спасибо"
 
 #: .\userauths\views.py:18
 #, python-format
