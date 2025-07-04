@@ -591,14 +591,27 @@
                 </div>
 
                 <div class="room-features-section">
-                    {% for feature in r.roomtype_features_detailed.all %}
-                        {% ifchanged feature.type_of_amenity %}
-                            <div class="room-feature-category">{{ feature.type_of_amenity }}:</div>
-                        {% endifchanged %}
-                        <div class="room-feature-item">
-                            <i class="fas fa-check"></i>
-                            <span>{{ feature.text }}</span>
-                        </div>
+                    {% regroup r.roomtype_features_detailed.all|dictsort:"type_of_amenity" by type_of_amenity as grouped_features %}
+                    {% for group in grouped_features %}
+                        {% if group.grouper %}
+                            <div class="room-feature-category">
+                                {% if group.grouper == 'private_bathroom' %}
+                                    {% trans "Private Bathroom" %}:
+                                {% elif group.grouper == 'view' %}
+                                    {% trans "View" context "room type features" %}:
+                                {% elif group.grouper == 'services_amenities' %}
+                                    {% trans "Services and Amenities" %}:
+                                {% else %}
+                                    {{ group.grouper }}
+                                {% endif %}
+                            </div>
+                            {% for feature in group.list %}
+                                <div class="room-feature-item">
+                                    <i class="fas fa-check"></i>
+                                    <span>{{ feature.text }}</span>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>
