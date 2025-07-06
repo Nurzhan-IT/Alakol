@@ -45,14 +45,14 @@
                             {% for id, item in data.items %}
                                 <li class="room_item_container">
                                     <div class="room_item_main">
-                                        <h5 class="room_name_number_and_delete">{{item.room_name}}  №{{item.room_number}} <small class="delete_room_button"><a style="cursor: pointer;" class="delete-item" data-item="{{ id }}"><i class="fas fa-trash" style="color: red;"></i></a></small> </h5>
+                                        <h5 class="">{{item.room_name}}  №{{item.room_number}} </h5>
                                         <div class="beds_and_capacity">
                                             <p><strong>{% trans "Beds" %} :</strong> {{item.number_of_beds}}  </p>
                                             <p><strong>{% trans "Capacity" %} :</strong> {{item.room_capacity}}  </p>
                                         </div>
                                     </div>
                                     <span class="room_item_price"> {{item.room_price | price_format}} {% trans "Tenge" %} </span>
-
+                                    <small class="delete_room_button"><a style="cursor: pointer;" class="delete-item" data-item="{{ id }}"><i class="fas fa-trash" style="color: red;"></i></a></small>
                                 </li>
                             {% endfor %}
                         </ul>
