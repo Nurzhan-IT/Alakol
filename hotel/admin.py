@@ -6,9 +6,8 @@ from import_export.formats import base_formats
 from django.utils.html import mark_safe
 
 from modeltranslation.admin import TranslationAdmin
-from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
-from .widgets import IconSelectWidget
+from .widgets import IconSelectWidget, SimpleTextEditorWidget, RoomTypeSelectWidget
 
 from django.shortcuts import render
 from django.urls import reverse
@@ -77,9 +76,9 @@ class BaseImportExportAdmin(ImportExportModelAdmin):
     formats = [base_formats.CSV, base_formats.XLS, base_formats.XLSX]
 
 class HotelAdminForm(forms.ModelForm):
-    description_ru = forms.CharField(widget=CKEditorUploadingWidget(), label='Описание (RU)')
-    description_kk = forms.CharField(widget=CKEditorUploadingWidget(), label='Описание (KK)')
-    description_en = forms.CharField(widget=CKEditorUploadingWidget(), label='Описание (EN)')
+    description_ru = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (RU)')
+    description_kk = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (KK)')
+    description_en = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (EN)')
     
     class Meta:
         model = Hotel
@@ -180,9 +179,9 @@ class PriceOnDateForm(forms.ModelForm):
         return instance
 
 class RoomTypeDescriptionForm(forms.ModelForm):
-    description_ru = forms.CharField(widget=CKEditorUploadingWidget(attrs={'cols': 100, 'rows': 100}), label='Описание (RU)')
-    description_kk = forms.CharField(widget=CKEditorUploadingWidget(), label='Описание (KK)')
-    description_en = forms.CharField(widget=CKEditorUploadingWidget(), label='Описание (EN)')
+    description_ru = forms.CharField(widget=SimpleTextEditorWidget(attrs={'rows': 15}), label='Описание (RU)')
+    description_kk = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (KK)')
+    description_en = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (EN)')
     
     class Meta:
         model = RoomTypeDescription
@@ -190,8 +189,9 @@ class RoomTypeDescriptionForm(forms.ModelForm):
         
     class Media:
         css = {
-            'all': ('css/custom_admin.css',),  # Подключаем кастомный CSS
+            'all': ('css/custom_admin.css', 'css/simple_editor.css'),  # Подключаем кастомный CSS и стили редактора
         }
+        js = ('js/simple_editor.js',)
 
         
 class HotelGallery_Tab(admin.TabularInline):
@@ -266,6 +266,9 @@ class Room_Tab(admin.TabularInline):
             parent_id = request.resolver_match.kwargs.get('object_id')  # Получаем ID текущего отеля
             if parent_id:
                 kwargs["queryset"] = RoomType.objects.filter(hotel_id=parent_id)
+            # Используем кастомный виджет для пользователей группы Manager
+            if is_manager(request.user):
+                kwargs["widget"] = RoomTypeSelectWidget()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
     
     def get_formset(self, request, obj=None, **kwargs):
@@ -289,6 +292,9 @@ class RoomTypeDescription_Tab(admin.TabularInline):
             parent_id = request.resolver_match.kwargs.get('object_id')  # Получаем ID текущего отеля
             if parent_id:
                 kwargs["queryset"] = RoomType.objects.filter(hotel_id=parent_id)
+            # Используем кастомный виджет для пользователей группы Manager
+            if is_manager(request.user):
+                kwargs["widget"] = RoomTypeSelectWidget()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -333,6 +339,9 @@ class RoomTypeGallery_Tab(admin.TabularInline):
             parent_id = request.resolver_match.kwargs.get('object_id')  # Получаем ID текущего отеля
             if parent_id:
                 kwargs["queryset"] = RoomType.objects.filter(hotel_id=parent_id)
+            # Используем кастомный виджет для пользователей группы Manager
+            if is_manager(request.user):
+                kwargs["widget"] = RoomTypeSelectWidget()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 class RoomTypeFeatures_Tab(admin.TabularInline):
@@ -345,6 +354,9 @@ class RoomTypeFeatures_Tab(admin.TabularInline):
             parent_id = request.resolver_match.kwargs.get('object_id')  # Получаем ID текущего отеля
             if parent_id:
                 kwargs["queryset"] = RoomType.objects.filter(hotel_id=parent_id)
+            # Используем кастомный виджет для пользователей группы Manager
+            if is_manager(request.user):
+                kwargs["widget"] = RoomTypeSelectWidget()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
     
     def get_formset(self, request, obj=None, **kwargs):
@@ -368,6 +380,9 @@ class RoomTypeFeaturesDetailed_Tab(admin.TabularInline):
             parent_id = request.resolver_match.kwargs.get('object_id')  # Получаем ID текущего отеля
             if parent_id:
                 kwargs["queryset"] = RoomType.objects.filter(hotel_id=parent_id)
+            # Используем кастомный виджет для пользователей группы Manager
+            if is_manager(request.user):
+                kwargs["widget"] = RoomTypeSelectWidget()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
     
     def get_formset(self, request, obj=None, **kwargs):

@@ -1,5 +1,4 @@
 from django.db import models
-from django_ckeditor_5.fields import CKEditor5Field
 from django.template.defaultfilters import escape
 from django.utils.text import slugify
 from shortuuid.django_fields import ShortUUIDField
@@ -146,7 +145,6 @@ MEAL_INCLUDED_IN_PRICE = (
 class Hotel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     name = models.CharField(max_length=100, blank=True, verbose_name='Название')
-    #description = CKEditor5Field(config_name='extends', null=True, blank=True)
     description = models.TextField(null=True, blank=True, verbose_name='Описание')
     image = models.FileField(upload_to="hotel_gallery", verbose_name='Изображение')
     address = models.CharField(max_length=200, verbose_name='Адрес')

@@ -51,9 +51,7 @@ urlpatterns = [
     # path("user/", include("userauths.urls")),
     # path("dashboard/", include("user_dashboard.urls")),
 
-    # Ckeditor
-    path("ckeditor5/", include('django_ckeditor_5.urls')),
-    path('ckeditor/', include('ckeditor_uploader.urls')), 
+ 
     path('i18n/', include('django.conf.urls.i18n')),
 
     # Прямые URL для Робокассы без языкового префикса
