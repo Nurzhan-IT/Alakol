@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-05 02:52+0500\n"
+"POT-Creation-Date: 2025-07-06 10:37+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,109 +44,126 @@ msgstr ""
 "Сіз тек бір қонақ үйден бөлме брондай аласыз. Таңдалған бөлмелер туралы "
 "деректерді өшіруді қалайсыз ба?"
 
-#: .\hms_prj\production_settings.py:202
-msgid "Kazakh"
-msgstr ""
-
-#: .\hms_prj\production_settings.py:203
-msgid "Russia"
-msgstr ""
-
-#: .\hms_prj\production_settings.py:204
-msgid "English"
-msgstr ""
-
-#: .\hotel\admin.py:548
+#: .\hotel\admin.py:563
 msgid "Check-In Date"
 msgstr "Тіркелу күні"
 
-#: .\hotel\decorators.py:9 .\hotel\views.py:479
+#: .\hotel\decorators.py:9 .\hotel\views.py:482
 msgid "You don't have any room selections yet!"
 msgstr "Сіз әлі ешқандай бөлме таңдамадыңыз!"
 
-#: .\hotel\views.py:350
+# Переводы для типов планов питания
+#: .\hotel\models.py:131
+msgid "Не включено"
+msgstr "Қосылмаған"
+
+#: .\hotel\models.py:132
+msgid "Трехразовое питание"
+msgstr "Үш рет тамақтану"
+
+#: .\hotel\models.py:133
+msgid "Двухразовое (обед + ужин)"
+msgstr "Екі рет тамақтану (түскі + кешкі)"
+
+#: .\hotel\models.py:134
+msgid "Двухразовое (завтрак + обед)"
+msgstr "Екі рет тамақтану (таңғы + түскі)"
+
+#: .\hotel\models.py:135
+msgid "Только завтрак"
+msgstr "Тек таңғы ас"
+
+#: .\hotel\models.py:136
+msgid "Только обед"
+msgstr "Тек түскі ас"
+
+#: .\hotel\models.py:137
+msgid "Только ужин"
+msgstr "Тек кешкі ас"
+
+#: .\hotel\views.py:352
 msgid "Please enter your booking data to check availability."
 msgstr "Қолжетімділікті тексеру үшін брондау деректерін енгізіңіз."
 
-#: .\hotel\views.py:361 .\hotel\views.py:954 .\hotel\views.py:1065
+#: .\hotel\views.py:363 .\hotel\views.py:957 .\hotel\views.py:1068
 msgid "Hotel is not available for booking on selected dates."
 msgstr "Қонақ үй таңдалған күндерде брондауға қолжетімді емес."
 
-#: .\hotel\views.py:709
+#: .\hotel\views.py:712
 msgid "You don't have any room selections or missing user information!"
 msgstr "Сізде бөлме таңдаулары жоқ немесе пайдаланушы ақпараты жетіспейді!"
 
-#: .\hotel\views.py:772
+#: .\hotel\views.py:775
 #, python-format
 msgid "Missing session data: %(keys)s"
 msgstr "Сессия деректері жетіспейді: %(keys)s"
 
-#: .\hotel\views.py:779
+#: .\hotel\views.py:782
 msgid "No selected rooms for booking"
 msgstr "Брондауға таңдалған бөлмелер жоқ"
 
-#: .\hotel\views.py:794
+#: .\hotel\views.py:797
 #, python-format
 msgid "Missing user data: %(fields)s"
 msgstr "Пайдаланушы деректері жетіспейді: %(fields)s"
 
-#: .\hotel\views.py:809
+#: .\hotel\views.py:812
 #, python-format
 msgid "Missing booking data: %(fields)s"
 msgstr "Брондау деректері жетіспейді: %(fields)s"
 
-#: .\hotel\views.py:821
+#: .\hotel\views.py:824
 msgid "Check-in date must be earlier than check-out date"
 msgstr "Орналасу күні шығу күнінен ерте болуы керек"
 
-#: .\hotel\views.py:830
+#: .\hotel\views.py:833
 msgid "Check-in date cannot be in the past"
 msgstr "Орналасу күні өткен уақытта болмайды"
 
-#: .\hotel\views.py:836
+#: .\hotel\views.py:839
 #, python-format
 msgid "Invalid date format: %(error)s"
 msgstr "Дұрыс емес күн форматы: %(error)s"
 
-#: .\hotel\views.py:846
+#: .\hotel\views.py:849
 #, python-format
 msgid "Invalid room data: %(room_id)s"
 msgstr "Дұрыс емес бөлме деректері: %(room_id)s"
 
-#: .\hotel\views.py:854
+#: .\hotel\views.py:857
 #, python-format
 msgid "Hotel with ID %(hotel_id)s not found or not active"
 msgstr "%(hotel_id)s ID-мен қонақ үй табылмады немесе белсенді емес"
 
-#: .\hotel\views.py:862
+#: .\hotel\views.py:865
 #, python-format
 msgid "Room with ID %(room_id)s not found"
 msgstr "%(room_id)s ID-мен бөлме табылмады"
 
-#: .\hotel\views.py:870
+#: .\hotel\views.py:873
 #, python-format
 msgid "Room type with ID %(room_type_id)s not found"
 msgstr "%(room_type_id)s ID-мен бөлме түрі табылмады"
 
-#: .\hotel\views.py:876
+#: .\hotel\views.py:879
 #, python-format
 msgid "Error in room data: %(error)s"
 msgstr "Бөлме деректерінде қате: %(error)s"
 
-#: .\hotel\views.py:882
+#: .\hotel\views.py:885
 msgid "Session data is valid"
 msgstr "Сессия деректері дұрыс"
 
-#: .\hotel\views.py:889
+#: .\hotel\views.py:892
 #, python-format
 msgid "Internal validation error: %(error)s"
 msgstr "Ішкі тексеру қатесі: %(error)s"
 
-#: .\hotel\views.py:898
+#: .\hotel\views.py:901
 msgid "Missing booking information!"
 msgstr "Брондау туралы ақпарат жетіспейді!"
 
-#: .\hotel\views.py:1125
+#: .\hotel\views.py:1128
 #, python-format
 msgid ""
 "Room %(room_number)s is not available for booking and has been removed from "
@@ -155,7 +172,7 @@ msgstr ""
 "%(room_number)s бөлмесі брондауға қолжетімді емес және тізімнен алынып "
 "тасталды."
 
-#: .\hotel\views.py:1127
+#: .\hotel\views.py:1130
 #, python-format
 msgid ""
 "Room %(room_number)s is marked as unavailable for selected dates and has "
@@ -164,7 +181,7 @@ msgstr ""
 "%(room_number)s бөлмесі таңдалған күндерде қолжетімсіз деп белгіленді және "
 "тізімнен алынып тасталды."
 
-#: .\hotel\views.py:1129
+#: .\hotel\views.py:1132
 #, python-format
 msgid ""
 "Room %(room_number)s is already booked for selected dates and has been "
@@ -173,11 +190,11 @@ msgstr ""
 "%(room_number)s бөлмесі таңдалған күндерде брондалған және тізімнен алынып "
 "тасталды."
 
-#: .\hotel\views.py:1134
+#: .\hotel\views.py:1137
 msgid "All selected rooms are not available for booking."
 msgstr "Барлық таңдалған бөлмелер брондауға қолжетімді емес."
 
-#: .\hotel\views.py:1138
+#: .\hotel\views.py:1141
 msgid ""
 "Some selected rooms are not available. Please check the list and continue "
 "booking."
@@ -185,21 +202,21 @@ msgstr ""
 "Кейбір таңдалған бөлмелер қолжетімді емес. Тізімді тексеріп, брондауды "
 "жалғастырыңыз."
 
-#: .\hotel\views.py:1147
+#: .\hotel\views.py:1150
 msgid "Failed to create booking!"
 msgstr "Брондау жасау сәтсіз аяқталды!"
 
-#: .\hotel\views.py:1230
+#: .\hotel\views.py:1233
 #, python-format
 msgid "Error creating payment: %(error)s"
 msgstr "Төлем жасау қатесі: %(error)s"
 
-#: .\hotel\views.py:1237
+#: .\hotel\views.py:1240
 #, python-format
 msgid "Error: %(error)s"
 msgstr "Қате: %(error)s"
 
-#: .\hotel\views.py:1382
+#: .\hotel\views.py:1385
 msgid ""
 "Error: Payment not confirmed by the system. If you have made a payment, "
 "please contact support."
@@ -207,36 +224,36 @@ msgstr ""
 "Қате: Төлем жүйе арқылы расталмады. Егер сіз төлем жасаған болсаңыз, қолдау "
 "қызметіне хабарласыңыз."
 
-#: .\hotel\views.py:1390
+#: .\hotel\views.py:1393
 msgid "Your booking was successfully paid!"
 msgstr "Сіздің брондауыңыз сәтті төленді!"
 
-#: .\hotel\views.py:1410
+#: .\hotel\views.py:1413
 msgid "Error: Payment not confirmed by the system."
 msgstr "Қате: Төлем жүйе арқылы расталмады."
 
-#: .\hotel\views.py:1415
+#: .\hotel\views.py:1418
 #, python-format
 msgid "An error occurred: %(error)s"
 msgstr "Қате пайда болды: %(error)s"
 
-#: .\hotel\views.py:1468
+#: .\hotel\views.py:1471
 msgid "Error: Insufficient data to verify payment"
 msgstr "Қате: Төлемді тексеру үшін деректер жеткіліксіз"
 
-#: .\hotel\views.py:1476
+#: .\hotel\views.py:1479
 msgid "Error: Payment verification failed"
 msgstr "Қате: Төлемді тексеру сәтсіз аяқталды"
 
-#: .\hotel\views.py:1507
+#: .\hotel\views.py:1510
 msgid "Error processing payment"
 msgstr "Төлемді өңдеу қатесі"
 
-#: .\hotel\views.py:1569
+#: .\hotel\views.py:1572
 msgid "Access to receipt is only available for paid bookings."
 msgstr "Чекке қол жеткізу тек төленген брондаулар үшін қолжетімді."
 
-#: .\hotel\views.py:1600
+#: .\hotel\views.py:1603
 #, python-format
 msgid "An error occurred while retrieving the receipt: %(error)s"
 msgstr "Чекті алу кезінде қате пайда болды: %(error)s"
@@ -259,7 +276,7 @@ msgstr "Бронь күнің таңдау"
 #: .\templates\booking\booking_data.html:22
 #: .\templates\hotel\hotel_detail.html:227
 #: .\templates\hotel\hotel_detail.html:504
-#: .\templates\hotel\room_type_detail.html:189
+#: .\templates\hotel\room_type_detail.html:196
 #: .\templates\partials\dashboard_base.html:102
 #: .\templates\partials\dashboard_base.html:148
 #: .\templates\user_dashboard\dashboard.html:48
@@ -269,7 +286,7 @@ msgstr "Бронь"
 #: .\templates\booking\booking_data.html:27
 #: .\templates\hotel\hotel_detail.html:509
 #: .\templates\hotel\payment_method_selection.html:150
-#: .\templates\hotel\room_type_detail.html:194
+#: .\templates\hotel\room_type_detail.html:201
 #: .\templates\search\search_results.html:40
 msgid "Check-in Date"
 msgstr "Қоңақ үйге кіру күні"
@@ -282,13 +299,13 @@ msgstr "Күнді таңдаңыз"
 #: .\templates\booking\booking_data.html:31
 #: .\templates\hotel\hotel_detail.html:513
 #: .\templates\hotel\payment_method_selection.html:151
-#: .\templates\hotel\room_type_detail.html:198
+#: .\templates\hotel\room_type_detail.html:205
 #: .\templates\search\search_results.html:44
 msgid "Check-out Date"
 msgstr "Қоңақ үйден шығу күні"
 
 #: .\templates\booking\booking_data.html:36 .\templates\hotel\index.html:31
-#: .\templates\hotel\room_type_detail.html:203
+#: .\templates\hotel\room_type_detail.html:210
 msgid "Guests"
 msgstr "Қонақтар"
 
@@ -297,7 +314,7 @@ msgstr "Қонақтар"
 #: .\templates\hotel\async\selected_rooms.html:168
 #: .\templates\hotel\checkout.html:93 .\templates\hotel\hotel_detail.html:521
 #: .\templates\hotel\payment_method_selection.html:153
-#: .\templates\hotel\room_type_detail.html:206
+#: .\templates\hotel\room_type_detail.html:213
 #: .\templates\hotel\selected_rooms.html:153
 #: .\templates\user_dashboard\booking_detail.html:68
 #: .\templates\user_dashboard\booking_detail.html:70
@@ -310,13 +327,13 @@ msgstr "Ересектер"
 
 #: .\templates\booking\booking_data.html:43
 #: .\templates\hotel\hotel_detail.html:525
-#: .\templates\hotel\room_type_detail.html:210
+#: .\templates\hotel\room_type_detail.html:217
 msgid "Childrens"
 msgstr "Балалар"
 
 #: .\templates\booking\booking_data.html:52
 #: .\templates\hotel\hotel_detail.html:533
-#: .\templates\hotel\room_type_detail.html:219
+#: .\templates\hotel\room_type_detail.html:226
 msgid "Select Room Type"
 msgstr "Бөлме түрін таңдау"
 
@@ -327,7 +344,7 @@ msgstr "Бөлме таңдау"
 
 #: .\templates\booking\booking_data.html:62
 #: .\templates\hotel\hotel_detail.html:542
-#: .\templates\hotel\room_type_detail.html:231
+#: .\templates\hotel\room_type_detail.html:238
 msgid "Check Availability"
 msgstr "Бөлменің қолжетімділігін тексеру"
 
@@ -495,7 +512,7 @@ msgstr "Таңдалған бөлмелер"
 
 #: .\templates\hotel\async\selected_rooms.html:67
 #: .\templates\hotel\checkout.html:41 .\templates\hotel\hotel_detail.html:354
-#: .\templates\hotel\room_type_detail.html:79
+#: .\templates\hotel\room_type_detail.html:86
 #: .\templates\hotel\selected_rooms.html:50
 msgid "Beds"
 msgstr "Төсек"
@@ -515,7 +532,7 @@ msgstr "Сыйымдылық"
 #: .\templates\hotel\payment_method_selection.html:57
 #: .\templates\hotel\payment_method_selection.html:158
 #: .\templates\hotel\payment_method_selection.html:165
-#: .\templates\hotel\room_type_detail.html:75
+#: .\templates\hotel\room_type_detail.html:82
 #: .\templates\hotel\selected_rooms.html:54
 #: .\templates\hotel\selected_rooms.html:156
 #: .\templates\hotel\selected_rooms.html:163
@@ -976,31 +993,31 @@ msgstr "Басталады"
 msgid "To"
 msgstr "Бітеді"
 
-#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:178
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:185
 msgid "Su"
 msgstr "Жексенбі"
 
-#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:172
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:179
 msgid "Mo"
 msgstr "Дүйсенбі"
 
-#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:173
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:180
 msgid "Tu"
 msgstr "Сейсенбі"
 
-#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:174
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:181
 msgid "We"
 msgstr "Сәрсенбі"
 
-#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:175
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:182
 msgid "Th"
 msgstr "Бейсенбі"
 
-#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:176
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:183
 msgid "Fr"
 msgstr "Жұма"
 
-#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:177
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:184
 msgid "Sa"
 msgstr "Сенбі"
 
@@ -1241,73 +1258,77 @@ msgstr "Шотты көру"
 msgid "Available Rooms"
 msgstr "Қолжетімді бөлмелер"
 
-#: .\templates\hotel\room_type_detail.html:64
+#: .\templates\hotel\room_type_detail.html:34
+msgid "Back to Hotel"
+msgstr "Қонақ үй парақшасына оралу"
+
+#: .\templates\hotel\room_type_detail.html:71
 msgid "All Available Rooms"
 msgstr "Барлық қолжетімді бөлмелер"
 
-#: .\templates\hotel\room_type_detail.html:64
+#: .\templates\hotel\room_type_detail.html:71
 #, python-format
 msgid "The %(room_type)s room has %(rooms_count)s available room(s)"
 msgstr "%(room_type)s бөлмесінде %(rooms_count)s бос бөлме бар"
 
-#: .\templates\hotel\room_type_detail.html:74
+#: .\templates\hotel\room_type_detail.html:81
 msgid "Room No."
 msgstr "Бөлме нөмірі"
 
-#: .\templates\hotel\room_type_detail.html:75
+#: .\templates\hotel\room_type_detail.html:82
 msgid "For"
 msgstr "Үшін"
 
-#: .\templates\hotel\room_type_detail.html:75
+#: .\templates\hotel\room_type_detail.html:82
 msgid "night(s)"
 msgstr "Түндер саны"
 
-#: .\templates\hotel\room_type_detail.html:80
+#: .\templates\hotel\room_type_detail.html:87
 msgid "Room Capacity"
 msgstr "Бөлменің сыйымдылығы"
 
-#: .\templates\hotel\room_type_detail.html:89
+#: .\templates\hotel\room_type_detail.html:96
 msgid "Added To Selection"
 msgstr "Таңдауға қосылды"
 
-#: .\templates\hotel\room_type_detail.html:94
+#: .\templates\hotel\room_type_detail.html:101
 msgid "Update"
 msgstr "Жаңарту"
 
-#: .\templates\hotel\room_type_detail.html:99
+#: .\templates\hotel\room_type_detail.html:106
 msgid "Add To Selection"
 msgstr "Таңдауға қосу"
 
-#: .\templates\hotel\room_type_detail.html:123
+#: .\templates\hotel\room_type_detail.html:130
 msgid "Select Dates"
 msgstr "Күндерді таңдаңыз"
 
-#: .\templates\hotel\room_type_detail.html:133
-#: .\templates\hotel\room_type_detail.html:849
+#: .\templates\hotel\room_type_detail.html:140
+#: .\templates\hotel\room_type_detail.html:856
 msgid "Select your dates"
 msgstr "Қонақ үйде тұру күндерін таңдаңыз"
 
-#: .\templates\hotel\room_type_detail.html:136
+#: .\templates\hotel\room_type_detail.html:143
 msgid "Click on calendar to select dates"
 msgstr "Күндерді таңдау үшін күнтізбені басыңыз"
 
-#: .\templates\hotel\room_type_detail.html:141
+#: .\templates\hotel\room_type_detail.html:148
 msgid "for"
 msgstr "Үшін"
 
-#: .\templates\hotel\room_type_detail.html:141
+#: .\templates\hotel\room_type_detail.html:148
 msgid "nights"
 msgstr "Түндер саны"
 
-#: .\templates\hotel\room_type_detail.html:150
+#: .\templates\hotel\room_type_detail.html:157
 msgid "Prices & Calendar"
 msgstr "Бағалар және күнтізбе"
 
-#: .\templates\hotel\room_type_detail.html:167
+#: .\templates\hotel\room_type_detail.html:174
 msgid "Approximate prices in tenge"
 msgstr "Жуықталған бағалар теңгемен көрсетілген"
 
-#: .\templates\hotel\room_type_detail.html:846
+#: .\templates\hotel\room_type_detail.html:853
 msgid "Select checkout"
 msgstr "Шығу күнін таңдаңыз"
 

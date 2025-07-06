@@ -33,6 +33,8 @@ from robokassa.robokassa import generate_payment_link, result_payment, check_suc
 
 from hotel.decorators import require_selection_data
 
+
+
 @cache_page(settings.CACHE_TTL['hotels_list'])
 @vary_on_headers('User-Agent', 'Accept-Language')
 def index(request):
@@ -1683,7 +1685,6 @@ def robots_txt(request):
         "Disallow: /admin/",
         "Disallow: /dashboard/", 
         "Disallow: /api/",
-        "Disallow: /ckeditor/",
         "Disallow: /user/",
         "",
         "# Языковые версии",
@@ -1819,3 +1820,4 @@ def live_check(request):
     Liveness probe - проверяет что приложение живо
     """
     return JsonResponse({'status': 'alive'}, status=200)
+

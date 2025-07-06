@@ -28,6 +28,13 @@
                       <li><a>{% trans "Hotel" %}</a></li>
                       <li>{% trans "Rooms" %}</li>
                     </ul>
+                    <ul>
+                        <li>
+                        <a href="{% url 'hotel:detail' hotel.slug %}" >
+                            <i class="fas fa-undo"></i> {% trans "Back to Hotel" %}
+                        </a>
+                        </li>
+                    </ul>
                   </nav>
             </div>
         </div>

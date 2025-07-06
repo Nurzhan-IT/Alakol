@@ -6,7 +6,7 @@
 }
 
 .delete_room_button {
-    border: 1px solid red;
+    border: 1px solid #6c757d;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -14,6 +14,10 @@
     margin: 8px;
     width: min-content;
     border-radius: 6px;
+}
+
+.delete_room_button i {
+    color: #6c757d !important;
 }
 
 .beds_and_capacity {
@@ -33,12 +37,51 @@
 
 .room_item_container {
     display: flex;
-    align-items: start;
+    align-items: center;
 }
 
 .room_item_main {
     display:  flex;
     flex-direction: row;
+}
+
+@media (max-width: 768px) {
+    .room_item_container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center;
+        gap: 15px;
+        padding: 20px 0;
+    }
+
+    .room_item_main {
+        flex-direction: column !important;
+        align-items: center !important;
+        width: 100%;
+    }
+
+    .room_name_number_and_delete {
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .beds_and_capacity {
+        justify-content: center;
+        padding: 10px 0;
+    }
+
+    .room_item_price {
+        border-radius: 5px !important;
+        white-space: nowrap;
+        padding: 8px 16px;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+    }
+
+    .delete_room_button {
+        margin: 0;
+    }
 }
 
 @media (max-width: 615px) {
@@ -49,7 +92,7 @@
 
     .beds_and_capacity {
         flex-direction: column;
-        margin-left: 40px;
+        gap: 10px;
     }
 }
 

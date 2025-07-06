@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser 
 from django.db.models.signals import post_save
 from django.utils.html import mark_safe
-from django_ckeditor_5.fields import CKEditor5Field
 from django.dispatch import receiver
 
 
