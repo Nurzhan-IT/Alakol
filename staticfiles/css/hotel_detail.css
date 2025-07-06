@@ -291,6 +291,40 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* Базовые стили для элементов номеров */
+.hrm-room-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 15px;
+}
+
+.hrm-room-info {
+  flex: 1;
+}
+
+.hrm-room-info h5 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.hrm-room-info p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.hrm-room-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+
 .btn-primary {
   background-color: #3498db;
   border: none;
@@ -732,25 +766,49 @@
 }
 
 @media (max-width: 650px) {
+  .utf_pricing_list_section {
+    text-align: center;
+  }
+
+  .utf_pricing_list_section ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .utf_pricing_list_section li {
+    max-width: 400px;
+    width: 100%;
+  }
+
   .hrm-room-item {
     display: flex !important;
     flex-direction: column !important;
     gap: 20px;
-    justify-content: left;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 
   .hrm-room-info {
     width: 100%;
     flex-direction: row;
+    justify-content: center;
+    text-align: center;
   }
 
   .hrm-photo-btn {
     width: 100%;
+    max-width: 200px;
   }
 
   .hrm-room-actions {
     width: 100%;
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
   }
 }
 
