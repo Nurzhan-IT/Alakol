@@ -1,10 +1,10 @@
 from django.db import models
-from django_ckeditor_5.fields import CKEditor5Field
 from django.template.defaultfilters import escape
 from django.utils.text import slugify
 from shortuuid.django_fields import ShortUUIDField
 from django.utils.html import mark_safe
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils.translation import gettext_lazy as _
 
 from userauths.models import User
 
@@ -128,13 +128,13 @@ ROOM_TYPE_FEATURES_DETAILED = [
 ]
 
 MEAL_PLAN_TYPES = (
-    ("not_included", "Не включено"),
-    ("full_board", "Трехразовое питание"),
-    ("half_board_lunch_dinner", "Двухразовое (обед + ужин)"),
-    ("half_board_breakfast_lunch", "Двухразовое (завтрак + обед)"),
-    ("breakfast_only", "Только завтрак"),
-    ("lunch_only", "Только обед"),
-    ("dinner_only", "Только ужин"),
+    ("not_included", _("Не включено")),
+    ("full_board", _("Трехразовое питание")),
+    ("half_board_lunch_dinner", _("Двухразовое (обед + ужин)")),
+    ("half_board_breakfast_lunch", _("Двухразовое (завтрак + обед)")),
+    ("breakfast_only", _("Только завтрак")),
+    ("lunch_only", _("Только обед")),
+    ("dinner_only", _("Только ужин")),
 )
 
 MEAL_INCLUDED_IN_PRICE = (
@@ -146,7 +146,6 @@ MEAL_INCLUDED_IN_PRICE = (
 class Hotel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     name = models.CharField(max_length=100, blank=True, verbose_name='Название')
-    #description = CKEditor5Field(config_name='extends', null=True, blank=True)
     description = models.TextField(null=True, blank=True, verbose_name='Описание')
     image = models.FileField(upload_to="hotel_gallery", verbose_name='Изображение')
     address = models.CharField(max_length=200, verbose_name='Адрес')

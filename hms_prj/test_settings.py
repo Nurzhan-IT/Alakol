@@ -34,9 +34,6 @@ INSTALLED_APPS = [
     'import_export',
     'crispy_forms',
     'mathfilters',
-    'ckeditor',
-    'ckeditor_uploader',
-    'django_ckeditor_5',
     'taggit',
     # 'anymail',  # Убираем для тестов - нет в base.txt
     'geoip2',   # Оставляем - есть в base.txt
