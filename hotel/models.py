@@ -4,6 +4,7 @@ from django.utils.text import slugify
 from shortuuid.django_fields import ShortUUIDField
 from django.utils.html import mark_safe
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils.translation import gettext_lazy as _
 
 from userauths.models import User
 
@@ -127,13 +128,13 @@ ROOM_TYPE_FEATURES_DETAILED = [
 ]
 
 MEAL_PLAN_TYPES = (
-    ("not_included", "Не включено"),
-    ("full_board", "Трехразовое питание"),
-    ("half_board_lunch_dinner", "Двухразовое (обед + ужин)"),
-    ("half_board_breakfast_lunch", "Двухразовое (завтрак + обед)"),
-    ("breakfast_only", "Только завтрак"),
-    ("lunch_only", "Только обед"),
-    ("dinner_only", "Только ужин"),
+    ("not_included", _("Не включено")),
+    ("full_board", _("Трехразовое питание")),
+    ("half_board_lunch_dinner", _("Двухразовое (обед + ужин)")),
+    ("half_board_breakfast_lunch", _("Двухразовое (завтрак + обед)")),
+    ("breakfast_only", _("Только завтрак")),
+    ("lunch_only", _("Только обед")),
+    ("dinner_only", _("Только ужин")),
 )
 
 MEAL_INCLUDED_IN_PRICE = (
