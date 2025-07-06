@@ -173,6 +173,46 @@ cat ~/.ssh/id_rsa
 # Скопируйте весь вывод в SSH_PRIVATE_KEY
 ```
 
+### Важно! Настройка SSH ключей для деплоя:
+
+Если получаете ошибку `Permission denied (publickey,password)`, выполните:
+
+```bash
+# 1. На локальной машине сгенерируйте новый SSH ключ для деплоя
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/deploy_key -C "github-actions-deploy"
+
+# 2. Скопируйте публичный ключ на сервер
+ssh-copy-id -i ~/.ssh/deploy_key.pub deploy@your-server-ip
+
+# 3. Добавьте приватный ключ в GitHub секреты
+cat ~/.ssh/deploy_key
+# Скопируйте ВЕСЬ вывод (включая BEGIN и END строки) в SSH_PRIVATE_KEY
+
+# 4. Проверьте подключение
+ssh -i ~/.ssh/deploy_key deploy@your-server-ip
+```
+
+### Альтернативный способ (если ssh-copy-id не работает):
+
+```bash
+# 1. Подключитесь к серверу
+ssh root@your-server-ip
+
+# 2. Переключитесь на пользователя deploy
+sudo su - deploy
+
+# 3. Создайте директорию .ssh если её нет
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+
+# 4. Добавьте публичный ключ в authorized_keys
+echo "ВАШ_ПУБЛИЧНЫЙ_КЛЮЧ" >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+
+# 5. Проверьте права доступа
+ls -la ~/.ssh/
+```
+
 После настройки каждый push в ветку `main` будет автоматически деплоить изменения.
 
 ## 📊 Мониторинг и управление
