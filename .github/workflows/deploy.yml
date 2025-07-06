@@ -104,13 +104,57 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
     
+    - name: Verify SSH connection prerequisites
+      run: |
+        echo "🔍 Проверяем SSH подключение..."
+        if [ -z "${{ secrets.HOST }}" ]; then
+          echo "❌ Секрет HOST не настроен!"
+          exit 1
+        fi
+        if [ -z "${{ secrets.SSH_USER }}" ]; then
+          echo "❌ Секрет SSH_USER не настроен!"
+          exit 1
+        fi
+        echo "✅ SSH секреты настроены"
+        echo "🎯 Подключаемся к хосту: ${{ secrets.HOST }}"
+    
     - name: Add server to known hosts
       run: |
-        ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+        echo "🔑 Добавляем сервер в known_hosts..."
+        # Создаем директорию ~/.ssh если её нет
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+        
+        # Пробуем получить ключ хоста с таймаутом
+        if timeout 30 ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts; then
+          echo "✅ Ключ хоста успешно добавлен"
+        else
+          echo "❌ Не удалось получить ключ хоста"
+          echo "🔍 Проверяем доступность хоста..."
+          if timeout 10 nc -z ${{ secrets.HOST }} 22; then
+            echo "✅ Порт 22 доступен"
+            echo "⚠️  Попробуем добавить ключ хоста без проверки..."
+            # Альтернативный способ - отключаем проверку ключа хоста
+            echo "StrictHostKeyChecking no" >> ~/.ssh/config
+            echo "UserKnownHostsFile /dev/null" >> ~/.ssh/config
+            chmod 600 ~/.ssh/config
+          else
+            echo "❌ Хост недоступен на порту 22"
+            echo "🔍 Пробуем ping хоста..."
+            if timeout 10 ping -c 3 ${{ secrets.HOST }}; then
+              echo "✅ Хост отвечает на ping"
+            else
+              echo "❌ Хост не отвечает на ping"
+            fi
+            exit 1
+          fi
+        fi
     
     - name: Deploy to server
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.HOST }} << 'EOF'
+        echo "🚀 Начинаем деплой..."
+        
+        ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 -o ServerAliveInterval=60 -o ServerAliveCountMax=3 ${{ secrets.SSH_USER }}@${{ secrets.HOST }} << 'EOF'
           set -e
           
           echo "🚀 Начинаем деплой Alakol HMS..."
@@ -196,11 +240,16 @@ jobs:
           
         EOF
     
-    - name: Notify deployment result
-      if: always()
+    - name: Notify deployment result - Success
+      if: success()
       run: |
-        if [ "${{ job.status }}" == "success" ]; then
-          echo "✅ Деплой успешно завершен!"
-        else
-          echo "❌ Деплой завершился с ошибкой!"
-        fi 
+        echo "✅ Деплой успешно завершен!"
+    
+    - name: Notify deployment result - Failure
+      if: failure()
+      run: |
+        echo "❌ Деплой завершился с ошибкой!"
+        echo "🔍 Проверьте:"
+        echo "1. Настройки SSH секретов (HOST, SSH_USER, SSH_PRIVATE_KEY)"
+        echo "2. Доступность сервера"
+        echo "3. Правильность конфигурации на сервере" 
