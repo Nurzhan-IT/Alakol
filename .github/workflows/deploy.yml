@@ -150,6 +150,31 @@ jobs:
           fi
         fi
     
+    - name: Debug SSH authentication
+      run: |
+        echo "🔍 Диагностика SSH аутентификации..."
+        
+        # Проверим что SSH agent работает
+        if [ -n "$SSH_AUTH_SOCK" ]; then
+          echo "✅ SSH agent активен"
+          echo "🔑 Загруженные ключи:"
+          ssh-add -l || echo "❌ Нет загруженных ключей"
+        else
+          echo "❌ SSH agent не активен"
+        fi
+        
+        # Попробуем подключиться с детальными логами
+        echo "🔧 Тестируем SSH подключение с детальными логами..."
+        ssh -vvv -o StrictHostKeyChecking=no -o ConnectTimeout=10 -o PreferredAuthentications=publickey -o PubkeyAuthentication=yes ${{ secrets.SSH_USER }}@${{ secrets.HOST }} "echo 'SSH connection test successful'" 2>&1 | head -30 || echo "❌ SSH подключение не удалось"
+        
+        # Проверим формат ключа
+        echo "🔍 Проверяем формат SSH ключа..."
+        if ssh-keygen -l -f /dev/stdin <<< "${{ secrets.SSH_PRIVATE_KEY }}" 2>/dev/null; then
+          echo "✅ SSH ключ имеет правильный формат"
+        else
+          echo "❌ SSH ключ имеет неправильный формат"
+        fi
+    
     - name: Deploy to server
       run: |
         echo "🚀 Начинаем деплой..."
