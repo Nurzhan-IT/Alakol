@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from hotel.models import  ICON_CHOICES,Hotel, Room, Booking, RoomServices, HotelGallery, RoomTypeGallery,RoomTypeFeatures, HotelFeatures, HotelFAQs, RoomType, RoomTypeDescription, Coupon, CouponUsers, Notification, Bookmark, Review, RoomTypeFeaturesDetailed, HotelMealPlan
+from hotel.models import  ICON_CHOICES,Hotel, Room, Booking, RoomServices, HotelGallery, RoomTypeGallery,RoomTypeFeatures, HotelFeatures, HotelFAQs, RoomType, Coupon, CouponUsers, Notification, Bookmark, Review, RoomTypeFeaturesDetailed, HotelMealPlan
 from import_export.admin import ImportExportModelAdmin
 from import_export.formats import base_formats
 from django.utils.html import mark_safe
@@ -272,9 +272,19 @@ class RoomTypeFeaturesDetailedForm(forms.ModelForm):
         fields = '__all__'
 
 class RoomTypeForm(forms.ModelForm):
+    description_ru = forms.CharField(widget=SimpleTextEditorWidget(attrs={'rows': 15}), required=False, label='Описание (RU)')
+    description_kk = forms.CharField(widget=SimpleTextEditorWidget(), required=False, label='Описание (KK)')
+    description_en = forms.CharField(widget=SimpleTextEditorWidget(), required=False, label='Описание (EN)')
+    
     class Meta:
         model = RoomType
         fields = '__all__'
+        
+    class Media:
+        css = {
+            'all': ('css/custom_admin.css', 'css/simple_editor.css'),  # Подключаем кастомный CSS и стили редактора
+        }
+        js = ('js/simple_editor.js',)
 
     
 class PriceOnDateForm(forms.ModelForm):
@@ -339,20 +349,7 @@ class PriceOnDateForm(forms.ModelForm):
         
         return instance
 
-class RoomTypeDescriptionForm(forms.ModelForm):
-    description_ru = forms.CharField(widget=SimpleTextEditorWidget(attrs={'rows': 15}), label='Описание (RU)')
-    description_kk = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (KK)')
-    description_en = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (EN)')
-    
-    class Meta:
-        model = RoomTypeDescription
-        fields = '__all__'
-        
-    class Media:
-        css = {
-            'all': ('css/custom_admin.css', 'css/simple_editor.css'),  # Подключаем кастомный CSS и стили редактора
-        }
-        js = ('js/simple_editor.js',)
+
 
 class RoomTypeGalleryForm(forms.ModelForm):
     """
@@ -592,32 +589,7 @@ class Room_Tab(admin.StackedInline):
 
         return formset
 
-class RoomTypeDescriptionInline(admin.StackedInline):
-    model = RoomTypeDescription
-    form = RoomTypeDescriptionForm
-    extra = 0
-    min_num = 1
-    max_num = 1
-    exclude = ['description']
-    verbose_name = 'Описание типа номера'
-    verbose_name_plural = 'Описание типа номера'
-    
-    def get_formset(self, request, obj=None, **kwargs):
-        formset = super().get_formset(request, obj, **kwargs)
-        
-        # Для Manager'ов скрываем поле hotel
-        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
-            if 'hotel' in formset.form.base_fields:
-                formset.form.base_fields['hotel'].widget = forms.HiddenInput()
-        
-        return formset
-    
-    def get_extra(self, request, obj=None, **kwargs):
-        # Если нет объекта или нет описания, показываем 1 форму
-        if obj is None:
-            return 1
-        existing_count = RoomTypeDescription.objects.filter(room_type=obj).count()
-        return 1 if existing_count == 0 else 0
+
 
 class RoomTypeGalleryInline(admin.StackedInline):
     model = RoomTypeGallery
@@ -689,7 +661,13 @@ class RoomTypeGalleryInline(admin.StackedInline):
                         )
                         gallery_instance.save()
                         print(f"DEBUG: save_formset RoomTypeGallery - Сохранен файл {file.name}")
+                    except ValidationError as e:
+                        from django.contrib import messages
+                        messages.error(request, f'Ошибка загрузки файла {file.name}: {str(e)}')
+                        print(f"DEBUG: save_formset RoomTypeGallery - Ошибка валидации файла {file.name}: {e}")
                     except Exception as e:
+                        from django.contrib import messages
+                        messages.error(request, f'Ошибка сохранения файла {file.name}: {str(e)}')
                         print(f"DEBUG: save_formset RoomTypeGallery - Ошибка сохранения файла {file.name}: {e}")
             
             # Добавляем сообщение об успешном сохранении
@@ -751,7 +729,6 @@ class RoomTypeFeaturesDetailedInline(admin.StackedInline):
 class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     form = RoomTypeForm
     inlines = [
-        RoomTypeDescriptionInline,
         RoomTypeGalleryInline, 
         RoomTypeFeaturesInline,
         RoomTypeFeaturesDetailedInline
@@ -762,7 +739,7 @@ class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     search_help_text = 'Поиск по типу номера, отелю, цене'
     list_per_page = 100
     prepopulated_fields = {"slug": ("type", )}
-    exclude = ['rtid']
+    exclude = ['rtid', 'description']
     change_form_template = 'admin/hotel/roomtype_complete/change_form.html'
     add_form_template = 'admin/hotel/roomtype_complete/change_form.html'
     
@@ -883,7 +860,7 @@ class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
             if 'hotel' in form.base_fields:
                 form.base_fields['hotel'].queryset = Hotel.objects.filter(user=request.user)
             # Скрываем технические поля
-            for field in ['rtid', 'slug', 'dynamic_pricing']:
+            for field in ['rtid', 'slug', 'dynamic_pricing', 'description']:
                 if field in form.base_fields:
                     form.base_fields[field].widget = forms.HiddenInput()
         
@@ -1539,12 +1516,8 @@ custom_admin_site.register(Notification, NotificationAdmin)
 custom_admin_site.register(Bookmark, BookmarkAdmin)
 custom_admin_site.register(Review, ReviewAdmin)
 
-# Регистрируем новый полный админ для RoomType отдельно (создаем прокси модель)
-class RoomTypeComplete(RoomType):
-    class Meta:
-        proxy = True
-        verbose_name = 'Управление типом номера'
-        verbose_name_plural = 'Управление типами номеров'
+# Регистрируем новый полный админ для RoomType отдельно (используем прокси модель из models.py)
+from .models import RoomTypeComplete
 
 custom_admin_site.register(RoomTypeComplete, RoomTypeCompleteAdmin)
 
