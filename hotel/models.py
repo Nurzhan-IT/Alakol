@@ -428,6 +428,24 @@ class RoomTypeGallery(models.Model):
     def __str__(self):
         return str(self.room_type)
     
+    def thumbnail(self):
+        """Возвращает HTML для отображения миниатюры изображения"""
+        if self.image:
+            # Экранируем название типа номера для безопасности
+            room_type_name_escaped = escape(self.room_type.type) if self.room_type.type else 'Тип номера'
+            return mark_safe(f'''
+                <div class="roomtype-gallery-thumbnail" 
+                     data-image-url="{self.image.url}" 
+                     data-room-type-name="{room_type_name_escaped}"
+                     style="cursor: pointer;">
+                    <img src="{self.image.url}" 
+                         style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; cursor: pointer; transition: transform 0.2s ease;" 
+                         title="Нажмите, чтобы открыть в модальном окне">
+                </div>
+            ''')
+        return "Нет изображения"
+    thumbnail.short_description = 'Миниатюра'
+    
     class Meta:
         verbose_name_plural = "Галерея типа номера"
 

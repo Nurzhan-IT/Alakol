@@ -354,6 +354,47 @@ class RoomTypeDescriptionForm(forms.ModelForm):
         }
         js = ('js/simple_editor.js',)
 
+class RoomTypeGalleryForm(forms.ModelForm):
+    """
+    Кастомная форма для RoomTypeGallery с возможностью множественной загрузки
+    """
+    multiple_images = MultipleFileField(
+        required=False,
+        label='Загрузить несколько изображений',
+        help_text='Выберите несколько изображений для загрузки в галерею типа номера (поддерживаются JPG, PNG, WEBP)'
+    )
+    
+    class Meta:
+        model = RoomTypeGallery
+        fields = ['hotel', 'room_type', 'image']
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Скрываем стандартное поле image, если используется множественная загрузка
+        if 'multiple_images' in self.fields and 'image' in self.fields:
+            self.fields['image'].required = False
+            # Добавляем подсказку для обычного поля image
+            self.fields['image'].help_text = 'Загрузите одно изображение или используйте поле выше для нескольких'
+            
+    def clean_multiple_images(self):
+        """
+        Валидация множественных файлов
+        """
+        files = self.cleaned_data.get('multiple_images')
+        if files:
+            # Проверяем каждый файл
+            for file in files:
+                if file:
+                    # Проверяем размер файла (максимум 5MB)
+                    if file.size > 5 * 1024 * 1024:
+                        raise forms.ValidationError(f'Файл {file.name} слишком большой. Максимальный размер 5MB.')
+                    
+                    # Проверяем тип файла
+                    if not file.content_type.startswith('image/'):
+                        raise forms.ValidationError(f'Файл {file.name} не является изображением.')
+        
+        return files
+
         
 class HotelGallery_Tab(admin.TabularInline):
     model = HotelGallery
@@ -551,125 +592,349 @@ class Room_Tab(admin.StackedInline):
 
         return formset
 
-class RoomTypeDescription_Tab(admin.StackedInline):
+class RoomTypeDescriptionInline(admin.StackedInline):
     model = RoomTypeDescription
     form = RoomTypeDescriptionForm
     extra = 0
+    min_num = 1
+    max_num = 1
     exclude = ['description']
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "room_type":
-            parent_id = request.resolver_match.kwargs.get('object_id')  # Получаем ID текущего отеля
-            if parent_id:
-                kwargs["queryset"] = RoomType.objects.filter(hotel_id=parent_id)
-            # Используем кастомный виджет для пользователей группы Manager
-            if is_manager(request.user):
-                kwargs["widget"] = RoomTypeSelectWidget()
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-
-# class ActivityLog_Tab(admin.TabularInline):
-#     model = ActivityLog
-
-# class StaffOnDuty_Tab(admin.TabularInline):
-#     model = StaffOnDuty
-
-class CouponUsers_Tab(admin.TabularInline):
-    model = CouponUsers
-
-
-
-class RoomType_Tab(admin.StackedInline):
-    model = RoomType
-    form = RoomTypeForm
-    extra = 0
-
-
-    def get_formset(self, request, obj=None, **kwargs):
-        formset = super().get_formset(request, obj, **kwargs)
-
-        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
-            for form in formset.form.base_fields.values():
-                if 'rtid' in formset.form.base_fields:
-                    formset.form.base_fields['rtid'].widget = forms.HiddenInput()
-                if 'slug' in formset.form.base_fields:
-                    formset.form.base_fields['slug'].widget = forms.HiddenInput()
-                if 'dynamic_pricing' in formset.form.base_fields:
-                    formset.form.base_fields['dynamic_pricing'].widget = forms.HiddenInput()
-
-
-        return formset
-
-class RoomTypeGallery_Tab(admin.StackedInline):
-    model = RoomTypeGallery
-    extra = 0
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "room_type":
-            parent_id = request.resolver_match.kwargs.get('object_id')  # Получаем ID текущего отеля
-            if parent_id:
-                kwargs["queryset"] = RoomType.objects.filter(hotel_id=parent_id)
-            # Используем кастомный виджет для пользователей группы Manager
-            if is_manager(request.user):
-                kwargs["widget"] = RoomTypeSelectWidget()
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-class RoomTypeFeatures_Tab(admin.StackedInline):
-    model = RoomTypeFeatures
-    form = RoomTypeFeaturesForm
-    extra = 0
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "room_type":
-            parent_id = request.resolver_match.kwargs.get('object_id')  # Получаем ID текущего отеля
-            if parent_id:
-                kwargs["queryset"] = RoomType.objects.filter(hotel_id=parent_id)
-            # Используем кастомный виджет для пользователей группы Manager
-            if is_manager(request.user):
-                kwargs["widget"] = RoomTypeSelectWidget()
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    verbose_name = 'Описание типа номера'
+    verbose_name_plural = 'Описание типа номера'
     
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
+        
+        # Для Manager'ов скрываем поле hotel
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            if 'hotel' in formset.form.base_fields:
+                formset.form.base_fields['hotel'].widget = forms.HiddenInput()
+        
+        return formset
+    
+    def get_extra(self, request, obj=None, **kwargs):
+        # Если нет объекта или нет описания, показываем 1 форму
+        if obj is None:
+            return 1
+        existing_count = RoomTypeDescription.objects.filter(room_type=obj).count()
+        return 1 if existing_count == 0 else 0
+
+class RoomTypeGalleryInline(admin.StackedInline):
+    model = RoomTypeGallery
+    form = RoomTypeGalleryForm
+    extra = 0
+    fields = ['thumbnail', 'image']
+    readonly_fields = ['thumbnail']
+    verbose_name = 'Изображение галереи'
+    verbose_name_plural = 'Галерея типа номера'
+    template = 'admin/hotel/roomtype_gallery_inline.html'
+    
+    class Media:
+        js = ('admin/js/roomtype_gallery_multiple.js',)
+        css = {
+            'all': ('admin/css/roomtype_gallery_multiple.css',)
+        }
+    
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj, **kwargs)
+        
+        # Для Manager'ов скрываем поля hotel и image (используем только multiple upload)
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            if 'hotel' in formset.form.base_fields:
+                formset.form.base_fields['hotel'].widget = forms.HiddenInput()
+            if 'image' in formset.form.base_fields:
+                formset.form.base_fields['image'].widget = forms.HiddenInput()
+        
+        return formset
+    
+    def save_formset(self, request, form, formset, change):
+        """
+        Обработка множественной загрузки файлов
+        """
+        print(f"DEBUG: RoomTypeGalleryInline.save_formset ВЫЗВАН!")
+        print(f"DEBUG: save_formset RoomTypeGallery вызван для formset {formset}")
+        print(f"DEBUG: save_formset - formset.model: {formset.model}")
+        print(f"DEBUG: save_formset - formset.model == RoomTypeGallery: {formset.model == RoomTypeGallery}")
+        print(f"DEBUG: save_formset - request.FILES keys: {list(request.FILES.keys())}")
+        print(f"DEBUG: save_formset - request.POST keys содержащие 'multiple': {[k for k in request.POST.keys() if 'multiple' in k]}")
+        print(f"DEBUG: save_formset - 'multiple_roomtype_images' in request.FILES: {'multiple_roomtype_images' in request.FILES}")
+        
+        # Отладочная информация о всех файлах
+        for key, file_list in request.FILES.lists():
+            print(f"DEBUG: save_formset - FILES[{key}]: {len(file_list)} файлов")
+            for i, file in enumerate(file_list):
+                print(f"  Файл {i+1}: {file.name} ({file.size} bytes, {file.content_type})")
+        
+        instances = formset.save(commit=False)
+        print(f"DEBUG: save_formset RoomTypeGallery - instances: {len(instances)}")
+        
+        # Проверяем, что это именно inline для RoomTypeGallery
+        if formset.model == RoomTypeGallery and 'multiple_roomtype_images' in request.FILES:
+            # Получаем отель и тип номера из основной формы
+            room_type = form.instance
+            hotel = room_type.hotel
+            
+            # Получаем все файлы с именем multiple_roomtype_images
+            files = request.FILES.getlist('multiple_roomtype_images')
+            
+            print(f"DEBUG: save_formset RoomTypeGallery - Обработка {len(files)} файлов")
+            
+            for file in files:
+                if file and file.size > 0:  # Проверяем что файл не пустой
+                    try:
+                        gallery_instance = RoomTypeGallery(
+                            hotel=hotel,
+                            room_type=room_type,
+                            image=file
+                        )
+                        gallery_instance.save()
+                        print(f"DEBUG: save_formset RoomTypeGallery - Сохранен файл {file.name}")
+                    except Exception as e:
+                        print(f"DEBUG: save_formset RoomTypeGallery - Ошибка сохранения файла {file.name}: {e}")
+            
+            # Добавляем сообщение об успешном сохранении
+            from django.contrib import messages
+            total_files = len([f for f in files if f and f.size > 0])
+            if total_files > 0:
+                messages.success(request, f'Успешно загружено {total_files} изображений в галерею типа номера.')
+        else:
+            print("DEBUG: save_formset RoomTypeGallery - Файлы multiple_roomtype_images не найдены в request.FILES")
+        
+        # Сохраняем остальные instances
+        for instance in instances:
+            instance.save()
+        formset.save_m2m()
+
+class RoomTypeFeaturesInline(admin.StackedInline):
+    model = RoomTypeFeatures
+    form = RoomTypeFeaturesForm
+    extra = 0
+    verbose_name = 'Особенность типа номера'
+    verbose_name_plural = 'Особенности типа номера'
+
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj, **kwargs)
 
         if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
-            for form in formset.form.base_fields.values():
-                if 'hfid' in formset.form.base_fields:
-                    formset.form.base_fields['hfid'].widget = forms.HiddenInput()
+            # Скрываем технические поля
+            for field in ['hfid']:
+                if field in formset.form.base_fields:
+                    formset.form.base_fields[field].widget = forms.HiddenInput()
+            # Скрываем поле hotel
+            if 'hotel' in formset.form.base_fields:
+                formset.form.base_fields['hotel'].widget = forms.HiddenInput()
 
         return formset
 
-class RoomTypeFeaturesDetailed_Tab(admin.StackedInline):
+class RoomTypeFeaturesDetailedInline(admin.StackedInline):
     model = RoomTypeFeaturesDetailed
     form = RoomTypeFeaturesDetailedForm
     extra = 0
     exclude = ['text']
+    verbose_name = 'Детальная особенность'
+    verbose_name_plural = 'Детальные особенности типа номера'
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "room_type":
-            parent_id = request.resolver_match.kwargs.get('object_id')  # Получаем ID текущего отеля
-            if parent_id:
-                kwargs["queryset"] = RoomType.objects.filter(hotel_id=parent_id)
-            # Используем кастомный виджет для пользователей группы Manager
-            if is_manager(request.user):
-                kwargs["widget"] = RoomTypeSelectWidget()
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-    
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
 
         if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
-            for form in formset.form.base_fields.values():
-                if 'hfid' in formset.form.base_fields:
-                    formset.form.base_fields['hfid'].widget = forms.HiddenInput()
+            # Скрываем технические поля
+            for field in ['hfid']:
+                if field in formset.form.base_fields:
+                    formset.form.base_fields[field].widget = forms.HiddenInput()
+            # Скрываем поле hotel
+            if 'hotel' in formset.form.base_fields:
+                formset.form.base_fields['hotel'].widget = forms.HiddenInput()
 
         return formset
+
+class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+    form = RoomTypeForm
+    inlines = [
+        RoomTypeDescriptionInline,
+        RoomTypeGalleryInline, 
+        RoomTypeFeaturesInline,
+        RoomTypeFeaturesDetailedInline
+    ]
+    list_display = ['type', 'hotel', 'price', 'number_of_beds', 'room_capacity', 'room_size', 'date']
+    list_filter = ['hotel', 'price', 'number_of_beds', 'room_capacity']
+    search_fields = ['type', 'hotel__name_ru', 'price']
+    search_help_text = 'Поиск по типу номера, отелю, цене'
+    list_per_page = 100
+    prepopulated_fields = {"slug": ("type", )}
+    exclude = ['rtid']
+    change_form_template = 'admin/hotel/roomtype_complete/change_form.html'
+    add_form_template = 'admin/hotel/roomtype_complete/change_form.html'
+    
+    def save_formset(self, request, form, formset, change):
+        """
+        Автоматически заполняем поле hotel из главной формы RoomType
+        и обрабатываем множественную загрузку файлов для галереи
+        """
+        print(f"DEBUG: RoomTypeCompleteAdmin.save_formset НАЧАЛО - formset: {formset}")
+        print(f"DEBUG: RoomTypeCompleteAdmin.save_formset - formset.model: {formset.model}")
+        print(f"DEBUG: RoomTypeCompleteAdmin.save_formset - request.FILES keys: {list(request.FILES.keys())}")
+        
+        instances = formset.save(commit=False)
+        
+        # Получаем отель из главной формы
+        room_type_hotel = form.instance.hotel
+        
+        # Обновляем поле hotel для всех инлайн объектов
+        for instance in instances:
+            if hasattr(instance, 'hotel'):
+                # Если отель не задан или пользователь Manager, устанавливаем отель из RoomType
+                if not instance.hotel or (is_manager(request.user) and room_type_hotel):
+                    instance.hotel = room_type_hotel
+                # Устанавливаем room_type для связи
+                if hasattr(instance, 'room_type'):
+                    instance.room_type = form.instance
+        
+        # Сохраняем инстансы
+        for instance in instances:
+            instance.save()
+        
+        # Обрабатываем удаления
+        for obj in formset.deleted_objects:
+            obj.delete()
+        
+        formset.save_m2m()
+        
+        # Резервная обработка файлов для галереи, если inline save_formset не сработал
+        print(f"DEBUG: RoomTypeCompleteAdmin.save_formset - formset.model: {formset.model}")
+        print(f"DEBUG: RoomTypeCompleteAdmin.save_formset - request.FILES keys: {list(request.FILES.keys())}")
+        
+        # Проверяем, обрабатывается ли это RoomTypeGallery и есть ли файлы
+        if formset.model == RoomTypeGallery and 'multiple_roomtype_images' in request.FILES:
+            print(f"DEBUG: RoomTypeCompleteAdmin.save_formset - Начинаем резервную обработку файлов галереи")
+            
+            # Получаем все файлы с именем multiple_roomtype_images
+            files = request.FILES.getlist('multiple_roomtype_images')
+            print(f"DEBUG: RoomTypeCompleteAdmin.save_formset - Резервная обработка {len(files)} файлов")
+            
+            # Получаем отель и тип номера из основной формы
+            room_type = form.instance
+            hotel = room_type.hotel
+            
+            for file in files:
+                if file and file.size > 0:  # Проверяем что файл не пустой
+                    try:
+                        # Проверяем, что изображение еще не существует
+                        existing = RoomTypeGallery.objects.filter(
+                            room_type=room_type,
+                            image__icontains=file.name
+                        ).exists()
+                        
+                        if not existing:
+                            gallery_instance = RoomTypeGallery(
+                                hotel=hotel,
+                                room_type=room_type,
+                                image=file
+                            )
+                            gallery_instance.save()
+                            print(f"DEBUG: RoomTypeCompleteAdmin.save_formset - Резервно сохранен файл {file.name}")
+                        else:
+                            print(f"DEBUG: RoomTypeCompleteAdmin.save_formset - Файл {file.name} уже существует, пропускаем")
+                    except Exception as e:
+                        print(f"DEBUG: RoomTypeCompleteAdmin.save_formset - Ошибка резервного сохранения файла {file.name}: {e}")
+            
+            # Добавляем сообщение об успешном сохранении
+            from django.contrib import messages
+            total_files = len([f for f in files if f and f.size > 0])
+            if total_files > 0:
+                messages.success(request, f'Успешно загружено {total_files} изображений в галерею типа номера (резервная обработка).')
+        
+        # Отладочная информация
+        if 'multiple_roomtype_images' in request.FILES:
+            files = request.FILES.getlist('multiple_roomtype_images')
+            print(f"DEBUG: RoomTypeCompleteAdmin.save_formset - Обнаружено {len(files)} файлов")
+            for i, file in enumerate(files):
+                print(f"  Файл {i+1}: {file.name} ({file.size} bytes, {file.content_type})")
+        else:
+            print(f"DEBUG: RoomTypeCompleteAdmin.save_formset - Файлы multiple_roomtype_images НЕ найдены")
+    
+    def get_search_fields(self, request):
+        if is_manager(request.user):
+            self.search_help_text = 'Поиск по типу номера, цене'
+            return ['type', 'price']
+        return self.search_fields
+
+    def get_list_filter(self, request):
+        if is_manager(request.user):
+            return ['price', 'number_of_beds', 'room_capacity']
+        return self.list_filter
+
+    def get_list_display(self, request):
+        if is_manager(request.user):
+            return ['type', 'price', 'number_of_beds', 'room_capacity', 'room_size']
+        return self.list_display
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        if is_manager(request.user):
+            return queryset.filter(hotel__user=request.user)
+        return queryset
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        
+        if is_manager(request.user):
+            # Ограничиваем выбор отелей только теми, которые принадлежат пользователю
+            if 'hotel' in form.base_fields:
+                form.base_fields['hotel'].queryset = Hotel.objects.filter(user=request.user)
+            # Скрываем технические поля
+            for field in ['rtid', 'slug', 'dynamic_pricing']:
+                if field in form.base_fields:
+                    form.base_fields[field].widget = forms.HiddenInput()
+        
+        return form
+
+    def save_model(self, request, obj, form, change):
+        # Если пользователь менеджер и не указан отель, устанавливаем один из его отелей
+        if is_manager(request.user) and not obj.hotel:
+            user_hotels = Hotel.objects.filter(user=request.user)
+            if user_hotels.exists():
+                obj.hotel = user_hotels.first()
+        
+        super().save_model(request, obj, form, change)
+
+    def has_module_permission(self, request):
+        return request.user.is_superuser or request.user.groups.filter(name='Manager').exists()
+
+    def has_view_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if request.user.groups.filter(name='Manager').exists():
+            if obj is None:
+                return True
+            return obj.hotel.user == request.user
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if request.user.groups.filter(name='Manager').exists():
+            if obj is None:
+                return True
+            return obj.hotel.user == request.user
+        return False
+
+    def has_add_permission(self, request):
+        return request.user.is_superuser or request.user.groups.filter(name='Manager').exists()
+
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if request.user.groups.filter(name='Manager').exists():
+            if obj is None:
+                return True
+            return obj.hotel.user == request.user
+        return False
 
 class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     form = HotelAdminForm
     inlines = [
-        HotelGallery_Tab, HotelFeatures_Tab, RoomType_Tab, RoomTypeDescription_Tab, 
-        RoomTypeGallery_Tab, RoomTypeFeatures_Tab, RoomTypeFeaturesDetailed_Tab, Room_Tab, HotelFAQs_Tab, HotelMealPlan_Tab
+        HotelGallery_Tab, HotelFeatures_Tab, Room_Tab, HotelFAQs_Tab, HotelMealPlan_Tab
     ]
     list_filter = ['featured', 'status']
     list_editable = ['status']
@@ -994,7 +1259,9 @@ class RoomServicesAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
         if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
             queryset = queryset.filter(booking__hotel__user=request.user)
         return queryset
-    
+
+class CouponUsers_Tab(admin.TabularInline):
+    model = CouponUsers
 
 class CouponAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     inlines = [CouponUsers_Tab]
@@ -1176,6 +1443,7 @@ class CustomAdminSite(admin.AdminSite):
         'Hotel': 'Отели',
         'Room': 'Номера',
         'RoomType': 'Типы номеров',
+        'RoomTypeComplete': 'Управление типами номеров',
         'Booking': 'Бронирования',
         'RoomServices': 'Услуги номеров',
         'Coupon': 'Купоны',
@@ -1270,6 +1538,15 @@ custom_admin_site.register(Coupon, CouponAdmin)
 custom_admin_site.register(Notification, NotificationAdmin)
 custom_admin_site.register(Bookmark, BookmarkAdmin)
 custom_admin_site.register(Review, ReviewAdmin)
+
+# Регистрируем новый полный админ для RoomType отдельно (создаем прокси модель)
+class RoomTypeComplete(RoomType):
+    class Meta:
+        proxy = True
+        verbose_name = 'Управление типом номера'
+        verbose_name_plural = 'Управление типами номеров'
+
+custom_admin_site.register(RoomTypeComplete, RoomTypeCompleteAdmin)
 
 # Register Django auth models
 from django.contrib.auth.models import Group, Permission
