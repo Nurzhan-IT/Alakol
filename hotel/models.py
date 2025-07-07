@@ -362,6 +362,7 @@ class HotelMealPlan(models.Model):
 class RoomType(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
     type = models.CharField(max_length=120, verbose_name='Тип')
+    description = models.TextField(null=True, blank=True, verbose_name='Описание')
     price = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, verbose_name='Цена')
     dynamic_pricing = models.JSONField(null=True, blank=True, default=dict, verbose_name='Динамические цены')  # Используем default=dict для инициализации пустым словарем
     number_of_beds = models.PositiveIntegerField(default=0, verbose_name='Количество кроватей')
@@ -406,24 +407,30 @@ class RoomType(models.Model):
         return self.price
 
 
-
-class RoomTypeDescription(models.Model):
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
-    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_description', verbose_name='Тип номера')
-    description = models.TextField(null=True, blank=True, verbose_name='Описание')
-
-    def __str__(self):
-        return str(self.hotel)
+class RoomTypeComplete(RoomType):
+    """
+    Прокси-модель для RoomType с расширенной админкой
+    """
     class Meta:
-        verbose_name_plural = "Описание типа номера"
-        constraints = [
-            models.UniqueConstraint(fields=['room_type'], name='unique_room_type_description')
-        ]
+        proxy = True
+        verbose_name = 'Управление типом номера'
+        verbose_name_plural = 'Управление типами номеров'
+
 
 class RoomTypeGallery(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_gallery', verbose_name='Тип номера')
     image = models.ImageField(upload_to='room_type_images/', verbose_name='Изображение')
+
+    def save(self, *args, **kwargs):
+        # Проверяем ограничение на количество фотографий для типа номера (максимум 10)
+        if not self.pk:  # Только для новых объектов
+            existing_count = RoomTypeGallery.objects.filter(room_type=self.room_type).count()
+            if existing_count >= 10:
+                from django.core.exceptions import ValidationError
+                raise ValidationError(f'Превышен лимит фотографий для типа номера "{self.room_type.type}". Максимум 10 фотографий. Сейчас: {existing_count}')
+        
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.room_type)
