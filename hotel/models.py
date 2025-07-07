@@ -265,6 +265,24 @@ class HotelGallery(models.Model):
 
     def __str__(self):
         return str(self.hotel)
+    
+    def thumbnail(self):
+        """Возвращает HTML для отображения миниатюры изображения"""
+        if self.image:
+            # Экранируем название отеля для безопасности
+            hotel_name_escaped = escape(self.hotel.name) if self.hotel.name else 'Отель'
+            return mark_safe(f'''
+                <div class="hotel-gallery-thumbnail" 
+                     data-image-url="{self.image.url}" 
+                     data-hotel-name="{hotel_name_escaped}"
+                     style="cursor: pointer;">
+                    <img src="{self.image.url}" 
+                         style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; cursor: pointer; transition: transform 0.2s ease;" 
+                         title="Нажмите, чтобы открыть в модальном окне">
+                </div>
+            ''')
+        return "Нет изображения"
+    thumbnail.short_description = 'Миниатюра'
 
     class Meta:
         verbose_name_plural = "Галерея отеля"
@@ -672,6 +690,20 @@ class Review(models.Model):
     rating = models.IntegerField(choices=RATING, default=None, verbose_name='Рейтинг')
     active = models.BooleanField(default=False, verbose_name='Активен')
     helpful = models.ManyToManyField(User, blank=True, related_name="helpful", verbose_name='Полезно')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата')
+
+    class Meta:
+        verbose_name_plural = "Reviews & Rating"
+        ordering = ["-date"]
+        
+    def __str__(self):
+        if self.user:
+            return f"{self.user.username} - {self.rating}"
+        elif self.hotel:
+            return f"Отзыв на отель {self.hotel.name} - {self.rating}"
+        else:
+            return f"Отзыв #{self.id} - {self.rating}"
+        
     date = models.DateTimeField(auto_now_add=True, verbose_name='Дата')
 
     class Meta:
