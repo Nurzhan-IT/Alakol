@@ -1,0 +1,135 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript">
+// Устанавливаем enctype для множественной загрузки файлов
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form[method="post"]');
+    if (form) {
+        form.setAttribute('enctype', 'multipart/form-data');
+        console.log('Form enctype set to multipart/form-data for file uploads');
+        console.log('Current form enctype:', form.getAttribute('enctype'));
+        
+        // Дополнительная проверка через MutationObserver
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'enctype') {
+                    console.log('Form enctype changed to:', form.getAttribute('enctype'));
+                    if (form.getAttribute('enctype') !== 'multipart/form-data') {
+                        console.warn('WARNING: Form enctype was changed, restoring to multipart/form-data');
+                        form.setAttribute('enctype', 'multipart/form-data');
+                    }
+                }
+            });
+        });
+        
+        observer.observe(form, {
+            attributes: true,
+            attributeFilter: ['enctype']
+        });
+    }
+});
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    // Функция для синхронизации hotel поля в инлайнах
+    function syncHotelFields() {
+        const mainHotelField = document.querySelector('#id_hotel');
+        if (!mainHotelField) return;
+        
+        const selectedHotelId = mainHotelField.value;
+        
+        // Находим все скрытые поля hotel в инлайнах
+        const inlineHotelFields = document.querySelectorAll(
+            'input[name*="hotel"][type="hidden"], select[name*="hotel"][style*="display: none"]'
+        );
+        
+        // Обновляем значения всех инлайн hotel полей
+        inlineHotelFields.forEach(function(field) {
+            if (field.name.includes('hotel') && !field.name.includes('room_type')) {
+                field.value = selectedHotelId;
+            }
+        });
+        
+        console.log('Hotel fields synchronized:', selectedHotelId);
+    }
+    
+    // Вызываем синхронизацию при загрузке страницы
+    syncHotelFields();
+    
+    // Добавляем обработчик изменения главного поля hotel
+    const mainHotelField = document.querySelector('#id_hotel');
+    if (mainHotelField) {
+        mainHotelField.addEventListener('change', syncHotelFields);
+    }
+    
+    // Синхронизируем при добавлении новых инлайн форм
+    const addButtons = document.querySelectorAll('.add-row a');
+    addButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            // Небольшая задержка для появления новой формы
+            setTimeout(syncHotelFields, 100);
+        });
+    });
+    
+    // Мутационный наблюдатель для отслеживания динамически добавляемых элементов
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                // Проверяем добавлены ли новые инлайн формы
+                const hasNewInlineForm = Array.from(mutation.addedNodes).some(function(node) {
+                    return node.nodeType === 1 && (
+                        node.classList && node.classList.contains('dynamic-form') ||
+                        node.querySelector && node.querySelector('.dynamic-form')
+                    );
+                });
+                
+                if (hasNewInlineForm) {
+                    setTimeout(syncHotelFields, 50);
+                }
+            }
+        });
+    });
+    
+    // Наблюдаем за изменениями в контейнере инлайнов
+    const inlineGroups = document.querySelectorAll('.inline-group');
+    inlineGroups.forEach(function(group) {
+        observer.observe(group, {
+            childList: true,
+            subtree: true
+        });
+    });
+    
+    console.log('RoomType hotel synchronization initialized');
+});
+</script>
+{% endblock %}
+
+{% block submit_buttons_bottom %}
+<script type="text/javascript">
+// Финальная синхронизация перед отправкой формы
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('#roomtypecomplete_form, form[method="post"]');
+    if (form) {
+        form.addEventListener('submit', function() {
+            const mainHotelField = document.querySelector('#id_hotel');
+            if (!mainHotelField) return;
+            
+            const selectedHotelId = mainHotelField.value;
+            
+            // Обновляем все hotel поля перед отправкой
+            const allHotelFields = document.querySelectorAll('input[name*="hotel"], select[name*="hotel"]');
+            allHotelFields.forEach(function(field) {
+                if (field.name.includes('hotel') && !field.name.includes('room_type')) {
+                    field.value = selectedHotelId;
+                }
+            });
+            
+            console.log('Final hotel synchronization before submit:', selectedHotelId);
+        });
+    }
+});
+</script>
+{{ block.super }}
+{% endblock %} 
