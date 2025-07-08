@@ -265,6 +265,24 @@ class HotelGallery(models.Model):
 
     def __str__(self):
         return str(self.hotel)
+    
+    def thumbnail(self):
+        """Возвращает HTML для отображения миниатюры изображения"""
+        if self.image:
+            # Экранируем название отеля для безопасности
+            hotel_name_escaped = escape(self.hotel.name) if self.hotel.name else 'Отель'
+            return mark_safe(f'''
+                <div class="hotel-gallery-thumbnail" 
+                     data-image-url="{self.image.url}" 
+                     data-hotel-name="{hotel_name_escaped}"
+                     style="cursor: pointer;">
+                    <img src="{self.image.url}" 
+                         style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; cursor: pointer; transition: transform 0.2s ease;" 
+                         title="Нажмите, чтобы открыть в модальном окне">
+                </div>
+            ''')
+        return "Нет изображения"
+    thumbnail.short_description = 'Миниатюра'
 
     class Meta:
         verbose_name_plural = "Галерея отеля"
@@ -344,6 +362,7 @@ class HotelMealPlan(models.Model):
 class RoomType(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
     type = models.CharField(max_length=120, verbose_name='Тип')
+    description = models.TextField(null=True, blank=True, verbose_name='Описание')
     price = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, verbose_name='Цена')
     dynamic_pricing = models.JSONField(null=True, blank=True, default=dict, verbose_name='Динамические цены')  # Используем default=dict для инициализации пустым словарем
     number_of_beds = models.PositiveIntegerField(default=0, verbose_name='Количество кроватей')
@@ -388,27 +407,51 @@ class RoomType(models.Model):
         return self.price
 
 
-
-class RoomTypeDescription(models.Model):
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
-    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_description', verbose_name='Тип номера')
-    description = models.TextField(null=True, blank=True, verbose_name='Описание')
-
-    def __str__(self):
-        return str(self.hotel)
+class RoomTypeComplete(RoomType):
+    """
+    Прокси-модель для RoomType с расширенной админкой
+    """
     class Meta:
-        verbose_name_plural = "Описание типа номера"
-        constraints = [
-            models.UniqueConstraint(fields=['room_type'], name='unique_room_type_description')
-        ]
+        proxy = True
+        verbose_name = 'Управление типом номера'
+        verbose_name_plural = 'Управление типами номеров'
+
 
 class RoomTypeGallery(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_gallery', verbose_name='Тип номера')
     image = models.ImageField(upload_to='room_type_images/', verbose_name='Изображение')
 
+    def save(self, *args, **kwargs):
+        # Проверяем ограничение на количество фотографий для типа номера (максимум 10)
+        if not self.pk:  # Только для новых объектов
+            existing_count = RoomTypeGallery.objects.filter(room_type=self.room_type).count()
+            if existing_count >= 10:
+                from django.core.exceptions import ValidationError
+                raise ValidationError(f'Превышен лимит фотографий для типа номера "{self.room_type.type}". Максимум 10 фотографий. Сейчас: {existing_count}')
+        
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return str(self.room_type)
+    
+    def thumbnail(self):
+        """Возвращает HTML для отображения миниатюры изображения"""
+        if self.image:
+            # Экранируем название типа номера для безопасности
+            room_type_name_escaped = escape(self.room_type.type) if self.room_type.type else 'Тип номера'
+            return mark_safe(f'''
+                <div class="roomtype-gallery-thumbnail" 
+                     data-image-url="{self.image.url}" 
+                     data-room-type-name="{room_type_name_escaped}"
+                     style="cursor: pointer;">
+                    <img src="{self.image.url}" 
+                         style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; cursor: pointer; transition: transform 0.2s ease;" 
+                         title="Нажмите, чтобы открыть в модальном окне">
+                </div>
+            ''')
+        return "Нет изображения"
+    thumbnail.short_description = 'Миниатюра'
     
     class Meta:
         verbose_name_plural = "Галерея типа номера"
@@ -672,6 +715,20 @@ class Review(models.Model):
     rating = models.IntegerField(choices=RATING, default=None, verbose_name='Рейтинг')
     active = models.BooleanField(default=False, verbose_name='Активен')
     helpful = models.ManyToManyField(User, blank=True, related_name="helpful", verbose_name='Полезно')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='Дата')
+
+    class Meta:
+        verbose_name_plural = "Reviews & Rating"
+        ordering = ["-date"]
+        
+    def __str__(self):
+        if self.user:
+            return f"{self.user.username} - {self.rating}"
+        elif self.hotel:
+            return f"Отзыв на отель {self.hotel.name} - {self.rating}"
+        else:
+            return f"Отзыв #{self.id} - {self.rating}"
+        
     date = models.DateTimeField(auto_now_add=True, verbose_name='Дата')
 
     class Meta:

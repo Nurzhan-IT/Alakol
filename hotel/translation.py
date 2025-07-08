@@ -1,5 +1,5 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import Hotel, HotelFAQs, RoomTypeDescription, RoomTypeFeaturesDetailed
+from .models import Hotel, HotelFAQs, RoomType, RoomTypeComplete, RoomTypeFeaturesDetailed
 
 @register(Hotel)
 class HotelTranslationOptions(TranslationOptions):
@@ -9,8 +9,12 @@ class HotelTranslationOptions(TranslationOptions):
 class HotelFAQsTranslationOptions(TranslationOptions):
     fields = ('question', 'answer')  # Указываем поля для перевода
 
-@register(RoomTypeDescription)
-class RoomTypeDescriptionTranslationOptions(TranslationOptions):
+@register(RoomType)
+class RoomTypeTranslationOptions(TranslationOptions):
+    fields = ['description']
+
+@register(RoomTypeComplete)
+class RoomTypeCompleteTranslationOptions(TranslationOptions):
     fields = ['description']
 
 @register(RoomTypeFeaturesDetailed)
