@@ -570,12 +570,11 @@
                 </div>
             </div>
             <div class="custom-room-description">
-                {% for description in r.roomtype_description.all %}
-                <p>{{ description.description | safe }}</p>
-                {% empty %}
-                <p class="hotel-room-description">{{ description.description | safe }}</p>
-
-                {% endfor %}
+                {% if r.description %}
+                <p>{{ r.description | safe }}</p>
+                {% else %}
+                <p class="hotel-room-description">{% trans "No description available" %}</p>
+                {% endif %}
 
                 <div class="room-size-info">
                     {% trans "Room size" %}: {{ r.room_size }} m²

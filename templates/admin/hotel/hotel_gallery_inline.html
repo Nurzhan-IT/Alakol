@@ -1,0 +1,134 @@
+{% load i18n admin_urls static admin_modify l10n %}
+
+<div class="inline-group" id="{{ inline_admin_formset.formset.prefix }}-group">
+    <div class="tabular inline-related">
+        {% block inline_selector %}{% endblock %}
+        
+        <!-- Поле множественной загрузки отдельно -->
+        <div class="multiple-upload-section" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px;">
+            <h3 style="margin-top: 0; color: #495057; font-size: 16px;">
+                <i class="fa fa-upload" style="margin-right: 8px;"></i>
+                Загрузка нескольких изображений
+            </h3>
+            <p style="color: #6c757d; font-size: 14px; margin-bottom: 15px;">
+                Выберите несколько изображений для быстрой загрузки в галерею отеля. Поддерживаются форматы: JPG, PNG, WEBP.
+            </p>
+            <div class="multiple-file-input-wrapper">
+                <input type="file" 
+                       name="multiple_hotel_images" 
+                       id="multiple_hotel_images"
+                       multiple 
+                       accept="image/*"
+                       class="form-control">
+                <div class="upload-help-text">
+                    <i class="fa fa-info-circle"></i>
+                    Максимальный размер файла: 5MB. Максимальное количество изображений: 10.
+                </div>
+            </div>
+        </div>
+
+        <fieldset class="module">
+            <h2>Текущие изображения в галерее</h2>
+            {{ inline_admin_formset.formset.management_form }}
+            
+            <!-- Скрытое поле для передачи множественных файлов -->
+            <input type="hidden" name="multiple_images_data" id="multiple_images_data" value="">
+            
+            <!-- Дополнительное скрытое поле для связи с основной формой -->
+            <input type="hidden" name="hotel_gallery_upload_trigger" value="1">
+            
+            <div class="gallery-grid" style="display: flex; flex-wrap: wrap; gap: 15px; margin: 20px 0;">
+                {% for inline_admin_form in inline_admin_formset %}
+                    {% if inline_admin_form.original %}
+                        <div class="gallery-item" style="display: flex; flex-direction: column; align-items: center; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background: #fafafa;">
+                            <!-- Скрытые поля для формы -->
+                            {% if inline_admin_form.has_auto_field or inline_admin_form.needs_explicit_pk_field %}
+                                <div style="display: none;">{{ inline_admin_form.pk_field.field }}</div>
+                            {% endif %}
+                            
+                            <!-- Миниатюра -->
+                            <div class="gallery-thumbnail">
+                                {% for fieldset in inline_admin_form %}
+                                    {% for line in fieldset %}
+                                        {% for field in line %}
+                                            {% if field.field.name == 'thumbnail' %}
+                                                {{ field.contents }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Чекбокс удаления -->
+                            <div class="gallery-delete" style="margin-top: 10px;">
+                                <label style="display: flex; align-items: center; font-size: 12px; color: #666;">
+                                    {{ inline_admin_form.deletion_field.field }}
+                                    <span style="margin-left: 5px;">Удалить?</span>
+                                </label>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </fieldset>
+
+        <script type="text/javascript">
+        (function($) {
+            $("#{{ inline_admin_formset.formset.prefix }}-group .add-row").click(function(e) {
+                e.preventDefault();
+                var forms = $("#{{ inline_admin_formset.formset.prefix }}-group .form-row").not(".empty-form");
+                var template = forms.filter(".empty-form");
+                var form = template.clone(true);
+                var formCount = forms.length;
+                form.removeClass("empty-form").addClass("dynamic-form");
+                form.find("*").each(function() {
+                    updateElementIndex(this, "{{ inline_admin_formset.formset.prefix }}", formCount);
+                });
+                form.insertBefore(template);
+                $("#id_{{ inline_admin_formset.formset.prefix }}-TOTAL_FORMS").val(formCount + 1);
+                // Re-initialize multiple file upload functionality
+                if (typeof handleMultipleFileUpload === 'function') {
+                    handleMultipleFileUpload();
+                }
+                return false;
+            });
+            
+            function updateElementIndex(el, prefix, ndx) {
+                var id_regex = new RegExp("(" + prefix + "-(\\d+|__prefix__))");
+                var replacement = prefix + "-" + ndx;
+                if ($(el).attr("for")) {
+                    $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+                }
+                if (el.id) {
+                    el.id = el.id.replace(id_regex, replacement);
+                }
+                if (el.name) {
+                    el.name = el.name.replace(id_regex, replacement);
+                }
+            }
+        })(django.jQuery);
+        </script>
+    </div>
+</div>
+
+<!-- Модальное окно для изображений -->
+<div id="imageModal" class="image-modal">
+    <div class="image-modal-content">
+        <button class="image-modal-close" type="button">&times;</button>
+        <img id="modalImage" src="" alt="Изображение отеля">
+        <div class="image-modal-title" id="modalTitle"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+// Инициализация модального окна после загрузки DOM
+document.addEventListener('DOMContentLoaded', function() {
+    // Инициализируем модальное окно
+    initImageModal();
+    
+    // Инициализируем обработку множественной загрузки файлов
+    if (typeof handleMultipleFileUpload === 'function') {
+        handleMultipleFileUpload();
+    }
+});
+</script>
