@@ -311,7 +311,7 @@ class SearchListViewTest(TestCase):
             payment_status='paid',
             is_active=True
         )
-        booking.room.add(self.room1)
+        booking.set_rooms_from_objects([self.room1])
         
         response = self.client.get(reverse('search:search_results'), {
             'check_in_date': check_in.strftime('%Y-%m-%d'),
@@ -529,7 +529,7 @@ class SearchListViewTest(TestCase):
             payment_status='paid',
             is_active=True
         )
-        booking.room.add(self.room2)
+        booking.set_rooms_from_objects([self.room2])
         
         request = self.factory.get('/search/', {
             'check_in_date': check_in.strftime('%Y-%m-%d'),

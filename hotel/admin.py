@@ -200,6 +200,65 @@ class RussianModelAdminMixin:
 def is_manager(user):
     return user.groups.filter(name='Manager').exists() and not user.is_superuser
 
+# Действия для массового удаления с проверкой связанных бронирований
+def delete_roomtypes_with_check(modeladmin, request, queryset):
+    """
+    Кастомное действие для массового удаления типов номеров с проверкой связанных записей бронирования
+    """
+    from hotel.models import Booking
+    from django.contrib import messages
+    
+    roomtypes_with_bookings = []
+    roomtypes_to_delete = []
+    
+    for roomtype in queryset:
+        if Booking.objects.filter(room_type=roomtype).exists():
+            roomtypes_with_bookings.append(roomtype.type)
+        else:
+            roomtypes_to_delete.append(roomtype)
+    
+    if roomtypes_with_bookings:
+        messages.error(request, 
+            f'Невозможно удалить следующие типы номеров так как с ними связаны записи бронирования: {", ".join(roomtypes_with_bookings)}. '
+            f'Для удаления необходимо связаться с поддержкой сайта support@ekol.kz')
+    
+    if roomtypes_to_delete:
+        deleted_count = len(roomtypes_to_delete)
+        for roomtype in roomtypes_to_delete:
+            roomtype.delete()
+        messages.success(request, f'Успешно удалено {deleted_count} типов номеров')
+
+delete_roomtypes_with_check.short_description = 'Удалить выбранные типы номеров'
+
+def delete_hotels_with_check(modeladmin, request, queryset):
+    """
+    Кастомное действие для массового удаления отелей с проверкой связанных записей бронирования
+    """
+    from hotel.models import Booking
+    from django.contrib import messages
+    
+    hotels_with_bookings = []
+    hotels_to_delete = []
+    
+    for hotel in queryset:
+        if Booking.objects.filter(hotel=hotel).exists():
+            hotels_with_bookings.append(hotel.name)
+        else:
+            hotels_to_delete.append(hotel)
+    
+    if hotels_with_bookings:
+        messages.error(request, 
+            f'Невозможно удалить следующие отели так как с ними связаны записи бронирования: {", ".join(hotels_with_bookings)}. '
+            f'Для удаления необходимо связаться с поддержкой сайта support@ekol.kz')
+    
+    if hotels_to_delete:
+        deleted_count = len(hotels_to_delete)
+        for hotel in hotels_to_delete:
+            hotel.delete()
+        messages.success(request, f'Успешно удалено {deleted_count} отелей')
+
+delete_hotels_with_check.short_description = 'Удалить выбранные отели'
+
 class BaseImportExportAdmin(ImportExportModelAdmin):
     formats = [base_formats.CSV, base_formats.XLS, base_formats.XLSX]
 
@@ -937,8 +996,52 @@ class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
         if request.user.groups.filter(name='Manager').exists():
             if obj is None:
                 return True
-            return obj.hotel.user == request.user
+            # Проверяем, принадлежит ли тип номера пользователю
+            if obj.hotel.user != request.user:
+                return False
+            # Проверяем, есть ли связанные записи бронирования
+            from hotel.models import Booking
+            if Booking.objects.filter(room_type=obj).exists():
+                return False
+            return True
         return False
+    
+    def delete_view(self, request, object_id, extra_context=None):
+        """
+        Переопределяем delete_view для отображения сообщения о необходимости связаться с поддержкой
+        """
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            try:
+                obj = self.get_object(request, object_id)
+                if obj:
+                    from hotel.models import Booking
+                    if Booking.objects.filter(room_type=obj).exists():
+                        from django.contrib import messages
+                        messages.error(request, 
+                            f'Невозможно удалить тип номера "{obj.type}" так как с ним связаны записи бронирования. '
+                            f'Для удаления необходимо связаться с поддержкой сайта support@ekol.kz')
+                        from django.shortcuts import redirect
+                        return redirect('admin:hotel_roomtypecomplete_changelist')
+            except Exception:
+                pass
+        return super().delete_view(request, object_id, extra_context)
+    
+    def get_actions(self, request):
+        """
+        Переопределяем действия для группы Manager
+        """
+        actions = super().get_actions(request)
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            # Удаляем стандартное действие delete_selected
+            if 'delete_selected' in actions:
+                del actions['delete_selected']
+            # Добавляем кастомное действие
+            actions['delete_roomtypes_with_check'] = (
+                delete_roomtypes_with_check,
+                'delete_roomtypes_with_check',
+                'Удалить выбранные типы номеров'
+            )
+        return actions
 
 class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     form = HotelAdminForm
@@ -1077,6 +1180,59 @@ class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
         if not change:
             obj.user = request.user
         super().save_model(request, obj, form, change)
+    
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if request.user.groups.filter(name='Manager').exists():
+            if obj is None:
+                return True
+            # Проверяем, принадлежит ли отель пользователю
+            if obj.user != request.user:
+                return False
+            # Проверяем, есть ли связанные записи бронирования
+            from hotel.models import Booking
+            if Booking.objects.filter(hotel=obj).exists():
+                return False
+            return True
+        return False
+    
+    def delete_view(self, request, object_id, extra_context=None):
+        """
+        Переопределяем delete_view для отображения сообщения о необходимости связаться с поддержкой
+        """
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            try:
+                obj = self.get_object(request, object_id)
+                if obj:
+                    from hotel.models import Booking
+                    if Booking.objects.filter(hotel=obj).exists():
+                        from django.contrib import messages
+                        messages.error(request, 
+                            f'Невозможно удалить отель "{obj.name}" так как с ним связаны записи бронирования. '
+                            f'Для удаления необходимо связаться с поддержкой сайта support@ekol.kz')
+                        from django.shortcuts import redirect
+                        return redirect('admin:hotel_hotel_changelist')
+            except Exception:
+                pass
+        return super().delete_view(request, object_id, extra_context)
+    
+    def get_actions(self, request):
+        """
+        Переопределяем действия для группы Manager
+        """
+        actions = super().get_actions(request)
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            # Удаляем стандартное действие delete_selected
+            if 'delete_selected' in actions:
+                del actions['delete_selected']
+            # Добавляем кастомное действие
+            actions['delete_hotels_with_check'] = (
+                delete_hotels_with_check,
+                'delete_hotels_with_check',
+                'Удалить выбранные отели'
+            )
+        return actions
 
 class RoomAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     list_display = ['hotel', 'get_room_type', 'room_number', 'get_price', 'get_number_of_beds', 'get_room_capacity', 'is_available']

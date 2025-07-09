@@ -67,7 +67,7 @@ class RobokassaViewsTest(TestCase):
             payment_status='Processing',
             is_active=True
         )
-        self.booking.room.add(self.room)
+        self.booking.set_rooms_from_objects([self.room])
 
 
 class RobokassaResultViewTest(RobokassaViewsTest):
