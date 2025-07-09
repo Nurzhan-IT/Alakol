@@ -115,6 +115,16 @@ class SmartCacheSerializer:
         """Десериализует объект из кэша."""
         return deserialize_from_cache(data)
     
+    @staticmethod
+    def _get_image_url(image_field):
+        """Безопасно получает URL изображения."""
+        if image_field:
+            try:
+                return image_field.url
+            except ValueError:
+                return None
+        return None
+    
     @staticmethod 
     def serialize_hotel_list(hotels):
         """Специализированная сериализация для списка отелей."""
@@ -125,7 +135,7 @@ class SmartCacheSerializer:
                 'name': hotel.name,
                 'slug': hotel.slug,
                 'description': hotel.description,
-                'image': hotel.image.url if hotel.image else None,
+                'image': SmartCacheSerializer._get_image_url(hotel.image),
                 'address': hotel.address,
                 'views': hotel.views,
                 'featured': hotel.featured,
@@ -159,7 +169,7 @@ class SmartCacheSerializer:
             'name': hotel.name,
             'slug': hotel.slug,
             'description': hotel.description,
-            'image': hotel.image.url if hotel.image else None,
+            'image': SmartCacheSerializer._get_image_url(hotel.image),
             'address': hotel.address,
             'mobile': hotel.mobile,
             'email': hotel.email,
