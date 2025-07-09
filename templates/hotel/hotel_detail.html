@@ -345,7 +345,7 @@
                     <div class="utf_pricing_list_section">
                         <h4>{% trans "Room Types" %}</h4>
                         <ul>
-                            {% for r in hotel.hotel_room_types %}
+                            {% for r in hotel.hotel_room_types|dictsort:"price" %}
                             <li class="hrm-room-item">
                                 <div class="hrm-room-info">
                                     <h5>{{ r.type }}</h5>
@@ -353,7 +353,7 @@
                                 </div>
                                 <button type="button" class="hrm-photo-btn" data-room-id="{{ r.id }}">{% trans "Photo" %}</button>
                                 <div class="hrm-room-actions">
-                                    <span>{{ r.price|price_format }} {% trans "Tenge" %}</span>
+                                    <span>{% trans "From" %}  {{ r.price|price_format }} {% trans "Tenge" %}</span>
                                 </div>
                             </li>
                             {% endfor %}
@@ -531,7 +531,7 @@
                             <a href="#">{% trans "Select Room Type" %}</a>
                             <select name="room-type" class="utf_chosen_select_single" required>
                                 <option value="">{% trans "Select Room" %}</option>
-                                {% for r in hotel.hotel_room_types %}
+                                {% for r in hotel.hotel_room_types|dictsort:"price" %}
                                 <option value="{{r.slug}}">{{r.type}}</option>
                                 {% endfor %}
                             </select>
@@ -548,7 +548,7 @@
 </div>
 
 <!-- Кастомные модальные окна -->
-{% for r in hotel.hotel_room_types %}
+{% for r in hotel.hotel_room_types|dictsort:"price" %}
 <div class="custom-modal" id="customModal{{ r.id }}">
     <div class="custom-modal-backdrop"></div>
     <div class="custom-modal-content">

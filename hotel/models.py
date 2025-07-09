@@ -563,7 +563,7 @@ class Booking(models.Model):
     
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True, verbose_name='Отель')
     room_type = models.ForeignKey(RoomType, on_delete=models.SET_NULL, null=True, verbose_name='Тип номера')
-    room = models.ManyToManyField(Room, verbose_name='Номера')
+    room = models.TextField(null=True, blank=True, verbose_name='Номера')
     selection_data = models.JSONField(null=True, blank=True, help_text="Данные о выбранных номерах из selection_data_obj", verbose_name='Данные выбора')
     before_discount = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, verbose_name='До скидки')
     total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, verbose_name='Итого')
@@ -610,9 +610,32 @@ class Booking(models.Model):
         return f"{self.booking_id}"
     
     def rooms(self):
-        return self.room.all().count()
+        """Возвращает количество номеров из текстового поля"""
+        if not self.room:
+            return 0
+        # Считаем количество номеров по разделителям (каждый номер на новой строке)
+        room_lines = [line.strip() for line in self.room.split('\n') if line.strip()]
+        return len(room_lines)
     
     rooms.short_description = 'Количество номеров'
+    
+    def set_rooms_from_objects(self, room_objects):
+        """
+        Преобразует список объектов Room в текстовое поле в формате:
+        'Тип номера - №номер'
+        """
+        room_texts = []
+        for room in room_objects:
+            formatted_room = f"{room.room_type.type} - №{room.room_number}"
+            room_texts.append(formatted_room)
+        
+        self.room = '\n'.join(room_texts)
+    
+    def get_rooms_text_list(self):
+        """Возвращает список номеров в текстовом формате"""
+        if not self.room:
+            return []
+        return [line.strip() for line in self.room.split('\n') if line.strip()]
     
     class Meta:
         indexes = [

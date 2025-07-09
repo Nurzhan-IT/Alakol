@@ -123,7 +123,7 @@ class RoomUnavailabilityModelTest(TestCase):
             payment_status='paid',
             is_active=True
         )
-        booking.room.add(self.room)
+        booking.set_rooms_from_objects([self.room])
         
         # Пытаемся создать перекрывающуюся запись о недоступности
         with self.assertRaises(ValidationError):
