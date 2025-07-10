@@ -75,7 +75,7 @@ def robokassa_success(request):
         
         context = {
             "booking": booking,
-            "rooms": list(booking.room.all()),  # Используем prefetch_related данные
+            "rooms": booking.get_rooms_text_list(),  # Используем текстовый список номеров
         }
         
         logger.info(f"Showing success page for booking {booking.booking_id}")

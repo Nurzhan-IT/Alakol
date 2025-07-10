@@ -127,7 +127,7 @@ def hotel_detail(request, slug):
         from django.db.models import Case, When, IntegerField
         return get_object_or_404(
             Hotel.objects.prefetch_related(
-                'roomtype_set',
+                Prefetch('roomtype_set', queryset=RoomType.objects.order_by('price')),
                 'hotelgallery_set',
                 'hotelfeatures_set',
                 Prefetch('hotelmealplan_set', 
@@ -203,7 +203,7 @@ def hotel_detail(request, slug):
         
     # Подготовка данных для таблицы динамических цен
     # Оптимизация: уже получили room_types через prefetch_related для hotel
-    room_types = hotel.roomtype_set.all()
+    room_types = hotel.roomtype_set.all().order_by('price')
     
     # Собираем все даты из dynamic_pricing всех типов номеров
     all_dates = []
@@ -985,7 +985,8 @@ def process_booking(request):
             booking.user = request.user
             booking.save()
         
-        # Добавляем комнаты к бронированию и рассчитываем общую стоимость
+        # Собираем комнаты для бронирования и рассчитываем общую стоимость
+        selected_rooms = []
         for h_id, item in request.session['selection_data_obj'].items():
             room_id = int(item["room_id"])
             
@@ -994,8 +995,9 @@ def process_booking(request):
             if not room:
                 # Если комната не была найдена в кэше, делаем отдельный запрос
                 room = Room.objects.get(id=room_id)
-                
-            booking.room.add(room)
+            
+            # Добавляем комнату в список для дальнейшего сохранения в текстовом формате
+            selected_rooms.append(room)
             
             # Получаем тип комнаты из кэша
             item_room_type_id = item["room_type"]
@@ -1007,6 +1009,9 @@ def process_booking(request):
             # Рассчитываем стоимость с учетом динамических цен
             room_total = calculate_total_price(item_room_type, checkin_date, checkout_date)
             total += room_total
+        
+        # Устанавливаем комнаты в текстовом формате
+        booking.set_rooms_from_objects(selected_rooms)
         
         # Обновляем сумму бронирования
         from decimal import Decimal
@@ -1299,7 +1304,7 @@ def robokassa_result(request):
                             # Fallback на старый способ отправки email
                             merge_data = {
                                 'booking': booking, 
-                                'booking_rooms': booking.room.all(), 
+                                'booking_rooms': booking.get_rooms_text_list(), 
                                 'full_name': booking.full_name, 
                                 'subject': f"Booking Completed - Invoice & Summary - ID: #{booking.booking_id}", 
                             }
@@ -1405,7 +1410,7 @@ def robokassa_success(request, booking_id):
             
             context = {
                 "booking": booking, 
-                'rooms': booking.room.all(), 
+                'rooms': booking.get_rooms_text_list(), 
             }
             return render(request, "hotel/payment_success.html", context)
         else:
@@ -1575,25 +1580,22 @@ def invoice(request, booking_id):
         # Преобразуем selection_data из JSON в словарь Python для использования в шаблоне
         selection_data = booking.selection_data or {}
         
-        # Подготавливаем информацию о комнатах с ценами
+        # Подготавливаем информацию о комнатах с ценами из selection_data
         rooms_with_prices = []
-        for room in booking.room.all():
+        room_text_list = booking.get_rooms_text_list()
+        
+        # Извлекаем информацию о комнатах из selection_data
+        for item_id, item in selection_data.items():
             room_data = {
-                'room': room,
-                'price': room.room_type.price  # Цена по умолчанию
+                'room_number': item.get('room_number', 'N/A'),
+                'room_type': item.get('room_type_name', 'N/A'),
+                'price': item.get('room_price', 0)
             }
-            
-            # Ищем цену в selection_data
-            for item_id, item in selection_data.items():
-                if str(item.get('room_id')) == str(room.id):
-                    room_data['price'] = item.get('room_price', room.room_type.price)
-                    break
-            
             rooms_with_prices.append(room_data)
         
         context = {
             "booking": booking,  
-            "room": booking.room.all(),
+            "room": room_text_list,
             "selection_data": selection_data,
             "rooms_with_prices": rooms_with_prices,
         }

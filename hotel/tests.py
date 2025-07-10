@@ -294,7 +294,7 @@ class BookingModelTestCase(TestCase):
             created_at=timezone.now(),
             expires_at=timezone.now() + timedelta(minutes=30)
         )
-        self.booking.room.add(self.room)
+        self.booking.set_rooms_from_objects([self.room])
         
     def test_booking_creation(self):
         """Тест создания бронирования"""

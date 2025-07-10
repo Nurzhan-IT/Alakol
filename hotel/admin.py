@@ -125,9 +125,9 @@ class HotelGalleryFormSet(forms.models.BaseInlineFormSet):
                 if form.cleaned_data.get('multiple_images'):
                     total_images += len(form.cleaned_data.get('multiple_images'))
         
-        # Ограничиваем общее количество изображений (например, максимум 50 для одного отеля)
-        if total_images > 50:
-            raise forms.ValidationError('Максимальное количество изображений для одного отеля - 50.')
+        # Ограничиваем общее количество изображений (например, максимум 10 для одного отеля)
+        if total_images > 10:
+            raise forms.ValidationError('Максимальное количество изображений для одного отеля - 10.')
         
     def save(self, commit=True):
         """
@@ -199,6 +199,65 @@ class RussianModelAdminMixin:
 # Проверка принадлежности пользователя к группе Manager
 def is_manager(user):
     return user.groups.filter(name='Manager').exists() and not user.is_superuser
+
+# Действия для массового удаления с проверкой связанных бронирований
+def delete_roomtypes_with_check(modeladmin, request, queryset):
+    """
+    Кастомное действие для массового удаления типов номеров с проверкой связанных записей бронирования
+    """
+    from hotel.models import Booking
+    from django.contrib import messages
+    
+    roomtypes_with_bookings = []
+    roomtypes_to_delete = []
+    
+    for roomtype in queryset:
+        if Booking.objects.filter(room_type=roomtype).exists():
+            roomtypes_with_bookings.append(roomtype.type)
+        else:
+            roomtypes_to_delete.append(roomtype)
+    
+    if roomtypes_with_bookings:
+        messages.error(request, 
+            f'Невозможно удалить следующие типы номеров так как с ними связаны записи бронирования: {", ".join(roomtypes_with_bookings)}. '
+            f'Для удаления необходимо связаться с поддержкой сайта support@ekol.kz')
+    
+    if roomtypes_to_delete:
+        deleted_count = len(roomtypes_to_delete)
+        for roomtype in roomtypes_to_delete:
+            roomtype.delete()
+        messages.success(request, f'Успешно удалено {deleted_count} типов номеров')
+
+delete_roomtypes_with_check.short_description = 'Удалить выбранные типы номеров'
+
+def delete_hotels_with_check(modeladmin, request, queryset):
+    """
+    Кастомное действие для массового удаления отелей с проверкой связанных записей бронирования
+    """
+    from hotel.models import Booking
+    from django.contrib import messages
+    
+    hotels_with_bookings = []
+    hotels_to_delete = []
+    
+    for hotel in queryset:
+        if Booking.objects.filter(hotel=hotel).exists():
+            hotels_with_bookings.append(hotel.name)
+        else:
+            hotels_to_delete.append(hotel)
+    
+    if hotels_with_bookings:
+        messages.error(request, 
+            f'Невозможно удалить следующие отели так как с ними связаны записи бронирования: {", ".join(hotels_with_bookings)}. '
+            f'Для удаления необходимо связаться с поддержкой сайта support@ekol.kz')
+    
+    if hotels_to_delete:
+        deleted_count = len(hotels_to_delete)
+        for hotel in hotels_to_delete:
+            hotel.delete()
+        messages.success(request, f'Успешно удалено {deleted_count} отелей')
+
+delete_hotels_with_check.short_description = 'Удалить выбранные отели'
 
 class BaseImportExportAdmin(ImportExportModelAdmin):
     formats = [base_formats.CSV, base_formats.XLS, base_formats.XLSX]
@@ -435,16 +494,31 @@ class HotelGallery_Tab(admin.TabularInline):
             # Получаем все файлы с именем multiple_hotel_images
             files = request.FILES.getlist('multiple_hotel_images')
             
-            print(f"DEBUG: save_formset - Обработка {len(files)} файлов")  # Временно для отладки
+            # Проверяем общее количество изображений (текущие + новые)
+            current_images_count = HotelGallery.objects.filter(hotel=hotel).count()
+            new_valid_files = [f for f in files if f and f.size > 0]
+            total_after_upload = current_images_count + len(new_valid_files)
             
-            for file in files:
-                if file and file.size > 0:  # Проверяем что файл не пустой
-                    try:
-                        gallery_instance = HotelGallery(hotel=hotel, image=file)
-                        gallery_instance.save()
-                        print(f"DEBUG: save_formset - Сохранен файл {file.name}")  # Временно для отладки
-                    except Exception as e:
-                        print(f"DEBUG: save_formset - Ошибка сохранения файла {file.name}: {e}")  # Временно для отладки
+            if total_after_upload > 10:
+                from django.contrib import messages
+                messages.error(request, f'Превышено максимальное количество изображений для отеля. Максимум: 10, текущее количество: {current_images_count}, попытка загрузить: {len(new_valid_files)}')
+            else:
+                print(f"DEBUG: save_formset - Обработка {len(files)} файлов")  # Временно для отладки
+                
+                for file in files:
+                    if file and file.size > 0:  # Проверяем что файл не пустой
+                        try:
+                            gallery_instance = HotelGallery(hotel=hotel, image=file)
+                            gallery_instance.save()
+                            print(f"DEBUG: save_formset - Сохранен файл {file.name}")  # Временно для отладки
+                        except Exception as e:
+                            print(f"DEBUG: save_formset - Ошибка сохранения файла {file.name}: {e}")  # Временно для отладки
+                
+                # Добавляем сообщение об успешном сохранении
+                from django.contrib import messages
+                total_files = len([f for f in files if f and f.size > 0])
+                if total_files > 0:
+                    messages.success(request, f'Успешно загружено {total_files} изображений в галерею отеля.')
         else:
             print("DEBUG: save_formset - Файлы multiple_hotel_images не найдены в request.FILES")
         
@@ -452,14 +526,6 @@ class HotelGallery_Tab(admin.TabularInline):
         for instance in instances:
             instance.save()
         formset.save_m2m()
-        
-        # Добавляем сообщение об успешном сохранении
-        if 'multiple_hotel_images' in request.FILES:
-            from django.contrib import messages
-            files = request.FILES.getlist('multiple_hotel_images')
-            total_files = len([f for f in files if f and f.size > 0])
-            if total_files > 0:
-                messages.success(request, f'Успешно загружено {total_files} изображений в галерею отеля.')
     
     def save_model(self, request, obj, form, change):
         """
@@ -478,7 +544,46 @@ class HotelGallery_Tab(admin.TabularInline):
             files = form.cleaned_data['multiple_hotel_images']
             
             if files:
-                print(f"DEBUG: save_model - Обработка {len(files)} файлов из cleaned_data")  # Временно для отладки
+                # Проверяем общее количество изображений (текущие + новые)
+                current_images_count = HotelGallery.objects.filter(hotel=obj).count()
+                new_valid_files = [f for f in files if f and f.size > 0]
+                total_after_upload = current_images_count + len(new_valid_files)
+                
+                if total_after_upload > 10:
+                    from django.contrib import messages
+                    messages.error(request, f'Превышено максимальное количество изображений для отеля. Максимум: 10, текущее количество: {current_images_count}, попытка загрузить: {len(new_valid_files)}')
+                else:
+                    print(f"DEBUG: save_model - Обработка {len(files)} файлов из cleaned_data")  # Временно для отладки
+                    
+                    for file in files:
+                        if file and file.size > 0:  # Проверяем что файл не пустой
+                            try:
+                                gallery_instance = HotelGallery(hotel=obj, image=file)
+                                gallery_instance.save()
+                                print(f"DEBUG: save_model - Сохранен файл {file.name}")  # Временно для отладки
+                            except Exception as e:
+                                print(f"DEBUG: save_model - Ошибка сохранения файла {file.name}: {e}")  # Временно для отладки
+                                
+                    # Добавляем сообщение об успешном сохранении
+                    from django.contrib import messages
+                    total_files = len([f for f in files if f and f.size > 0])
+                    if total_files > 0:
+                        messages.success(request, f'Успешно загружено {total_files} изображений в галерею отеля.')
+        
+        # Дополнительно обрабатываем файлы из request.FILES (на случай если они не попали в cleaned_data)
+        elif 'multiple_hotel_images' in request.FILES:
+            files = request.FILES.getlist('multiple_hotel_images')
+            
+            # Проверяем общее количество изображений (текущие + новые)
+            current_images_count = HotelGallery.objects.filter(hotel=obj).count()
+            new_valid_files = [f for f in files if f and f.size > 0]
+            total_after_upload = current_images_count + len(new_valid_files)
+            
+            if total_after_upload > 10:
+                from django.contrib import messages
+                messages.error(request, f'Превышено максимальное количество изображений для отеля. Максимум: 10, текущее количество: {current_images_count}, попытка загрузить: {len(new_valid_files)}')
+            else:
+                print(f"DEBUG: save_model - Обработка {len(files)} файлов из request.FILES")  # Временно для отладки
                 
                 for file in files:
                     if file and file.size > 0:  # Проверяем что файл не пустой
@@ -486,33 +591,12 @@ class HotelGallery_Tab(admin.TabularInline):
                             gallery_instance = HotelGallery(hotel=obj, image=file)
                             gallery_instance.save()
                             print(f"DEBUG: save_model - Сохранен файл {file.name}")  # Временно для отладки
+                            
+                            # Добавляем сообщение об успешном сохранении
+                            from django.contrib import messages
+                            messages.success(request, f'Успешно загружено изображение {file.name} в галерею отеля.')
                         except Exception as e:
                             print(f"DEBUG: save_model - Ошибка сохранения файла {file.name}: {e}")  # Временно для отладки
-                            
-                # Добавляем сообщение об успешном сохранении
-                from django.contrib import messages
-                total_files = len([f for f in files if f and f.size > 0])
-                if total_files > 0:
-                    messages.success(request, f'Успешно загружено {total_files} изображений в галерею отеля.')
-        
-        # Дополнительно обрабатываем файлы из request.FILES (на случай если они не попали в cleaned_data)
-        elif 'multiple_hotel_images' in request.FILES:
-            files = request.FILES.getlist('multiple_hotel_images')
-            
-            print(f"DEBUG: save_model - Обработка {len(files)} файлов из request.FILES")  # Временно для отладки
-            
-            for file in files:
-                if file and file.size > 0:  # Проверяем что файл не пустой
-                    try:
-                        gallery_instance = HotelGallery(hotel=obj, image=file)
-                        gallery_instance.save()
-                        print(f"DEBUG: save_model - Сохранен файл {file.name}")  # Временно для отладки
-                        
-                        # Добавляем сообщение об успешном сохранении
-                        from django.contrib import messages
-                        messages.success(request, f'Успешно загружено изображение {file.name} в галерею отеля.')
-                    except Exception as e:
-                        print(f"DEBUG: save_model - Ошибка сохранения файла {file.name}: {e}")  # Временно для отладки
         else:
             print("DEBUG: save_model - Файлы для загрузки не найдены")
 
@@ -537,13 +621,15 @@ class HotelFAQs_Tab(admin.StackedInline):
     extra = 0
 
     def get_formset(self, request, obj=None, **kwargs):
-        FormSet = super().get_formset(request, obj, **kwargs)
-        
-        class CustomFormSet(FormSet):
-            def __init__(self, *args, **kwargs):
-                super().__init__(*args, **kwargs)
-                
-        return CustomFormSet
+        formset = super().get_formset(request, obj, **kwargs)
+
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            # Скрываем технические поля
+            for field in ['hfid']:
+                if field in formset.form.base_fields:
+                    formset.form.base_fields[field].widget = forms.HiddenInput()
+
+        return formset
 
 class HotelMealPlan_Tab(admin.StackedInline):
     model = HotelMealPlan
@@ -583,9 +669,13 @@ class Room_Tab(admin.StackedInline):
         formset = super().get_formset(request, obj, **kwargs)
 
         if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
-            for form in formset.form.base_fields.values():
-                if 'rid' in formset.form.base_fields:
-                    formset.form.base_fields['rid'].widget = forms.HiddenInput()
+            # Скрываем технические поля
+            for field in ['rid']:
+                if field in formset.form.base_fields:
+                    formset.form.base_fields[field].widget = forms.HiddenInput()
+            # Скрываем поле hotel
+            if 'hotel' in formset.form.base_fields:
+                formset.form.base_fields['hotel'].widget = forms.HiddenInput()
 
         return formset
 
@@ -687,8 +777,8 @@ class RoomTypeFeaturesInline(admin.StackedInline):
     model = RoomTypeFeatures
     form = RoomTypeFeaturesForm
     extra = 0
-    verbose_name = 'Особенность типа номера'
-    verbose_name_plural = 'Особенности типа номера'
+    verbose_name = 'Удобство типа номера'
+    verbose_name_plural = 'Удобства типа номера'
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
@@ -709,8 +799,8 @@ class RoomTypeFeaturesDetailedInline(admin.StackedInline):
     form = RoomTypeFeaturesDetailedForm
     extra = 0
     exclude = ['text']
-    verbose_name = 'Детальная особенность'
-    verbose_name_plural = 'Детальные особенности типа номера'
+    verbose_name = 'Текстовая удобство'
+    verbose_name_plural = 'Текстовые удобства'
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj, **kwargs)
@@ -731,7 +821,8 @@ class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     inlines = [
         RoomTypeGalleryInline, 
         RoomTypeFeaturesInline,
-        RoomTypeFeaturesDetailedInline
+        RoomTypeFeaturesDetailedInline,
+        Room_Tab,
     ]
     list_display = ['type', 'hotel', 'price', 'number_of_beds', 'room_capacity', 'room_size', 'date']
     list_filter = ['hotel', 'price', 'number_of_beds', 'room_capacity']
@@ -905,13 +996,57 @@ class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
         if request.user.groups.filter(name='Manager').exists():
             if obj is None:
                 return True
-            return obj.hotel.user == request.user
+            # Проверяем, принадлежит ли тип номера пользователю
+            if obj.hotel.user != request.user:
+                return False
+            # Проверяем, есть ли связанные записи бронирования
+            from hotel.models import Booking
+            if Booking.objects.filter(room_type=obj).exists():
+                return False
+            return True
         return False
+    
+    def delete_view(self, request, object_id, extra_context=None):
+        """
+        Переопределяем delete_view для отображения сообщения о необходимости связаться с поддержкой
+        """
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            try:
+                obj = self.get_object(request, object_id)
+                if obj:
+                    from hotel.models import Booking
+                    if Booking.objects.filter(room_type=obj).exists():
+                        from django.contrib import messages
+                        messages.error(request, 
+                            f'Невозможно удалить тип номера "{obj.type}" так как с ним связаны записи бронирования. '
+                            f'Для удаления необходимо связаться с поддержкой сайта support@ekol.kz')
+                        from django.shortcuts import redirect
+                        return redirect('admin:hotel_roomtypecomplete_changelist')
+            except Exception:
+                pass
+        return super().delete_view(request, object_id, extra_context)
+    
+    def get_actions(self, request):
+        """
+        Переопределяем действия для группы Manager
+        """
+        actions = super().get_actions(request)
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            # Удаляем стандартное действие delete_selected
+            if 'delete_selected' in actions:
+                del actions['delete_selected']
+            # Добавляем кастомное действие
+            actions['delete_roomtypes_with_check'] = (
+                delete_roomtypes_with_check,
+                'delete_roomtypes_with_check',
+                'Удалить выбранные типы номеров'
+            )
+        return actions
 
 class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     form = HotelAdminForm
     inlines = [
-        HotelGallery_Tab, HotelFeatures_Tab, Room_Tab, HotelFAQs_Tab, HotelMealPlan_Tab
+        HotelGallery_Tab, HotelFeatures_Tab, HotelMealPlan_Tab, HotelFAQs_Tab
     ]
     list_filter = ['featured', 'status']
     list_editable = ['status']
@@ -934,20 +1069,29 @@ class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
             files = request.FILES.getlist('multiple_hotel_images')
             print(f"DEBUG: response_change - Найдено {len(files)} файлов для загрузки")
             
-            for file in files:
-                if file and file.size > 0:
-                    try:
-                        gallery_instance = HotelGallery(hotel=obj, image=file)
-                        gallery_instance.save()
-                        print(f"DEBUG: response_change - Сохранен файл {file.name}")
-                    except Exception as e:
-                        print(f"DEBUG: response_change - Ошибка сохранения файла {file.name}: {e}")
+            # Проверяем общее количество изображений (текущие + новые)
+            current_images_count = HotelGallery.objects.filter(hotel=obj).count()
+            new_valid_files = [f for f in files if f and f.size > 0]
+            total_after_upload = current_images_count + len(new_valid_files)
             
-            # Добавляем сообщение об успешном сохранении
-            from django.contrib import messages
-            total_files = len([f for f in files if f and f.size > 0])
-            if total_files > 0:
-                messages.success(request, f'Успешно загружено {total_files} изображений в галерею отеля.')
+            if total_after_upload > 10:
+                from django.contrib import messages
+                messages.error(request, f'Превышено максимальное количество изображений для отеля. Максимум: 10, текущее количество: {current_images_count}, попытка загрузить: {len(new_valid_files)}')
+            else:
+                for file in files:
+                    if file and file.size > 0:
+                        try:
+                            gallery_instance = HotelGallery(hotel=obj, image=file)
+                            gallery_instance.save()
+                            print(f"DEBUG: response_change - Сохранен файл {file.name}")
+                        except Exception as e:
+                            print(f"DEBUG: response_change - Ошибка сохранения файла {file.name}: {e}")
+                
+                # Добавляем сообщение об успешном сохранении
+                from django.contrib import messages
+                total_files = len([f for f in files if f and f.size > 0])
+                if total_files > 0:
+                    messages.success(request, f'Успешно загружено {total_files} изображений в галерею отеля.')
         
         return response
     
@@ -966,20 +1110,29 @@ class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
             files = request.FILES.getlist('multiple_hotel_images')
             print(f"DEBUG: response_add - Найдено {len(files)} файлов для загрузки")
             
-            for file in files:
-                if file and file.size > 0:
-                    try:
-                        gallery_instance = HotelGallery(hotel=obj, image=file)
-                        gallery_instance.save()
-                        print(f"DEBUG: response_add - Сохранен файл {file.name}")
-                    except Exception as e:
-                        print(f"DEBUG: response_add - Ошибка сохранения файла {file.name}: {e}")
+            # Проверяем общее количество изображений (текущие + новые)
+            current_images_count = HotelGallery.objects.filter(hotel=obj).count()
+            new_valid_files = [f for f in files if f and f.size > 0]
+            total_after_upload = current_images_count + len(new_valid_files)
             
-            # Добавляем сообщение об успешном сохранении
-            from django.contrib import messages
-            total_files = len([f for f in files if f and f.size > 0])
-            if total_files > 0:
-                messages.success(request, f'Успешно загружено {total_files} изображений в галерею отеля.')
+            if total_after_upload > 10:
+                from django.contrib import messages
+                messages.error(request, f'Превышено максимальное количество изображений для отеля. Максимум: 10, текущее количество: {current_images_count}, попытка загрузить: {len(new_valid_files)}')
+            else:
+                for file in files:
+                    if file and file.size > 0:
+                        try:
+                            gallery_instance = HotelGallery(hotel=obj, image=file)
+                            gallery_instance.save()
+                            print(f"DEBUG: response_add - Сохранен файл {file.name}")
+                        except Exception as e:
+                            print(f"DEBUG: response_add - Ошибка сохранения файла {file.name}: {e}")
+                
+                # Добавляем сообщение об успешном сохранении
+                from django.contrib import messages
+                total_files = len([f for f in files if f and f.size > 0])
+                if total_files > 0:
+                    messages.success(request, f'Успешно загружено {total_files} изображений в галерею отеля.')
         else:
             print("DEBUG: response_add - Файлы multiple_hotel_images не найдены")
         
@@ -1027,6 +1180,59 @@ class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
         if not change:
             obj.user = request.user
         super().save_model(request, obj, form, change)
+    
+    def has_delete_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if request.user.groups.filter(name='Manager').exists():
+            if obj is None:
+                return True
+            # Проверяем, принадлежит ли отель пользователю
+            if obj.user != request.user:
+                return False
+            # Проверяем, есть ли связанные записи бронирования
+            from hotel.models import Booking
+            if Booking.objects.filter(hotel=obj).exists():
+                return False
+            return True
+        return False
+    
+    def delete_view(self, request, object_id, extra_context=None):
+        """
+        Переопределяем delete_view для отображения сообщения о необходимости связаться с поддержкой
+        """
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            try:
+                obj = self.get_object(request, object_id)
+                if obj:
+                    from hotel.models import Booking
+                    if Booking.objects.filter(hotel=obj).exists():
+                        from django.contrib import messages
+                        messages.error(request, 
+                            f'Невозможно удалить отель "{obj.name}" так как с ним связаны записи бронирования. '
+                            f'Для удаления необходимо связаться с поддержкой сайта support@ekol.kz')
+                        from django.shortcuts import redirect
+                        return redirect('admin:hotel_hotel_changelist')
+            except Exception:
+                pass
+        return super().delete_view(request, object_id, extra_context)
+    
+    def get_actions(self, request):
+        """
+        Переопределяем действия для группы Manager
+        """
+        actions = super().get_actions(request)
+        if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
+            # Удаляем стандартное действие delete_selected
+            if 'delete_selected' in actions:
+                del actions['delete_selected']
+            # Добавляем кастомное действие
+            actions['delete_hotels_with_check'] = (
+                delete_hotels_with_check,
+                'delete_hotels_with_check',
+                'Удалить выбранные отели'
+            )
+        return actions
 
 class RoomAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     list_display = ['hotel', 'get_room_type', 'room_number', 'get_price', 'get_number_of_beds', 'get_room_capacity', 'is_available']
@@ -1173,10 +1379,19 @@ class CheckInDateFilter(admin.SimpleListFilter):
 class BookingAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     # inlines = [ActivityLog_Tab, StaffOnDuty_Tab]
     list_filter = [HotelFilter, RoomTypeFilter, 'is_active', 'checked_in', 'checked_out', CheckInDateFilter, 'payment_status']
-    list_display = ['booking_id', 'user', 'hotel', 'room_type', 'rooms', 'total', 'prepayment', 'payment_for_hotel', 'payment_status', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'date']
+    list_display = ['booking_id', 'user', 'hotel', 'get_room_type', 'rooms', 'total', 'prepayment', 'payment_for_hotel', 'payment_status', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'date']
     search_fields = ['booking_id', 'robokassa_inv_id']
     search_help_text = 'Поиск по ID бронирования, ID инвойса Robokassa, Сумме'
     list_per_page = 100
+
+    def get_room_type(self, obj):
+        """Отображает только название типа номера"""
+        if obj.room_type:
+            return obj.room_type.type
+        return None
+    
+    get_room_type.short_description = 'Тип номера'
+    get_room_type.admin_order_field = 'room_type__type'
 
     def get_search_fields(self, request):
         if is_manager(request.user):
@@ -1186,7 +1401,7 @@ class BookingAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
 
     def get_list_display(self, request):
         if is_manager(request.user):
-            return ['booking_id', 'hotel', 'room_type', 'rooms', 'total', 'payment_for_hotel', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'date']
+            return ['booking_id', 'hotel', 'get_room_type', 'rooms', 'total', 'payment_for_hotel', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'date']
         return self.list_display
 
     def get_list_filter(self, request):
@@ -1303,7 +1518,7 @@ class PriceOnDateAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     list_filter = [HotelFilter]
     search_fields = ['type', 'hotel__name_ru']
     search_help_text = 'Поиск по Типу номера, Отелю'
-    exclude = ['dynamic_pricing', 'number_of_beds', 'room_capacity', 'room_size', 'rtid']
+    exclude = ['dynamic_pricing', 'number_of_beds', 'room_capacity', 'room_size', 'rtid', 'description', 'description_ru', 'description_kk', 'description_en']
     prepopulated_fields = {"slug": ("type", )}
     change_form_template = 'admin/hotel/roomtype/change_form.html'  # Кастомный шаблон для PriceOnDate
     
@@ -1420,7 +1635,7 @@ class CustomAdminSite(admin.AdminSite):
         'Hotel': 'Отели',
         'Room': 'Номера',
         'RoomType': 'Типы номеров',
-        'RoomTypeComplete': 'Управление типами номеров',
+        'RoomTypeComplete': 'Типы номеров',
         'Booking': 'Бронирования',
         'RoomServices': 'Услуги номеров',
         'Coupon': 'Купоны',
@@ -1433,13 +1648,13 @@ class CustomAdminSite(admin.AdminSite):
         'Permission': 'Разрешения',
         'RoomUnavailability': 'Недоступность номеров',
         'HotelGallery': 'Галерея отелей',
-        'HotelFeatures': 'Особенности отелей',
+        'HotelFeatures': 'Удобства отелей',
         'HotelFAQs': 'FAQ отелей',
         'HotelMealPlan': 'Планы питания отелей',
         'RoomTypeDescription': 'Описания типов номеров',
         'RoomTypeGallery': 'Галерея типов номеров',
-        'RoomTypeFeatures': 'Особенности типов номеров',
-        'RoomTypeFeaturesDetailed': 'Детальные особенности типов номеров',
+        'RoomTypeFeatures': 'Удобства типов номеров',
+        'RoomTypeFeaturesDetailed': 'Текстовые удобства типов номеров',
     }
     
     # Словарь переводов для приложений
@@ -1505,21 +1720,21 @@ class CustomAdminSite(admin.AdminSite):
 # Instantiate the custom admin site
 custom_admin_site = CustomAdminSite(name='custom_admin')
 
-# Register models with the custom admin site
+# Register models with the custom admin site in the required order
 custom_admin_site.register(Hotel, HotelAdmin)
-custom_admin_site.register(Room, RoomAdmin)
-custom_admin_site.register(RoomType, PriceOnDateAdmin)
-custom_admin_site.register(Booking, BookingAdmin)
-custom_admin_site.register(RoomServices, RoomServicesAdmin)
-custom_admin_site.register(Coupon, CouponAdmin)
-custom_admin_site.register(Notification, NotificationAdmin)
-custom_admin_site.register(Bookmark, BookmarkAdmin)
-custom_admin_site.register(Review, ReviewAdmin)
 
 # Регистрируем новый полный админ для RoomType отдельно (используем прокси модель из models.py)
 from .models import RoomTypeComplete
-
 custom_admin_site.register(RoomTypeComplete, RoomTypeCompleteAdmin)
+
+# custom_admin_site.register(Room, RoomAdmin)
+custom_admin_site.register(RoomType, PriceOnDateAdmin)
+custom_admin_site.register(Booking, BookingAdmin)
+custom_admin_site.register(RoomServices, RoomServicesAdmin)
+custom_admin_site.register(Bookmark, BookmarkAdmin)
+custom_admin_site.register(Coupon, CouponAdmin)
+custom_admin_site.register(Review, ReviewAdmin)
+custom_admin_site.register(Notification, NotificationAdmin)
 
 # Register Django auth models
 from django.contrib.auth.models import Group, Permission

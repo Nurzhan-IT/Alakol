@@ -219,7 +219,12 @@ class Hotel(models.Model):
         super(Hotel, self).save(*args, **kwargs) 
 
     def thumbnail(self):
-        return mark_safe('<img src="%s" width="50" height="50" style="object-fit:cover; border-radius: 6px;" />' % (self.image.url))
+        if self.image and hasattr(self.image, 'url'):
+            try:
+                return mark_safe('<img src="%s" width="50" height="50" style="object-fit:cover; border-radius: 6px;" />' % (self.image.url))
+            except ValueError:
+                return mark_safe('<div style="width: 50px; height: 50px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 12px; color: #666;">Нет изображения</div>')
+        return mark_safe('<div style="width: 50px; height: 50px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 12px; color: #666;">Нет изображения</div>')
     
     thumbnail.short_description = 'Миниатюра'
 
@@ -268,19 +273,22 @@ class HotelGallery(models.Model):
     
     def thumbnail(self):
         """Возвращает HTML для отображения миниатюры изображения"""
-        if self.image:
-            # Экранируем название отеля для безопасности
-            hotel_name_escaped = escape(self.hotel.name) if self.hotel.name else 'Отель'
-            return mark_safe(f'''
-                <div class="hotel-gallery-thumbnail" 
-                     data-image-url="{self.image.url}" 
-                     data-hotel-name="{hotel_name_escaped}"
-                     style="cursor: pointer;">
-                    <img src="{self.image.url}" 
-                         style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; cursor: pointer; transition: transform 0.2s ease;" 
-                         title="Нажмите, чтобы открыть в модальном окне">
-                </div>
-            ''')
+        if self.image and hasattr(self.image, 'url'):
+            try:
+                # Экранируем название отеля для безопасности
+                hotel_name_escaped = escape(self.hotel.name) if self.hotel.name else 'Отель'
+                return mark_safe(f'''
+                    <div class="hotel-gallery-thumbnail" 
+                         data-image-url="{self.image.url}" 
+                         data-hotel-name="{hotel_name_escaped}"
+                         style="cursor: pointer;">
+                        <img src="{self.image.url}" 
+                             style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; cursor: pointer; transition: transform 0.2s ease;" 
+                             title="Нажмите, чтобы открыть в модальном окне">
+                    </div>
+                ''')
+            except ValueError:
+                return "Нет изображения"
         return "Нет изображения"
     thumbnail.short_description = 'Миниатюра'
 
@@ -292,7 +300,7 @@ class HotelFeatures(models.Model):
     # icon_type = models.CharField(max_length=100, null=True, blank=True, choices=ICON_TPYE)
     icon = models.CharField(max_length=100, null=True, blank=True, verbose_name='Иконка')
     name = models.CharField(max_length=35, verbose_name='Название')
-    hfid = models.CharField(max_length=20, blank=True, verbose_name='ID особенности')
+    hfid = models.CharField(max_length=20, blank=True, verbose_name='ID удобства')
 
     def save(self, *args, **kwargs):
         # Генерация уникального hfid, если оно отсутствует
@@ -413,8 +421,8 @@ class RoomTypeComplete(RoomType):
     """
     class Meta:
         proxy = True
-        verbose_name = 'Управление типом номера'
-        verbose_name_plural = 'Управление типами номеров'
+        verbose_name = 'Тип номера'
+        verbose_name_plural = 'Типы номеров'
 
 
 class RoomTypeGallery(models.Model):
@@ -437,19 +445,22 @@ class RoomTypeGallery(models.Model):
     
     def thumbnail(self):
         """Возвращает HTML для отображения миниатюры изображения"""
-        if self.image:
-            # Экранируем название типа номера для безопасности
-            room_type_name_escaped = escape(self.room_type.type) if self.room_type.type else 'Тип номера'
-            return mark_safe(f'''
-                <div class="roomtype-gallery-thumbnail" 
-                     data-image-url="{self.image.url}" 
-                     data-room-type-name="{room_type_name_escaped}"
-                     style="cursor: pointer;">
-                    <img src="{self.image.url}" 
-                         style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; cursor: pointer; transition: transform 0.2s ease;" 
-                         title="Нажмите, чтобы открыть в модальном окне">
-                </div>
-            ''')
+        if self.image and hasattr(self.image, 'url'):
+            try:
+                # Экранируем название типа номера для безопасности
+                room_type_name_escaped = escape(self.room_type.type) if self.room_type.type else 'Тип номера'
+                return mark_safe(f'''
+                    <div class="roomtype-gallery-thumbnail" 
+                         data-image-url="{self.image.url}" 
+                         data-room-type-name="{room_type_name_escaped}"
+                         style="cursor: pointer;">
+                        <img src="{self.image.url}" 
+                             style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; cursor: pointer; transition: transform 0.2s ease;" 
+                             title="Нажмите, чтобы открыть в модальном окне">
+                    </div>
+                ''')
+            except ValueError:
+                return "Нет изображения"
         return "Нет изображения"
     thumbnail.short_description = 'Миниатюра'
     
@@ -461,7 +472,7 @@ class RoomTypeFeatures(models.Model):
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_features', verbose_name='Тип номера')
     icon = models.CharField(max_length=100, null=True, blank=True, verbose_name='Иконка')
     name = models.CharField(max_length=100, verbose_name='Название')
-    hfid = models.CharField(max_length=20, blank=True, verbose_name='ID особенности')
+    hfid = models.CharField(max_length=20, blank=True, verbose_name='ID удобства')
 
     def save(self, *args, **kwargs):
         # Генерация уникального hfid, если оно отсутствует
@@ -485,7 +496,7 @@ class RoomTypeFeaturesDetailed(models.Model):
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_features_detailed', verbose_name='Тип номера')
     type_of_amenity = models.CharField(max_length=100, null=True, choices=ROOM_TYPE_FEATURES_DETAILED, verbose_name='Тип удобства')
     text = models.CharField(max_length=100, verbose_name='Текст')
-    hfid = models.CharField(max_length=20, blank=True, verbose_name='ID особенности')
+    hfid = models.CharField(max_length=20, blank=True, verbose_name='ID удобства')
 
     def save(self, *args, **kwargs):
         # Генерация уникального hfid, если оно отсутствует
@@ -535,6 +546,10 @@ class Room(models.Model):
     def room_capacity(self):
         return self.room_type.room_capacity
     
+    class Meta:
+        verbose_name = 'Номер'
+        verbose_name_plural = 'Номера'
+    
 
 
 class Booking(models.Model):
@@ -548,7 +563,7 @@ class Booking(models.Model):
     
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True, verbose_name='Отель')
     room_type = models.ForeignKey(RoomType, on_delete=models.SET_NULL, null=True, verbose_name='Тип номера')
-    room = models.ManyToManyField(Room, verbose_name='Номера')
+    room = models.TextField(null=True, blank=True, verbose_name='Номера')
     selection_data = models.JSONField(null=True, blank=True, help_text="Данные о выбранных номерах из selection_data_obj", verbose_name='Данные выбора')
     before_discount = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, verbose_name='До скидки')
     total = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, verbose_name='Итого')
@@ -595,9 +610,32 @@ class Booking(models.Model):
         return f"{self.booking_id}"
     
     def rooms(self):
-        return self.room.all().count()
+        """Возвращает количество номеров из текстового поля"""
+        if not self.room:
+            return 0
+        # Считаем количество номеров по разделителям (каждый номер на новой строке)
+        room_lines = [line.strip() for line in self.room.split('\n') if line.strip()]
+        return len(room_lines)
     
     rooms.short_description = 'Количество номеров'
+    
+    def set_rooms_from_objects(self, room_objects):
+        """
+        Преобразует список объектов Room в текстовое поле в формате:
+        'Тип номера - №номер'
+        """
+        room_texts = []
+        for room in room_objects:
+            formatted_room = f"{room.room_type.type} - №{room.room_number}"
+            room_texts.append(formatted_room)
+        
+        self.room = '\n'.join(room_texts)
+    
+    def get_rooms_text_list(self):
+        """Возвращает список номеров в текстовом формате"""
+        if not self.room:
+            return []
+        return [line.strip() for line in self.room.split('\n') if line.strip()]
     
     class Meta:
         indexes = [
