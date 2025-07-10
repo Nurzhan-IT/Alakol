@@ -56,15 +56,9 @@ def robokassa_success(request):
             logger.error("Missing InvId parameter")
             return redirect('/')
         
-        # Получаем бронирование вместе со связанными данными и номерами за один запрос
+        # Получаем бронирование вместе со связанными данными за один запрос
         booking = get_object_or_404(
-            Booking.objects.select_related('hotel', 'user', 'room_type')
-                           .prefetch_related(
-                               Prefetch(
-                                   'room',
-                                   queryset=Room.objects.select_related('room_type')
-                               )
-                           ),
+            Booking.objects.select_related('hotel', 'user', 'room_type'),
             id=order_id
         )
         
@@ -148,11 +142,6 @@ def get_active_bookings_for_hotel(hotel_slug, start_date=None, end_date=None):
     # с предварительной загрузкой связанных данных
     bookings = Booking.objects.select_related(
         'hotel', 'user', 'room_type'
-    ).prefetch_related(
-        Prefetch(
-            'room',
-            queryset=Room.objects.select_related('room_type')
-        )
     ).filter(
         hotel=hotel,
         is_active=True,

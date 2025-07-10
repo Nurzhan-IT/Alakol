@@ -77,20 +77,53 @@ class SearchListView(ListView):
         if not (check_in_date_obj and check_out_date_obj):
             return []
         
-        # Получаем ID всех забронированных номеров на указанные даты
-        booked_room_ids = list(Booking.objects.filter(
-            Q(check_in_date__lt=check_out_date_obj, check_out_date__gt=check_in_date_obj),
-            is_active=True,
-            payment_status__in=["paid", "processing", "pending"]
-        ).values_list('room__id', flat=True).distinct())
-        
         # Получаем ID номеров, которые отмечены как недоступные в RoomUnavailability
         unavailable_room_ids = list(RoomUnavailability.objects.filter(
             Q(start_date__lt=check_out_date_obj, end_date__gt=check_in_date_obj)
         ).values_list('room__id', flat=True).distinct())
         
+        # Получаем ID номеров из активных бронирований
+        booked_room_ids = []
+        active_bookings = Booking.objects.filter(
+            Q(check_in_date__lt=check_out_date_obj, check_out_date__gt=check_in_date_obj),
+            is_active=True,
+            payment_status__in=["paid", "processing", "pending"]
+        ).values_list('selection_data', 'room', flat=False)
+        
+        # Извлекаем ID номеров из JSON данных о выборе или из текстового поля
+        for selection_data, room_text in active_bookings:
+            # Сначала пытаемся извлечь из selection_data
+            if selection_data and isinstance(selection_data, dict):
+                # Проверяем различные возможные структуры данных
+                if 'rooms' in selection_data:
+                    for room_data in selection_data['rooms']:
+                        if isinstance(room_data, dict) and 'id' in room_data:
+                            booked_room_ids.append(room_data['id'])
+                        elif isinstance(room_data, (int, str)) and str(room_data).isdigit():
+                            booked_room_ids.append(int(room_data))
+                elif 'room_ids' in selection_data:
+                    if isinstance(selection_data['room_ids'], list):
+                        booked_room_ids.extend(selection_data['room_ids'])
+            elif room_text:
+                # Если нет selection_data, пытаемся извлечь ID из текстового поля
+                # Ищем все номера в том же отеле и типе номера, которые соответствуют описанию в тексте
+                from hotel.models import Room
+                
+                # Парсим текст номеров для извлечения номеров комнат
+                room_lines = [line.strip() for line in room_text.split('\n') if line.strip()]
+                for room_line in room_lines:
+                    # Ищем номер комнаты в строке (например, "Стандарт - №101")
+                    if '№' in room_line:
+                        room_number = room_line.split('№')[-1].strip()
+                        # Находим номер с таким номером комнаты
+                        matching_rooms = Room.objects.filter(room_number=room_number)
+                        for room in matching_rooms:
+                            booked_room_ids.append(room.id)
+        
         # Объединяем оба списка ID недоступных номеров и удаляем дубликаты
-        return list(set(booked_room_ids + unavailable_room_ids))
+        all_unavailable_ids = list(set(unavailable_room_ids + booked_room_ids))
+        # Фильтруем None значения и конвертируем в int
+        return [int(room_id) for room_id in all_unavailable_ids if room_id is not None and str(room_id).isdigit()]
     
     def get_queryset(self):
         """Получение результатов поиска с кэшированием."""
