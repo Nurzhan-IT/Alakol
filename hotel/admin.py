@@ -1379,10 +1379,19 @@ class CheckInDateFilter(admin.SimpleListFilter):
 class BookingAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
     # inlines = [ActivityLog_Tab, StaffOnDuty_Tab]
     list_filter = [HotelFilter, RoomTypeFilter, 'is_active', 'checked_in', 'checked_out', CheckInDateFilter, 'payment_status']
-    list_display = ['booking_id', 'user', 'hotel', 'room_type', 'rooms', 'total', 'prepayment', 'payment_for_hotel', 'payment_status', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'date']
+    list_display = ['booking_id', 'user', 'hotel', 'get_room_type', 'rooms', 'total', 'prepayment', 'payment_for_hotel', 'payment_status', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'date']
     search_fields = ['booking_id', 'robokassa_inv_id']
     search_help_text = 'Поиск по ID бронирования, ID инвойса Robokassa, Сумме'
     list_per_page = 100
+
+    def get_room_type(self, obj):
+        """Отображает только название типа номера"""
+        if obj.room_type:
+            return obj.room_type.type
+        return None
+    
+    get_room_type.short_description = 'Тип номера'
+    get_room_type.admin_order_field = 'room_type__type'
 
     def get_search_fields(self, request):
         if is_manager(request.user):
@@ -1392,7 +1401,7 @@ class BookingAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
 
     def get_list_display(self, request):
         if is_manager(request.user):
-            return ['booking_id', 'hotel', 'room_type', 'rooms', 'total', 'payment_for_hotel', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'date']
+            return ['booking_id', 'hotel', 'get_room_type', 'rooms', 'total', 'payment_for_hotel', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'date']
         return self.list_display
 
     def get_list_filter(self, request):
