@@ -530,6 +530,7 @@ class SearchListViewTest(TestCase):
             is_active=True
         )
         booking.set_rooms_from_objects([self.room2])
+        booking.save()
         
         request = self.factory.get('/search/', {
             'check_in_date': check_in.strftime('%Y-%m-%d'),
