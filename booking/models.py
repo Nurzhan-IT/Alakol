@@ -23,8 +23,10 @@ class RoomUnavailability(models.Model):
             raise ValidationError('Дата окончания не может быть раньше даты начала')
 
         # Проверяем пересечение с существующими бронированиями
+        # Поскольку поле room в Booking теперь TextField, проверяем по отелю и типу номера
         overlapping_bookings = Booking.objects.filter(
-            room=self.room,
+            hotel=self.room.hotel,
+            room_type=self.room.room_type,
             is_active=True,
             check_in_date__lt=self.end_date,
             check_out_date__gt=self.start_date,
@@ -33,9 +35,37 @@ class RoomUnavailability(models.Model):
             checked_out=True  # Исключаем уже выписанных гостей
         )
         
-        if overlapping_bookings.exists():
+        # Дополнительно проверяем selection_data для более точного определения конкретного номера
+        conflicting_bookings = []
+        for booking in overlapping_bookings:
+            # Проверяем, упоминается ли наш номер в selection_data
+            if booking.selection_data and isinstance(booking.selection_data, dict):
+                room_mentioned = False
+                # Проверяем различные возможные структуры данных
+                if 'rooms' in booking.selection_data:
+                    for room_data in booking.selection_data['rooms']:
+                        if isinstance(room_data, dict) and 'id' in room_data:
+                            if int(room_data['id']) == self.room.id:
+                                room_mentioned = True
+                                break
+                        elif isinstance(room_data, (int, str)) and str(room_data).isdigit():
+                            if int(room_data) == self.room.id:
+                                room_mentioned = True
+                                break
+                elif 'room_ids' in booking.selection_data:
+                    if isinstance(booking.selection_data['room_ids'], list):
+                        if self.room.id in booking.selection_data['room_ids']:
+                            room_mentioned = True
+                
+                if room_mentioned:
+                    conflicting_bookings.append(booking)
+            else:
+                # Если нет selection_data, считаем что есть конфликт (консервативный подход)
+                conflicting_bookings.append(booking)
+        
+        if conflicting_bookings:
             booking_dates = []
-            for booking in overlapping_bookings:
+            for booking in conflicting_bookings:
                 booking_dates.append(
                     f"Booking ID - {booking.booking_id}: {booking.check_in_date} - {booking.check_out_date};"
                 )

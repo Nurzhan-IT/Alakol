@@ -20,8 +20,6 @@ def dashboard(request):
         'hotel', 
         'user', 
         'room_type'
-    ).prefetch_related(
-        Prefetch('room', queryset=Room.objects.select_related('room_type'))
     )
     
     total_spent = Booking.objects.filter(
@@ -43,8 +41,6 @@ def booking_detail(request, booking_id):
             'hotel', 
             'user', 
             'room_type'
-        ).prefetch_related(
-            Prefetch('room', queryset=Room.objects.select_related('room_type'))
         ),
         booking_id=booking_id
     )
@@ -63,8 +59,6 @@ def bookings(request):
         'hotel', 
         'user', 
         'room_type'
-    ).prefetch_related(
-        Prefetch('room', queryset=Room.objects.select_related('room_type'))
     )
 
     context = {
@@ -124,8 +118,6 @@ def wallet(request):
         'hotel', 
         'user', 
         'room_type'
-    ).prefetch_related(
-        Prefetch('room', queryset=Room.objects.select_related('room_type'))
     )
     
     total_spent = Booking.objects.filter(
