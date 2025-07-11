@@ -425,6 +425,7 @@ JAZZMIN_SETTINGS = {
         "hotel.Notification":"fas fa-bell",
     },
 
+    "custom_css": "admin/css/custom_admin.css",
     "show_ui_builder" : False  # Disable in production
 }
 
