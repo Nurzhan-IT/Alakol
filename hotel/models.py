@@ -340,6 +340,7 @@ class HotelFAQs(models.Model):
         return str(self.hotel)
     
     class Meta:
+        verbose_name = "Вопрос/Ответ"
         verbose_name_plural = "Вопрос/Ответ"
 
 class HotelMealPlan(models.Model):

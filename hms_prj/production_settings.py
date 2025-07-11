@@ -325,11 +325,11 @@ CACHE_TTL = {
     'hotels_list': 1800,         # 30 минут - список отелей (увеличено для продакшена)
     'hotel_detail': 3600,        # 1 час - детали отеля
     'search_results': 600,       # 10 минут - результаты поиска
-    'room_availability': 30,    # 30 секунд - доступность номеров
+    #'room_availability': 0,    # ОТКЛЮЧЕНО - доступность номеров (без кеширования)
     'hotel_reviews': 7200,       # 2 часа - отзывы отеля
     'features_and_amenities': 14400,  # 4 часа - удобства и особенности
     'static_content': 86400,     # 24 часа - статический контент
-    'room_unavailability': 30,  # 30 секунд - недоступность номеров
+    #'room_unavailability': 0,  # ОТКЛЮЧЕНО - недоступность номеров (без кеширования)
 }
 
 # ==============================================
@@ -393,11 +393,11 @@ JAZZMIN_SETTINGS = {
 
     "order_with_respect_to": [
         "hotel",
+        "booking",
         "hotel.Hotel",
         "hotel.RoomTypeComplete",
         "hotel.Room",
         "hotel.RoomType",
-        "hotel.Booking",
         "hotel.RoomServices",
         "hotel.Bookmark",
         "hotel.Coupon",
@@ -425,6 +425,7 @@ JAZZMIN_SETTINGS = {
         "hotel.Notification":"fas fa-bell",
     },
 
+    "custom_css": "admin/css/custom_admin.css",
     "show_ui_builder" : False  # Disable in production
 }
 
@@ -490,6 +491,7 @@ LOGGING = {
             'maxBytes': 1024*1024*15,  # 15MB
             'backupCount': 10,
             'formatter': 'verbose',
+            'encoding': 'utf-8',
         },
         'error_file': {
             'level': 'ERROR',
@@ -498,6 +500,7 @@ LOGGING = {
             'maxBytes': 1024*1024*5,  # 5MB
             'backupCount': 5,
             'formatter': 'verbose',
+            'encoding': 'utf-8',
         },
     },
     'loggers': {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-06 10:37+0500\n"
+"POT-Creation-Date: 2025-07-11 14:51+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,11 +47,11 @@ msgstr ""
 "Вы можете бронировать номера только из одного отеля. Хотите очистить данные "
 "о уже выбранных номерах?"
 
-#: .\hotel\admin.py:563
+#: .\hotel\admin.py:1351
 msgid "Check-In Date"
 msgstr "Дата заезда"
 
-#: .\hotel\decorators.py:9 .\hotel\views.py:482
+#: .\hotel\decorators.py:9 .\hotel\views.py:512
 msgid "You don't have any room selections yet!"
 msgstr "У вас еще нет выбранных номеров!"
 
@@ -89,86 +89,86 @@ msgid "Please enter your booking data to check availability."
 msgstr ""
 "Пожалуйста, введите данные для бронирования, чтобы проверить наличие мест."
 
-#: .\hotel\views.py:363 .\hotel\views.py:957 .\hotel\views.py:1068
+#: .\hotel\views.py:363 .\hotel\views.py:987 .\hotel\views.py:1103
 msgid "Hotel is not available for booking on selected dates."
 msgstr "Отель недоступен для бронирования в выбранные даты."
 
-#: .\hotel\views.py:712
+#: .\hotel\views.py:742
 msgid "You don't have any room selections or missing user information!"
 msgstr ""
 "У вас нет выбранных комнат или отсутствуют необходимые данные бронировния!"
 
-#: .\hotel\views.py:775
+#: .\hotel\views.py:805
 #, python-format
 msgid "Missing session data: %(keys)s"
 msgstr "Отсутствуют данные в сессии: %(keys)s"
 
-#: .\hotel\views.py:782
+#: .\hotel\views.py:812
 msgid "No selected rooms for booking"
 msgstr "Нет выбранных номеров для бронирования"
 
-#: .\hotel\views.py:797
+#: .\hotel\views.py:827
 #, python-format
 msgid "Missing user data: %(fields)s"
 msgstr "Отсутствуют данные пользователя: %(fields)s"
 
-#: .\hotel\views.py:812
+#: .\hotel\views.py:842
 #, python-format
 msgid "Missing booking data: %(fields)s"
 msgstr "Отсутствуют данные бронирования: %(fields)s"
 
-#: .\hotel\views.py:824
+#: .\hotel\views.py:854
 msgid "Check-in date must be earlier than check-out date"
 msgstr "Дата заезда должна быть раньше даты выезда"
 
-#: .\hotel\views.py:833
+#: .\hotel\views.py:863
 msgid "Check-in date cannot be in the past"
 msgstr "Дата заезда не может быть в прошлом"
 
-#: .\hotel\views.py:839
+#: .\hotel\views.py:869
 #, python-format
 msgid "Invalid date format: %(error)s"
 msgstr "Некорректный формат дат: %(error)s"
 
-#: .\hotel\views.py:849
+#: .\hotel\views.py:879
 #, python-format
 msgid "Invalid room data: %(room_id)s"
 msgstr "Некорректные данные номера: %(room_id)s"
 
-#: .\hotel\views.py:857
+#: .\hotel\views.py:887
 #, python-format
 msgid "Hotel with ID %(hotel_id)s not found or not active"
 msgstr "Отель с ID %(hotel_id)s не найден или не активен"
 
-#: .\hotel\views.py:865
+#: .\hotel\views.py:895
 #, python-format
 msgid "Room with ID %(room_id)s not found"
 msgstr "Номер с ID %(room_id)s не найден"
 
-#: .\hotel\views.py:873
+#: .\hotel\views.py:903
 #, python-format
 msgid "Room type with ID %(room_type_id)s not found"
 msgstr "Тип номера с ID %(room_type_id)s не найден"
 
-#: .\hotel\views.py:879
+#: .\hotel\views.py:909
 #, python-format
 msgid "Error in room data: %(error)s"
 msgstr "Ошибка в данных номеров: %(error)s"
 
-#: .\hotel\views.py:885
+#: .\hotel\views.py:915
 msgid "Session data is valid"
 msgstr "Данные сессии корректны"
 
-#: .\hotel\views.py:892
+#: .\hotel\views.py:922
 #, python-format
 msgid "Internal validation error: %(error)s"
 msgstr "Внутренняя ошибка проверки: %(error)s"
 
-#: .\hotel\views.py:901
+#: .\hotel\views.py:931
 msgid "Missing booking information!"
 msgstr "Отсутствует информация о бронировании!"
 
-#: .\hotel\views.py:1128
+#: .\hotel\views.py:1163
 #, python-format
 msgid ""
 "Room %(room_number)s is not available for booking and has been removed from "
@@ -176,7 +176,7 @@ msgid ""
 msgstr ""
 "Номер %(room_number)s недоступен для бронирования и был удален из списка."
 
-#: .\hotel\views.py:1130
+#: .\hotel\views.py:1165
 #, python-format
 msgid ""
 "Room %(room_number)s is marked as unavailable for selected dates and has "
@@ -185,7 +185,7 @@ msgstr ""
 "Номер %(room_number)s помечен как недоступный для выбранных дат и удален из "
 "списка."
 
-#: .\hotel\views.py:1132
+#: .\hotel\views.py:1167
 #, python-format
 msgid ""
 "Room %(room_number)s is already booked for selected dates and has been "
@@ -193,11 +193,11 @@ msgid ""
 msgstr ""
 "Номер %(room_number)s уже забронирован на выбранные даты и удален из списка."
 
-#: .\hotel\views.py:1137
+#: .\hotel\views.py:1172
 msgid "All selected rooms are not available for booking."
 msgstr "Все выбранные номера недоступны для бронирования."
 
-#: .\hotel\views.py:1141
+#: .\hotel\views.py:1176
 msgid ""
 "Some selected rooms are not available. Please check the list and continue "
 "booking."
@@ -205,21 +205,21 @@ msgstr ""
 "Некоторые выбранные номера недоступны. Пожалуйста, проверьте список и "
 "продолжите бронирование."
 
-#: .\hotel\views.py:1150
+#: .\hotel\views.py:1185
 msgid "Failed to create booking!"
 msgstr "Не удалось создать бронирование!"
 
-#: .\hotel\views.py:1233
+#: .\hotel\views.py:1268
 #, python-format
 msgid "Error creating payment: %(error)s"
 msgstr "Ошибка при создании платежа: %(error)s"
 
-#: .\hotel\views.py:1240
+#: .\hotel\views.py:1275
 #, python-format
 msgid "Error: %(error)s"
 msgstr "Ошибка: %(error)s"
 
-#: .\hotel\views.py:1385
+#: .\hotel\views.py:1420
 msgid ""
 "Error: Payment not confirmed by the system. If you have made a payment, "
 "please contact support."
@@ -227,36 +227,36 @@ msgstr ""
 "Ошибка: Платеж не подтвержден системой. Если вы произвели платеж, "
 "пожалуйста, свяжитесь с поддержкой."
 
-#: .\hotel\views.py:1393
+#: .\hotel\views.py:1428
 msgid "Your booking was successfully paid!"
 msgstr "Ваше бронирование успешно оплачено!"
 
-#: .\hotel\views.py:1413
+#: .\hotel\views.py:1448
 msgid "Error: Payment not confirmed by the system."
 msgstr "Ошибка: Платеж не подтвержден системой."
 
-#: .\hotel\views.py:1418
+#: .\hotel\views.py:1453
 #, python-format
 msgid "An error occurred: %(error)s"
 msgstr "Произошла ошибка: %(error)s"
 
-#: .\hotel\views.py:1471
+#: .\hotel\views.py:1506
 msgid "Error: Insufficient data to verify payment"
 msgstr "Ошибка: Недостаточно данных для проверки платежа"
 
-#: .\hotel\views.py:1479
+#: .\hotel\views.py:1514
 msgid "Error: Payment verification failed"
 msgstr "Ошибка: Проверка платежа не удалась"
 
-#: .\hotel\views.py:1510
+#: .\hotel\views.py:1545
 msgid "Error processing payment"
 msgstr "Ошибка обработки платежа"
 
-#: .\hotel\views.py:1572
+#: .\hotel\views.py:1607
 msgid "Access to receipt is only available for paid bookings."
 msgstr "Доступ к квитанции предоставляется только для оплаченных бронирований."
 
-#: .\hotel\views.py:1603
+#: .\hotel\views.py:1635
 #, python-format
 msgid "An error occurred while retrieving the receipt: %(error)s"
 msgstr "Произошла ошибка при получении квитанции: %(error)s"
@@ -530,8 +530,7 @@ msgstr "Вместимость Номера"
 #: .\templates\hotel\async\selected_rooms.html:171
 #: .\templates\hotel\async\selected_rooms.html:178
 #: .\templates\hotel\checkout.html:42 .\templates\hotel\checkout.html:99
-#: .\templates\hotel\checkout.html:105 .\templates\hotel\hotel_detail.html:358
-#: .\templates\hotel\payment_failed.html:38
+#: .\templates\hotel\checkout.html:105 .\templates\hotel\payment_failed.html:38
 #: .\templates\hotel\payment_method_selection.html:53
 #: .\templates\hotel\payment_method_selection.html:57
 #: .\templates\hotel\payment_method_selection.html:158
@@ -825,6 +824,16 @@ msgstr "Типы номеров"
 msgid "Photo"
 msgstr "Фото"
 
+#: .\templates\hotel\hotel_detail.html:358
+msgctxt "hotel_detail_room_type"
+msgid "From"
+msgstr "От"
+
+#: .\templates\hotel\hotel_detail.html:358
+msgctxt "hotel_detail_room_type"
+msgid "Tenge"
+msgstr "Тенге"
+
 #: .\templates\hotel\hotel_detail.html:369
 msgid "Amenities"
 msgstr "Удобства"
@@ -897,25 +906,29 @@ msgstr "Часто задаваемые вопросы"
 msgid "Not Rated Yet"
 msgstr "Еще не оценен"
 
-#: .\templates\hotel\hotel_detail.html:583
+#: .\templates\hotel\hotel_detail.html:578
+msgid "No description available"
+msgstr "Описание недоступно."
+
+#: .\templates\hotel\hotel_detail.html:582
 msgid "Room size"
 msgstr "Площадь номера"
 
-#: .\templates\hotel\hotel_detail.html:601
+#: .\templates\hotel\hotel_detail.html:600
 msgid "Private Bathroom"
 msgstr "В частном санузле"
 
 # Оставил специально
-#: .\templates\hotel\hotel_detail.html:603
+#: .\templates\hotel\hotel_detail.html:602
 msgctxt "room type features"
 msgid "View"
 msgstr "Вид"
 
-#: .\templates\hotel\hotel_detail.html:605
+#: .\templates\hotel\hotel_detail.html:604
 msgid "Services and Amenities"
 msgstr "Услуги и удобства"
 
-#: .\templates\hotel\hotel_detail.html:622
+#: .\templates\hotel\hotel_detail.html:621
 msgid "Close"
 msgstr "Закрыть"
 
@@ -1163,7 +1176,7 @@ msgid "I accept the terms of the"
 msgstr "Я принимаю условия"
 
 #: .\templates\hotel\payment_method_selection.html:72
-#: .\templates\partials\base.html:335
+#: .\templates\partials\base.html:334
 #: .\templates\partials\legal_consent_component.html:73
 #: .\templates\partials\legal_consent_component.html:161
 msgid "Public Offer"
@@ -1457,7 +1470,7 @@ msgstr "Повторите пароль:"
 msgid "I agree to"
 msgstr "Я соглашаюсь с"
 
-#: .\templates\partials\base.html:260 .\templates\partials\base.html:329
+#: .\templates\partials\base.html:260 .\templates\partials\base.html:328
 #: .\templates\partials\legal_consent_component.html:18
 #: .\templates\partials\legal_consent_component.html:119
 #: .\templates\partials\legal_consent_component.html:155
@@ -1465,7 +1478,7 @@ msgstr "Я соглашаюсь с"
 msgid "Terms of Use"
 msgstr "Пользовательское соглашение"
 
-#: .\templates\partials\base.html:271 .\templates\partials\base.html:332
+#: .\templates\partials\base.html:271 .\templates\partials\base.html:331
 #: .\templates\partials\legal_consent_component.html:30
 #: .\templates\partials\legal_consent_component.html:130
 #: .\templates\partials\legal_consent_component.html:158
@@ -1488,42 +1501,38 @@ msgid "Contacts"
 msgstr "Контакты"
 
 #: .\templates\partials\base.html:313
-msgid "Phone:"
-msgstr "Телефон"
-
-#: .\templates\partials\base.html:314
 msgid "E-mail:"
 msgstr "Электронная почта"
 
-#: .\templates\partials\base.html:315
+#: .\templates\partials\base.html:314
 msgid "Address:"
 msgstr "Адрес"
 
-#: .\templates\partials\base.html:316
+#: .\templates\partials\base.html:315
 msgid "BIN/IIN:"
 msgstr "БИН/ИИН"
 
-#: .\templates\partials\base.html:325
+#: .\templates\partials\base.html:324
 #: .\templates\partials\legal_consent_component.html:151
 msgid "Legal Information"
 msgstr "Информация соглашения"
 
-#: .\templates\partials\base.html:338
+#: .\templates\partials\base.html:337
 #: .\templates\partials\legal_consent_component.html:164
 msgid "Booking Rules"
 msgstr "Правила бронирования"
 
-#: .\templates\partials\base.html:341
+#: .\templates\partials\base.html:340
 #: .\templates\partials\legal_consent_component.html:167
 msgid "Data Processing Consent"
 msgstr "Согласие на обработку данных"
 
-#: .\templates\partials\base.html:344
+#: .\templates\partials\base.html:343
 #: .\templates\partials\legal_consent_component.html:170
 msgid "Payment Rules"
 msgstr "Правила оплаты"
 
-#: .\templates\partials\base.html:493
+#: .\templates\partials\base.html:492
 msgid ""
 "By continuing to use this site, you acknowledge that you consent to the "
 "collection and use of data stored in cookies. This helps us to improve the "
@@ -1533,15 +1542,15 @@ msgstr ""
 "использование данных, хранящихся в файлах cookie. Это помогает нам улучшать "
 "сайт и предоставлять вам более качественные услуги."
 
-#: .\templates\partials\base.html:494
+#: .\templates\partials\base.html:493
 msgid "Read more about our privacy policy"
 msgstr "Узнайте больше о политике конфиденциальности"
 
-#: .\templates\partials\base.html:497
+#: .\templates\partials\base.html:496
 msgid "Reject"
 msgstr "Отклонить"
 
-#: .\templates\partials\base.html:498
+#: .\templates\partials\base.html:497
 msgid "Accept"
 msgstr "Принять"
 
@@ -2036,31 +2045,31 @@ msgstr "Привет! С возвращением"
 msgid "Hi there! Create a free account today."
 msgstr "Привет! Создайте бесплатную учетную запись сегодня."
 
-#: .\user_dashboard\views.py:116
+#: .\user_dashboard\views.py:110
 msgid "Marked As Seen"
 msgstr "Отмечено как прочитанное"
 
-#: .\user_dashboard\views.py:170
+#: .\user_dashboard\views.py:162
 msgid "Bookmark Deleted"
 msgstr "Закладка удалена"
 
-#: .\user_dashboard\views.py:173
+#: .\user_dashboard\views.py:165
 msgid "Hotel Bookmarked"
 msgstr "Отель добавлен в закладки"
 
-#: .\user_dashboard\views.py:175
+#: .\user_dashboard\views.py:167
 msgid "Login To Bookmark Hotel"
 msgstr "Войдите, чтобы добавить отель в закладки"
 
-#: .\user_dashboard\views.py:188
+#: .\user_dashboard\views.py:180
 msgid "Profile Updated Successfully"
 msgstr "Профиль успешно обновлен"
 
-#: .\user_dashboard\views.py:216
+#: .\user_dashboard\views.py:208
 msgid "Review Already Exists"
 msgstr "Отзыв уже существует"
 
-#: .\user_dashboard\views.py:224
+#: .\user_dashboard\views.py:216
 msgid "Review Submitted, Thank You"
 msgstr "Отзыв отправлен, спасибо"
 
@@ -2097,6 +2106,9 @@ msgstr "Произошла ошибка во время входа в систе
 #: .\userauths\views.py:117
 msgid "You have been logged out"
 msgstr "Ты вышел из системы"
+
+#~ msgid "Phone:"
+#~ msgstr "Телефон"
 
 #~ msgid "Book Unique Experiences"
 #~ msgstr "Закажите уникальные впечатления"
@@ -2779,9 +2791,6 @@ msgstr "Ты вышел из системы"
 
 #~ msgid "Service"
 #~ msgstr "Услуга"
-
-#~ msgid "No description available."
-#~ msgstr "Описание недоступно."
 
 #~ msgid "Contact Info"
 #~ msgstr "Контактная информация"

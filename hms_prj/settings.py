@@ -259,7 +259,7 @@ JAZZMIN_SETTINGS = {
     "language_chooser": False,
     
     "topmenu_links": [
-        {"name": "Главная",  "url": "admin:index", "permissions": ["auth.view_user"]},
+        #{"name": "Главная",  "url": "admin:index", "permissions": ["auth.view_user"]},
         # {"name": "Company", "url": "/admin/addons/company/"},
         # {"name": "Users", "url": "/admin/userauths/user/"},
 
@@ -268,11 +268,11 @@ JAZZMIN_SETTINGS = {
 
     "order_with_respect_to": [
         "hotel",
+        "booking",
         "hotel.Hotel",
         "hotel.RoomTypeComplete",
         "hotel.Room",
         "hotel.RoomType",
-        "hotel.Booking",
         "hotel.RoomServices",
         "hotel.Bookmark",
         "hotel.Coupon",
@@ -303,6 +303,7 @@ JAZZMIN_SETTINGS = {
         "hotel.Notification":"fas fa-bell",
     },
 
+    "custom_css": "admin/css/custom_admin.css",
     "show_ui_builder" : True
 }
 
@@ -406,12 +407,12 @@ CACHE_TTL = {
     'hotels_list': 900,         # 15 минут - список отелей
     'hotel_detail': 1800,       # 30 минут - детали отеля
     'search_results': 300,      # 5 минут - результаты поиска
-    'room_availability': 0,    # 1 минута - доступность номеров (сокращено для реального времени)
+    #'room_availability': 0,    # ОТКЛЮЧЕНО - доступность номеров (без кеширования)
     'hotel_reviews': 3600,      # 1 час - отзывы отеля
     'features_and_amenities': 7200,  # 2 часа - удобства и особенности
     'static_content': 86400,    # 24 часа - статический контент
     # Настройки для booking приложения
-    'room_unavailability': 0,      # 1 минута - недоступность номеров (сокращено для реального времени)
+    #'room_unavailability': 0,      # ОТКЛЮЧЕНО - недоступность номеров (без кеширования)
     
     # ОТКЛЮЧЕННЫЕ ТИПЫ КЭШИРОВАНИЯ для данных реального времени:
     # 'booking_data': 0,              # ОТКЛЮЧЕНО - данные бронирования должны обновляться мгновенно
@@ -446,6 +447,7 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': 'debug.log',
             'formatter': 'verbose',
+            'encoding': 'utf-8',
         },
         'console': {
             'level': 'DEBUG',
