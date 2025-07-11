@@ -1,1 +1,9 @@
+/* Скрытие логотипа в сайдбаре админки */
+#jazzy-logo {
+    display: none !important;
+}
 
+/* Альтернативный способ скрытия через класс brand-link в сайдбаре */
+.main-sidebar .brand-link {
+    display: none !important;
+}

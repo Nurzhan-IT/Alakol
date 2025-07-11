@@ -259,7 +259,7 @@ JAZZMIN_SETTINGS = {
     "language_chooser": False,
     
     "topmenu_links": [
-        {"name": "Главная",  "url": "admin:index", "permissions": ["auth.view_user"]},
+        #{"name": "Главная",  "url": "admin:index", "permissions": ["auth.view_user"]},
         # {"name": "Company", "url": "/admin/addons/company/"},
         # {"name": "Users", "url": "/admin/userauths/user/"},
 
@@ -303,6 +303,7 @@ JAZZMIN_SETTINGS = {
         "hotel.Notification":"fas fa-bell",
     },
 
+    "custom_css": "admin/css/custom_admin.css",
     "show_ui_builder" : True
 }
 
