@@ -268,11 +268,11 @@ JAZZMIN_SETTINGS = {
 
     "order_with_respect_to": [
         "hotel",
+        "booking",
         "hotel.Hotel",
         "hotel.RoomTypeComplete",
         "hotel.Room",
         "hotel.RoomType",
-        "hotel.Booking",
         "hotel.RoomServices",
         "hotel.Bookmark",
         "hotel.Coupon",
