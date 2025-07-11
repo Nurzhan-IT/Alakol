@@ -353,7 +353,7 @@
                                 </div>
                                 <button type="button" class="hrm-photo-btn" data-room-id="{{ r.id }}">{% trans "Photo" %}</button>
                                 <div class="hrm-room-actions">
-                                    <span>{% trans "From" %}  {{ r.price|price_format }} {% trans "Tenge" %}</span>
+                                    <span>{% trans "From" context 'hotel_detail_room_type' %}  {{ r.price|price_format }} {% trans "Tenge" context 'hotel_detail_room_type' %}</span>
                                 </div>
                             </li>
                             {% endfor %}

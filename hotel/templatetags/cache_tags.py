@@ -170,13 +170,8 @@ def room_price_for_date(room_type, date_str):
 @register.inclusion_tag('hotel/templatetags/cached_room_availability.html')
 def cached_room_availability(hotel_id, room_type_id, checkin_date, checkout_date):
     """
-    Показывает кэшированную информацию о доступности номеров.
+    Показывает информацию о доступности номеров в реальном времени.
     """
-    cache_key = CacheKeyGenerator.room_availability(
-        hotel_id, 
-        str(checkin_date), 
-        str(checkout_date)
-    )
     
     def get_availability():
         from hotel.models import Room
@@ -243,11 +238,8 @@ def cached_room_availability(hotel_id, room_type_id, checkin_date, checkout_date
             'unavailable_rooms': len(unavailable_rooms)
         }
     
-    availability_data = CacheHelper.get_or_set_complex(
-        cache_key,
-        get_availability,
-        timeout=settings.CACHE_TTL['room_availability']
-    )
+    # Не используем кэширование для доступности номеров (данные в реальном времени)
+    availability_data = get_availability()
     
     return {
         'hotel_id': hotel_id,

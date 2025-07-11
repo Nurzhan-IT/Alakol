@@ -13,66 +13,43 @@ class BookingCacheHelper:
     @staticmethod
     def cache_room_unavailability(room_id: int, start_date: str, end_date: str, 
                                  unavailability_periods: List[Dict]) -> None:
-        """Кэширует периоды недоступности номера."""
-        cache_key = CacheKeyGenerator.room_unavailability(
-            room_id, f"{start_date}_{end_date}"
-        )
-        timeout = settings.CACHE_TTL.get('room_unavailability', 300)
-        cache.set(cache_key, unavailability_periods, timeout)
-        logger.debug(f"Кэшированы периоды недоступности номера {room_id}: {cache_key}")
+        """Кэширование периодов недоступности номера отключено (данные реального времени)."""
+        logger.debug(f"Кэширование недоступности номера {room_id} отключено для данных реального времени")
+        pass
     
     @staticmethod
     def get_cached_room_unavailability(room_id: int, start_date: str, 
                                      end_date: str) -> List[Dict]:
-        """Получает кэшированные периоды недоступности номера."""
-        cache_key = CacheKeyGenerator.room_unavailability(
-            room_id, f"{start_date}_{end_date}"
-        )
-        cached_data = cache.get(cache_key)
-        if cached_data is not None:
-            logger.debug(f"Найдены кэшированные периоды недоступности: {cache_key}")
-        return cached_data
+        """Получение кэшированных периодов недоступности номера отключено (данные реального времени)."""
+        logger.debug(f"Получение кэшированных данных недоступности номера {room_id} отключено")
+        return None
     
     @staticmethod
     def cache_booking_availability_check(hotel_id: int, room_type_id: int, 
                                        checkin: str, checkout: str, 
                                        availability_data: Dict) -> None:
-        """Кэширует результат проверки доступности номеров."""
-        cache_key = CacheKeyGenerator.booking_availability_check(
-            hotel_id, room_type_id, checkin, checkout
-        )
-        timeout = settings.CACHE_TTL.get('booking_availability_check', 120)
-        cache.set(cache_key, availability_data, timeout)
-        logger.debug(f"Кэширован результат проверки доступности: {cache_key}")
+        """Кэширование результата проверки доступности номеров отключено (данные реального времени)."""
+        logger.debug(f"Кэширование проверки доступности для отеля {hotel_id} отключено для данных реального времени")
+        pass
     
     @staticmethod
     def get_cached_booking_availability_check(hotel_id: int, room_type_id: int, 
                                             checkin: str, checkout: str) -> Dict:
-        """Получает кэшированный результат проверки доступности."""
-        cache_key = CacheKeyGenerator.booking_availability_check(
-            hotel_id, room_type_id, checkin, checkout
-        )
-        cached_data = cache.get(cache_key)
-        if cached_data is not None:
-            logger.debug(f"Найден кэшированный результат проверки доступности: {cache_key}")
-        return cached_data
+        """Получение кэшированного результата проверки доступности отключено (данные реального времени)."""
+        logger.debug(f"Получение кэшированных данных доступности для отеля {hotel_id} отключено")
+        return None
     
     @staticmethod
     def cache_booking_session_data(session_key: str, data: Dict) -> None:
-        """Кэширует данные сессии бронирования."""
-        cache_key = CacheKeyGenerator.booking_session_data(session_key)
-        timeout = settings.CACHE_TTL.get('booking_session_data', 1800)
-        cache.set(cache_key, data, timeout)
-        logger.debug(f"Кэшированы данные сессии бронирования: {cache_key}")
+        """Кэширование данных сессии бронирования отключено (данные реального времени)."""
+        logger.debug(f"Кэширование данных сессии бронирования {session_key} отключено для данных реального времени")
+        pass
     
     @staticmethod
     def get_cached_booking_session_data(session_key: str) -> Dict:
-        """Получает кэшированные данные сессии бронирования."""
-        cache_key = CacheKeyGenerator.booking_session_data(session_key)
-        cached_data = cache.get(cache_key)
-        if cached_data is not None:
-            logger.debug(f"Найдены кэшированные данные сессии: {cache_key}")
-        return cached_data
+        """Получение кэшированных данных сессии бронирования отключено (данные реального времени)."""
+        logger.debug(f"Получение кэшированных данных сессии {session_key} отключено")
+        return None
     
     @staticmethod
     def invalidate_booking_related_cache(hotel_id: int = None, room_id: int = None, 
@@ -117,10 +94,8 @@ def cache_booking_function(key_func, timeout=None):
             # Выполняем функцию и кэшируем результат
             result = func(*args, **kwargs)
             
-            # Определяем timeout
-            actual_timeout = timeout or settings.CACHE_TTL.get(
-                'booking_availability_check', 120
-            )
+            # Кэширование для данных реального времени отключено
+            actual_timeout = 0  # Не кэшируем
             
             cache.set(cache_key, result, actual_timeout)
             logger.debug(f"Cache set для функции бронирования: {cache_key}")
