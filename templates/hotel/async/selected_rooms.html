@@ -47,9 +47,15 @@
           <nav id="breadcrumbs">
             <ul>
               <li>
-                <a href="{% url 'hotel:detail' hotel.slug %}" >
-                  <i class="fas fa-undo"></i> {% trans "Back to Hotel" %}
-                </a>
+                {% if hotel %}
+                  <a href="{% url 'hotel:detail' hotel.slug %}" >
+                    <i class="fas fa-undo"></i> {% trans "Back to Hotel" %}
+                  </a>
+                {% else %}
+                  <a href="{% url 'hotel:index' %}" >
+                    <i class="fas fa-undo"></i> {% trans "Back to Hotels" %}
+                  </a>
+                {% endif %}
               </li>
             </ul>
           </nav>
@@ -95,7 +101,7 @@
                                    <!-- Форма обновления выбора -->
                                    <form id="update-selection-form" class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}" style="display:none;">
                                        {% csrf_token %}
-                                       <input type="hidden" value="{{ hotel.id }}" name="hotel-id">
+                                       <input type="hidden" value="{{ hotel.id|default:'' }}" name="hotel-id">
                                        <input type="hidden" id="checkin-input" value="{{ checkin }}" name="checkin">
                                        <input type="hidden" id="checkout-input" value="{{ checkout }}" name="checkout">
                                        <input type="hidden" value="{{ adult }}" name="adult">
@@ -156,6 +162,7 @@
       </div>
       
       <div class="col-lg-4 col-md-4 margin-top-0 utf_listing_payment_section">
+        {% if hotel %}
         <div class="utf_booking_listing_item_container compact utf_order_summary_widget_section">
           <div class="listing-item"> <img src="{{hotel.image.url}}" alt="">
             <div class="utf_listing_item_content">              
@@ -167,6 +174,7 @@
             </div>
           </div>
         </div>
+        {% endif %}
         <div class="boxed-widget opening-hours summary margin-top-0">
           <h3><i class="fa fa-calendar-check-o"></i> {% trans "Booking Summary" %}</h3>
           <ul>

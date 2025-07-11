@@ -445,6 +445,15 @@ def delete_selection(request):
                     request.session.modified = True
             else:
                 logger.error(f"Тип номера с ID {room_type_id} не найден")
+    else:
+        # Если сессия пуста, устанавливаем значения по умолчанию
+        today = datetime.now().strftime("%Y-%m-%d")
+        tomorrow = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+        checkin = today
+        checkout = tomorrow
+        adult = 1
+        children = 0
+        total_days = 1
     
     context = {
         "data": request.session['selection_data_obj'] if 'selection_data_obj' in request.session else {},
