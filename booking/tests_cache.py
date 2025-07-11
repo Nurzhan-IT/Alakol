@@ -61,7 +61,7 @@ class BookingCacheTest(TestCase):
         self.checkout = (datetime.now() + timedelta(days=3)).strftime('%Y-%m-%d')
     
     def test_booking_cache_helper_room_unavailability(self):
-        """Тест кэширования недоступности номеров."""
+        """Тест того, что кэширование недоступности номеров отключено."""
         room_id = self.room.id
         start_date = self.checkin
         end_date = self.checkout
@@ -74,22 +74,20 @@ class BookingCacheTest(TestCase):
             }
         ]
         
-        # Кэшируем данные
+        # Пытаемся закэшировать данные (но кэширование отключено)
         BookingCacheHelper.cache_room_unavailability(
             room_id, start_date, end_date, unavailability_periods
         )
         
-        # Проверяем, что данные закэшированы
+        # Проверяем, что данные НЕ закэшированы (кэширование отключено)
         cached_data = BookingCacheHelper.get_cached_room_unavailability(
             room_id, start_date, end_date
         )
         
-        self.assertIsNotNone(cached_data)
-        self.assertEqual(len(cached_data), 1)
-        self.assertEqual(cached_data[0]['reason'], 'Maintenance')
+        self.assertIsNone(cached_data)  # Кэширование отключено для данных реального времени
     
     def test_booking_availability_check_cache(self):
-        """Тест кэширования проверки доступности бронирования."""
+        """Тест того, что кэширование проверки доступности бронирования отключено."""
         hotel_id = self.hotel.id
         room_type_id = self.room_type.id
         checkin = self.checkin
@@ -101,22 +99,20 @@ class BookingCacheTest(TestCase):
             'min_price': 100.00
         }
         
-        # Кэшируем данные
+        # Пытаемся закэшировать данные (но кэширование отключено)
         BookingCacheHelper.cache_booking_availability_check(
             hotel_id, room_type_id, checkin, checkout, availability_data
         )
         
-        # Проверяем, что данные закэшированы
+        # Проверяем, что данные НЕ закэшированы (кэширование отключено)
         cached_data = BookingCacheHelper.get_cached_booking_availability_check(
             hotel_id, room_type_id, checkin, checkout
         )
         
-        self.assertIsNotNone(cached_data)
-        self.assertTrue(cached_data['available'])
-        self.assertEqual(cached_data['rooms_count'], 5)
+        self.assertIsNone(cached_data)  # Кэширование отключено для данных реального времени
     
     def test_booking_session_data_cache(self):
-        """Тест кэширования данных сессии бронирования."""
+        """Тест того, что кэширование данных сессии бронирования отключено."""
         session_key = 'test_session_key_123'
         session_data = {
             'checkin': self.checkin,
@@ -125,28 +121,26 @@ class BookingCacheTest(TestCase):
             'children': 0
         }
         
-        # Кэшируем данные сессии
+        # Пытаемся закэшировать данные сессии (но кэширование отключено)
         BookingCacheHelper.cache_booking_session_data(session_key, session_data)
         
-        # Проверяем, что данные закэшированы
+        # Проверяем, что данные НЕ закэшированы (кэширование отключено)
         cached_data = BookingCacheHelper.get_cached_booking_session_data(session_key)
         
-        self.assertIsNotNone(cached_data)
-        self.assertEqual(cached_data['checkin'], self.checkin)
-        self.assertEqual(cached_data['adult'], 2)
+        self.assertIsNone(cached_data)  # Кэширование отключено для данных реального времени
     
     def test_cache_invalidation_on_room_unavailability_change(self):
-        """Тест инвалидации кэша при изменении RoomUnavailability."""
-        # Сначала кэшируем данные
+        """Тест того, что кэширование отключено и инвалидация не требуется."""
+        # Пытаемся закэшировать данные (но кэширование отключено)
         BookingCacheHelper.cache_room_unavailability(
             self.room.id, self.checkin, self.checkout, []
         )
         
-        # Проверяем, что данные в кэше
+        # Проверяем, что данные НЕ в кэше (кэширование отключено)
         cached_data = BookingCacheHelper.get_cached_room_unavailability(
             self.room.id, self.checkin, self.checkout
         )
-        self.assertIsNotNone(cached_data)
+        self.assertIsNone(cached_data)  # Кэширование отключено
         
         # Создаем RoomUnavailability
         unavailability = RoomUnavailability.objects.create(
@@ -156,12 +150,11 @@ class BookingCacheTest(TestCase):
             reason='Test'
         )
         
-        # Проверяем, что кэш инвалидирован
-        # (этот тест может потребовать дополнительной настройки сигналов)
+        # Проверяем, что кэш по-прежнему пуст (кэширование отключено)
         cached_data_after = BookingCacheHelper.get_cached_room_unavailability(
             self.room.id, self.checkin, self.checkout
         )
-        # В зависимости от реализации сигналов, кэш может быть очищен
+        self.assertIsNone(cached_data_after)  # Кэширование отключено для данных реального времени
     
     def test_check_room_availability_view_with_cache(self):
         """Тест представления check_room_availability с кэшированием."""
@@ -221,14 +214,20 @@ class BookingCacheTest(TestCase):
     
     def test_cache_ttl_settings(self):
         """Тест настроек TTL для кэша booking."""
-        # Проверяем, что активные настройки TTL существуют
-        self.assertIn('room_unavailability', settings.CACHE_TTL)
+        # Проверяем, что основные настройки TTL существуют
+        self.assertIn('hotels_list', settings.CACHE_TTL)
+        self.assertIn('hotel_detail', settings.CACHE_TTL)
+        self.assertIn('search_results', settings.CACHE_TTL)
+        self.assertIn('static_content', settings.CACHE_TTL)
         
         # Проверяем, что значения разумные
-        self.assertGreater(settings.CACHE_TTL['room_unavailability'], 0)
+        self.assertGreater(settings.CACHE_TTL['hotels_list'], 0)
+        self.assertGreater(settings.CACHE_TTL['hotel_detail'], 0)
         
-        # Проверяем, что отключенные настройки действительно отключены
+        # Проверяем, что настройки для данных реального времени отключены
         # (эти настройки закомментированы для обеспечения данных реального времени)
+        self.assertNotIn('room_availability', settings.CACHE_TTL)
+        self.assertNotIn('room_unavailability', settings.CACHE_TTL)
         self.assertNotIn('booking_availability_check', settings.CACHE_TTL)
         self.assertNotIn('booking_session_data', settings.CACHE_TTL)
         self.assertNotIn('booking_data', settings.CACHE_TTL)

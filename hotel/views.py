@@ -363,12 +363,7 @@ def room_type_detail(request, slug, rt_slug):
         messages.warning(request, _("Hotel is not available for booking on selected dates."))
         return redirect("hotel:detail", hotel.slug)
     
-    # Кэшируем доступность номеров для конкретных дат
-    availability_cache_key = CacheKeyGenerator.room_availability(
-        hotel.id, 
-        checkin, 
-        checkout
-    )
+    # Кэширование доступности номеров отключено для данных реального времени
     
     def get_room_availability():
         # Получаем все номера с предварительно загруженными типами
@@ -427,12 +422,8 @@ def room_type_detail(request, slug, rt_slug):
             'unavailable_count': len(unavailable_room_ids)
         }
     
-    # Для доступности номеров используем короткое время кэширования (3 минуты)
-    availability_data = CacheHelper.get_or_set_complex(
-        availability_cache_key,
-        get_room_availability,
-        timeout=settings.CACHE_TTL['room_availability']
-    )
+    # Для доступности номеров НЕ используем кэширование (данные в реальном времени)
+    availability_data = get_room_availability()
     
     available_rooms = availability_data['available_rooms']
     
