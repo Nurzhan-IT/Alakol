@@ -316,6 +316,7 @@ class HotelFeatures(models.Model):
         return str(self.hotel)
     
     class Meta:
+        verbose_name = "Удобство отеля"
         verbose_name_plural = "Удобства отеля"
     
 class HotelFAQs(models.Model):
