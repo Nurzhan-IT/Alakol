@@ -215,6 +215,19 @@ LANGUAGE_COOKIE_HTTPONLY = True  # HttpOnly for production
 LANGUAGE_COOKIE_SAMESITE = 'Lax'
 
 # ==============================================
+# MODELTRANSLATION SETTINGS
+# ==============================================
+
+# Настройки для django-modeltranslation
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'  # По умолчанию русский
+MODELTRANSLATION_FALLBACK_LANGUAGES = ('ru', 'kk', 'en')  # Порядок резервных языков
+MODELTRANSLATION_LANGUAGES = ('ru', 'kk', 'en')  # Поддерживаемые языки для переводов
+
+# Настройки валидации переводов
+MODELTRANSLATION_ENABLE_FALLBACKS = True  # Разрешить использование резервных языков
+MODELTRANSLATION_PREPOPULATE_LANGUAGE = 'ru'  # Автозаполнение форм на русском
+
+# ==============================================
 # STATIC FILES (CSS, JavaScript, Images)
 # ==============================================
 
