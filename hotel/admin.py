@@ -263,9 +263,15 @@ class BaseImportExportAdmin(ImportExportModelAdmin):
     formats = [base_formats.CSV, base_formats.XLS, base_formats.XLSX]
 
 class HotelAdminForm(forms.ModelForm):
-    description_ru = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (RU)')
-    description_kk = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (KK)')
-    description_en = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (EN)')
+    # Поля для переводов названий
+    name_ru = forms.CharField(max_length=100, label='Название (RU)', required=False)
+    name_kk = forms.CharField(max_length=100, label='Название (KK)', required=False)
+    name_en = forms.CharField(max_length=100, label='Название (EN)', required=False)
+    
+    # Поля для переводов описаний
+    description_ru = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (RU)', required=False)
+    description_kk = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (KK)', required=False)
+    description_en = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (EN)', required=False)
     
     # Добавляем поле для множественной загрузки изображений
     multiple_hotel_images = MultipleFileField(
@@ -279,11 +285,27 @@ class HotelAdminForm(forms.ModelForm):
         fields = '__all__'
         
     def __init__(self, *args, **kwargs):
+        # Извлекаем request из kwargs, если он передан
+        self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
+        
         # Скрываем поле для пользователей группы Manager
-        if hasattr(self, 'request') and self.request.user.groups.filter(name='Manager').exists() and not self.request.user.is_superuser:
+        if self.request and hasattr(self.request, 'user') and self.request.user.groups.filter(name='Manager').exists() and not self.request.user.is_superuser:
             if 'multiple_hotel_images' in self.fields:
                 self.fields['multiple_hotel_images'].widget = forms.HiddenInput()
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Проверяем, что хотя бы одно из полей названий заполнено
+        name_ru = cleaned_data.get('name_ru')
+        name_kk = cleaned_data.get('name_kk')
+        name_en = cleaned_data.get('name_en')
+        
+        if not any([name_ru, name_kk, name_en]):
+            raise forms.ValidationError('Необходимо заполнить хотя бы одно из полей названий (RU, KK, EN)')
+        
+        return cleaned_data
                 
     def clean_multiple_hotel_images(self):
         """
@@ -1155,20 +1177,51 @@ class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
         return super().get_list_display(request)
 
     def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        
-        # Передаем запрос в форму для обработки прав доступа
-        form.request = request
-        
+        # Для Manager'ов используем специальную форму с исключенными полями
         if is_manager(request.user):
-            form.base_fields.pop('user', None)
-            for field in ['featured', 'slug', 'hid', 'status', 'views', 'name']:
-                if field in form.base_fields:
-                    form.base_fields[field].widget = forms.HiddenInput()
-            # Скрываем поле множественной загрузки для менеджеров
-            if 'multiple_hotel_images' in form.base_fields:
-                form.base_fields['multiple_hotel_images'].widget = forms.HiddenInput()
-        return form
+            class ManagerHotelForm(HotelAdminForm):
+                class Meta:
+                    model = Hotel
+                    # Исключаем технические поля для Manager'ов
+                    exclude = ['user', 'hid', 'views', 'featured', 'slug', 'name', 'description', 'status']
+                    widgets = {
+                        'check_in_time': forms.TimeInput(attrs={'type': 'time'}),
+                        'check_out_time': forms.TimeInput(attrs={'type': 'time'}),
+                        'start_date': forms.DateInput(attrs={'type': 'date'}),
+                        'end_date': forms.DateInput(attrs={'type': 'date'}),
+                    }
+                
+                def __init__(self, *args, **kwargs):
+                    self.request = kwargs.pop('request', None)
+                    super().__init__(*args, **kwargs)
+                    
+                    # Скрываем поле множественной загрузки для менеджеров
+                    if 'multiple_hotel_images' in self.fields:
+                        self.fields['multiple_hotel_images'].widget = forms.HiddenInput()
+                        self.fields['multiple_hotel_images'].required = False
+                    
+                    # Добавляем подсказку к полю названия
+                    if 'name_ru' in self.fields:
+                        self.fields['name_ru'].help_text = 'Заполните хотя бы одно из полей названий'
+            
+            # Создаем кастомную форму, которая будет принимать request в kwargs
+            class RequestAwareManagerForm(ManagerHotelForm):
+                def __init__(self, *args, **kwargs):
+                    kwargs['request'] = request  # Передаем request в kwargs
+                    super().__init__(*args, **kwargs)
+            
+            return RequestAwareManagerForm
+        
+        else:
+            # Для суперпользователей используем стандартную форму
+            form_class = super().get_form(request, obj, **kwargs)
+            
+            class RequestAwareForm(form_class):
+                def __init__(self, *args, **kwargs):
+                    kwargs['request'] = request  # Передаем request в kwargs
+                    super().__init__(*args, **kwargs)
+            
+            return RequestAwareForm
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -1176,9 +1229,41 @@ class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
             return queryset.filter(user=request.user)
         return queryset
 
+    def get_prepopulated_fields(self, request, obj=None):
+        """
+        Переопределяем prepopulated_fields для менеджеров
+        """
+        if is_manager(request.user):
+            return {}  # Для менеджеров не используем prepopulated_fields
+        return self.prepopulated_fields
+
     def save_model(self, request, obj, form, change):
+        # Для новых объектов устанавливаем пользователя
         if not change:
             obj.user = request.user
+        
+        # Для Manager'ов устанавливаем значения по умолчанию для скрытых полей
+        if is_manager(request.user):
+            # Обязательно устанавливаем пользователя
+            obj.user = request.user
+            
+            # Устанавливаем статус по умолчанию если не установлен
+            if not obj.status:
+                obj.status = 'In Review'  # На проверке для Manager'ов
+            
+            # Устанавливаем featured в False если не установлен
+            if obj.featured is None:
+                obj.featured = False
+            
+            # Устанавливаем views в 0 если не установлен
+            if obj.views is None:
+                obj.views = 0
+            
+            # Генерируем hid если не установлен
+            if not obj.hid:
+                import shortuuid
+                obj.hid = shortuuid.uuid()[:10]
+        
         super().save_model(request, obj, form, change)
     
     def has_delete_permission(self, request, obj=None):
