@@ -75,6 +75,55 @@
 
     <link rel="stylesheet" href="{% static 'css/search.css' %}">
     <link rel="stylesheet" href="{% static 'css/topbar.css' %}">
+    
+    <!-- Антикэш CSS для кнопок аутентификации -->
+    <style>
+        /* Предотвращение мерцания кнопок при загрузке */
+        #auth-buttons-container {
+            min-height: 50px;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Стиль для кнопок по умолчанию */
+        .auth-loading #auth-buttons-container {
+            opacity: 0.7;
+        }
+        
+        /* Плавная анимация для обновления кнопок */
+        #auth-buttons-container a {
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        
+        /* Обеспечиваем правильное отображение кнопок в контейнере */
+        #auth-buttons-container .selected-rooms-button,
+        #auth-buttons-container .sign-in-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        
+        /* Мобильные стили для контейнера кнопок */
+        @media (max-width: 490px) {
+            #auth-buttons-container {
+                gap: 5px;
+            }
+            
+            #auth-buttons-container .selected-rooms-button,
+            #auth-buttons-container .sign-in-button {
+                width: 50px;
+            }
+            
+            #auth-buttons-container .sign-in-span,
+            #auth-buttons-container .sign-up-span {
+                display: none;
+            }
+        }
+    </style>
 
     {% comment %} <link href="{% static 'css/datedropper.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
 
@@ -148,31 +197,14 @@
 
 </style>
                         <div class="header_widget "> 
-<!--                            <div class='lang-code'>-->
-<!--                                <form action="{% url 'set_language' %}" method="post">-->
-<!--                                {% csrf_token %}-->
-<!--                                <input name="next" type="hidden" value="{{ redirect_to }}">-->
-<!--                                {% get_current_language as LANGUAGE_CODE %}-->
-<!--                                {% get_available_languages as LANGUAGES %}-->
-<!--                                {% get_language_info_list for LANGUAGES as languages %}-->
-<!--                                {% for language in languages %}-->
-<!--                                {% comment %} btn btn-outline-dark btn-sm {% endcomment %}-->
-<!--                                    <button class="lang-button-topbar" name="language" value="{{ language.code }}" type="submit">-->
-<!--                                        <img src="{% static 'images/flags/'|add:language.code|add:'.png' %}" alt="{{ language.code }}" width="20" height="15">-->
-<!--                                    </button>-->
-<!--                                {% endfor %}-->
-<!--                                </form>-->
-<!--                            </div>-->
                                
-                            {% if request.user.is_authenticated %}
-                                <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button"><i class="fas fa-bed"></i><span class="room-count">0</span></a>
-                                <a href="{% url 'dashboard:dashboard' %}" class="sign-in-button"><i class="bi bi-grid"></i> <span class="sign-in-span">{% trans "Dashboard" %}</span></a>
-                                <a href="{% url 'userauths:sign-out' %}" class="sign-in-button"><i class="bi bi-power"></i> <span class="sign-up-span">{% trans "Sign Out" %}</span></a>
-                            {% else %}
+                            <!-- Контейнер для кнопок аутентификации - будет обновляться динамически -->
+                            <div id="auth-buttons-container">
+                                <!-- По умолчанию показываем кнопки для неаутентифицированных пользователей -->
                                 <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button"><i class="fas fa-bed"></i><span class="room-count">0</span></a>
                                 <a href="{% url 'userauths:sign-in' %}" class="sign-in-button"><i class="fa fa-sign-in"></i><span class="sign-in-span">{% trans "Sign In" %}</span></a>
                                 <a href="{% url 'userauths:sign-up' %}" class="sign-in-button"><i class="bi bi-person-add"></i><span class="sign-in-span">{% trans "Sign Up" %}</span></a>
-                            {% endif %}
+                            </div>
 
                         </div>
                     </div>
@@ -379,8 +411,64 @@
             });
         }
         
-        // Загружаем messages при загрузке страницы
+        // Функция для загрузки количества выбранных номеров в реальном времени
+        function loadSelectedItemsCount() {
+            $.ajax({
+                url: '{% url "hotel:get_selected_items_count" %}',
+                type: 'GET',
+                success: function(data) {
+                    $('.room-count').text(data.total_selected_items);
+                },
+                error: function() {
+                    // В случае ошибки оставляем 0
+                    $('.room-count').text('0');
+                }
+            });
+        }
+        
+        // Функция для загрузки состояния аутентификации и обновления кнопок в топ-баре
+        function loadUserAuthStatus() {
+            // Добавляем класс для индикации загрузки
+            $('body').addClass('auth-loading');
+            
+            $.ajax({
+                url: '{% url "hotel:get_user_auth_status" %}',
+                type: 'GET',
+                success: function(data) {
+                    var container = $('#auth-buttons-container');
+                    container.empty(); // Очищаем контейнер
+                    
+                    // Создаем кнопки на основе ответа от сервера
+                    data.buttons.forEach(function(button) {
+                        var buttonHtml = '<a href="' + button.url + '" class="' + button.class + '">';
+                        buttonHtml += '<i class="' + button.icon + '"></i>';
+                        
+                        if (button.span_class) {
+                            buttonHtml += '<span class="' + button.span_class + '">' + button.span_text + '</span>';
+                        }
+                        
+                        buttonHtml += '</a>';
+                        container.append(buttonHtml);
+                    });
+                    
+                    // После обновления кнопок загружаем количество выбранных номеров
+                    loadSelectedItemsCount();
+                    
+                    // Убираем класс загрузки
+                    $('body').removeClass('auth-loading');
+                },
+                error: function() {
+                    // В случае ошибки оставляем кнопки по умолчанию (неаутентифицированного пользователя)
+                    console.log('Auth status loading failed, using default buttons');
+                    loadSelectedItemsCount();
+                    $('body').removeClass('auth-loading');
+                }
+            });
+        }
+        
+        // Загружаем состояние аутентификации и messages при загрузке страницы
         $(document).ready(function() {
+            loadUserAuthStatus();
             loadAndDisplayMessages();
         });
     </script>
@@ -413,26 +501,6 @@
     {% endblock script_links %}
 
     <script>
-        // Функция для загрузки количества выбранных номеров в реальном времени
-        function loadSelectedItemsCount() {
-            $.ajax({
-                url: '{% url "hotel:get_selected_items_count" %}',
-                type: 'GET',
-                success: function(data) {
-                    $('.room-count').text(data.total_selected_items);
-                },
-                error: function() {
-                    // В случае ошибки оставляем 0
-                    $('.room-count').text('0');
-                }
-            });
-        }
-        
-        // Загружаем количество выбранных номеров при загрузке страницы
-        $(document).ready(function() {
-            loadSelectedItemsCount();
-        });
-        
         $(function() {
 
             var start = moment().subtract(0, 'days');
