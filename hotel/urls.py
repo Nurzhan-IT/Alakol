@@ -17,6 +17,7 @@ urlpatterns = [
     # Real-time data API (no cache)
     path('api/selected-items-count/', views.get_selected_items_count, name='get_selected_items_count'),
     path('api/messages/', views.get_messages, name='get_messages'),
+    path('api/user-auth-status/', views.get_user_auth_status, name='get_user_auth_status'),
     
     # Robokassa Payment API
     path('api/robokassa-payment/', views.create_robokassa_payment, name='api_robokassa_payment'),
