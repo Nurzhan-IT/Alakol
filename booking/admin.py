@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import RoomUnavailability
+from .forms import RoomUnavailabilityForm
 from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
@@ -42,9 +43,16 @@ class RoomTypeFilter(admin.SimpleListFilter):
 
 # @admin.register(RoomUnavailability)
 class RoomUnavailabilityAdmin(RussianModelAdminMixin, admin.ModelAdmin):
+    form = RoomUnavailabilityForm
     list_display = ('get_room', 'start_date', 'end_date', 'reason', 'created_at')
     list_filter = (RoomFilter, RoomTypeFilter)  # Добавляем RoomTypeFilter
     # date_hierarchy = 'start_date'
+    
+    class Media:
+        css = {
+            'all': ('css/room_unavailability_admin.css',)
+        }
+        js = ('js/room_unavailability_validation.js',)
 
     def _setup_russian_verbose_names(self):
         """Устанавливает русские названия для модели"""
@@ -78,7 +86,18 @@ class RoomUnavailabilityAdmin(RussianModelAdminMixin, admin.ModelAdmin):
         try:
             obj.full_clean()  # Вызывает метод clean()
             super().save_model(request, obj, form, change)
+            self.message_user(request, 'Запись успешно сохранена.', level=messages.SUCCESS)
         except ValidationError as e:
-            self.message_user(request, str(e), level=messages.ERROR)
+            # Отображаем ошибки валидации пользователю
+            error_messages = []
+            if hasattr(e, 'message_dict'):
+                for field, errors in e.message_dict.items():
+                    for error in errors:
+                        error_messages.append(f"{field}: {error}")
+            else:
+                error_messages.append(str(e))
+            
+            for error_msg in error_messages:
+                self.message_user(request, error_msg, level=messages.ERROR)
 
 custom_admin_site.register(RoomUnavailability, RoomUnavailabilityAdmin)
