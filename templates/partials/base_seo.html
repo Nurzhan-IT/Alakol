@@ -129,20 +129,20 @@
                             <!-- Mobile menu trigger -->
                         </div>
                         <div class='lang-code'>
-                            <form action="{% url 'set_language' %}" method="post">
-                                {% csrf_token %}
-                                <input name="next" type="hidden" value="{{ redirect_to }}">
+                            <div class="language-buttons">
                                 {% get_current_language as LANGUAGE_CODE %}
                                 {% get_available_languages as LANGUAGES %}
                                 {% get_language_info_list for LANGUAGES as languages %}
                                 {% for language in languages %}
-                                <button class="lang-button-topbar" name="language" value="{{ language.code }}" type="submit" 
-                                        title="{% trans 'Переключить на' %} {{ language.name_local }}">
+                                <button class="lang-button-topbar" 
+                                        onclick="changeLanguage('{{ language.code }}')" 
+                                        data-language="{{ language.code }}"
+                                        title="{% trans 'Switch to' %} {{ language.name_local }}">
                                     <img src="{% static 'images/flags/'|add:language.code|add:'.png' %}" 
                                          alt="{{ language.code }}" width="20" height="15">
                                 </button>
                                 {% endfor %}
-                            </form>
+                            </div>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -229,6 +229,42 @@
     </div>
 
     <!-- JavaScript at the end for better performance -->
+    <script>
+        // Функция для смены языка без CSRF-токена
+        function changeLanguage(languageCode) {
+            // Создаем cookie для языка
+            document.cookie = 'django_language=' + languageCode + '; path=/; max-age=31536000';
+            
+            // Получаем текущий путь и параметры
+            var currentPath = window.location.pathname;
+            var currentSearch = window.location.search;
+            var baseUrl = window.location.protocol + '//' + window.location.host;
+            
+            // Определяем новый URL
+            var newUrl;
+            
+            // Проверяем, есть ли уже языковой префикс в пути
+            var langPattern = /^\/([a-z]{2})\//;
+            var match = currentPath.match(langPattern);
+            
+            if (match) {
+                // Заменяем существующий языковой префикс
+                var currentLang = match[1];
+                var newPath = currentPath.replace('/'+currentLang+'/', '/'+languageCode+'/');
+                newUrl = baseUrl + newPath + currentSearch;
+            } else {
+                // Добавляем языковой префикс к текущему пути
+                if (currentPath === '/') {
+                    newUrl = baseUrl + '/' + languageCode + '/';
+                } else {
+                    newUrl = baseUrl + '/' + languageCode + currentPath + currentSearch;
+                }
+            }
+            
+            // Перенаправляем на новый URL
+            window.location.href = newUrl;
+        }
+    </script>
     {% block javascript %}{% endblock %}
 </body>
 </html> 
