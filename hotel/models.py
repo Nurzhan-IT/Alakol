@@ -5,6 +5,9 @@ from shortuuid.django_fields import ShortUUIDField
 from django.utils.html import mark_safe
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
+from django.core.files.images import get_image_dimensions
 
 from userauths.models import User
 
@@ -143,11 +146,26 @@ MEAL_INCLUDED_IN_PRICE = (
 )
 
 
+def validate_image(file):
+    max_size_mb = 5  # Max file size in MB
+    if file.size > max_size_mb * 1024 * 1024:
+        raise ValidationError(f"Максимальный размер файла {max_size_mb}MB")
+    width, height = get_image_dimensions(file)
+    if width < 300 or height < 300:  # Minimum dimensions
+        raise ValidationError("Изображение слишком маленькое. Минимальные размеры: 300x300 пикселей.")
+
 class Hotel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     name = models.CharField(max_length=100, blank=True, verbose_name='Название')
     description = models.TextField(null=True, blank=True, verbose_name='Описание')
-    image = models.FileField(upload_to="hotel_gallery", verbose_name='Изображение')
+    image = models.ImageField(
+        upload_to="hotel_gallery",
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp']),
+            validate_image
+        ],
+        verbose_name='Изображение'
+    )
     address = models.CharField(max_length=200, verbose_name='Адрес')
     mobile = models.CharField(max_length=20, verbose_name='Мобильный телефон')
     email = models.CharField(max_length=20, verbose_name='Электронная почта')
@@ -255,7 +273,14 @@ class Hotel(models.Model):
 
 class HotelGallery(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
-    image = models.FileField(upload_to="hotel_gallery", verbose_name='Изображение')
+    image = models.ImageField(
+        upload_to="hotel_gallery",
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp']),
+            validate_image
+        ],
+        verbose_name='Изображение'
+    )
     hgid = models.CharField(max_length=20, blank=True, verbose_name='ID галереи')
 
     def save(self, *args, **kwargs):
@@ -430,7 +455,14 @@ class RoomTypeComplete(RoomType):
 class RoomTypeGallery(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_gallery', verbose_name='Тип номера')
-    image = models.ImageField(upload_to='room_type_images/', verbose_name='Изображение')
+    image = models.ImageField(
+        upload_to='room_type_images/',
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp']),
+            validate_image
+        ],
+        verbose_name='Изображение'
+    )
 
     def save(self, *args, **kwargs):
         # Проверяем ограничение на количество фотографий для типа номера (максимум 10)
