@@ -1645,6 +1645,10 @@ class PriceOnDateAdmin(RussianModelAdminMixin, BaseExportAdmin):
         # Запрещаем добавление записей для пользователей группы Manager
         return False
 
+    def has_delete_permission(self, request, obj=None):
+        # Запрещаем удаление записей в PriceOnDateAdmin
+        return False
+
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         if request.user.groups.filter(name='Manager').exists() and not request.user.is_superuser:
