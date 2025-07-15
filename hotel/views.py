@@ -33,6 +33,11 @@ from robokassa.robokassa import generate_payment_link, result_payment, check_suc
 
 from hotel.decorators import require_selection_data
 
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.utils.translation import activate, get_language
+
 
 
 @cache_page(settings.CACHE_TTL['hotels_list'])
@@ -1915,4 +1920,40 @@ def live_check(request):
     Liveness probe - проверяет что приложение живо
     """
     return JsonResponse({'status': 'alive'}, status=200)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class CustomLanguageChangeView(View):
+    """
+    Кастомное представление для смены языка без CSRF-токена
+    """
+    
+    def post(self, request):
+        language_code = request.POST.get('language')
+        if language_code and language_code in [lang[0] for lang in settings.LANGUAGES]:
+            # Активируем язык
+            activate(language_code)
+            
+            # Устанавливаем cookie
+            response = JsonResponse({'status': 'success', 'language': language_code})
+            response.set_cookie(
+                settings.LANGUAGE_COOKIE_NAME,
+                language_code,
+                max_age=settings.LANGUAGE_COOKIE_AGE,
+                path=settings.LANGUAGE_COOKIE_PATH,
+                domain=settings.LANGUAGE_COOKIE_DOMAIN,
+                secure=settings.LANGUAGE_COOKIE_SECURE,
+                httponly=settings.LANGUAGE_COOKIE_HTTPONLY,
+                samesite=settings.LANGUAGE_COOKIE_SAMESITE,
+            )
+            return response
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Invalid language code'}, status=400)
+    
+    def get(self, request):
+        # Для GET-запросов возвращаем текущий язык
+        return JsonResponse({
+            'status': 'success', 
+            'current_language': get_language(),
+            'available_languages': [lang[0] for lang in settings.LANGUAGES]
+        })
 
