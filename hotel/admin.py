@@ -1,8 +1,7 @@
 from django import forms
 from django.contrib import admin
 from hotel.models import  ICON_CHOICES,Hotel, Room, Booking, RoomServices, HotelGallery, RoomTypeGallery,RoomTypeFeatures, HotelFeatures, HotelFAQs, RoomType, Coupon, CouponUsers, Notification, Bookmark, Review, RoomTypeFeaturesDetailed, HotelMealPlan
-from import_export.admin import ImportExportModelAdmin
-from import_export.formats import base_formats
+
 from django.utils.html import mark_safe
 
 from modeltranslation.admin import TranslationAdmin
@@ -27,6 +26,8 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
+
+from import_export.admin import ExportMixin
 
 class MultipleFileInput(forms.ClearableFileInput):
     """
@@ -259,8 +260,8 @@ def delete_hotels_with_check(modeladmin, request, queryset):
 
 delete_hotels_with_check.short_description = 'Удалить выбранные отели'
 
-class BaseImportExportAdmin(ImportExportModelAdmin):
-    formats = [base_formats.CSV, base_formats.XLS, base_formats.XLSX]
+class BaseExportAdmin(ExportMixin, admin.ModelAdmin):
+    pass
 
 class HotelAdminForm(forms.ModelForm):
     # Поля для переводов названий
@@ -838,7 +839,7 @@ class RoomTypeFeaturesDetailedInline(admin.StackedInline):
 
         return formset
 
-class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseExportAdmin):
     form = RoomTypeForm
     inlines = [
         RoomTypeGalleryInline, 
@@ -1065,7 +1066,7 @@ class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
             )
         return actions
 
-class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class HotelAdmin(RussianModelAdminMixin, BaseExportAdmin):
     form = HotelAdminForm
     inlines = [
         HotelGallery_Tab, HotelFeatures_Tab, HotelMealPlan_Tab, HotelFAQs_Tab
@@ -1319,7 +1320,7 @@ class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
             )
         return actions
 
-class RoomAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class RoomAdmin(RussianModelAdminMixin, BaseExportAdmin):
     list_display = ['hotel', 'get_room_type', 'room_number', 'get_price', 'get_number_of_beds', 'get_room_capacity', 'is_available']
     list_per_page = 100
     list_filter = ['is_available']
@@ -1461,7 +1462,7 @@ class CheckInDateFilter(admin.SimpleListFilter):
 
 
 
-class BookingAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class BookingAdmin(RussianModelAdminMixin, BaseExportAdmin):
     # inlines = [ActivityLog_Tab, StaffOnDuty_Tab]
     list_filter = [HotelFilter, RoomTypeFilter, 'is_active', 'checked_in', 'checked_out', CheckInDateFilter, 'payment_status']
     list_display = ['booking_id', 'user', 'hotel', 'get_room_type', 'rooms', 'total', 'prepayment', 'payment_for_hotel', 'payment_status', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'date']
@@ -1526,7 +1527,7 @@ class BookingAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
                 form.base_fields['payment_for_hotel'].widget.attrs['readonly'] = True
         return form
 
-class RoomServicesAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class RoomServicesAdmin(RussianModelAdminMixin, BaseExportAdmin):
     list_display = ['booking', 'room', 'date', 'price', 'service_type']
     list_per_page = 100
 
@@ -1540,7 +1541,7 @@ class RoomServicesAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
 class CouponUsers_Tab(admin.TabularInline):
     model = CouponUsers
 
-class CouponAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class CouponAdmin(RussianModelAdminMixin, BaseExportAdmin):
     inlines = [CouponUsers_Tab]
     list_editable = ['valid_from', 'valid_to', 'active', 'type']
     list_display = ['code', 'discount', 'type', 'redemption', 'valid_from', 'valid_to', 'active', 'date']
@@ -1552,7 +1553,7 @@ class CouponAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
             queryset = queryset.filter(hotel__user=request.user)
         return queryset
 
-class NotificationAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class NotificationAdmin(RussianModelAdminMixin, BaseExportAdmin):
     list_editable = ['seen', 'type']
     list_display = ['user', 'booking', 'type', 'seen', 'date']
     
@@ -1568,7 +1569,7 @@ class NotificationAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
         return queryset
 
 
-class BookmarkAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class BookmarkAdmin(RussianModelAdminMixin, BaseExportAdmin):
     list_display = ['user', 'hotel']
 
     def get_queryset(self, request):
@@ -1597,7 +1598,7 @@ class ReviewAdmin(RussianModelAdminMixin, admin.ModelAdmin):
             queryset = queryset.filter(hotel__user=request.user)
         return queryset
 
-class PriceOnDateAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class PriceOnDateAdmin(RussianModelAdminMixin, BaseExportAdmin):
     form = PriceOnDateForm
     list_display = ['type', 'hotel']
     list_filter = [HotelFilter]
