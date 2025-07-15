@@ -150,7 +150,7 @@ def get_user_auth_status(request):
                     'icon': 'bi bi-grid',
                     'class': 'sign-in-button',
                     'span_class': 'sign-in-span',
-                    'span_text': str(_('Dashboard'))
+                    'span_text': str(_('Dash'))
                 },
                 {
                     'type': 'sign_out',

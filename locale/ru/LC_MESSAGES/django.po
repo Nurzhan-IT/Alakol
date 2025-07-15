@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-15 22:14+0500\n"
+"POT-Creation-Date: 2025-07-15 23:11+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,12 +84,8 @@ msgstr "Только обед"
 msgid "Только ужин"
 msgstr "Только ужин"
 
-#: .\hotel\views.py:153 .\templates\partials\dashboard_base.html:11
-#: .\templates\partials\dashboard_base.html:64
-#: .\templates\partials\dashboard_base.html:100
-#: .\templates\partials\dashboard_base.html:146
-#: .\templates\partials\dashboard_sidebar.html:7
-msgid "Dashboard"
+#: .\hotel\views.py:153
+msgid "Dash"
 msgstr "Аккаунт"
 
 #: .\hotel\views.py:161
@@ -1559,6 +1555,14 @@ msgstr "Узнайте больше о политике конфиденциал
 #: .\templates\partials\base.html:622
 msgid "Continue"
 msgstr "Продолжить"
+
+#: .\templates\partials\dashboard_base.html:11
+#: .\templates\partials\dashboard_base.html:64
+#: .\templates\partials\dashboard_base.html:100
+#: .\templates\partials\dashboard_base.html:146
+#: .\templates\partials\dashboard_sidebar.html:7
+msgid "Dashboard"
+msgstr "Аккаунт"
 
 #: .\templates\partials\dashboard_base.html:72
 #: .\templates\partials\dashboard_base.html:118
