@@ -17286,7 +17286,7 @@ input#date-picker:hover {
 
 #booking-date-range i {
     color: #999;
-    background-color:
+    background-color: transparent;
 }
 
 .daterangepicker .ranges li {
@@ -21999,6 +21999,15 @@ select.selectpicker {
 .cookie-decline-btn:hover {
     background: white;
     color: black;
+}
+
+.cookie-continue-btn {
+    background: #4CAF50;
+    color: white;
+}
+
+.cookie-continue-btn:hover {
+    background: #45a049;
 }
 
 @media (max-width: 768px) {

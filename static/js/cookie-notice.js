@@ -1,8 +1,7 @@
 // Cookie Notice Management
 document.addEventListener('DOMContentLoaded', function() {
     const cookieNotice = document.getElementById('cookie-notice');
-    const cookieAcceptBtn = document.getElementById('cookie-accept');
-    const cookieDeclineBtn = document.getElementById('cookie-decline');
+    const cookieContinueBtn = document.getElementById('cookie-continue');
     
     // Проверяем, есть ли уже согласие пользователя
     const cookieConsent = localStorage.getItem('cookieConsent');
@@ -18,27 +17,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1000); // Показываем через 1 секунду после загрузки страницы
     }
     
-    // Обработчик принятия cookie
-    cookieAcceptBtn.addEventListener('click', function() {
-        localStorage.setItem('cookieConsent', 'accepted');
+    // Обработчик кнопки "Продолжить"
+    cookieContinueBtn.addEventListener('click', function() {
+        localStorage.setItem('cookieConsent', 'continued');
         localStorage.setItem('cookieConsentDate', new Date().toISOString());
         hideCookieNotice();
         
         // Можно добавить отправку события на сервер для аналитики
-        // trackCookieConsent('accepted');
-    });
-    
-    // Обработчик отклонения cookie
-    cookieDeclineBtn.addEventListener('click', function() {
-        localStorage.setItem('cookieConsent', 'declined');
-        localStorage.setItem('cookieConsentDate', new Date().toISOString());
-        hideCookieNotice();
-        
-        // Отключаем все не необходимые cookie
-        disableNonEssentialCookies();
-        
-        // Можно добавить отправку события на сервер для аналитики
-        // trackCookieConsent('declined');
+        // trackCookieConsent('continued');
     });
     
     function hideCookieNotice() {

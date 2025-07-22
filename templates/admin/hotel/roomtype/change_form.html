@@ -112,7 +112,6 @@
   
   <div class="pricing-actions">
     <button type="button" id="add_pricing" class="add-button">Добавить цены</button>
-    <button type="button" id="clear_pricing" class="clear-button">Очистить выбранные даты</button>
   </div>
   
   <hr>
@@ -200,7 +199,6 @@
         const endDateInput = document.getElementById('end_date');
         const priceInput = document.getElementById('price');
         const addPricingButton = document.getElementById('add_pricing');
-  const clearPricingButton = document.getElementById('clear_pricing');
   const pricingTable = document.getElementById('pricing_table').getElementsByTagName('tbody')[0];
         const dynamicPricingInput = document.getElementById('id_dynamic_pricing_input');
   const form = document.querySelector('form#roomtype_form');
@@ -468,13 +466,6 @@
       }
     });
   }
-  
-  // Обработчик для кнопки очистки полей
-  clearPricingButton.addEventListener('click', function() {
-          startDateInput.value = '';
-          endDateInput.value = '';
-          priceInput.value = '';
-        });
   
   // Инициализируем таблицу при загрузке страницы
   updatePricingTable();

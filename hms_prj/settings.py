@@ -161,7 +161,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'Asia/Yekaterinburg'  # UTC+5, Алматы не обновленый там +6 до сих пор
 
@@ -193,6 +193,19 @@ LANGUAGE_COOKIE_PATH = '/'
 LANGUAGE_COOKIE_SECURE = False
 LANGUAGE_COOKIE_HTTPONLY = False
 LANGUAGE_COOKIE_SAMESITE = None
+
+# ==============================================
+# MODELTRANSLATION SETTINGS
+# ==============================================
+
+# Настройки для django-modeltranslation
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'  # По умолчанию русский
+MODELTRANSLATION_FALLBACK_LANGUAGES = ('ru', 'kk', 'en')  # Порядок резервных языков
+MODELTRANSLATION_LANGUAGES = ('ru', 'kk', 'en')  # Поддерживаемые языки для переводов
+
+# Настройки валидации переводов
+MODELTRANSLATION_ENABLE_FALLBACKS = True  # Разрешить использование резервных языков
+MODELTRANSLATION_PREPOPULATE_LANGUAGE = 'ru'  # Автозаполнение форм на русском
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

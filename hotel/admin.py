@@ -1,8 +1,7 @@
 from django import forms
 from django.contrib import admin
 from hotel.models import  ICON_CHOICES,Hotel, Room, Booking, RoomServices, HotelGallery, RoomTypeGallery,RoomTypeFeatures, HotelFeatures, HotelFAQs, RoomType, Coupon, CouponUsers, Notification, Bookmark, Review, RoomTypeFeaturesDetailed, HotelMealPlan
-from import_export.admin import ImportExportModelAdmin
-from import_export.formats import base_formats
+
 from django.utils.html import mark_safe
 
 from modeltranslation.admin import TranslationAdmin
@@ -27,6 +26,8 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
+
+from import_export.admin import ExportMixin
 
 class MultipleFileInput(forms.ClearableFileInput):
     """
@@ -259,13 +260,19 @@ def delete_hotels_with_check(modeladmin, request, queryset):
 
 delete_hotels_with_check.short_description = 'Удалить выбранные отели'
 
-class BaseImportExportAdmin(ImportExportModelAdmin):
-    formats = [base_formats.CSV, base_formats.XLS, base_formats.XLSX]
+class BaseExportAdmin(ExportMixin, admin.ModelAdmin):
+    pass
 
 class HotelAdminForm(forms.ModelForm):
-    description_ru = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (RU)')
-    description_kk = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (KK)')
-    description_en = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (EN)')
+    # Поля для переводов названий
+    name_ru = forms.CharField(max_length=100, label='Название (RU)', required=False)
+    name_kk = forms.CharField(max_length=100, label='Название (KK)', required=False)
+    name_en = forms.CharField(max_length=100, label='Название (EN)', required=False)
+    
+    # Поля для переводов описаний
+    description_ru = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (RU)', required=False)
+    description_kk = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (KK)', required=False)
+    description_en = forms.CharField(widget=SimpleTextEditorWidget(), label='Описание (EN)', required=False)
     
     # Добавляем поле для множественной загрузки изображений
     multiple_hotel_images = MultipleFileField(
@@ -279,11 +286,27 @@ class HotelAdminForm(forms.ModelForm):
         fields = '__all__'
         
     def __init__(self, *args, **kwargs):
+        # Извлекаем request из kwargs, если он передан
+        self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
+        
         # Скрываем поле для пользователей группы Manager
-        if hasattr(self, 'request') and self.request.user.groups.filter(name='Manager').exists() and not self.request.user.is_superuser:
+        if self.request and hasattr(self.request, 'user') and self.request.user.groups.filter(name='Manager').exists() and not self.request.user.is_superuser:
             if 'multiple_hotel_images' in self.fields:
                 self.fields['multiple_hotel_images'].widget = forms.HiddenInput()
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Проверяем, что хотя бы одно из полей названий заполнено
+        name_ru = cleaned_data.get('name_ru')
+        name_kk = cleaned_data.get('name_kk')
+        name_en = cleaned_data.get('name_en')
+        
+        if not any([name_ru, name_kk, name_en]):
+            raise forms.ValidationError('Необходимо заполнить хотя бы одно из полей названий (RU, KK, EN)')
+        
+        return cleaned_data
                 
     def clean_multiple_hotel_images(self):
         """
@@ -816,7 +839,7 @@ class RoomTypeFeaturesDetailedInline(admin.StackedInline):
 
         return formset
 
-class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseExportAdmin):
     form = RoomTypeForm
     inlines = [
         RoomTypeGalleryInline, 
@@ -1043,7 +1066,7 @@ class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
             )
         return actions
 
-class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class HotelAdmin(RussianModelAdminMixin, BaseExportAdmin):
     form = HotelAdminForm
     inlines = [
         HotelGallery_Tab, HotelFeatures_Tab, HotelMealPlan_Tab, HotelFAQs_Tab
@@ -1155,20 +1178,51 @@ class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
         return super().get_list_display(request)
 
     def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        
-        # Передаем запрос в форму для обработки прав доступа
-        form.request = request
-        
+        # Для Manager'ов используем специальную форму с исключенными полями
         if is_manager(request.user):
-            form.base_fields.pop('user', None)
-            for field in ['featured', 'slug', 'hid', 'status', 'views', 'name']:
-                if field in form.base_fields:
-                    form.base_fields[field].widget = forms.HiddenInput()
-            # Скрываем поле множественной загрузки для менеджеров
-            if 'multiple_hotel_images' in form.base_fields:
-                form.base_fields['multiple_hotel_images'].widget = forms.HiddenInput()
-        return form
+            class ManagerHotelForm(HotelAdminForm):
+                class Meta:
+                    model = Hotel
+                    # Исключаем технические поля для Manager'ов
+                    exclude = ['user', 'hid', 'views', 'featured', 'slug', 'name', 'description', 'status']
+                    widgets = {
+                        'check_in_time': forms.TimeInput(attrs={'type': 'time'}),
+                        'check_out_time': forms.TimeInput(attrs={'type': 'time'}),
+                        'start_date': forms.DateInput(attrs={'type': 'date'}),
+                        'end_date': forms.DateInput(attrs={'type': 'date'}),
+                    }
+                
+                def __init__(self, *args, **kwargs):
+                    self.request = kwargs.pop('request', None)
+                    super().__init__(*args, **kwargs)
+                    
+                    # Скрываем поле множественной загрузки для менеджеров
+                    if 'multiple_hotel_images' in self.fields:
+                        self.fields['multiple_hotel_images'].widget = forms.HiddenInput()
+                        self.fields['multiple_hotel_images'].required = False
+                    
+                    # Добавляем подсказку к полю названия
+                    if 'name_ru' in self.fields:
+                        self.fields['name_ru'].help_text = 'Заполните хотя бы одно из полей названий'
+            
+            # Создаем кастомную форму, которая будет принимать request в kwargs
+            class RequestAwareManagerForm(ManagerHotelForm):
+                def __init__(self, *args, **kwargs):
+                    kwargs['request'] = request  # Передаем request в kwargs
+                    super().__init__(*args, **kwargs)
+            
+            return RequestAwareManagerForm
+        
+        else:
+            # Для суперпользователей используем стандартную форму
+            form_class = super().get_form(request, obj, **kwargs)
+            
+            class RequestAwareForm(form_class):
+                def __init__(self, *args, **kwargs):
+                    kwargs['request'] = request  # Передаем request в kwargs
+                    super().__init__(*args, **kwargs)
+            
+            return RequestAwareForm
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -1176,9 +1230,41 @@ class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
             return queryset.filter(user=request.user)
         return queryset
 
+    def get_prepopulated_fields(self, request, obj=None):
+        """
+        Переопределяем prepopulated_fields для менеджеров
+        """
+        if is_manager(request.user):
+            return {}  # Для менеджеров не используем prepopulated_fields
+        return self.prepopulated_fields
+
     def save_model(self, request, obj, form, change):
+        # Для новых объектов устанавливаем пользователя
         if not change:
             obj.user = request.user
+        
+        # Для Manager'ов устанавливаем значения по умолчанию для скрытых полей
+        if is_manager(request.user):
+            # Обязательно устанавливаем пользователя
+            obj.user = request.user
+            
+            # Устанавливаем статус по умолчанию если не установлен
+            if not obj.status:
+                obj.status = 'In Review'  # На проверке для Manager'ов
+            
+            # Устанавливаем featured в False если не установлен
+            if obj.featured is None:
+                obj.featured = False
+            
+            # Устанавливаем views в 0 если не установлен
+            if obj.views is None:
+                obj.views = 0
+            
+            # Генерируем hid если не установлен
+            if not obj.hid:
+                import shortuuid
+                obj.hid = shortuuid.uuid()[:10]
+        
         super().save_model(request, obj, form, change)
     
     def has_delete_permission(self, request, obj=None):
@@ -1234,7 +1320,7 @@ class HotelAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
             )
         return actions
 
-class RoomAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class RoomAdmin(RussianModelAdminMixin, BaseExportAdmin):
     list_display = ['hotel', 'get_room_type', 'room_number', 'get_price', 'get_number_of_beds', 'get_room_capacity', 'is_available']
     list_per_page = 100
     list_filter = ['is_available']
@@ -1376,7 +1462,7 @@ class CheckInDateFilter(admin.SimpleListFilter):
 
 
 
-class BookingAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class BookingAdmin(RussianModelAdminMixin, BaseExportAdmin):
     # inlines = [ActivityLog_Tab, StaffOnDuty_Tab]
     list_filter = [HotelFilter, RoomTypeFilter, 'is_active', 'checked_in', 'checked_out', CheckInDateFilter, 'payment_status']
     list_display = ['booking_id', 'user', 'hotel', 'get_room_type', 'rooms', 'total', 'prepayment', 'payment_for_hotel', 'payment_status', 'total_days', 'num_adults', 'num_children', 'check_in_date', 'check_out_date', 'date']
@@ -1441,7 +1527,7 @@ class BookingAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
                 form.base_fields['payment_for_hotel'].widget.attrs['readonly'] = True
         return form
 
-class RoomServicesAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class RoomServicesAdmin(RussianModelAdminMixin, BaseExportAdmin):
     list_display = ['booking', 'room', 'date', 'price', 'service_type']
     list_per_page = 100
 
@@ -1455,7 +1541,7 @@ class RoomServicesAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
 class CouponUsers_Tab(admin.TabularInline):
     model = CouponUsers
 
-class CouponAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class CouponAdmin(RussianModelAdminMixin, BaseExportAdmin):
     inlines = [CouponUsers_Tab]
     list_editable = ['valid_from', 'valid_to', 'active', 'type']
     list_display = ['code', 'discount', 'type', 'redemption', 'valid_from', 'valid_to', 'active', 'date']
@@ -1467,7 +1553,7 @@ class CouponAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
             queryset = queryset.filter(hotel__user=request.user)
         return queryset
 
-class NotificationAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class NotificationAdmin(RussianModelAdminMixin, BaseExportAdmin):
     list_editable = ['seen', 'type']
     list_display = ['user', 'booking', 'type', 'seen', 'date']
     
@@ -1483,7 +1569,7 @@ class NotificationAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
         return queryset
 
 
-class BookmarkAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class BookmarkAdmin(RussianModelAdminMixin, BaseExportAdmin):
     list_display = ['user', 'hotel']
 
     def get_queryset(self, request):
@@ -1512,7 +1598,7 @@ class ReviewAdmin(RussianModelAdminMixin, admin.ModelAdmin):
             queryset = queryset.filter(hotel__user=request.user)
         return queryset
 
-class PriceOnDateAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
+class PriceOnDateAdmin(RussianModelAdminMixin, BaseExportAdmin):
     form = PriceOnDateForm
     list_display = ['type', 'hotel']
     list_filter = [HotelFilter]
@@ -1557,6 +1643,10 @@ class PriceOnDateAdmin(RussianModelAdminMixin, BaseImportExportAdmin):
 
     def has_add_permission(self, request):
         # Запрещаем добавление записей для пользователей группы Manager
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        # Запрещаем удаление записей в PriceOnDateAdmin
         return False
 
     def get_queryset(self, request):

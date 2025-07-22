@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.cache import cache_page
+from django.views.decorators.cache import cache_page, cache_control
 from django.views.decorators.vary import vary_on_headers, vary_on_cookie
 from django.utils import timezone
 from django.conf import settings
@@ -32,6 +32,11 @@ import string
 from robokassa.robokassa import generate_payment_link, result_payment, check_success_payment
 
 from hotel.decorators import require_selection_data
+
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.utils.translation import activate, get_language
 
 
 
@@ -68,6 +73,7 @@ def index(request):
     return render(request, "hotel/index.html", context)
 
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def get_selected_items_count(request):
     """
     API endpoint для получения количества выбранных номеров.
@@ -83,6 +89,7 @@ def get_selected_items_count(request):
     })
 
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def get_messages(request):
     """
     API endpoint для получения Django messages.
@@ -108,13 +115,83 @@ def get_messages(request):
         messages_data.append({
             'message': str(message),
             'level_tag': level_map.get(message.tags, 'info'),
-            'tags': message.tags
         })
-    
+        
     return JsonResponse({
         'messages': messages_data
     })
 
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def get_user_auth_status(request):
+    """
+    API endpoint для проверки состояния аутентификации пользователя.
+    КРИТИЧНО: Данные НЕ кэшируются из соображений безопасности!
+    Возвращает состояние аутентификации в реальном времени.
+    """
+    from django.urls import reverse
+    from django.utils.translation import gettext as _
+    
+    if request.user.is_authenticated:
+        return JsonResponse({
+            'is_authenticated': True,
+            'buttons': [
+                {
+                    'type': 'selected_rooms',
+                    'url': reverse('hotel:selected_rooms'),
+                    'icon': 'fas fa-bed',
+                    'class': 'selected-rooms-button',
+                    'span_class': 'room-count',
+                    'span_text': '0'
+                },
+                {
+                    'type': 'dashboard',
+                    'url': reverse('dashboard:dashboard'),
+                    'icon': 'bi bi-grid',
+                    'class': 'sign-in-button',
+                    'span_class': 'sign-in-span',
+                    'span_text': str(_('Dash'))
+                },
+                {
+                    'type': 'sign_out',
+                    'url': reverse('userauths:sign-out'),
+                    'icon': 'bi bi-power',
+                    'class': 'sign-in-button',
+                    'span_class': 'sign-up-span',
+                    'span_text': str(_('Sign Out'))
+                }
+            ]
+        })
+    else:
+        return JsonResponse({
+            'is_authenticated': False,
+            'buttons': [
+                {
+                    'type': 'selected_rooms',
+                    'url': reverse('hotel:selected_rooms'),
+                    'icon': 'fas fa-bed',
+                    'class': 'selected-rooms-button',
+                    'span_class': 'room-count',
+                    'span_text': '0'
+                },
+                {
+                    'type': 'sign_in',
+                    'url': reverse('userauths:sign-in'),
+                    'icon': 'fa fa-sign-in',
+                    'class': 'sign-in-button',
+                    'span_class': 'sign-in-span',
+                    'span_text': str(_('Sign In'))
+                },
+                {
+                    'type': 'sign_up',
+                    'url': reverse('userauths:sign-up'),
+                    'icon': 'bi bi-person-add',
+                    'class': 'sign-in-button',
+                    'span_class': 'sign-in-span',
+                    'span_text': str(_('Sign Up'))
+                }
+            ]
+        })
 
 @vary_on_cookie
 def hotel_detail(request, slug):
@@ -1843,4 +1920,40 @@ def live_check(request):
     Liveness probe - проверяет что приложение живо
     """
     return JsonResponse({'status': 'alive'}, status=200)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class CustomLanguageChangeView(View):
+    """
+    Кастомное представление для смены языка без CSRF-токена
+    """
+    
+    def post(self, request):
+        language_code = request.POST.get('language')
+        if language_code and language_code in [lang[0] for lang in settings.LANGUAGES]:
+            # Активируем язык
+            activate(language_code)
+            
+            # Устанавливаем cookie
+            response = JsonResponse({'status': 'success', 'language': language_code})
+            response.set_cookie(
+                settings.LANGUAGE_COOKIE_NAME,
+                language_code,
+                max_age=settings.LANGUAGE_COOKIE_AGE,
+                path=settings.LANGUAGE_COOKIE_PATH,
+                domain=settings.LANGUAGE_COOKIE_DOMAIN,
+                secure=settings.LANGUAGE_COOKIE_SECURE,
+                httponly=settings.LANGUAGE_COOKIE_HTTPONLY,
+                samesite=settings.LANGUAGE_COOKIE_SAMESITE,
+            )
+            return response
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Invalid language code'}, status=400)
+    
+    def get(self, request):
+        # Для GET-запросов возвращаем текущий язык
+        return JsonResponse({
+            'status': 'success', 
+            'current_language': get_language(),
+            'available_languages': [lang[0] for lang in settings.LANGUAGES]
+        })
 

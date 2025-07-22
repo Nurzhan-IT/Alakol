@@ -75,6 +75,55 @@
 
     <link rel="stylesheet" href="{% static 'css/search.css' %}">
     <link rel="stylesheet" href="{% static 'css/topbar.css' %}">
+    
+    <!-- Антикэш CSS для кнопок аутентификации -->
+    <style>
+        /* Предотвращение мерцания кнопок при загрузке */
+        #auth-buttons-container {
+            min-height: 50px;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Стиль для кнопок по умолчанию */
+        .auth-loading #auth-buttons-container {
+            opacity: 0.7;
+        }
+        
+        /* Плавная анимация для обновления кнопок */
+        #auth-buttons-container a {
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        
+        /* Обеспечиваем правильное отображение кнопок в контейнере */
+        #auth-buttons-container .selected-rooms-button,
+        #auth-buttons-container .sign-in-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+        
+        /* Мобильные стили для контейнера кнопок */
+        @media (max-width: 490px) {
+            #auth-buttons-container {
+                gap: 5px;
+            }
+            
+            #auth-buttons-container .selected-rooms-button,
+            #auth-buttons-container .sign-in-button {
+                width: 50px;
+            }
+            
+            #auth-buttons-container .sign-in-span,
+            #auth-buttons-container .sign-up-span {
+                display: none;
+            }
+        }
+    </style>
 
     {% comment %} <link href="{% static 'css/datedropper.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
 
@@ -123,19 +172,20 @@
 <!--                            </button>-->
                         </div>
                         <div class='lang-code'>
-                            <form action="{% url 'set_language' %}" method="post">
-                                {% csrf_token %}
-                                <input name="next" type="hidden" value="{{ redirect_to }}">
+                            <div class="language-buttons">
                                 {% get_current_language as LANGUAGE_CODE %}
                                 {% get_available_languages as LANGUAGES %}
                                 {% get_language_info_list for LANGUAGES as languages %}
                                 {% for language in languages %}
-                                {% comment %} btn btn-outline-dark btn-sm {% endcomment %}
-                                <button class="lang-button-topbar" name="language" value="{{ language.code }}" type="submit">
-                                    <img src="{% static 'images/flags/'|add:language.code|add:'.png' %}" alt="{{ language.code }}" width="20" height="15">
+                                <button class="lang-button-topbar" 
+                                        onclick="changeLanguage('{{ language.code }}')" 
+                                        data-language="{{ language.code }}"
+                                        title="{% trans 'Switch to' %} {{ language.name_local }}">
+                                    <img src="{% static 'images/flags/'|add:language.code|add:'.png' %}" 
+                                         alt="{{ language.code }}" width="20" height="15">
                                 </button>
                                 {% endfor %}
-                            </form>
+                            </div>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -148,31 +198,14 @@
 
 </style>
                         <div class="header_widget "> 
-<!--                            <div class='lang-code'>-->
-<!--                                <form action="{% url 'set_language' %}" method="post">-->
-<!--                                {% csrf_token %}-->
-<!--                                <input name="next" type="hidden" value="{{ redirect_to }}">-->
-<!--                                {% get_current_language as LANGUAGE_CODE %}-->
-<!--                                {% get_available_languages as LANGUAGES %}-->
-<!--                                {% get_language_info_list for LANGUAGES as languages %}-->
-<!--                                {% for language in languages %}-->
-<!--                                {% comment %} btn btn-outline-dark btn-sm {% endcomment %}-->
-<!--                                    <button class="lang-button-topbar" name="language" value="{{ language.code }}" type="submit">-->
-<!--                                        <img src="{% static 'images/flags/'|add:language.code|add:'.png' %}" alt="{{ language.code }}" width="20" height="15">-->
-<!--                                    </button>-->
-<!--                                {% endfor %}-->
-<!--                                </form>-->
-<!--                            </div>-->
                                
-                            {% if request.user.is_authenticated %}
-                                <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button"><i class="fas fa-bed"></i><span class="room-count">0</span></a>
-                                <a href="{% url 'dashboard:dashboard' %}" class="sign-in-button"><i class="bi bi-grid"></i> <span class="sign-in-span">{% trans "Dashboard" %}</span></a>
-                                <a href="{% url 'userauths:sign-out' %}" class="sign-in-button"><i class="bi bi-power"></i> <span class="sign-up-span">{% trans "Sign Out" %}</span></a>
-                            {% else %}
+                            <!-- Контейнер для кнопок аутентификации - будет обновляться динамически -->
+                            <div id="auth-buttons-container">
+                                <!-- По умолчанию показываем кнопки для неаутентифицированных пользователей -->
                                 <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button"><i class="fas fa-bed"></i><span class="room-count">0</span></a>
                                 <a href="{% url 'userauths:sign-in' %}" class="sign-in-button"><i class="fa fa-sign-in"></i><span class="sign-in-span">{% trans "Sign In" %}</span></a>
                                 <a href="{% url 'userauths:sign-up' %}" class="sign-in-button"><i class="bi bi-person-add"></i><span class="sign-in-span">{% trans "Sign Up" %}</span></a>
-                            {% endif %}
+                            </div>
 
                         </div>
                     </div>
@@ -355,6 +388,65 @@
     </div>
 
     <script>
+        // Функция для смены языка без CSRF-токена
+        function changeLanguage(languageCode) {
+            // Создаем cookie для языка
+            document.cookie = 'django_language=' + languageCode + '; path=/; max-age=31536000';
+            
+            // Получаем текущий путь и параметры
+            var currentPath = window.location.pathname;
+            var currentSearch = window.location.search;
+            var baseUrl = window.location.protocol + '//' + window.location.host;
+            
+            // Определяем новый URL
+            var newUrl;
+            
+            // Проверяем, есть ли уже языковой префикс в пути
+            var langPattern = /^\/([a-z]{2})\//;
+            var match = currentPath.match(langPattern);
+            
+            if (match) {
+                // Заменяем существующий языковой префикс
+                var currentLang = match[1];
+                var newPath = currentPath.replace('/'+currentLang+'/', '/'+languageCode+'/');
+                newUrl = baseUrl + newPath + currentSearch;
+            } else {
+                // Добавляем языковой префикс к текущему пути
+                if (currentPath === '/') {
+                    newUrl = baseUrl + '/' + languageCode + '/';
+                } else {
+                    newUrl = baseUrl + '/' + languageCode + currentPath + currentSearch;
+                }
+            }
+            
+            // Перенаправляем на новый URL
+            window.location.href = newUrl;
+        }
+        
+        // Альтернативная функция через API (для продакшена)
+        function changeLanguageViaAPI(languageCode) {
+            $.ajax({
+                url: '{% url "hotel:custom_change_language" %}',
+                type: 'POST',
+                data: {
+                    'language': languageCode
+                },
+                success: function(data) {
+                    if (data.status === 'success') {
+                        // Перезагружаем страницу с новым языком
+                        window.location.reload();
+                    } else {
+                        console.error('Language change failed:', data.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Language change error:', error);
+                    // Fallback к простой смене языка
+                    changeLanguage(languageCode);
+                }
+            });
+        }
+        
         // Messages загружаются динамически через AJAX для предотвращения кэширования
         function loadAndDisplayMessages() {
             $.ajax({
@@ -379,8 +471,64 @@
             });
         }
         
-        // Загружаем messages при загрузке страницы
+        // Функция для загрузки количества выбранных номеров в реальном времени
+        function loadSelectedItemsCount() {
+            $.ajax({
+                url: '{% url "hotel:get_selected_items_count" %}',
+                type: 'GET',
+                success: function(data) {
+                    $('.room-count').text(data.total_selected_items);
+                },
+                error: function() {
+                    // В случае ошибки оставляем 0
+                    $('.room-count').text('0');
+                }
+            });
+        }
+        
+        // Функция для загрузки состояния аутентификации и обновления кнопок в топ-баре
+        function loadUserAuthStatus() {
+            // Добавляем класс для индикации загрузки
+            $('body').addClass('auth-loading');
+            
+            $.ajax({
+                url: '{% url "hotel:get_user_auth_status" %}',
+                type: 'GET',
+                success: function(data) {
+                    var container = $('#auth-buttons-container');
+                    container.empty(); // Очищаем контейнер
+                    
+                    // Создаем кнопки на основе ответа от сервера
+                    data.buttons.forEach(function(button) {
+                        var buttonHtml = '<a href="' + button.url + '" class="' + button.class + '">';
+                        buttonHtml += '<i class="' + button.icon + '"></i>';
+                        
+                        if (button.span_class) {
+                            buttonHtml += '<span class="' + button.span_class + '">' + button.span_text + '</span>';
+                        }
+                        
+                        buttonHtml += '</a>';
+                        container.append(buttonHtml);
+                    });
+                    
+                    // После обновления кнопок загружаем количество выбранных номеров
+                    loadSelectedItemsCount();
+                    
+                    // Убираем класс загрузки
+                    $('body').removeClass('auth-loading');
+                },
+                error: function() {
+                    // В случае ошибки оставляем кнопки по умолчанию (неаутентифицированного пользователя)
+                    console.log('Auth status loading failed, using default buttons');
+                    loadSelectedItemsCount();
+                    $('body').removeClass('auth-loading');
+                }
+            });
+        }
+        
+        // Загружаем состояние аутентификации и messages при загрузке страницы
         $(document).ready(function() {
+            loadUserAuthStatus();
             loadAndDisplayMessages();
         });
     </script>
@@ -413,26 +561,6 @@
     {% endblock script_links %}
 
     <script>
-        // Функция для загрузки количества выбранных номеров в реальном времени
-        function loadSelectedItemsCount() {
-            $.ajax({
-                url: '{% url "hotel:get_selected_items_count" %}',
-                type: 'GET',
-                success: function(data) {
-                    $('.room-count').text(data.total_selected_items);
-                },
-                error: function() {
-                    // В случае ошибки оставляем 0
-                    $('.room-count').text('0');
-                }
-            });
-        }
-        
-        // Загружаем количество выбранных номеров при загрузке страницы
-        $(document).ready(function() {
-            loadSelectedItemsCount();
-        });
-        
         $(function() {
 
             var start = moment().subtract(0, 'days');
@@ -490,8 +618,7 @@
                 <a href="{% url 'legal:privacy_policy' %}" target="_blank">{% trans "Read more about our privacy policy" %}</a>
             </div>
             <div class="cookie-notice-buttons">
-                <button id="cookie-decline" class="cookie-notice-btn cookie-decline-btn">{% trans "Reject" %}</button>
-                <button id="cookie-accept" class="cookie-notice-btn cookie-accept-btn">{% trans "Accept" %}</button>
+                <button id="cookie-continue" class="cookie-notice-btn cookie-continue-btn">{% trans "Continue" %}</button>
             </div>
         </div>
     </div>
