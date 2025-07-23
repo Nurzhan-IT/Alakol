@@ -288,13 +288,13 @@ $(document).ready(function(){
                 })
 
                 if (res.data == gettext("Bookmark Deleted")) {
-                    button.html('<i class="fas fa-heart" style="color: gray;"></i>')
+                    button.html('')
                 } else {
-                    button.html('<i class="fas fa-heart" style="color: red;"></i>')
+                    button.html('')
                 }
 
                 if (res.data == gettext("Login To Bookmark Hotel")) {
-                    button.html('<i class="fas fa-heart" style="color: gray;"></i>')
+                    button.html('')
                 } 
             }
         })
