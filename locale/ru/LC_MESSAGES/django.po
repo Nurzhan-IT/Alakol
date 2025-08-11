@@ -271,6 +271,12 @@ msgstr "Ошибка: Проверка платежа не удалась"
 msgid "Error processing payment"
 msgstr "Ошибка обработки платежа"
 
+# Сообщение о минимальном количестве ночей проживания
+#: hotel/views.py
+#, python-format
+msgid "Minimum stay for this hotel is %(n)d nights"
+msgstr "Минимальный срок проживания в этом отеле — %(n)d ночей"
+
 #: .\hotel\views.py:1675
 msgid "Access to receipt is only available for paid bookings."
 msgstr "Доступ к квитанции предоставляется только для оплаченных бронирований."
