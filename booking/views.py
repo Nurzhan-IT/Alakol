@@ -105,6 +105,24 @@ def check_room_availability(request):
             referer = request.META.get("HTTP_REFERER", reverse("hotel:index"))
             return redirect(referer)
 
+        # Проверка минимального количества дней бронирования для отеля
+        try:
+            date_format = "%Y-%m-%d"
+            checkin_date = datetime.strptime(checkin, date_format).date()
+            checkout_date = datetime.strptime(checkout, date_format).date()
+            total_days = (checkout_date - checkin_date).days
+            if total_days < hotel.min_days_for_booking:
+                messages.error(
+                    request,
+                    _("Minimum stay for this hotel is %(n)d nights") % {"n": hotel.min_days_for_booking}
+                )
+                # Возврат на страницу деталей отеля или referer
+                referer = request.META.get("HTTP_REFERER", reverse("hotel:detail", args=[hotel.slug]))
+                return redirect(referer)
+        except Exception:
+            # Если даты некорректные, передадим управление существующей логике ниже
+            pass
+
         try:
             # Если room_type совпадает с room_type_id, значит это ID, а не slug
             if room_type and room_type.isdigit() and room_type_id and room_type == room_type_id:

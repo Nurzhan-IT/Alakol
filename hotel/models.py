@@ -173,6 +173,11 @@ class Hotel(models.Model):
 
     check_in_time = models.TimeField(null=True, blank=True, verbose_name='Время заезда')
     check_out_time = models.TimeField(null=True, blank=True, verbose_name='Время выезда')
+    min_days_for_booking = models.PositiveSmallIntegerField(
+        default=1,
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        verbose_name='Кол-во мин дней для бронирования'
+    )
     
     # Даты начала и окончания работы отеля
     start_date = models.DateField(null=True, blank=True, help_text="Дата начала работы отеля", verbose_name='Дата начала работы отеля')
