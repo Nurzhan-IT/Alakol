@@ -2,6 +2,62 @@ from django import forms
 from django.utils.safestring import mark_safe
 import os
 
+class DDMMDateInput(forms.TextInput):
+    """
+    Text input for DD.MM date without year with client-side mask and auto dot.
+    """
+    input_type = 'text'
+
+    def __init__(self, attrs=None):
+        base_attrs = {
+            'placeholder': 'ДД.ММ',
+            'maxlength': '5',
+            'pattern': r'\d{2}\.\d{2}',
+            'inputmode': 'numeric',
+            'style': 'width:120px',
+        }
+        if attrs:
+            base_attrs.update(attrs)
+        super().__init__(base_attrs)
+
+    def render(self, name, value, attrs=None, renderer=None):
+        input_html = super().render(name, value, attrs, renderer)
+        field_id = (attrs or {}).get('id', f'id_{name}')
+        js = f'''
+        <script>(function(){{
+          var el=document.getElementById('{field_id}');
+          if(!el) return;
+          function format(v){{
+            v = (v||'').replace(/[^0-9]/g,'');
+            if (v.length > 4) v = v.slice(0,4);
+            if (v.length >= 3) return v.slice(0,2)+'.'+v.slice(2);
+            if (v.length >= 1) return v;
+            return '';
+          }}
+          el.addEventListener('input', function(e){{
+            var cur = e.target.value;
+            var formatted = format(cur);
+            if (cur !== formatted) {{
+              var pos = e.target.selectionStart;
+              e.target.value = formatted;
+              // try to keep caret near end
+              e.target.selectionStart = e.target.selectionEnd = formatted.length;
+            }}
+          }});
+          el.addEventListener('blur', function(e){{
+            var v = e.target.value;
+            if (!v) return;
+            var m = /^\d{2}\.\d{2}$/.test(v);
+            if(!m) {{ e.target.classList.add('error'); return; }}
+            var d=parseInt(v.slice(0,2),10), mth=parseInt(v.slice(3),10);
+            var daysIn=[31,29,31,30,31,30,31,31,30,31,30,31];
+            var ok = mth>=1 && mth<=12 && d>=1 && d<=daysIn[mth-1];
+            if(!ok) e.target.classList.add('error'); else e.target.classList.remove('error');
+          }});
+        }})();</script>
+        '''
+        return mark_safe(input_html + js)
+
 class IconSelectWidget(forms.Select):
     def __init__(self, attrs=None, choices=()):
         super().__init__(attrs, choices)
