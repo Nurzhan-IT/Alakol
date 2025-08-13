@@ -340,6 +340,22 @@ class HotelFeaturesForm(forms.ModelForm):
             'icon': IconSelectWidget(choices=ICON_CHOICES)  # Используем кастомный виджет
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Базовое поле name делаем необязательным, чтобы скрытие не давало ошибку
+        if 'name' in self.fields:
+            self.fields['name'].required = False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not any([
+            cleaned_data.get('name_ru'),
+            cleaned_data.get('name_kk'),
+            cleaned_data.get('name_en')
+        ]):
+            raise forms.ValidationError('Заполните хотя бы одно поле названия (RU, KK, EN)')
+        return cleaned_data
+
 
 class RoomTypeFeaturesForm(forms.ModelForm):
     # Поля для переводов названий
@@ -353,6 +369,22 @@ class RoomTypeFeaturesForm(forms.ModelForm):
         widgets = {
             'icon': IconSelectWidget(choices=ICON_CHOICES)  # Используем кастомный виджет для поля icon
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Базовое поле name делаем необязательным, чтобы скрытие не давало ошибку
+        if 'name' in self.fields:
+            self.fields['name'].required = False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not any([
+            cleaned_data.get('name_ru'),
+            cleaned_data.get('name_kk'),
+            cleaned_data.get('name_en')
+        ]):
+            raise forms.ValidationError('Заполните хотя бы одно поле названия (RU, KK, EN)')
+        return cleaned_data
 
 class RoomTypeFeaturesDetailedForm(forms.ModelForm):
     text_ru = forms.CharField(max_length=100, label='Текст (RU)')
@@ -383,6 +415,22 @@ class RoomTypeForm(forms.ModelForm):
             'all': ('css/custom_admin.css', 'css/simple_editor.css'),  # Подключаем кастомный CSS и стили редактора
         }
         js = ('js/simple_editor.js',)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not any([
+            cleaned_data.get('type_ru'),
+            cleaned_data.get('type_kk'),
+            cleaned_data.get('type_en')
+        ]):
+            raise forms.ValidationError('Заполните хотя бы одно поле типа (RU, KK, EN)')
+        return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Базовое поле type делаем необязательным, чтобы скрытие не давало ошибку
+        if 'type' in self.fields:
+            self.fields['type'].required = False
 
     
 class PriceOnDateForm(forms.ModelForm):
@@ -651,6 +699,9 @@ class HotelFeatures_Tab(admin.StackedInline):
             for form in formset.form.base_fields.values():
                 if 'hfid' in formset.form.base_fields:
                     formset.form.base_fields['hfid'].widget = forms.HiddenInput()
+                # Скрываем базовое поле name для менеджеров
+                if 'name' in formset.form.base_fields:
+                    formset.form.base_fields['name'].widget = forms.HiddenInput()
 
         return formset
 
@@ -830,6 +881,9 @@ class RoomTypeFeaturesInline(admin.StackedInline):
             # Скрываем поле hotel
             if 'hotel' in formset.form.base_fields:
                 formset.form.base_fields['hotel'].widget = forms.HiddenInput()
+            # Скрываем базовое поле name для менеджеров
+            if 'name' in formset.form.base_fields:
+                formset.form.base_fields['name'].widget = forms.HiddenInput()
 
         return formset
 
@@ -993,6 +1047,9 @@ class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseExportAdmin):
             for field in ['rtid', 'slug', 'dynamic_pricing', 'description']:
                 if field in form.base_fields:
                     form.base_fields[field].widget = forms.HiddenInput()
+            # Скрываем базовое поле типа для менеджеров (type)
+            if 'type' in form.base_fields:
+                form.base_fields['type'].widget = forms.HiddenInput()
         
         return form
 
