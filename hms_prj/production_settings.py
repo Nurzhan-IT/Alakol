@@ -220,8 +220,8 @@ LANGUAGE_COOKIE_SAMESITE = 'Lax'
 
 # Настройки для django-modeltranslation
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'  # По умолчанию русский
-MODELTRANSLATION_FALLBACK_LANGUAGES = ('ru', 'kk', 'en')  # Порядок резервных языков
-MODELTRANSLATION_LANGUAGES = ('ru', 'kk', 'en')  # Поддерживаемые языки для переводов
+MODELTRANSLATION_FALLBACK_LANGUAGES = ('kk', 'ru', 'en')  # Порядок резервных языков
+MODELTRANSLATION_LANGUAGES = ('kk', 'ru', 'en')  # Поддерживаемые языки для переводов
 
 # Настройки валидации переводов
 MODELTRANSLATION_ENABLE_FALLBACKS = True  # Разрешить использование резервных языков
@@ -343,6 +343,9 @@ CACHE_TTL = {
     'features_and_amenities': 14400,  # 4 часа - удобства и особенности
     'static_content': 86400,     # 24 часа - статический контент
     #'room_unavailability': 0,  # ОТКЛЮЧЕНО - недоступность номеров (без кеширования)
+    
+    # Настройки для dashboard статистики
+    'dashboard_stats': 600,      # 10 минут - основная статистика дашборда (увеличено для продакшена)
 }
 
 # ==============================================

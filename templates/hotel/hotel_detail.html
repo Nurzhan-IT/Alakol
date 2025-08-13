@@ -399,21 +399,24 @@
                 <div class="meal-plans-pricing">
                     <h4>{% trans "Meal costs" %}</h4>
                     <div class="meal-plans-list">
-                        {% for meal_plan in hotel.hotelmealplan_set.all %}
+                        {% for meal_plan in hotel.hotelmealplan_set.all|dictsort:"age_min" %}
                         <div class="meal-plan-item">
                             <div class="meal-plan-info">
                                 <div class="age-range">
                                     <i class="fas fa-user"></i>
                                     {% if meal_plan.age_min and meal_plan.age_max %}
-                                        {% trans "Age" %}: {% trans "from" %} {{ meal_plan.age_min }} {% trans "to" %} {{ meal_plan.age_max }} {% trans "years" %}
+                                        {% if meal_plan.age_max >= 99 %}
+                                            {% trans "Age" %}: {{ meal_plan.age_min }}+ {% trans "years old." %}
+                                        {% else %}
+                                            {% trans "Age" %}: {% trans "from" %} {{ meal_plan.age_min }} {% trans "to" %} {{ meal_plan.age_max }} {% trans "years" %}
+                                        {% endif %}
                                     {% elif meal_plan.age_min %}
-                                        {% trans "Age" %}: {{ meal_plan.age_min }}+ {% trans "years old." %}
+                                        {% trans "Age" %}: {% trans "from" %} {{ meal_plan.age_min }} {% trans "years" %}
                                     {% elif meal_plan.age_max %}
                                         {% trans "Age" %}: {% trans "up to" %} {{ meal_plan.age_max }} {% trans "years" %}
                                     {% else %}
                                         {% trans "Age" %}: {% trans "any" %}
                                     {% endif %}
-                                    
                                 </div>
                             </div>
                             <div class="meal-plan-price">

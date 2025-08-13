@@ -434,6 +434,15 @@ def room_type_detail(request, slug, rt_slug):
     user_checkin_date = datetime.strptime(checkin, date_format).date()
     user_checkout_date = datetime.strptime(checkout, date_format).date()
     
+    # Проверяем минимальное количество дней для бронирования у отеля
+    total_days = (user_checkout_date - user_checkin_date).days
+    if total_days < hotel.min_days_for_booking:
+        messages.warning(
+            request,
+            _("Minimum stay for this hotel is %(n)d nights") % {"n": hotel.min_days_for_booking}
+        )
+        return redirect("hotel:detail", hotel.slug)
+
     # Проверяем, активен ли отель на выбранные даты
     hotel_available = hotel.is_active_for_dates(user_checkin_date, user_checkout_date)
     if not hotel_available:
@@ -1049,6 +1058,14 @@ def process_booking(request):
         time_difference = checkout_date - checkin_date
         total_days = time_difference.days
         
+        # Проверяем минимальное количество дней для бронирования у отеля
+        if total_days < hotel.min_days_for_booking:
+            messages.error(
+                request,
+                _("Minimum stay for this hotel is %(n)d nights") % {"n": hotel.min_days_for_booking}
+            )
+            return None
+
         # Проверяем, активен ли отель на выбранные даты
         hotel_available = hotel.is_active_for_dates(checkin_date, checkout_date)
         if not hotel_available:
@@ -1158,6 +1175,8 @@ def create_robokassa_payment(request, payment_key=None):
             date_format = "%Y-%m-%d"
             checkin_date = datetime.strptime(booking_data['checkin'], date_format).date()
             checkout_date = datetime.strptime(booking_data['checkout'], date_format).date()
+            # Минимальная длительность проживания
+            total_days = (checkout_date - checkin_date).days
             
             # Получаем информацию об отеле
             first_item_id = next(iter(request.session['selection_data_obj']))
@@ -1165,6 +1184,13 @@ def create_robokassa_payment(request, payment_key=None):
             hotel_id = int(first_item['hotel_id'])
             hotel = Hotel.objects.get(id=hotel_id)
             
+            if total_days < hotel.min_days_for_booking:
+                messages.error(
+                    request,
+                    _("Minimum stay for this hotel is %(n)d nights") % {"n": hotel.min_days_for_booking}
+                )
+                return redirect("/")
+
             # Проверяем, активен ли отель на выбранные даты
             hotel_available = hotel.is_active_for_dates(checkin_date, checkout_date)
             if not hotel_available:
@@ -1750,16 +1776,41 @@ def fill_missing_dates_with_base_price(room_type, hotel):
     # Получаем существующие динамические цены или создаем пустой словарь
     dynamic_pricing = room_type.dynamic_pricing or {}
     
-    # Определяем диапазон дат для заполнения
-    start_date = hotel.start_date
-    end_date = hotel.end_date
-    
-    # Если даты не заданы, используем разумные значения по умолчанию
-    if not start_date:
-        start_date = date.today()
-    
-    if not end_date:
-        # Если конечная дата не задана, берем год вперед от start_date
+    # Определяем диапазон дат для заполнения на основе сезонных полей ДД.ММ
+    today = date.today()
+
+    def parse_md(value):
+        # Поддержка 'ДД.ММ' и legacy 'YYYY-MM-DD'
+        if not value:
+            return None
+        value = str(value)
+        try:
+            if len(value) == 5 and value[2] == '.':
+                # return (month, day)
+                return (int(value[3:5]), int(value[:2]))
+            if len(value) == 10 and value[4] == '-' and value[7] == '-':
+                y, m, d = value.split('-')
+                return (int(m), int(d))
+        except Exception:
+            return None
+        return None
+
+    def pick_year_for_md(md, base_year):
+        return date(base_year, md[0], md[1])
+
+    start_md = parse_md(getattr(hotel, 'start_date', None))
+    end_md = parse_md(getattr(hotel, 'end_date', None))
+
+    if start_md and end_md:
+        start_candidate = pick_year_for_md(start_md, today.year)
+        end_candidate = pick_year_for_md(end_md, today.year)
+        if end_candidate < start_candidate:
+            end_candidate = pick_year_for_md(end_md, today.year + 1)
+        start_date = start_candidate
+        end_date = end_candidate
+    else:
+        # Фолбэк: год от сегодня
+        start_date = today
         end_date = start_date + timedelta(days=365)
     
     # Заполняем пустые даты базовой ценой

@@ -6,7 +6,7 @@ from django.utils.html import mark_safe
 
 from modeltranslation.admin import TranslationAdmin
 
-from .widgets import IconSelectWidget, SimpleTextEditorWidget, RoomTypeSelectWidget
+from .widgets import IconSelectWidget, SimpleTextEditorWidget, RoomTypeSelectWidget, DDMMDateInput, AgeRangeSliderWidget
 
 from django.shortcuts import render
 from django.urls import reverse
@@ -328,6 +328,11 @@ class HotelAdminForm(forms.ModelForm):
         return files
 
 class HotelFeaturesForm(forms.ModelForm):
+    # Поля для переводов названий
+    name_ru = forms.CharField(max_length=35, label='Название (RU)', required=False)
+    name_kk = forms.CharField(max_length=35, label='Название (KK)', required=False)
+    name_en = forms.CharField(max_length=35, label='Название (EN)', required=False)
+    
     class Meta:
         model = HotelFeatures
         fields = '__all__'
@@ -335,14 +340,51 @@ class HotelFeaturesForm(forms.ModelForm):
             'icon': IconSelectWidget(choices=ICON_CHOICES)  # Используем кастомный виджет
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Базовое поле name делаем необязательным, чтобы скрытие не давало ошибку
+        if 'name' in self.fields:
+            self.fields['name'].required = False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not any([
+            cleaned_data.get('name_ru'),
+            cleaned_data.get('name_kk'),
+            cleaned_data.get('name_en')
+        ]):
+            raise forms.ValidationError('Заполните хотя бы одно поле названия (RU, KK, EN)')
+        return cleaned_data
+
 
 class RoomTypeFeaturesForm(forms.ModelForm):
+    # Поля для переводов названий
+    name_ru = forms.CharField(max_length=100, label='Название (RU)', required=False)
+    name_kk = forms.CharField(max_length=100, label='Название (KK)', required=False)
+    name_en = forms.CharField(max_length=100, label='Название (EN)', required=False)
+    
     class Meta:
         model = RoomTypeFeatures
         fields = '__all__'
         widgets = {
             'icon': IconSelectWidget(choices=ICON_CHOICES)  # Используем кастомный виджет для поля icon
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Базовое поле name делаем необязательным, чтобы скрытие не давало ошибку
+        if 'name' in self.fields:
+            self.fields['name'].required = False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not any([
+            cleaned_data.get('name_ru'),
+            cleaned_data.get('name_kk'),
+            cleaned_data.get('name_en')
+        ]):
+            raise forms.ValidationError('Заполните хотя бы одно поле названия (RU, KK, EN)')
+        return cleaned_data
 
 class RoomTypeFeaturesDetailedForm(forms.ModelForm):
     text_ru = forms.CharField(max_length=100, label='Текст (RU)')
@@ -353,7 +395,34 @@ class RoomTypeFeaturesDetailedForm(forms.ModelForm):
         model = RoomTypeFeaturesDetailed
         fields = '__all__'
 
+class HotelMealPlanForm(forms.ModelForm):
+    class Meta:
+        model = HotelMealPlan
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Двухползунковый слайдер (age_min управляет UI, age_max скрытое поле обновляется JS)
+        self.fields['age_min'].widget = AgeRangeSliderWidget(min_age=0, max_age=99, step=1)
+        self.fields['age_max'].widget = forms.HiddenInput()
+        self.fields['age_min'].label = 'Диапазон возрастов'
+
+    def clean(self):
+        cleaned = super().clean()
+        age_min = cleaned.get('age_min')
+        age_max = cleaned.get('age_max')
+        if age_min is not None and age_max is not None:
+            if age_min > age_max:
+                raise forms.ValidationError('Минимальный возраст не может быть больше максимального.')
+        return cleaned
+
 class RoomTypeForm(forms.ModelForm):
+    # Поля для переводов названий
+    type_ru = forms.CharField(max_length=120, label='Тип (RU)', required=False)
+    type_kk = forms.CharField(max_length=120, label='Тип (KK)', required=False)
+    type_en = forms.CharField(max_length=120, label='Тип (EN)', required=False)
+    
+    # Поля для переводов описаний
     description_ru = forms.CharField(widget=SimpleTextEditorWidget(attrs={'rows': 15}), required=False, label='Описание (RU)')
     description_kk = forms.CharField(widget=SimpleTextEditorWidget(), required=False, label='Описание (KK)')
     description_en = forms.CharField(widget=SimpleTextEditorWidget(), required=False, label='Описание (EN)')
@@ -367,6 +436,22 @@ class RoomTypeForm(forms.ModelForm):
             'all': ('css/custom_admin.css', 'css/simple_editor.css'),  # Подключаем кастомный CSS и стили редактора
         }
         js = ('js/simple_editor.js',)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not any([
+            cleaned_data.get('type_ru'),
+            cleaned_data.get('type_kk'),
+            cleaned_data.get('type_en')
+        ]):
+            raise forms.ValidationError('Заполните хотя бы одно поле типа (RU, KK, EN)')
+        return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Базовое поле type делаем необязательным, чтобы скрытие не давало ошибку
+        if 'type' in self.fields:
+            self.fields['type'].required = False
 
     
 class PriceOnDateForm(forms.ModelForm):
@@ -623,7 +708,7 @@ class HotelGallery_Tab(admin.TabularInline):
         else:
             print("DEBUG: save_model - Файлы для загрузки не найдены")
 
-class HotelFeatures_Tab(admin.TabularInline):
+class HotelFeatures_Tab(admin.StackedInline):
     model = HotelFeatures
     form = HotelFeaturesForm  # Подключаем кастомную форму с виджетом
     extra = 0
@@ -635,6 +720,9 @@ class HotelFeatures_Tab(admin.TabularInline):
             for form in formset.form.base_fields.values():
                 if 'hfid' in formset.form.base_fields:
                     formset.form.base_fields['hfid'].widget = forms.HiddenInput()
+                # Скрываем базовое поле name для менеджеров
+                if 'name' in formset.form.base_fields:
+                    formset.form.base_fields['name'].widget = forms.HiddenInput()
 
         return formset
 
@@ -657,6 +745,7 @@ class HotelFAQs_Tab(admin.StackedInline):
 class HotelMealPlan_Tab(admin.StackedInline):
     model = HotelMealPlan
     extra = 0
+    form = HotelMealPlanForm
     fields = ['price_per_day', 'age_min', 'age_max']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -814,6 +903,9 @@ class RoomTypeFeaturesInline(admin.StackedInline):
             # Скрываем поле hotel
             if 'hotel' in formset.form.base_fields:
                 formset.form.base_fields['hotel'].widget = forms.HiddenInput()
+            # Скрываем базовое поле name для менеджеров
+            if 'name' in formset.form.base_fields:
+                formset.form.base_fields['name'].widget = forms.HiddenInput()
 
         return formset
 
@@ -847,9 +939,9 @@ class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseExportAdmin):
         RoomTypeFeaturesDetailedInline,
         Room_Tab,
     ]
-    list_display = ['type', 'hotel', 'price', 'number_of_beds', 'room_capacity', 'room_size', 'date']
+    list_display = ['type_ru', 'hotel', 'price', 'number_of_beds', 'room_capacity', 'room_size', 'date']
     list_filter = ['hotel', 'price', 'number_of_beds', 'room_capacity']
-    search_fields = ['type', 'hotel__name_ru', 'price']
+    search_fields = ['type_ru', 'hotel__name_ru', 'price']
     search_help_text = 'Поиск по типу номера, отелю, цене'
     list_per_page = 100
     prepopulated_fields = {"slug": ("type", )}
@@ -977,6 +1069,9 @@ class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseExportAdmin):
             for field in ['rtid', 'slug', 'dynamic_pricing', 'description']:
                 if field in form.base_fields:
                     form.base_fields[field].widget = forms.HiddenInput()
+            # Скрываем базовое поле типа для менеджеров (type)
+            if 'type' in form.base_fields:
+                form.base_fields['type'].widget = forms.HiddenInput()
         
         return form
 
@@ -1188,8 +1283,8 @@ class HotelAdmin(RussianModelAdminMixin, BaseExportAdmin):
                     widgets = {
                         'check_in_time': forms.TimeInput(attrs={'type': 'time'}),
                         'check_out_time': forms.TimeInput(attrs={'type': 'time'}),
-                        'start_date': forms.DateInput(attrs={'type': 'date'}),
-                        'end_date': forms.DateInput(attrs={'type': 'date'}),
+                        'start_date': DDMMDateInput(),
+                        'end_date': DDMMDateInput(),
                     }
                 
                 def __init__(self, *args, **kwargs):
@@ -1229,6 +1324,12 @@ class HotelAdmin(RussianModelAdminMixin, BaseExportAdmin):
         if is_manager(request.user):
             return queryset.filter(user=request.user)
         return queryset
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        # Назначаем маску DD.MM для сезонных полей
+        if db_field.name in ('start_date', 'end_date'):
+            kwargs['widget'] = DDMMDateInput()
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
     def get_prepopulated_fields(self, request, obj=None):
         """

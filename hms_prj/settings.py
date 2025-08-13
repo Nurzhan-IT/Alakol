@@ -200,8 +200,8 @@ LANGUAGE_COOKIE_SAMESITE = None
 
 # Настройки для django-modeltranslation
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'  # По умолчанию русский
-MODELTRANSLATION_FALLBACK_LANGUAGES = ('ru', 'kk', 'en')  # Порядок резервных языков
-MODELTRANSLATION_LANGUAGES = ('ru', 'kk', 'en')  # Поддерживаемые языки для переводов
+MODELTRANSLATION_FALLBACK_LANGUAGES = ('kk', 'ru', 'en')  # Порядок резервных языков
+MODELTRANSLATION_LANGUAGES = ('kk', 'ru', 'en')  # Поддерживаемые языки для переводов
 
 # Настройки валидации переводов
 MODELTRANSLATION_ENABLE_FALLBACKS = True  # Разрешить использование резервных языков
@@ -426,6 +426,9 @@ CACHE_TTL = {
     'static_content': 86400,    # 24 часа - статический контент
     # Настройки для booking приложения
     #'room_unavailability': 0,      # ОТКЛЮЧЕНО - недоступность номеров (без кеширования)
+    
+    # Настройки для dashboard статистики
+    'dashboard_stats': 300,     # 5 минут - основная статистика дашборда
     
     # ОТКЛЮЧЕННЫЕ ТИПЫ КЭШИРОВАНИЯ для данных реального времени:
     # 'booking_data': 0,              # ОТКЛЮЧЕНО - данные бронирования должны обновляться мгновенно
