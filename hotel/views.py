@@ -2051,6 +2051,10 @@ def hotel_accommodations(request, slug):
                 totals_by_room_type[rt.id] = calculate_total_price(rt, checkin_date, checkout_date)
             except Exception:
                 totals_by_room_type[rt.id] = Decimal(str(rt.price)) * total_nights
+    
+    # Добавляем рассчитанную сумму в каждый объект типа номера для удобного доступа в шаблоне
+    for rt in room_types:
+        rt.calculated_total = totals_by_room_type.get(rt.id)
 
     context = {
         'hotel': hotel,
