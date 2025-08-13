@@ -3,7 +3,7 @@ from django.template.defaultfilters import escape
 from django.utils.text import slugify
 from shortuuid.django_fields import ShortUUIDField
 from django.utils.html import mark_safe
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import FileExtensionValidator
 from django.core.exceptions import ValidationError
@@ -154,6 +154,73 @@ def validate_image(file):
     if width < 300 or height < 300:  # Minimum dimensions
         raise ValidationError("Изображение слишком маленькое. Минимальные размеры: 300x300 пикселей.")
 
+def validate_ddmm(value: str):
+    """Validate DD.MM format and real calendar day for month.
+
+    Accepts also legacy ISO format YYYY-MM-DD and treats it as valid to keep
+    backward compatibility with existing data until a full migration runs.
+    """
+    if value in (None, ""):
+        return
+
+    # Accept legacy 'YYYY-MM-DD' and skip strict validation here
+    if isinstance(value, str) and len(value) == 10 and value[4] == '-' and value[7] == '-':
+        try:
+            year, month, day = value.split('-')
+            month_int = int(month)
+            day_int = int(day)
+        except Exception:
+            raise ValidationError("Неверный формат даты. Используйте ДД.ММ, например 11.05")
+    else:
+        if not isinstance(value, str) or len(value) != 5 or value[2] != '.':
+            raise ValidationError("Неверный формат даты. Используйте ДД.ММ, например 11.05")
+        try:
+            day_int = int(value[:2])
+            month_int = int(value[3:5])
+        except Exception:
+            raise ValidationError("Неверный формат даты. Используйте ДД.ММ, например 11.05")
+
+    if month_int < 1 or month_int > 12:
+        raise ValidationError("Месяц должен быть в диапазоне 01-12")
+
+    # Max days per month; для февраля допускаем до 29 без учета високосности
+    days_in_month = {
+        1: 31, 2: 29, 3: 31, 4: 30, 5: 31, 6: 30,
+        7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31,
+    }
+    if day_int < 1 or day_int > days_in_month[month_int]:
+        raise ValidationError("Неверный день для указанного месяца")
+
+
+def _parse_ddmm_to_month_day(value: str):
+    """Returns (month, day) from 'DD.MM' or legacy 'YYYY-MM-DD'. None-safe.
+
+    Raises ValidationError only if provided but unparsable.
+    """
+    if not value:
+        return None
+    value = str(value)
+    try:
+        if len(value) == 5 and value[2] == '.':
+            day = int(value[:2])
+            month = int(value[3:5])
+            return (month, day)
+        if len(value) == 10 and value[4] == '-' and value[7] == '-':
+            # ISO legacy
+            year, month, day = value.split('-')
+            return (int(month), int(day))
+    except Exception:
+        pass
+    raise ValidationError("Неверный формат даты. Используйте ДД.ММ, например 11.05")
+
+
+def _compare_md(md_left, md_right) -> int:
+    """Lexicographic compare of (month, day) tuples. Returns -1, 0, 1."""
+    if md_left == md_right:
+        return 0
+    return -1 if (md_left[0], md_left[1]) < (md_right[0], md_right[1]) else 1
+
+
 class Hotel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     name = models.CharField(max_length=100, blank=True, verbose_name='Название')
@@ -171,17 +238,32 @@ class Hotel(models.Model):
     email = models.CharField(max_length=20, verbose_name='Электронная почта')
     status = models.CharField(choices=HOTEL_STATUS, max_length=10, default="published", null=True, blank=True, verbose_name='Статус')
 
-    check_in_time = models.TimeField(null=True, blank=True, verbose_name='Время заезда')
-    check_out_time = models.TimeField(null=True, blank=True, verbose_name='Время выезда')
+
+    check_in_time = models.TimeField(null=True,  verbose_name='Время заезда')
+    check_out_time = models.TimeField(null=True,  verbose_name='Время выезда')
+
     min_days_for_booking = models.PositiveSmallIntegerField(
         default=1,
         validators=[MinValueValidator(1), MaxValueValidator(5)],
         verbose_name='Кол-во мин дней для бронирования'
     )
+
     
-    # Даты начала и окончания работы отеля
-    start_date = models.DateField(null=True, blank=True, help_text="Дата начала работы отеля", verbose_name='Дата начала работы отеля')
-    end_date = models.DateField(null=True, blank=True, help_text="Дата окончания работы отеля", verbose_name='Дата окончания работы отеля')
+    # Даты сезона работы отеля в формате ДД.ММ (например, 11.05)
+    start_date = models.CharField(
+        max_length=5,
+        null=True,
+        validators=[RegexValidator(r"^\d{2}\.\d{2}$", message="Используйте формат ДД.ММ"), validate_ddmm],
+        help_text="Дата начала сезона работы отеля (ДД.ММ)",
+        verbose_name='Дата начала работы отеля'
+    )
+    end_date = models.CharField(
+        max_length=5,
+        null=True,
+        validators=[RegexValidator(r"^\d{2}\.\d{2}$", message="Используйте формат ДД.ММ"), validate_ddmm],
+        help_text="Дата окончания сезона работы отеля (ДД.ММ)",
+        verbose_name='Дата окончания работы отеля'
+    )
 
     # Поля для питания
     meal_plan_type = models.CharField(
@@ -218,20 +300,45 @@ class Hotel(models.Model):
         Returns:
             bool: True если отель доступен для указанных дат, иначе False
         """
-        # Если даты работы отеля не указаны, считаем что отель доступен всегда
+        # Если даты сезона не заданы — доступен всегда
         if not self.start_date and not self.end_date:
             return True
-            
-        # Если указана только дата начала работы
-        if self.start_date and not self.end_date:
-            return check_in_date >= self.start_date
-            
-        # Если указана только дата окончания работы
-        if not self.start_date and self.end_date:
-            return check_out_date <= self.end_date
-            
-        # Если указаны обе даты
-        return check_in_date >= self.start_date and check_out_date <= self.end_date
+
+        # Разбираем DD.MM или legacy YYYY-MM-DD в кортежи (month, day)
+        start_md = _parse_ddmm_to_month_day(self.start_date) if self.start_date else None
+        end_md = _parse_ddmm_to_month_day(self.end_date) if self.end_date else None
+
+        # Вспомогательные функции для сравнения month-day
+        def md_of(date_obj):
+            return (date_obj.month, date_obj.day)
+
+        def in_open_interval(date_obj):
+            current_md = md_of(date_obj)
+            if start_md and not end_md:
+                # Активно ежегодно с start_md до 31.12
+                return _compare_md(current_md, start_md) >= 0
+            if end_md and not start_md:
+                # Активно ежегодно с 01.01 до end_md
+                return _compare_md(current_md, end_md) <= 0
+            return True
+
+        # Только одна граница задана
+        if start_md and not end_md:
+            return in_open_interval(check_in_date) and in_open_interval(check_out_date)
+        if end_md and not start_md:
+            return in_open_interval(check_in_date) and in_open_interval(check_out_date)
+
+        # Обе границы заданы
+        wraps = _compare_md(end_md, start_md) < 0  # интервал через новый год
+
+        def in_season(date_obj):
+            current_md = md_of(date_obj)
+            if not wraps:
+                return _compare_md(current_md, start_md) >= 0 and _compare_md(current_md, end_md) <= 0
+            # Если сезон завершается в следующем году: [start..12-31] U [01-01..end]
+            return _compare_md(current_md, start_md) >= 0 or _compare_md(current_md, end_md) <= 0
+
+        return in_season(check_in_date) and in_season(check_out_date)
     
     def save(self, *args, **kwargs):
         if self.slug == "" or self.slug == None:
