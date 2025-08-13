@@ -328,6 +328,11 @@ class HotelAdminForm(forms.ModelForm):
         return files
 
 class HotelFeaturesForm(forms.ModelForm):
+    # Поля для переводов названий
+    name_ru = forms.CharField(max_length=35, label='Название (RU)', required=False)
+    name_kk = forms.CharField(max_length=35, label='Название (KK)', required=False)
+    name_en = forms.CharField(max_length=35, label='Название (EN)', required=False)
+    
     class Meta:
         model = HotelFeatures
         fields = '__all__'
@@ -337,6 +342,11 @@ class HotelFeaturesForm(forms.ModelForm):
 
 
 class RoomTypeFeaturesForm(forms.ModelForm):
+    # Поля для переводов названий
+    name_ru = forms.CharField(max_length=100, label='Название (RU)', required=False)
+    name_kk = forms.CharField(max_length=100, label='Название (KK)', required=False)
+    name_en = forms.CharField(max_length=100, label='Название (EN)', required=False)
+    
     class Meta:
         model = RoomTypeFeatures
         fields = '__all__'
@@ -354,6 +364,12 @@ class RoomTypeFeaturesDetailedForm(forms.ModelForm):
         fields = '__all__'
 
 class RoomTypeForm(forms.ModelForm):
+    # Поля для переводов названий
+    type_ru = forms.CharField(max_length=120, label='Тип (RU)', required=False)
+    type_kk = forms.CharField(max_length=120, label='Тип (KK)', required=False)
+    type_en = forms.CharField(max_length=120, label='Тип (EN)', required=False)
+    
+    # Поля для переводов описаний
     description_ru = forms.CharField(widget=SimpleTextEditorWidget(attrs={'rows': 15}), required=False, label='Описание (RU)')
     description_kk = forms.CharField(widget=SimpleTextEditorWidget(), required=False, label='Описание (KK)')
     description_en = forms.CharField(widget=SimpleTextEditorWidget(), required=False, label='Описание (EN)')
@@ -623,7 +639,7 @@ class HotelGallery_Tab(admin.TabularInline):
         else:
             print("DEBUG: save_model - Файлы для загрузки не найдены")
 
-class HotelFeatures_Tab(admin.TabularInline):
+class HotelFeatures_Tab(admin.StackedInline):
     model = HotelFeatures
     form = HotelFeaturesForm  # Подключаем кастомную форму с виджетом
     extra = 0
@@ -847,9 +863,9 @@ class RoomTypeCompleteAdmin(RussianModelAdminMixin, BaseExportAdmin):
         RoomTypeFeaturesDetailedInline,
         Room_Tab,
     ]
-    list_display = ['type', 'hotel', 'price', 'number_of_beds', 'room_capacity', 'room_size', 'date']
+    list_display = ['type_ru', 'hotel', 'price', 'number_of_beds', 'room_capacity', 'room_size', 'date']
     list_filter = ['hotel', 'price', 'number_of_beds', 'room_capacity']
-    search_fields = ['type', 'hotel__name_ru', 'price']
+    search_fields = ['type_ru', 'hotel__name_ru', 'price']
     search_help_text = 'Поиск по типу номера, отелю, цене'
     list_per_page = 100
     prepopulated_fields = {"slug": ("type", )}
