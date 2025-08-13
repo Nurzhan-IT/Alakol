@@ -267,6 +267,30 @@ class SearchListView(ListView):
         # Добавляем параметры запроса в контекст для формы поиска
         context['search_params'] = self.search_params
         
+        # Сохраняем ключевые параметры поиска в сессию для улучшения UX
+        try:
+            params = self.search_params
+            check_in = params.get('check_in_date')
+            check_out = params.get('check_out_date')
+            guests = params.get('guests')
+            if check_in or check_out or guests:
+                # Безопасно приводим гостей к int, если возможно
+                guests_int = None
+                if guests is not None:
+                    try:
+                        guests_int = int(guests)
+                    except (TypeError, ValueError):
+                        guests_int = None
+                self.request.session['search_query_data'] = {
+                    'checkin': check_in,
+                    'checkout': check_out,
+                    'guests': guests_int,
+                }
+                self.request.session.modified = True
+        except Exception:
+            # Не прерываем рендеринг страницы, если что-то пошло не так с сессией
+            pass
+        #print(self.request.session['search_query_data'])
         # Получаем даты для расчета динамических цен в шаблоне
         check_in_date_obj, check_out_date_obj = self.date_objects
         

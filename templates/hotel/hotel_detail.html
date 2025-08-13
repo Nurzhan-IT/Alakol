@@ -626,6 +626,15 @@
 </div>
 {% endfor %}
 
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12" style="margin-top: 20px; margin-bottom: 40px;">
+            <a href="{% url 'hotel:accommodations' hotel.slug %}" class="button fullwidth_block">Показать номера и домики</a>
+        </div>
+    </div>
+    
+</div>
+
 {% endblock content %}
 
 {% block script_links %}
