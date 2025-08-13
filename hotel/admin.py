@@ -6,7 +6,7 @@ from django.utils.html import mark_safe
 
 from modeltranslation.admin import TranslationAdmin
 
-from .widgets import IconSelectWidget, SimpleTextEditorWidget, RoomTypeSelectWidget, DDMMDateInput
+from .widgets import IconSelectWidget, SimpleTextEditorWidget, RoomTypeSelectWidget, DDMMDateInput, AgeRangeSliderWidget
 
 from django.shortcuts import render
 from django.urls import reverse
@@ -395,6 +395,27 @@ class RoomTypeFeaturesDetailedForm(forms.ModelForm):
         model = RoomTypeFeaturesDetailed
         fields = '__all__'
 
+class HotelMealPlanForm(forms.ModelForm):
+    class Meta:
+        model = HotelMealPlan
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Двухползунковый слайдер (age_min управляет UI, age_max скрытое поле обновляется JS)
+        self.fields['age_min'].widget = AgeRangeSliderWidget(min_age=0, max_age=99, step=1)
+        self.fields['age_max'].widget = forms.HiddenInput()
+        self.fields['age_min'].label = 'Диапазон возрастов'
+
+    def clean(self):
+        cleaned = super().clean()
+        age_min = cleaned.get('age_min')
+        age_max = cleaned.get('age_max')
+        if age_min is not None and age_max is not None:
+            if age_min > age_max:
+                raise forms.ValidationError('Минимальный возраст не может быть больше максимального.')
+        return cleaned
+
 class RoomTypeForm(forms.ModelForm):
     # Поля для переводов названий
     type_ru = forms.CharField(max_length=120, label='Тип (RU)', required=False)
@@ -724,6 +745,7 @@ class HotelFAQs_Tab(admin.StackedInline):
 class HotelMealPlan_Tab(admin.StackedInline):
     model = HotelMealPlan
     extra = 0
+    form = HotelMealPlanForm
     fields = ['price_per_day', 'age_min', 'age_max']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):

@@ -197,3 +197,57 @@ class SimpleTextEditorWidget(forms.Textarea):
             {textarea_html}
         </div>
         ''')
+
+
+class AgeRangeSliderWidget(forms.TextInput):
+    """
+    Кастомный виджет двухползункового слайдера для выбора диапазона возраста.
+    Рендерится как скрытое числовое поле age_min + визуальный слайдер.
+    Значение age_max читается/записывается через соответствующий скрытый input,
+    который должен быть отрендерен отдельным полем формы (HiddenInput) рядом.
+    """
+
+    input_type = 'number'
+
+    def __init__(self, attrs=None, min_age=0, max_age=99, step=1):
+        base_attrs = {
+            'min': str(min_age),
+            'max': str(max_age),
+            'step': str(step),
+            'style': 'display:none',
+        }
+        if attrs:
+            base_attrs.update(attrs)
+        self._min_age = min_age
+        self._max_age = max_age
+        self._step = step
+        super().__init__(base_attrs)
+
+    class Media:
+        css = {
+            'all': (
+                'admin/css/age_range_slider.css',
+            )
+        }
+        js = (
+            'admin/js/age_range_slider.js',
+        )
+
+    def render(self, name, value, attrs=None, renderer=None):
+        input_html = super().render(name, value, attrs, renderer)
+
+        field_id = (attrs or {}).get('id', f'id_{name}')
+        slider_id = f'{field_id}__slider'
+
+        # Не указываем data-*-input-id атрибуты, JS найдет поля сам
+        slider_html = f'''
+        <div class="age-range-slider" id="{slider_id}"
+             data-min="{self._min_age}" data-max="{self._max_age}" data-step="{self._step}">
+            <div class="ars-track"></div>
+            <div class="ars-range"></div>
+            <div class="ars-handle ars-handle-min"><div class="ars-label ars-label-min">{value if value is not None else self._min_age}</div></div>
+            <div class="ars-handle ars-handle-max"><div class="ars-label ars-label-max"></div></div>
+        </div>
+        '''
+
+        return mark_safe(input_html + slider_html)
