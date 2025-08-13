@@ -23,6 +23,22 @@
 .rt-swiper .dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; }
 .rt-swiper .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.7); }
 .rt-swiper .dot.active { background: #fff; }
+/* Кликабельность карточки */
+.rt-card { cursor: pointer; }
+/* Bottom sheet modal */
+.rt-modal { position: fixed; left: 0; right: 0; bottom: -100%; height: 90vh; background: #fff; border-radius: 16px 16px 0 0; box-shadow: 0 -8px 24px rgba(0,0,0,.15); z-index: 10000; display: flex; flex-direction: column; transition: transform .3s ease, bottom .3s ease; }
+.rt-modal.show { bottom: 0; }
+.rt-modal-header { position: relative; padding: 10px 16px; border-bottom: 1px solid #eee; }
+.rt-modal-drag { width: 40px; height: 4px; border-radius: 4px; background: #ccc; margin: 6px auto; }
+.rt-modal-slider { flex: 0 0 240px; position: sticky; top: 0; background: #000; }
+.rt-modal-slider .slides { width: 100%; height: 240px; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }
+.rt-modal-slider .slides img { width: 100%; height: 240px; object-fit: cover; flex: 0 0 100%; scroll-snap-align: start; }
+.rt-modal-slider .dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; }
+.rt-modal-content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 12px 16px; }
+.rt-modal-footer { position: sticky; bottom: 0; background: #fff; border-top: 1px solid #eee; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+.rt-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.4); opacity: 0; visibility: hidden; transition: opacity .3s ease; z-index: 9999; }
+.rt-modal-backdrop.show { opacity: 1; visibility: visible; }
+@media (min-width: 768px) { .rt-modal-slider, .rt-modal-slider .slides img { height: 300px; } }
 @media (min-width: 768px) {
   .rt-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .rt-swiper { height: 260px; }
@@ -44,7 +60,7 @@
 
     <div class="rt-grid">
         {% for rt in room_types %}
-        <div class="rt-card">
+        <div class="rt-card" data-rt-open="{{ rt.id }}">
             <div class="rt-swiper" data-rt-id="{{ rt.id }}">
                 <div class="slides">
                     {% with first=rt.roomtype_gallery.all|first %}
@@ -90,13 +106,13 @@
 
                 <div class="rt-actions">
                     <div class="rt-total">
-                        {% if totals_by_room_type.rt.id %}
-                            {{ totals_by_room_type.rt.id|price_format }} {% trans "tenge" %}
+                        {% if rt.calculated_total %}
+                            {{ rt.calculated_total|price_format }} {% trans "tenge" %}
                         {% else %}
                             {% trans "From" %} {{ rt.price|price_format }} {% trans "tenge per night" %}
                         {% endif %}
                     </div>
-                    <a class="button" href="{% url 'hotel:room_type_detail' hotel.slug rt.slug %}?hotel-id={{ hotel.id }}{% if checkin %}&checkin={{ checkin }}{% endif %}{% if checkout %}&checkout={{ checkout }}{% endif %}{% if guests %}&adult={{ guests }}{% endif %}&children=0">{% trans "Select" %}</a>
+                    <a class="button" href="{% url 'hotel:room_type_detail' hotel.slug rt.slug %}?hotel-id={{ hotel.id }}{% if checkin %}&checkin={{ checkin }}{% endif %}{% if checkout %}&checkout={{ checkout }}{% endif %}{% if guests %}&adult={{ guests }}{% endif %}&children=0" onclick="event.stopPropagation();">{% trans "Select" %}</a>
                 </div>
             </div>
         </div>
@@ -107,7 +123,7 @@
 
 {% block script_links %}
 <script>
-// Простой слайдер без внешних зависимостей
+// Простой слайдер и модальное окно (bottom sheet)
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.rt-swiper').forEach(function(swiper) {
     const slides = swiper.querySelector('.slides');
@@ -129,6 +145,100 @@ document.addEventListener('DOMContentLoaded', function() {
     slides.addEventListener('scroll', updateDots);
     window.addEventListener('resize', updateDots);
   });
+
+  // Генерация модалок и управление ими
+  const body = document.body;
+  const modalBackdrop = document.createElement('div');
+  modalBackdrop.className = 'rt-modal-backdrop';
+  body.appendChild(modalBackdrop);
+
+  function createModalCard(rtId) {
+    const card = document.querySelector(`.rt-card[data-rt-open="${rtId}"]`);
+    if (!card) return null;
+    const title = card.querySelector('h4')?.textContent || '';
+    const cardSwiper = card.querySelector('.rt-swiper .slides');
+    const imgs = cardSwiper ? cardSwiper.querySelectorAll('img') : [];
+
+    const modal = document.createElement('div');
+    modal.className = 'rt-modal';
+    modal.setAttribute('data-rt-modal', rtId);
+    modal.innerHTML = `
+      <div class="rt-modal-header"><div class="rt-modal-drag"></div></div>
+      <div class="rt-modal-slider"><div class="slides"></div><div class="dots"></div></div>
+      <div class="rt-modal-content"></div>
+      <div class="rt-modal-footer">
+        <div class="rt-total"></div>
+        <a class="button rt-book-btn" href="#">${document.documentElement.lang === 'ru' ? 'Перейти к бронированию' : 'Proceed to booking'}</a>
+      </div>
+    `;
+
+    // Копируем слайды
+    const modalSlides = modal.querySelector('.rt-modal-slider .slides');
+    imgs.forEach(img => {
+      const c = img.cloneNode();
+      modalSlides.appendChild(c);
+    });
+    // Точки
+    const dots = modal.querySelector('.rt-modal-slider .dots');
+    imgs.forEach((_, idx) => {
+      const d = document.createElement('span');
+      d.className = 'dot' + (idx === 0 ? ' active' : '');
+      dots.appendChild(d);
+    });
+
+    // Контент: копируем информацию из карточки
+    const content = modal.querySelector('.rt-modal-content');
+    const meta = card.querySelector('.rt-meta');
+    const actions = card.querySelector('.rt-actions');
+    if (meta) content.appendChild(meta.cloneNode(true));
+
+    // Итог и кнопка
+    const totalBox = modal.querySelector('.rt-total');
+    const cardTotal = actions?.querySelector('.rt-total')?.innerHTML || '';
+    totalBox.innerHTML = cardTotal;
+    const selectBtn = actions?.querySelector('a.button')?.getAttribute('href') || '#';
+    modal.querySelector('.rt-book-btn').setAttribute('href', selectBtn);
+
+    // Инициализируем слайдер в модалке
+    const modalDotEls = dots.querySelectorAll('.dot');
+    function updateModalDots() {
+      const index = Math.round(modalSlides.scrollLeft / modalSlides.clientWidth);
+      modalDotEls.forEach((d, i) => d.classList.toggle('active', i === index));
+    }
+    modalSlides.addEventListener('scroll', updateModalDots);
+    window.addEventListener('resize', updateModalDots);
+
+    body.appendChild(modal);
+    return modal;
+  }
+
+  function openModal(rtId) {
+    let modal = document.querySelector(`.rt-modal[data-rt-modal="${rtId}"]`);
+    if (!modal) modal = createModalCard(rtId);
+    if (!modal) return;
+    modal.classList.add('show');
+    modalBackdrop.classList.add('show');
+    body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.querySelectorAll('.rt-modal.show').forEach(m => m.classList.remove('show'));
+    modalBackdrop.classList.remove('show');
+    body.style.overflow = '';
+  }
+
+  // Открытие при клике по карточке
+  document.querySelectorAll('.rt-card[data-rt-open]').forEach(card => {
+    card.addEventListener('click', function() {
+      const rtId = this.getAttribute('data-rt-open');
+      openModal(rtId);
+    });
+  });
+
+  // Закрытие по клику на фон
+  modalBackdrop.addEventListener('click', closeModal);
+  // Закрытие по ESC
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeModal(); }});
 });
 </script>
 {% endblock %}
