@@ -1,0 +1,136 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% load i18n %}
+{% load price_format %}
+
+{% block title %}{{ hotel.name }} — {% trans "Rooms and cottages" %}{% endblock %}
+
+{% block special_header_links %}
+<link rel="stylesheet" href="{% static 'css/hotel_detail.css' %}">
+<style>
+/* Мобильная сетка карточек */
+.rt-card { border: 1px solid #eee; border-radius: 12px; overflow: hidden; background: #fff; margin-bottom: 20px; }
+.rt-card-body { padding: 12px; }
+.rt-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.rt-badge { background: #f5f7fb; border-radius: 8px; padding: 6px 10px; font-size: 13px; }
+.rt-meta { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.rt-meta .line { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.rt-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+.rt-total { font-weight: 600; }
+.rt-swiper { position: relative; width: 100%; height: 220px; background: #f9f9f9; }
+.rt-swiper .slides { width: 100%; height: 100%; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }
+.rt-swiper .slides img { width: 100%; height: 220px; object-fit: cover; flex: 0 0 100%; scroll-snap-align: start; }
+.rt-swiper .dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; }
+.rt-swiper .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.7); }
+.rt-swiper .dot.active { background: #fff; }
+@media (min-width: 768px) {
+  .rt-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .rt-swiper { height: 260px; }
+  .rt-swiper .slides img { height: 260px; }
+}
+@media (min-width: 1200px) {
+  .rt-grid { grid-template-columns: repeat(3, 1fr); }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div id="titlebar" class="utf_listing_titlebar">
+        <div class="utf_listing_titlebar_title">
+            <h2>{{ hotel.name }} — {% trans "rooms and cottages" %}</h2>
+        </div>
+    </div>
+
+    <div class="rt-grid">
+        {% for rt in room_types %}
+        <div class="rt-card">
+            <div class="rt-swiper" data-rt-id="{{ rt.id }}">
+                <div class="slides">
+                    {% with first=rt.roomtype_gallery.all|first %}
+                        <img src="{{ first.image.url|default:'/static/images/placeholder.jpg' }}" alt="{{ rt.type }}">
+                    {% endwith %}
+                    {% for g in rt.roomtype_gallery.all %}
+                        {% if not forloop.first %}
+                        <img src="{{ g.image.url }}" alt="{{ rt.type }}">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="dots"></div>
+            </div>
+
+            <div class="rt-card-body">
+                <h4 style="margin-bottom:8px;">{{ rt.type }}</h4>
+                <div class="rt-meta">
+                    <!-- 1 линия: площадь, кровати -->
+                    <div class="line">
+                        <span class="rt-badge">{% trans "Area" %}: {{ rt.room_size }} m²</span>
+                        <span class="rt-badge">{% trans "Beds" %}: {{ rt.number_of_beds }}</span>
+                    </div>
+                    <!-- 2 линия: удобства (иконки/названия) -->
+                    <div class="line">
+                        {% for feat in rt.roomtype_features.all %}
+                            <span class="rt-badge">{{ feat.name }}</span>
+                        {% empty %}
+                            <span class="rt-badge">{% trans "No amenities listed" %}</span>
+                        {% endfor %}
+                    </div>
+                    <!-- 3 линия: даты, ночи, гости, итог -->
+                    <div class="line">
+                        {% if checkin and checkout %}
+                            <span class="rt-badge">{% trans "Check-in" %}: {{ checkin }}</span>
+                            <span class="rt-badge">{% trans "Check-out" %}: {{ checkout }}</span>
+                            <span class="rt-badge">{% trans "Nights" %}: {{ total_nights }}</span>
+                        {% endif %}
+                        {% if guests %}
+                            <span class="rt-badge">{% trans "Guests" %}: {{ guests }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="rt-actions">
+                    <div class="rt-total">
+                        {% if totals_by_room_type.rt.id %}
+                            {{ totals_by_room_type.rt.id|price_format }} {% trans "tenge" %}
+                        {% else %}
+                            {% trans "From" %} {{ rt.price|price_format }} {% trans "tenge per night" %}
+                        {% endif %}
+                    </div>
+                    <a class="button" href="{% url 'hotel:room_type_detail' hotel.slug rt.slug %}?hotel-id={{ hotel.id }}{% if checkin %}&checkin={{ checkin }}{% endif %}{% if checkout %}&checkout={{ checkout }}{% endif %}{% if guests %}&adult={{ guests }}{% endif %}&children=0">{% trans "Select" %}</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script_links %}
+<script>
+// Простой слайдер без внешних зависимостей
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.rt-swiper').forEach(function(swiper) {
+    const slides = swiper.querySelector('.slides');
+    const images = swiper.querySelectorAll('.slides img');
+    const dots = swiper.querySelector('.dots');
+    if (!slides || images.length === 0 || !dots) return;
+
+    images.forEach((_, idx) => {
+      const d = document.createElement('span');
+      d.className = 'dot' + (idx === 0 ? ' active' : '');
+      dots.appendChild(d);
+    });
+
+    const dotEls = dots.querySelectorAll('.dot');
+    function updateDots() {
+      const index = Math.round(slides.scrollLeft / slides.clientWidth);
+      dotEls.forEach((d, i) => d.classList.toggle('active', i === index));
+    }
+    slides.addEventListener('scroll', updateDots);
+    window.addEventListener('resize', updateDots);
+  });
+});
+</script>
+{% endblock %}
+
+

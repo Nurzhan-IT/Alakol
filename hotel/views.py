@@ -2008,3 +2008,57 @@ class CustomLanguageChangeView(View):
             'available_languages': [lang[0] for lang in settings.LANGUAGES]
         })
 
+
+def hotel_accommodations(request, slug):
+    """Страница "%hotel_name% номера и домики" с карточками типов номеров."""
+    hotel = get_object_or_404(
+        Hotel.objects.prefetch_related(
+            Prefetch(
+                'roomtype_set',
+                queryset=RoomType.objects.order_by('price').prefetch_related(
+                    'roomtype_gallery', 'roomtype_features', 'roomtype_features_detailed'
+                )
+            )
+        ),
+        status="Live",
+        slug=slug
+    )
+
+    # Параметры поиска из сессии для расчета цены и отображения
+    search_data = request.session.get('search_query_data', {})
+    checkin = search_data.get('checkin')
+    checkout = search_data.get('checkout')
+    guests = search_data.get('guests')
+
+    checkin_date = None
+    checkout_date = None
+    total_nights = 0
+    if checkin and checkout:
+        try:
+            date_format = "%Y-%m-%d"
+            from datetime import datetime as _dt
+            checkin_date = _dt.strptime(checkin, date_format).date()
+            checkout_date = _dt.strptime(checkout, date_format).date()
+            total_nights = (checkout_date - checkin_date).days
+        except Exception:
+            pass
+
+    room_types = hotel.roomtype_set.all()
+    totals_by_room_type = {}
+    if checkin_date and checkout_date and total_nights > 0:
+        for rt in room_types:
+            try:
+                totals_by_room_type[rt.id] = calculate_total_price(rt, checkin_date, checkout_date)
+            except Exception:
+                totals_by_room_type[rt.id] = Decimal(str(rt.price)) * total_nights
+
+    context = {
+        'hotel': hotel,
+        'room_types': room_types,
+        'checkin': checkin,
+        'checkout': checkout,
+        'guests': guests,
+        'total_nights': total_nights,
+        'totals_by_room_type': totals_by_room_type,
+    }
+    return render(request, "hotel/hotel_accommodations.html", context)
