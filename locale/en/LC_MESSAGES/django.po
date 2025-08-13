@@ -39,3 +39,9 @@ msgstr "Lunch only"
 
 msgid "Только ужин"
 msgstr "Dinner only"
+
+# Minimum nights message
+#: hotel/views.py
+#, python-format
+msgid "Minimum stay for this hotel is %(n)d nights"
+msgstr "Minimum stay for this hotel is %(n)d nights"

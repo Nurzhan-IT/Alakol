@@ -238,8 +238,16 @@ class Hotel(models.Model):
     email = models.CharField(max_length=20, verbose_name='Электронная почта')
     status = models.CharField(choices=HOTEL_STATUS, max_length=10, default="published", null=True, blank=True, verbose_name='Статус')
 
+
     check_in_time = models.TimeField(null=True,  verbose_name='Время заезда')
     check_out_time = models.TimeField(null=True,  verbose_name='Время выезда')
+
+    min_days_for_booking = models.PositiveSmallIntegerField(
+        default=1,
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        verbose_name='Кол-во мин дней для бронирования'
+    )
+
     
     # Даты сезона работы отеля в формате ДД.ММ (например, 11.05)
     start_date = models.CharField(

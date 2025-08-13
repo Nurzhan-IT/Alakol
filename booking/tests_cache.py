@@ -209,8 +209,8 @@ class BookingCacheTest(TestCase):
         self.assertContains(response2, self.hotel.name)
         
         # Проверяем, что форма бронирования присутствует
-        self.assertContains(response1, 'Check Availability')
-        self.assertContains(response2, 'Check Availability')
+        self.assertContains(response1, 'Проверить свободные номера')
+        self.assertContains(response2, 'Проверить свободные номера')
     
     def test_cache_ttl_settings(self):
         """Тест настроек TTL для кэша booking."""
