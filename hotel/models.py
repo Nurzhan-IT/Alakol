@@ -434,9 +434,8 @@ class HotelGallery(models.Model):
 
 class HotelFeatures(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
-    # icon_type = models.CharField(max_length=100, null=True, blank=True, choices=ICON_TPYE)
     icon = models.CharField(max_length=100, null=True, blank=True, verbose_name='Иконка')
-    name = models.CharField(max_length=35, verbose_name='Название')
+    name = models.CharField(max_length=35, blank=True, verbose_name='Название')
     hfid = models.CharField(max_length=20, blank=True, verbose_name='ID удобства')
 
     def save(self, *args, **kwargs):
@@ -508,7 +507,7 @@ class HotelMealPlan(models.Model):
 
 class RoomType(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
-    type = models.CharField(max_length=120, verbose_name='Тип')
+    type = models.CharField(blank=True, max_length=120, verbose_name='Тип')
     description = models.TextField(null=True, blank=True, verbose_name='Описание')
     price = models.DecimalField(max_digits=12, decimal_places=2, default=0.00, verbose_name='Цена')
     dynamic_pricing = models.JSONField(null=True, blank=True, default=dict, verbose_name='Динамические цены')  # Используем default=dict для инициализации пустым словарем
@@ -617,7 +616,7 @@ class RoomTypeFeatures(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, verbose_name='Отель')
     room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE, related_name='roomtype_features', verbose_name='Тип номера')
     icon = models.CharField(max_length=100, null=True, blank=True, verbose_name='Иконка')
-    name = models.CharField(max_length=100, verbose_name='Название')
+    name = models.CharField(max_length=100, blank=True, verbose_name='Название')
     hfid = models.CharField(max_length=20, blank=True, verbose_name='ID удобства')
 
     def save(self, *args, **kwargs):
