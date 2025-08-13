@@ -233,7 +233,8 @@ class AddToBookmarkViewTest(UserDashboardViewsTest):
         
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
-        self.assertEqual(data['data'], 'Отель добавлен в закладки')
+        # В тестах USE_I18N=False, поэтому переводы не работают
+        self.assertEqual(data['data'], 'Hotel Bookmarked')
         self.assertEqual(data['icon'], 'success')
     
     def test_add_bookmark_unauthenticated_user(self):
@@ -245,7 +246,8 @@ class AddToBookmarkViewTest(UserDashboardViewsTest):
         
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
-        self.assertEqual(data['data'], 'Войдите, чтобы добавить отель в закладки')
+        # В тестах USE_I18N=False, поэтому переводы не работают
+        self.assertEqual(data['data'], 'Login To Bookmark Hotel')
         self.assertEqual(data['icon'], 'warning')
 
 
@@ -296,7 +298,8 @@ class NotificationMarkAsSeenViewTest(UserDashboardViewsTest):
         
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
-        self.assertEqual(data['data'], 'Отмечено как прочитанное')
+        # В тестах USE_I18N=False, поэтому переводы не работают
+        self.assertEqual(data['data'], 'Marked As Seen')
 
 
 class AddReviewViewTest(UserDashboardViewsTest):
@@ -316,7 +319,8 @@ class AddReviewViewTest(UserDashboardViewsTest):
         
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
-        self.assertEqual(data['data'], 'Отзыв отправлен, спасибо')
+        # В тестах USE_I18N=False, поэтому переводы не работают
+        self.assertEqual(data['data'], 'Review Submitted, Thank You')
         self.assertEqual(data['icon'], 'success')
 
 

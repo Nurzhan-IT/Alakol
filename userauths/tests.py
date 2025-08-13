@@ -70,7 +70,8 @@ class RegisterViewTest(UserAuthsViewsTest):
         # Проверяем предупреждающее сообщение
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
-        self.assertIn('уже вошел в систему', str(messages[0]))
+        # В тестах USE_I18N=False, поэтому переводы не работают
+        self.assertIn('you are already logged in', str(messages[0]))
     
     @patch('userauths.views.save_registration_consents')
     def test_register_post_valid_data(self, mock_save_consents):
@@ -108,7 +109,8 @@ class RegisterViewTest(UserAuthsViewsTest):
         
         # Должен остаться на странице регистрации
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'form', 'email', 'Введите правильный адрес электронной почты.')
+        # В тестах USE_I18N=False, поэтому переводы не работают
+        self.assertFormError(response, 'form', 'email', ['Enter a valid email address.'])
     
     def test_register_duplicate_email(self):
         """Тест регистрации с уже существующим email"""
