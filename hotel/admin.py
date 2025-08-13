@@ -6,7 +6,7 @@ from django.utils.html import mark_safe
 
 from modeltranslation.admin import TranslationAdmin
 
-from .widgets import IconSelectWidget, SimpleTextEditorWidget, RoomTypeSelectWidget
+from .widgets import IconSelectWidget, SimpleTextEditorWidget, RoomTypeSelectWidget, DDMMDateInput
 
 from django.shortcuts import render
 from django.urls import reverse
@@ -1188,8 +1188,8 @@ class HotelAdmin(RussianModelAdminMixin, BaseExportAdmin):
                     widgets = {
                         'check_in_time': forms.TimeInput(attrs={'type': 'time'}),
                         'check_out_time': forms.TimeInput(attrs={'type': 'time'}),
-                        'start_date': forms.DateInput(attrs={'type': 'date'}),
-                        'end_date': forms.DateInput(attrs={'type': 'date'}),
+                        'start_date': DDMMDateInput(),
+                        'end_date': DDMMDateInput(),
                     }
                 
                 def __init__(self, *args, **kwargs):
@@ -1229,6 +1229,12 @@ class HotelAdmin(RussianModelAdminMixin, BaseExportAdmin):
         if is_manager(request.user):
             return queryset.filter(user=request.user)
         return queryset
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        # Назначаем маску DD.MM для сезонных полей
+        if db_field.name in ('start_date', 'end_date'):
+            kwargs['widget'] = DDMMDateInput()
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
     def get_prepopulated_fields(self, request, obj=None):
         """

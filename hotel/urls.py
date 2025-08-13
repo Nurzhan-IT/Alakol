@@ -1,5 +1,6 @@
 from django.urls import path 
 from hotel import views 
+from hotel import dashboard_views 
 
 app_name = "hotel"
 
@@ -28,4 +29,10 @@ urlpatterns = [
     path('robokassa/result/', views.robokassa_result, name='robokassa_result'),
     path('robokassa/success/<booking_id>/', views.robokassa_success, name='robokassa_success'),
     path('robokassa/failed/<booking_id>/', views.robokassa_failed, name='robokassa_failed'),
+    
+    # Dashboard API (для админов)
+    path('admin/dashboard/export/csv/', dashboard_views.export_dashboard_csv, name='dashboard_export_csv'),
+    path('admin/dashboard/export/json/', dashboard_views.export_dashboard_json, name='dashboard_export_json'),
+    path('admin/dashboard/api/stats/', dashboard_views.dashboard_api_stats, name='dashboard_api_stats'),
+    path('admin/dashboard/cache/invalidate/', dashboard_views.invalidate_dashboard_cache, name='dashboard_cache_invalidate'),
 ] 

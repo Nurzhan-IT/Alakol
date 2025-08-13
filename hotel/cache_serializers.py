@@ -178,7 +178,8 @@ class SmartCacheSerializer:
             'status': hotel.status,
             'check_in_time': hotel.check_in_time.isoformat() if hotel.check_in_time else None,
             'check_out_time': hotel.check_out_time.isoformat() if hotel.check_out_time else None,
-            'start_date': hotel.start_date.isoformat() if hotel.start_date else None,
-            'end_date': hotel.end_date.isoformat() if hotel.end_date else None,
+            # start_date / end_date теперь строки формата ДД.ММ
+            'start_date': hotel.start_date if hotel.start_date else None,
+            'end_date': hotel.end_date if hotel.end_date else None,
             'date': hotel.date.isoformat() if hotel.date else None,
         } 

@@ -10,13 +10,14 @@
     <script>
         // Принудительная русификация breadcrumb и других элементов
         document.addEventListener('DOMContentLoaded', function() {
-            // Словарь переводов для breadcrumb
-            var breadcrumbTranslations = {
+            // Общие переводы (применяются везде)
+            var generalTranslations = {
                 'Home': 'Главная',
                 'На главную': 'Главная', // уже переведенный текст
+                'Dashboard': '📊 Статистика',
+                'Админпанель': '📊 Статистика',
                 'Hotel': 'Отели',
                 'Room': 'Номера',
-                'RoomType': 'Типы номеров',
                 'Booking': 'Бронирования',
                 'RoomServices': 'Услуги номеров',
                 'Coupon': 'Купоны',
@@ -34,11 +35,29 @@
                 'View': 'Просмотр',
                 'hotel': 'Отель',
                 'Userauths': 'Пользователи',
+                'userauths': 'Пользователи',
                 'booking': 'Бронирования',
                 'auth': 'Аутентификация',
                 'Room unavailabilities': 'Недоступность номеров',
                 'RoomUnavailability': 'Недоступность номеров'
             };
+
+            // Переводы только для раздела RoomType (URL начинается строго с /admin/hotel/roomtype/)
+            var roomTypeOnlyTranslations = {
+                'RoomType': 'Цены по датам',
+                'Room types': 'Цены по датам',
+                'Room Types': 'Цены по датам',
+                'Room type': 'Цены по датам',
+                'Room Type': 'Цены по датам',
+                'Типы номеров': 'Цены по датам'
+            };
+
+            // Определяем, находимся ли мы в разделе RoomType (а не RoomTypeComplete)
+            var path = (window.location && window.location.pathname) || '';
+            var isRoomTypeModule = path.indexOf('/admin/hotel/roomtype/') === 0;
+
+            // Итоговый словарь переводов для текущей страницы
+            var breadcrumbTranslations = Object.assign({}, generalTranslations, isRoomTypeModule ? roomTypeOnlyTranslations : {});
             
             // Функция для безопасной замены текста в узле, сохраняя HTML структуру
             function translateTextNode(node) {
@@ -52,6 +71,12 @@
                 return false;
             }
             
+            // Вспомогательная функция: заменить по словарю только при полном совпадении текста
+            function replaceExact(text, dict) {
+                if (!text || !dict) return text;
+                return Object.prototype.hasOwnProperty.call(dict, text) ? dict[text] : text;
+            }
+
             // Функция для замены текста в breadcrumb с сохранением ссылок
             function translateBreadcrumb() {
                 // Ищем breadcrumb элементы
@@ -71,10 +96,16 @@
                             // Если есть ссылка внутри элемента, переводим только ее текст
                             var link = item.querySelector('a');
                             if (link) {
-                                // Переводим текст ссылки
+                                // Переводим текст ссылки, учитывая целевой href (только точные соответствия)
                                 var linkText = link.textContent.trim();
-                                if (breadcrumbTranslations[linkText]) {
-                                    link.textContent = breadcrumbTranslations[linkText];
+                                var href = link.getAttribute('href') || '';
+                                var replaced = replaceExact(linkText, generalTranslations);
+                                // Применяем спец-переводы только к ссылкам на /admin/hotel/roomtype/
+                                if (isRoomTypeModule && (href.indexOf('/admin/hotel/roomtype/') === 0)) {
+                                    replaced = replaceExact(replaced, roomTypeOnlyTranslations);
+                                }
+                                if (replaced !== linkText) {
+                                    link.textContent = replaced;
                                 }
                             } else {
                                 // Если нет ссылки, переводим текст самого элемента
@@ -89,19 +120,43 @@
                         var directLinks = container.querySelectorAll('a');
                         directLinks.forEach(function(link) {
                             var linkText = link.textContent.trim();
-                            if (breadcrumbTranslations[linkText]) {
-                                link.textContent = breadcrumbTranslations[linkText];
+                            var href = link.getAttribute('href') || '';
+                            var replaced = replaceExact(linkText, generalTranslations);
+                            if (isRoomTypeModule && (href.indexOf('/admin/hotel/roomtype/') === 0)) {
+                                replaced = replaceExact(replaced, roomTypeOnlyTranslations);
+                            }
+                            if (replaced !== linkText) {
+                                link.textContent = replaced;
                             }
                         });
                     });
                 });
                 
                 // Обрабатываем также заголовки страниц
-                var pageHeaders = document.querySelectorAll('h1, .model-name, .object-name');
+                var pageHeaders = document.querySelectorAll('h1, .model-name, .object-name, .content-title, .content-header h1');
                 pageHeaders.forEach(function(header) {
                     var headerText = header.textContent.trim();
-                    if (breadcrumbTranslations[headerText]) {
-                        header.textContent = breadcrumbTranslations[headerText];
+                    // Заголовки текущей страницы: общие + (при необходимости) спец-переводы (только точные соответствия)
+                    var replaced = replaceExact(headerText, generalTranslations);
+                    if (isRoomTypeModule) {
+                        replaced = replaceExact(replaced, roomTypeOnlyTranslations);
+                    }
+                    if (replaced !== headerText) {
+                        header.textContent = replaced;
+                    }
+                });
+
+                // Обрабатываем общие ссылки по всему документу (например, пункт меню "Dashboard")
+                var allLinks = document.querySelectorAll('a');
+                allLinks.forEach(function(link) {
+                    var text = link.textContent.trim();
+                    var href = link.getAttribute('href') || '';
+                    var replaced = replaceExact(text, generalTranslations);
+                    if (isRoomTypeModule && (href.indexOf('/admin/hotel/roomtype/') === 0)) {
+                        replaced = replaceExact(replaced, roomTypeOnlyTranslations);
+                    }
+                    if (replaced !== text) {
+                        link.textContent = replaced;
                     }
                 });
             }
