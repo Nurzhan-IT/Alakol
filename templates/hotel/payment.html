@@ -1,0 +1,310 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% load i18n %}
+{% load price_format %}
+
+{% block title %}{% trans "Payment" %}{% endblock %}
+
+{% block content %}
+<div id="main_wrapper" class="selection-list">
+  <div id="titlebar" class="gradient">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>{% trans "Payment" %}</h2>
+          <nav id="breadcrumbs">
+            <ul>
+              <li><a>{% trans "Hotel" %}</a></li>
+              <li><a>{% trans "Rooms" %}</a></li>
+              <li>{% trans "Payment" %}</li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container margin-bottom-75">
+    <div class="row">
+      <div class="col-lg-8 col-md-8 utf_listing_payment_section">
+        <!-- 1) Название отеля/адрес -->
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+          <h3><i class="fas fa-hotel"></i> {% trans "Hotel" %}</h3>
+          <div class="utf_listing_section">
+            <div style="display:flex;gap:16px;align-items:center;">
+              <img src="{{ hotel.image.url }}" alt="{{ hotel.name }}" style="width:90px;height:70px;object-fit:cover;border-radius:6px;">
+              <div>
+                <div style="font-weight:600;">{{ hotel.name }}</div>
+                <div style="color:#666;"><i class="fa fa-map-marker"></i> {{ hotel.address }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2) Даты/время -->
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+          <h3><i class="fa fa-calendar-check-o"></i> {% trans "Stay Details" %}</h3>
+          <div class="utf_listing_section">
+            <ul>
+              <li>{% trans "Check-in Date" %} <span>{{ checkin }}</span></li>
+              <li>{% trans "Check-out Date" %} <span>{{ checkout }}</span></li>
+              <li>{% trans "Total Days" %} <span>{{ total_days }}</span></li>
+              <li>{% trans "Check-in Time" %} <span>{% if checkin_time %}{{ checkin_time|time:"H:i" }}{% else %}14:00{% endif %}</span></li>
+              <li>{% trans "Check-out Time" %} <span>{% if checkout_time %}{{ checkout_time|time:"H:i" }}{% else %}12:00{% endif %}</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 3) Гости -->
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+          <h3><i class="fas fa-user-friends"></i> {% trans "Guests" %}</h3>
+          <div class="utf_listing_section">
+            <ul>
+              <li>{% trans "Adults" %}: <span>{{ adult }}</span></li>
+              <li>{% trans "Children" %}: <span>{{ children }}</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 4) Краткое описание типа номера -->
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+          <h3><i class="fas fa-bed"></i> {% trans "Room Type" %}</h3>
+          <div class="utf_listing_section">
+            <div class="rt-summary">
+              <div style="font-weight:600;">{{ room_type.type }}</div>
+              <div class="rt-line" style="display:flex;gap:12px;flex-wrap:wrap;color:#555;margin-top:6px;">
+                <span>{% trans "Area" %}: {{ room_type.room_size }} m²</span>
+                <span>{% trans "Beds" %}: {{ room_type.number_of_beds }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5) Billing Information (как в selected_rooms.html) -->
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+          <h3><i class="fas fa-user"></i> {% trans "Billing Information" %}</h3>
+          <form method="POST" id="billingForm">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-12">
+                <label>{% trans "First Name" %}</label>
+                <input name="full_name" type="text" value="{{ user_data.full_name|default:user_full_name_default|title }}" placeholder="{% trans 'First Name' %}" required>
+                <div class="error-message" id="fullNameError"></div>
+              </div>
+              <div class="col-md-6">
+                <div class="medium-icons">
+                  <label>{% trans "E-Mail" %}</label>
+                  <input name="email" type="email" value="{{ user_data.email|default:user_email_default }}" placeholder="Email" required>
+                  <div class="error-message" id="emailError"></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="medium-icons">
+                  <label>{% trans "Phone" %}</label>
+                  <input name="phone" type="tel" class="phone-input" placeholder="{% trans 'Enter phone number' %}" required>
+                  <input type="hidden" name="country_code" id="country_code" value="{{ user_data.country_code }}">
+                  <div class="error-message" id="phoneError"></div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <button type="submit" class="button utf_booking_confirmation_button margin-top-20 margin-bottom-10">{% trans "Save personal data" %}</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- 6) Legal Agreements -->
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+          <h3><i class="fas fa-shield-alt"></i> {% trans "Legal Agreements" %}</h3>
+          <div class="utf_listing_section">
+            <div class="legal-consent-section">
+              <div class="legal-checkbox-group">
+                <div class="legal-checkbox required">
+                  <input type="checkbox" id="public_offer_consent" name="public_offer_consent" required>
+                  <label for="public_offer_consent">
+                    {% trans "I accept the terms of the" %}
+                    <a href="{% url 'legal:public_offer' %}" class="legal-link" target="_blank" rel="noopener noreferrer">{% trans "Public Offer" %}</a>
+                    {% trans "for eKol booking services" %}
+                  </label>
+                </div>
+                <div class="legal-checkbox required">
+                  <input type="checkbox" id="booking_rules_consent" name="booking_rules_consent" required>
+                  <label for="booking_rules_consent">
+                    {% trans "I agree to the" %}
+                    <a href="{% url 'legal:booking_rules' %}" class="legal-link" target="_blank" rel="noopener noreferrer">{% trans "Booking and Cancellation Rules" %}</a>
+                    {% trans "including cancellation policies" %}
+                  </label>
+                </div>
+                <div class="legal-checkbox required">
+                  <input type="checkbox" id="payment_rules_consent" name="payment_rules_consent" required>
+                  <label for="payment_rules_consent">
+                    {% trans "I understand and accept the" %}
+                    <a href="{% url 'legal:payment_rules' %}" class="legal-link" target="_blank" rel="noopener noreferrer">{% trans "Payment and Refund Rules" %}</a>
+                    {% trans "including the 10% prepayment policy and refundable terms" %}
+                  </label>
+                </div>
+              </div>
+              <div class="legal-validation-error">
+                {% trans "Please accept all required legal documents to proceed with payment." %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7) Кнопка оплаты Robokassa -->
+        <div class="utf_booking_listing_section_form margin-bottom-40">
+          <div class="utf_listing_section">
+            <button class="button booking-confirmation" id="robokassa-button" disabled style="background-color: #007bff; width: 100%; text-align: center; font-weight: 600; padding: 12px; margin-top: 10px; transition: all 0.3s ease;">
+              <i class="fas fa-credit-card" style="margin-right: 10px;"></i>{% trans "Pay with Robokassa" %}
+            </button>
+            <small class="text-muted" id="robokassa-help-text" style="display: block; margin-top: 10px; text-align: center;">
+              {% trans "Please accept all legal agreements above to enable payment" %}
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-4 margin-top-0 utf_listing_payment_section">
+        <div class="boxed-widget opening-hours summary margin-top-0">
+          <h3><i class="fa fa-calendar-check-o"></i> {% trans "Booking Summary" %}</h3>
+          <ul>
+            <li>{% trans "Check-in Date" %} <span>{{ checkin }}</span></li>
+            <li>{% trans "Check-out Date" %} <span>{{ checkout }}</span></li>
+            <li>{% trans "Total Days" %} <span>{{ total_days }} {% trans "Days" %}</span></li>
+            <li>{% trans "Adults" %} <span>{{ adult }} {% trans "Adult" %}</span></li>
+            <li>{% trans "Children" %} <span>{{ children }} {% trans "Children" %}</span></li>
+            <li class="total-costs" style="border-top: 1px dashed #ddd; padding-top: 10px;">
+              <strong>{% trans "Total Cost" %}</strong> <span>{{ total|price_format }} {% trans "Tenge" %}</span>
+            </li>
+            <li class="prepayment" style="background-color: #f0f9ff; padding: 12px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+              <span style="display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-credit-card" style="color: #007bff; font-size: 16px;"></i>
+                <strong style="font-weight: bold;">{% trans "Prepayment (10%)" %}</strong>
+              </span>
+              <span style="color: #007bff; font-weight: bold; font-size: 1.1em; white-space: nowrap;">{{ prepayment|price_format }} {% trans "Tenge" %}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script_links %}
+<!-- intl-tel-input -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
+
+<style>
+  .iti { width: 100%; }
+  .error-message { color: #e74c3c; font-size: 12px; margin-top: 5px; }
+  input.phone-input.error { border-color: #e74c3c; }
+  .button.disabled { opacity: .6!important; cursor: not-allowed!important; background: #6c757d!important; pointer-events: none!important; }
+  .button:not(.disabled) { opacity: 1!important; cursor: pointer!important; pointer-events: auto!important; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Телефон
+  const phoneInput = document.querySelector('input[name="phone"]');
+  let iti;
+  if (phoneInput) {
+    iti = window.intlTelInput(phoneInput, {
+      utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/utils.js",
+      initialCountry: "kz",
+      preferredCountries: ["kz","ru","cn","us"],
+      separateDialCode: true,
+      autoPlaceholder: "aggressive"
+    });
+    const countryCodeInput = document.getElementById('country_code');
+    if (countryCodeInput) {
+      countryCodeInput.value = "+" + iti.getSelectedCountryData().dialCode;
+      phoneInput.addEventListener('countrychange', function(){
+        countryCodeInput.value = "+" + iti.getSelectedCountryData().dialCode;
+      });
+    }
+  }
+
+  // Валидация формы - сохраняем user_data в сессию через POST на текущий URL
+  const billingForm = document.getElementById('billingForm');
+  if (billingForm) {
+    billingForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      let isValid = true;
+
+      const fullName = billingForm.querySelector('input[name="full_name"]');
+      const email = billingForm.querySelector('input[name="email"]');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!fullName.value.trim()) {
+        document.getElementById('fullNameError').textContent = '{% trans "Please enter your full name" %}';
+        isValid = false;
+      } else { document.getElementById('fullNameError').textContent = ''; }
+      if (!emailRegex.test(email.value)) {
+        document.getElementById('emailError').textContent = '{% trans "Please enter a valid email address" %}';
+        isValid = false;
+      } else { document.getElementById('emailError').textContent = ''; }
+      if (phoneInput && typeof iti !== 'undefined') {
+        if (!iti.isValidNumber()) {
+          document.getElementById('phoneError').textContent = '{% trans "Please enter a valid phone number" %}';
+          phoneInput.classList.add('error');
+          isValid = false;
+        } else {
+          document.getElementById('phoneError').textContent = '';
+          phoneInput.classList.remove('error');
+        }
+      }
+      if (!isValid) return;
+      // Сохраняем номер в intl-формате
+      if (phoneInput && typeof iti !== 'undefined') {
+        phoneInput.value = iti.getNumber();
+      }
+      // Отправка формы — сохраним в сессии данные пользователя тем же механизмом, что уже используется в selected_rooms
+      const formData = new FormData(billingForm);
+      fetch(window.location.href, { method: 'POST', body: formData, headers: {'X-Requested-With':'XMLHttpRequest'} })
+        .then(() => { alert('{% trans "Personal data saved" %}'); })
+        .catch(() => {});
+    });
+  }
+
+  // Активация кнопки оплаты, когда приняты Legal Agreements
+  const paymentButton = document.getElementById('robokassa-button');
+  const helpText = document.getElementById('robokassa-help-text');
+  const requiredCheckboxes = [
+    document.getElementById('public_offer_consent'),
+    document.getElementById('booking_rules_consent'),
+    document.getElementById('payment_rules_consent')
+  ].filter(Boolean);
+
+  function updatePaymentButtonState() {
+    const allChecked = requiredCheckboxes.every(cb => cb && cb.checked);
+    if (allChecked) {
+      paymentButton.disabled = false;
+      paymentButton.classList.remove('disabled');
+      helpText.style.display = 'none';
+    } else {
+      paymentButton.disabled = true;
+      paymentButton.classList.add('disabled');
+      helpText.style.display = 'block';
+    }
+  }
+  requiredCheckboxes.forEach(cb => ['change','click','input'].forEach(ev => cb?.addEventListener(ev, updatePaymentButtonState)));
+  updatePaymentButtonState();
+
+  // Перед оплатой — проверка сессии как в payment_method_selection
+  if (paymentButton) {
+    paymentButton.addEventListener('click', function(e){
+      e.preventDefault();
+      if (paymentButton.disabled || paymentButton.classList.contains('disabled')) return;
+      fetch('/check-session-data/', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' } })
+        .then(r => r.json())
+        .then(d => { if (!d.success) { alert('Ошибка: ' + d.error); window.location.href='/'; return; } proceedToPayment(); })
+        .catch(() => proceedToPayment());
+      function proceedToPayment(){ window.location.href = '{% url "hotel:api_robokassa_payment" %}'; }
+    });
+  }
+});
+</script>
+{% endblock %}
+
+

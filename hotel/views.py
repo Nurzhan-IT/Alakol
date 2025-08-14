@@ -2009,6 +2009,146 @@ class CustomLanguageChangeView(View):
         })
 
 
+def payment(request):
+    """Новая страница Оплата: агрегирует данные брони для финального шага оплаты."""
+    # Проверяем наличие необходимых данных в сессии
+    if 'selection_data_obj' not in request.session or 'booking_common_data' not in request.session:
+        messages.warning(request, _("You don't have any room selections or booking data!"))
+        return redirect("/")
+
+    booking_data = request.session['booking_common_data']
+    checkin = booking_data.get('checkin')
+    checkout = booking_data.get('checkout')
+    adult = int(booking_data.get('adult', 1))
+    children = int(booking_data.get('children', 0))
+
+    # Получаем первую комнату чтобы определить отель и тип номера
+    first_item_key = next(iter(request.session['selection_data_obj']))
+    first_item = request.session['selection_data_obj'][first_item_key]
+    hotel_id = int(first_item['hotel_id'])
+    room_type_id = int(first_item['room_type'])
+
+    hotel = get_object_or_404(Hotel, id=hotel_id)
+    room_type = get_object_or_404(RoomType, id=room_type_id)
+
+    # Даты/время и количество ночей
+    date_format = "%Y-%m-%d"
+    total_days = 0
+    checkin_time = getattr(hotel, 'check_in_time', None)
+    checkout_time = getattr(hotel, 'check_out_time', None)
+    try:
+        checkin_date = datetime.strptime(checkin, date_format).date()
+        checkout_date = datetime.strptime(checkout, date_format).date()
+        total_days = (checkout_date - checkin_date).days
+    except Exception:
+        pass
+
+    # Итоговая стоимость по динамическим ценам
+    total = calculate_total_price(room_type, checkin_date, checkout_date) if checkin and checkout else Decimal('0')
+    prepayment = (total / Decimal('10')) if total else Decimal('0')
+
+    # Сохранение персональных данных, если пришел POST
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        country_code = request.POST.get('country_code')
+        if full_name or email or phone:
+            request.session['user_data'] = {
+                'full_name': full_name or '',
+                'email': email or '',
+                'phone': phone or '',
+                'country_code': country_code or '',
+            }
+            request.session.modified = True
+        # Если AJAX-запрос — вернем JSON
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': True})
+
+    # Безопасные дефолты для заполнения полей (чтобы не обращаться к AnonymousUser.profile в шаблоне)
+    user_full_name_default = ''
+    user_email_default = ''
+    if request.user.is_authenticated:
+        try:
+            user_full_name_default = getattr(request.user, 'profile', None).full_name if getattr(request.user, 'profile', None) else ''
+        except Exception:
+            user_full_name_default = ''
+        try:
+            user_email_default = getattr(request.user, 'email', '') or ''
+        except Exception:
+            user_email_default = ''
+
+    context = {
+        'hotel': hotel,
+        'room_type': room_type,
+        'checkin': checkin,
+        'checkout': checkout,
+        'total_days': total_days,
+        'adult': adult,
+        'children': children,
+        'total': total,
+        'prepayment': prepayment,
+        'checkin_time': checkin_time,
+        'checkout_time': checkout_time,
+        'user_data': request.session.get('user_data', {}),
+        'user_full_name_default': user_full_name_default,
+        'user_email_default': user_email_default,
+    }
+    return render(request, 'hotel/payment.html', context)
+
+
+def proceed_to_payment(request, slug, rt_slug):
+    """Сохраняет ключевые данные в сессию и переводит на страницу оплаты."""
+    hotel = get_object_or_404(Hotel, slug=slug, status='Live')
+    room_type = get_object_or_404(RoomType, slug=rt_slug, hotel=hotel)
+
+    # Получаем параметры из GET
+    checkin = request.GET.get('checkin')
+    checkout = request.GET.get('checkout')
+    adult = request.GET.get('adult') or '1'
+    children = request.GET.get('children') or '0'
+
+    # Обновляем booking_common_data
+    if 'booking_common_data' not in request.session:
+        request.session['booking_common_data'] = {}
+    request.session['booking_common_data'].update({
+        'checkin': checkin,
+        'checkout': checkout,
+        'adult': adult,
+        'children': children,
+    })
+
+    # Готовим selection_data_obj с одним placeholder-элементом типа номера
+    # Если уже есть выбранные комнаты, не трогаем их — пользователь может продолжить с ними
+    if 'selection_data_obj' not in request.session or not request.session['selection_data_obj']:
+        # Создаем запись-черновик для выбранного типа номера, чтобы резюмировать оплату
+        draft_id = str(room_type.id)
+        request.session['selection_data_obj'] = {
+            draft_id: {
+                'hotel_id': str(hotel.id),
+                'hotel_name': hotel.name,
+                'room_name': room_type.type,
+                'room_price': str(room_type.price),
+                'number_of_beds': str(getattr(room_type, 'number_of_beds', '')),
+                'room_number': '',
+                'room_type': str(room_type.id),
+                'room_id': '0',
+                'room_type_slug': room_type.slug,
+                'room_capacity': getattr(room_type, 'room_capacity', 0),
+            }
+        }
+
+    # Также синхронизируем компактные данные поиска для других экранов
+    request.session['search_query_data'] = {
+        'checkin': checkin,
+        'checkout': checkout,
+        'guests': int(adult) if (adult and str(adult).isdigit()) else None,
+    }
+
+    request.session.modified = True
+
+    return redirect('hotel:payment')
+
 def hotel_accommodations(request, slug):
     """Страница "%hotel_name% номера и домики" с карточками типов номеров."""
     hotel = get_object_or_404(
