@@ -2118,11 +2118,44 @@ def proceed_to_payment(request, slug, rt_slug):
         'children': children,
     })
 
-    # Готовим selection_data_obj с одним placeholder-элементом типа номера
+    # Проверяем доступность комнат для данного типа номера
+    from datetime import datetime
+    from django.db.models import Q
+    
+    user_checkin_date = datetime.strptime(checkin, "%Y-%m-%d").date() if checkin else None
+    user_checkout_date = datetime.strptime(checkout, "%Y-%m-%d").date() if checkout else None
+    
+    # Находим доступную комнату
+    available_room = None
+    if user_checkin_date and user_checkout_date:
+        # Получаем все комнаты данного типа
+        rooms = Room.objects.filter(room_type=room_type, is_available=True)
+        
+        # Получаем ID забронированных номеров на выбранные даты
+        booked_room_ids = set()
+        active_bookings = Booking.objects.filter(
+            Q(check_in_date__lt=user_checkout_date, check_out_date__gt=user_checkin_date),
+            is_active=True,
+            payment_status__in=["paid", "processing", "pending"]
+        ).values_list('room', flat=True)
+        
+        booked_room_ids.update(active_bookings)
+        
+        # Находим первую доступную комнату
+        for room in rooms:
+            if room.id not in booked_room_ids:
+                available_room = room
+                break
+    
+    if not available_room:
+        messages.error(request, _("No available rooms of this type for selected dates."))
+        return redirect('hotel:accommodations', slug=hotel.slug)
+
+    # Готовим selection_data_obj с реальной комнатой
     # Если уже есть выбранные комнаты, не трогаем их — пользователь может продолжить с ними
     if 'selection_data_obj' not in request.session or not request.session['selection_data_obj']:
-        # Создаем запись-черновик для выбранного типа номера, чтобы резюмировать оплату
-        draft_id = str(room_type.id)
+        # Создаем запись для выбранной комнаты
+        draft_id = str(available_room.id)
         request.session['selection_data_obj'] = {
             draft_id: {
                 'hotel_id': str(hotel.id),
@@ -2130,9 +2163,9 @@ def proceed_to_payment(request, slug, rt_slug):
                 'room_name': room_type.type,
                 'room_price': str(room_type.price),
                 'number_of_beds': str(getattr(room_type, 'number_of_beds', '')),
-                'room_number': '',
+                'room_number': available_room.room_number,
                 'room_type': str(room_type.id),
-                'room_id': '0',
+                'room_id': str(available_room.id),
                 'room_type_slug': room_type.slug,
                 'room_capacity': getattr(room_type, 'room_capacity', 0),
             }
