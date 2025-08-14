@@ -112,7 +112,7 @@
                             {% trans "From" %} {{ rt.price|price_format }} {% trans "tenge per night" %}
                         {% endif %}
                     </div>
-                    <a class="button" href="{% url 'hotel:room_type_detail' hotel.slug rt.slug %}?hotel-id={{ hotel.id }}{% if checkin %}&checkin={{ checkin }}{% endif %}{% if checkout %}&checkout={{ checkout }}{% endif %}{% if guests %}&adult={{ guests }}{% endif %}&children=0" onclick="event.stopPropagation();">{% trans "Select" %}</a>
+                    <a class="button" href="{% url 'hotel:proceed_to_payment' hotel.slug rt.slug %}?hotel-id={{ hotel.id }}{% if checkin %}&checkin={{ checkin }}{% endif %}{% if checkout %}&checkout={{ checkout }}{% endif %}{% if guests %}&adult={{ guests }}{% endif %}&children=0" onclick="event.stopPropagation();">{% trans "Proceed to booking" %}</a>
                 </div>
             </div>
         </div>
