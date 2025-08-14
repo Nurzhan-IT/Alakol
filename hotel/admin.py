@@ -1705,7 +1705,7 @@ class PriceOnDateAdmin(RussianModelAdminMixin, BaseExportAdmin):
     list_filter = [HotelFilter]
     search_fields = ['type', 'hotel__name_ru']
     search_help_text = 'Поиск по Типу номера, Отелю'
-    exclude = ['dynamic_pricing', 'number_of_beds', 'room_capacity', 'room_size', 'rtid', 'description', 'description_ru', 'description_kk', 'description_en']
+    exclude = ['dynamic_pricing', 'number_of_beds', 'room_capacity', 'room_size', 'rtid', 'description', 'description_ru', 'description_kk', 'description_en', "type_kk", "type_en", "type_ru"]
     prepopulated_fields = {"slug": ("type", )}
     change_form_template = 'admin/hotel/roomtype/change_form.html'  # Кастомный шаблон для PriceOnDate
     
