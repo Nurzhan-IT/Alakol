@@ -290,7 +290,10 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function closeModal() {
-    document.querySelectorAll('.rt-modal.show').forEach(m => m.classList.remove('show'));
+    document.querySelectorAll('.rt-modal.show').forEach(m => {
+      m.classList.remove('show');
+      m.style.transform = 'translateY(0)'; // Сбрасываем transform
+    });
     modalBackdrop.classList.remove('show');
     body.style.overflow = '';
   }
@@ -315,6 +318,71 @@ document.addEventListener('DOMContentLoaded', function() {
   modalBackdrop.addEventListener('click', closeModal);
   // Закрытие по ESC
   document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeModal(); }});
+
+  // Drag функциональность для закрытия модального окна
+  let isDragging = false;
+  let startY = 0;
+  let currentY = 0;
+  let modal = null;
+
+  function handleDragStart(e) {
+    isDragging = true;
+    startY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
+    modal = e.target.closest('.rt-modal');
+    if (modal) {
+      modal.style.transition = 'none';
+    }
+  }
+
+  function handleDragMove(e) {
+    if (!isDragging || !modal) return;
+    
+    e.preventDefault();
+    currentY = e.type === 'mousemove' ? e.clientY : e.touches[0].clientY;
+    const deltaY = currentY - startY;
+    
+    if (deltaY > 0) {
+      modal.style.transform = `translateY(${deltaY}px)`;
+    }
+  }
+
+  function handleDragEnd(e) {
+    if (!isDragging || !modal) return;
+    
+    isDragging = false;
+    const deltaY = currentY - startY;
+    modal.style.transition = 'transform .3s ease, bottom .3s ease';
+    
+    if (deltaY > 100) {
+      // Закрываем модальное окно если drag был больше 100px
+      closeModal();
+    } else {
+      // Возвращаем на место
+      modal.style.transform = 'translateY(0)';
+    }
+    
+    modal = null;
+  }
+
+  // Добавляем обработчики событий для drag
+  document.addEventListener('mousedown', function(e) {
+    if (e.target.closest('.rt-modal-header')) {
+      handleDragStart(e);
+    }
+  });
+
+  document.addEventListener('mousemove', handleDragMove);
+  document.addEventListener('mouseup', handleDragEnd);
+
+  // Touch события для мобильных устройств
+  document.addEventListener('touchstart', function(e) {
+    if (e.target.closest('.rt-modal-header')) {
+      handleDragStart(e);
+    }
+  });
+
+  document.addEventListener('touchmove', handleDragMove, { passive: false });
+  document.addEventListener('touchend', handleDragEnd);
 });
 </script>
 {% endblock %}
