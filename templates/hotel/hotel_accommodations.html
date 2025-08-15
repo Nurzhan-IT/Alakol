@@ -47,9 +47,18 @@
 .rt-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.4); opacity: 0; visibility: hidden; transition: opacity .3s ease; z-index: 9999; }
 .rt-modal-backdrop.show { opacity: 1; visibility: visible; }
 @media (min-width: 768px) { 
+  .rt-modal { 
+    height: 95vh; 
+    width: 90%; 
+    left: 5%; 
+    right: 5%; 
+    border-radius: 16px; 
+  }
   .rt-modal-slider, .rt-modal-slider .slides img { height: 300px; } 
-  .rt-modal-slider .slides { overflow-x: hidden; } 
+  .rt-modal-slider .slides { overflow-x: hidden; height: 300px;} 
   .rt-modal-slider .prev, .rt-modal-slider .next { display: block; } 
+  .rt-modal-content { display: flex; flex-direction: column; justify-content: space-between; }
+  .rt-modal-content .rt-meta { flex: 1; }
 }
 @media (min-width: 768px) {
   .rt-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
@@ -60,6 +69,19 @@
   .rt-card { cursor: default; }
   .rt-swiper { cursor: default; }
   .rt-card-body { cursor: pointer; }
+  /* Дополнительные стили для модального окна на больших экранах */
+  .rt-modal-content .rt-meta { 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    min-height: 200px; 
+  }
+  .rt-modal-content .rt-meta .line { 
+    margin-bottom: 16px; 
+  }
+  .rt-modal-content .rt-meta .line:last-child { 
+    margin-bottom: 0; 
+  }
 }
 @media (min-width: 1200px) {
   .rt-grid { grid-template-columns: repeat(3, 1fr); }
@@ -131,7 +153,7 @@
                             {% trans "From" %} {{ rt.price|price_format }} {% trans "tenge per night" %}
                         {% endif %}
                     </div>
-                    <a class="button" href="{% url 'hotel:proceed_to_payment' hotel.slug rt.slug %}?hotel-id={{ hotel.id }}{% if checkin %}&checkin={{ checkin }}{% endif %}{% if checkout %}&checkout={{ checkout }}{% endif %}{% if guests %}&adult={{ guests }}{% endif %}&children=0" onclick="event.stopPropagation();">{% trans "Proceed to booking" %}</a>
+                    
                 </div>
             </div>
         </div>
