@@ -2202,26 +2202,9 @@ def generate_hotel_pricing_calendar(hotel, nights_count=None):
     if nights_count is None:
         nights_count = hotel.min_days_for_booking
     
-    # Определяем диапазон дат
+    # Определяем диапазон дат: 7 дней (сегодня - 3 дня) по (сегодня + 3 дня)
     start_range_date = date.today() - timedelta(days=3)
-    
-    # Парсим дату окончания работы отеля
-    end_range_date = None
-    if hotel.end_date:
-        try:
-            end_md = _parse_ddmm_to_month_day(hotel.end_date)
-            if end_md:
-                current_year = date.today().year
-                end_range_date = date(current_year, end_md[0], end_md[1])
-                # Если дата уже прошла в этом году, берем следующий год
-                if end_range_date < date.today():
-                    end_range_date = date(current_year + 1, end_md[0], end_md[1])
-        except Exception:
-            pass
-    
-    # Если не удалось определить дату окончания, используем 3 дня от сегодня
-    if not end_range_date:
-        end_range_date = date.today() + timedelta(days=3)
+    end_range_date = date.today() + timedelta(days=3)
     
     # Находим самый дешевый тип номера
     cheapest_room_type = hotel.roomtype_set.order_by('price').first()
@@ -2376,4 +2359,6 @@ def hotel_accommodations(request, slug):
         'totals_by_room_type': totals_by_room_type,
         'pricing_calendar_json': json.dumps(pricing_calendar),
     }
+    print(json.dumps(pricing_calendar))
+    print(context['pricing_calendar_json'])
     return render(request, "hotel/hotel_accommodations.html", context)
