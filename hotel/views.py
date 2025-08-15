@@ -15,7 +15,7 @@ from django.core.cache import cache
 from django.utils.translation import gettext_lazy as _
 import uuid
 
-from hotel.models import Coupon, CouponUsers, Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType, RoomTypeGallery, Notification, Bookmark, Review, HotelMealPlan
+from hotel.models import Coupon, CouponUsers, Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType, RoomTypeGallery, Notification, Bookmark, Review, HotelMealPlan, _parse_ddmm_to_month_day
 from booking.models import RoomUnavailability
 from hotel.cache_utils import (
     CacheKeyGenerator, CacheInvalidator, cache_function, 
@@ -2182,6 +2182,139 @@ def proceed_to_payment(request, slug, rt_slug):
 
     return redirect('hotel:payment')
 
+def generate_hotel_pricing_calendar(hotel, nights_count=None):
+    """
+    Генерирует JSON данные с ценами по датам для отеля
+    
+    Args:
+        hotel: Объект модели Hotel
+        nights_count: Количество ночей для бронирования (по умолчанию из hotel.min_days_for_booking)
+    
+    Returns:
+        dict: Словарь в формате {дата: цена} или {дата: "Not available"}
+    """
+    from datetime import date, timedelta
+    from django.db.models import Q
+    from booking.models import RoomUnavailability
+    import json
+    
+    # Определяем количество ночей
+    if nights_count is None:
+        nights_count = hotel.min_days_for_booking
+    
+    # Определяем диапазон дат
+    start_range_date = date.today() - timedelta(days=3)
+    
+    # Парсим дату окончания работы отеля
+    end_range_date = None
+    if hotel.end_date:
+        try:
+            end_md = _parse_ddmm_to_month_day(hotel.end_date)
+            if end_md:
+                current_year = date.today().year
+                end_range_date = date(current_year, end_md[0], end_md[1])
+                # Если дата уже прошла в этом году, берем следующий год
+                if end_range_date < date.today():
+                    end_range_date = date(current_year + 1, end_md[0], end_md[1])
+        except Exception:
+            pass
+    
+    # Если не удалось определить дату окончания, используем 3 дня от сегодня
+    if not end_range_date:
+        end_range_date = date.today() + timedelta(days=3)
+    
+    # Находим самый дешевый тип номера
+    cheapest_room_type = hotel.roomtype_set.order_by('price').first()
+    if not cheapest_room_type:
+        return {}
+    
+    # Получаем все номера самого дешевого типа
+    available_rooms = Room.objects.filter(
+        room_type=cheapest_room_type, 
+        is_available=True
+    )
+    
+    if not available_rooms.exists():
+        return {}
+    
+    pricing_data = {}
+    current_date = start_range_date
+    
+    while current_date <= end_range_date:
+        date_str = current_date.strftime("%Y-%m-%d")
+        checkout_date = current_date + timedelta(days=nights_count)
+        
+        # Проверяем, активен ли отель на эти даты
+        if not hotel.is_active_for_dates(current_date, checkout_date):
+            pricing_data[date_str] = "Not available"
+            current_date += timedelta(days=1)
+            continue
+        
+        # Получаем забронированные номера на период
+        booked_room_ids = set()
+        active_bookings = Booking.objects.filter(
+            Q(check_in_date__lt=checkout_date, check_out_date__gt=current_date),
+            is_active=True,
+            payment_status__in=["paid", "processing", "pending"]
+        )
+        
+        # Извлекаем ID номеров из бронирований
+        for booking in active_bookings:
+            if booking.selection_data and isinstance(booking.selection_data, dict):
+                for item_data in booking.selection_data.values():
+                    try:
+                        room_id = int(item_data.get('room_id', 0))
+                        if room_id > 0:
+                            booked_room_ids.add(room_id)
+                    except (ValueError, TypeError):
+                        continue
+            
+            # Также проверяем по прямому полю room если есть
+            if hasattr(booking, 'room') and booking.room:
+                try:
+                    # Парсим номера из текстового поля
+                    room_lines = [line.strip() for line in booking.room.split('\n') if line.strip()]
+                    for room_line in room_lines:
+                        if '№' in room_line:
+                            room_number = room_line.split('№')[-1].strip()
+                            matching_rooms = Room.objects.filter(
+                                room_number=room_number, 
+                                room_type=cheapest_room_type
+                            )
+                            for room in matching_rooms:
+                                booked_room_ids.add(room.id)
+                except Exception:
+                    continue
+        
+        # Получаем недоступные номера из RoomUnavailability
+        unavailable_room_ids = set(
+            RoomUnavailability.objects.filter(
+                Q(start_date__lt=checkout_date, end_date__gt=current_date),
+                room__room_type=cheapest_room_type
+            ).values_list('room__id', flat=True)
+        )
+        
+        # Проверяем есть ли свободные номера
+        all_unavailable_ids = booked_room_ids.union(unavailable_room_ids)
+        free_rooms = available_rooms.exclude(id__in=all_unavailable_ids)
+        
+        if free_rooms.exists():
+            # Рассчитываем цену за период с учетом динамического ценообразования
+            try:
+                total_price = calculate_total_price(cheapest_room_type, current_date, checkout_date)
+                pricing_data[date_str] = float(total_price)
+            except Exception:
+                # Fallback на базовую цену * количество дней
+                base_price = cheapest_room_type.get_price_for_date(current_date)
+                pricing_data[date_str] = float(base_price) * nights_count
+        else:
+            pricing_data[date_str] = "Not available"
+        
+        current_date += timedelta(days=1)
+    
+    return pricing_data
+
+
 def hotel_accommodations(request, slug):
     """Страница "%hotel_name% номера и домики" с карточками типов номеров."""
     hotel = get_object_or_404(
@@ -2229,6 +2362,10 @@ def hotel_accommodations(request, slug):
     for rt in room_types:
         rt.calculated_total = totals_by_room_type.get(rt.id)
 
+    # Генерируем календарь цен
+    nights_for_pricing = total_nights if total_nights > 0 else hotel.min_days_for_booking
+    pricing_calendar = generate_hotel_pricing_calendar(hotel, nights_for_pricing)
+    
     context = {
         'hotel': hotel,
         'room_types': room_types,
@@ -2237,5 +2374,6 @@ def hotel_accommodations(request, slug):
         'guests': guests,
         'total_nights': total_nights,
         'totals_by_room_type': totals_by_room_type,
+        'pricing_calendar_json': json.dumps(pricing_calendar),
     }
     return render(request, "hotel/hotel_accommodations.html", context)
