@@ -2182,13 +2182,14 @@ def proceed_to_payment(request, slug, rt_slug):
 
     return redirect('hotel:payment')
 
-def generate_hotel_pricing_calendar(hotel, nights_count=None):
+def generate_hotel_pricing_calendar(hotel, nights_count=None, center_date=None):
     """
     Генерирует JSON данные с ценами по датам для отеля
     
     Args:
         hotel: Объект модели Hotel
         nights_count: Количество ночей для бронирования (по умолчанию из hotel.min_days_for_booking)
+        center_date: Центральная дата для генерации календаря (по умолчанию сегодня)
     
     Returns:
         dict: Словарь в формате {дата: цена} или {дата: "Not available"}
@@ -2202,9 +2203,18 @@ def generate_hotel_pricing_calendar(hotel, nights_count=None):
     if nights_count is None:
         nights_count = hotel.min_days_for_booking
     
-    # Определяем диапазон дат: 7 дней (сегодня - 3 дня) по (сегодня + 3 дня)
-    start_range_date = date.today() - timedelta(days=3)
-    end_range_date = date.today() + timedelta(days=3)
+    # Определяем центральную дату
+    if center_date is None:
+        center_date = date.today()
+    elif isinstance(center_date, str):
+        try:
+            center_date = datetime.strptime(center_date, "%Y-%m-%d").date()
+        except ValueError:
+            center_date = date.today()
+    
+    # Определяем диапазон дат: 7 дней (центральная_дата - 3 дня) по (центральная_дата + 3 дня)
+    start_range_date = center_date - timedelta(days=3)
+    end_range_date = center_date + timedelta(days=3)
     
     # Находим самый дешевый тип номера
     cheapest_room_type = hotel.roomtype_set.order_by('price').first()
@@ -2312,12 +2322,53 @@ def hotel_accommodations(request, slug):
         status="Live",
         slug=slug
     )
+    
+    # Обработка POST-запроса для обновления дат поиска
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        action = request.POST.get('action')
+        if action == 'update_search_dates':
+            checkin = request.POST.get('checkin')
+            checkout = request.POST.get('checkout') 
+            guests = request.POST.get('guests', '1')
+            
+            if checkin and checkout:
+                # Обновляем данные поиска в сессии
+                request.session['search_query_data'] = {
+                    'checkin': checkin,
+                    'checkout': checkout,
+                    'guests': int(guests) if guests.isdigit() else 1,
+                }
+                request.session.modified = True
+                
+                return JsonResponse({
+                    'success': True,
+                    'redirect_url': request.build_absolute_uri()
+                })
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Missing required dates'
+                }, status=400)
+        
+        return JsonResponse({
+            'success': False,
+            'error': 'Invalid action'
+        }, status=400)
 
     # Параметры поиска из сессии для расчета цены и отображения
     search_data = request.session.get('search_query_data', {})
     checkin = search_data.get('checkin')
     checkout = search_data.get('checkout')
     guests = search_data.get('guests')
+    
+    # Определяем центральную дату для календаря цен
+    center_date_for_calendar = None
+    if checkin:
+        try:
+            # Используем дату заезда как центр календаря
+            center_date_for_calendar = checkin
+        except Exception:
+            pass
 
     checkin_date = None
     checkout_date = None
@@ -2347,7 +2398,11 @@ def hotel_accommodations(request, slug):
 
     # Генерируем календарь цен
     nights_for_pricing = total_nights if total_nights > 0 else hotel.min_days_for_booking
-    pricing_calendar = generate_hotel_pricing_calendar(hotel, nights_for_pricing)
+    pricing_calendar = generate_hotel_pricing_calendar(
+        hotel, 
+        nights_for_pricing, 
+        center_date_for_calendar
+    )
     
     context = {
         'hotel': hotel,
