@@ -1,0 +1,170 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block special_header_links %}
+    <link rel="stylesheet" href="{% static 'css/news.css' %}">
+{% endblock special_header_links %}
+
+{% block content %}
+<div class="news-list-container">
+    <div class="container">
+        <!-- Заголовок страницы -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="utf_main_search_container_block margin-bottom-35">
+                    <h2>{% trans "News from Alakol" %}</h2>
+                    <p>{% trans "Stay updated with the latest news and events from Alakol region" %}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Фильтры и поиск -->
+        <div class="row margin-bottom-30">
+            <div class="col-md-8">
+                <form method="get" class="news-filter-form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" 
+                                       name="search" 
+                                       value="{{ search_query }}" 
+                                       placeholder="{% trans 'Search news...' %}" 
+                                       class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <select name="category" class="form-control">
+                                    <option value="">{% trans "All Categories" %}</option>
+                                    {% for category in categories %}
+                                    <option value="{{ category.slug }}" 
+                                            {% if current_category == category.slug %}selected{% endif %}>
+                                        {{ category.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="button">{% trans "Filter" %}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Список новостей -->
+        <div class="row">
+            {% for news in news_list %}
+            <div class="col-md-6 col-lg-4">
+                <div class="news-list-item news-loading">
+                    {% if news.featured_image %}
+                    <img src="{{ news.featured_image.url }}" alt="{{ news.title }}" class="news-list-image">
+                    {% else %}
+                    <img src="{% static 'images/news-placeholder.jpg' %}" alt="{{ news.title }}" class="news-list-image">
+                    {% endif %}
+                    
+                    <div class="news-list-content">
+                        {% if news.category %}
+                        <div class="news-category">
+                            <span class="news-category-tag">{{ news.category.name }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        <h3 class="news-list-title">
+                            <a href="{{ news.get_absolute_url }}">{{ news.title }}</a>
+                        </h3>
+                        
+                        <p class="news-list-excerpt">{{ news.excerpt|truncatechars:150 }}</p>
+                        
+                        <div class="news-list-meta">
+                            <div>
+                                <span>
+                                    <i class="fa fa-user"></i> {{ news.author }}
+                                </span>
+                                <span>
+                                    <i class="fa fa-calendar"></i> 
+                                    {% if news.published_at %}
+                                        {{ news.published_at|date:"d.m.Y" }}
+                                    {% else %}
+                                        {{ news.created_at|date:"d.m.Y" }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div>
+                                <span>
+                                    <i class="fa fa-eye"></i> {{ news.views_count }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-md-12">
+                <div class="utf_no_results_found">
+                    <h3>{% trans "No news found" %}</h3>
+                    <p>{% trans "There are no news articles matching your criteria." %}</p>
+                    <a href="{% url 'news:news_list' %}" class="button">{% trans "View All News" %}</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Пагинация -->
+        {% if is_paginated %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="news-pagination">
+                    <div class="pagination">
+                        {% if page_obj.has_previous %}
+                            <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if current_category %}category={{ current_category }}&{% endif %}page=1">{% trans "First" %}</a>
+                            <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if current_category %}category={{ current_category }}&{% endif %}page={{ page_obj.previous_page_number }}">{% trans "Previous" %}</a>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <span class="current">{{ num }}</span>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if current_category %}category={{ current_category }}&{% endif %}page={{ num }}">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if current_category %}category={{ current_category }}&{% endif %}page={{ page_obj.next_page_number }}">{% trans "Next" %}</a>
+                            <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if current_category %}category={{ current_category }}&{% endif %}page={{ page_obj.paginator.num_pages }}">{% trans "Last" %}</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+$(document).ready(function() {
+    // Анимация появления новостей
+    $('.news-loading').each(function(index) {
+        $(this).delay(index * 100).animate({opacity: 1}, 600);
+    });
+    
+    // Поиск в реальном времени (опционально)
+    let searchTimeout;
+    $('input[name="search"]').on('input', function() {
+        clearTimeout(searchTimeout);
+        const query = $(this).val();
+        
+        if (query.length >= 2) {
+            searchTimeout = setTimeout(function() {
+                // Здесь можно добавить AJAX поиск
+                console.log('Search for:', query);
+            }, 500);
+        }
+    });
+});
+</script>
+{% endblock script %}

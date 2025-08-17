@@ -5,6 +5,7 @@
 {% block special_header_links %}
     <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}">
     <link rel="stylesheet" href="{% static 'css/indexsearchbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/news.css' %}">
 
 {% endblock special_header_links %}
 {% block content %}
@@ -103,6 +104,75 @@
             </div>
         </section>
 
+        <!-- Секция новостей -->
+        {% if featured_news %}
+        <section class="fullwidth_block margin-top-65 padding-top-75 padding-bottom-70">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="headline_part centered margin-bottom-45">{% trans "Latest News from Alakol" %} <span>{% trans "Stay updated with the latest news and events" %}</span></h3>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    {% for news in featured_news %}
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="utf_listing_item-container news-item-container">
+                            <div class="utf_listing_item news-item">
+                                {% if news.featured_image %}
+                                <img src="{{ news.featured_image.url }}" alt="{{ news.title }}" class="news-image">
+                                {% else %}
+                                <img src="{% static 'images/news-placeholder.jpg' %}" alt="{{ news.title }}" class="news-image">
+                                {% endif %}
+                                
+                                <div class="news-date-badge">
+                                    {% if news.published_at %}
+                                        {{ news.published_at|date:"d M" }}
+                                    {% else %}
+                                        {{ news.created_at|date:"d M" }}
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="utf_listing_item_content news-content">
+                                    {% if news.category %}
+                                    <div class="news-category">
+                                        <span class="news-category-tag">{{ news.category.name }}</span>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <h4 class="news-title">
+                                        <a href="{{ news.get_absolute_url }}">{{ news.title|truncatechars:60 }}</a>
+                                    </h4>
+                                    
+                                    <p class="news-excerpt">{{ news.excerpt|truncatechars:120 }}</p>
+                                    
+                                    <div class="news-meta">
+                                        <span class="news-author">
+                                            <i class="fa fa-user"></i> {{ news.author }}
+                                        </span>
+                                        <span class="news-views">
+                                            <i class="fa fa-eye"></i> {{ news.views_count }}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="news-read-more">
+                                        <a href="{{ news.get_absolute_url }}" class="button news-btn">{% trans "Read More" %}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="row margin-top-30">
+                    <div class="col-md-12 centered-content">
+                        <a href="{% url 'news:news_list' %}" class="button border margin-top-20">{% trans "View All News" %}</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endif %}
 
         <div class="clearfix"></div>
 
