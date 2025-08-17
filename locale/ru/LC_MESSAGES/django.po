@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-17 15:28+0500\n"
+"POT-Creation-Date: 2025-08-14 07:50+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,8 +34,8 @@ msgid "Hotel not found."
 msgstr "Отель не найден"
 
 # Сообщение о минимальном количестве ночей проживания
-#: .\booking\views.py:117 .\hotel\views.py:426 .\hotel\views.py:1049
-#: .\hotel\views.py:1174
+#: .\booking\views.py:117 .\hotel\views.py:442 .\hotel\views.py:1065
+#: .\hotel\views.py:1190
 #, python-format
 msgid "Minimum stay for this hotel is %(n)d nights"
 msgstr "Минимальный срок проживания в этом отеле — %(n)d ночей"
@@ -58,7 +58,7 @@ msgstr ""
 msgid "Check-In Date"
 msgstr "Дата заезда"
 
-#: .\hotel\decorators.py:9 .\hotel\views.py:573
+#: .\hotel\decorators.py:9 .\hotel\views.py:589
 msgid "You don't have any room selections yet!"
 msgstr "У вас еще нет выбранных номеров!"
 
@@ -91,110 +91,110 @@ msgstr "Только обед"
 msgid "Только ужин"
 msgstr "Только ужин"
 
-#: .\hotel\views.py:145
+#: .\hotel\views.py:153
 msgid "Dash"
 msgstr "Аккаунт"
 
-#: .\hotel\views.py:153
+#: .\hotel\views.py:161
 msgid "Sign Out"
 msgstr "Выход"
 
-#: .\hotel\views.py:167 .\templates\partials\base.html:204
-#: .\templates\partials\base.html:213 .\templates\userauths\sign-in.html:9
+#: .\hotel\views.py:183 .\templates\partials\base.html:207
+#: .\templates\partials\base.html:216 .\templates\userauths\sign-in.html:9
 #: .\templates\userauths\sign-in.html:39
 msgid "Sign In"
 msgstr "Вход"
 
-#: .\hotel\views.py:175 .\templates\partials\base.html:205
+#: .\hotel\views.py:191 .\templates\partials\base.html:208
 #: .\templates\userauths\sign-up.html:9
 msgid "Sign Up"
 msgstr "Регистрация"
 
-#: .\hotel\views.py:413
+#: .\hotel\views.py:429
 msgid "Please enter your booking data to check availability."
 msgstr ""
 "Пожалуйста, введите данные для бронирования, чтобы проверить наличие мест."
 
-#: .\hotel\views.py:433 .\hotel\views.py:1056 .\hotel\views.py:1181
+#: .\hotel\views.py:449 .\hotel\views.py:1072 .\hotel\views.py:1197
 msgid "Hotel is not available for booking on selected dates."
 msgstr "Отель недоступен для бронирования в выбранные даты."
 
-#: .\hotel\views.py:803
+#: .\hotel\views.py:819
 msgid "You don't have any room selections or missing user information!"
 msgstr ""
 "У вас нет выбранных комнат или отсутствуют необходимые данные бронировния!"
 
-#: .\hotel\views.py:866
+#: .\hotel\views.py:882
 #, python-format
 msgid "Missing session data: %(keys)s"
 msgstr "Отсутствуют данные в сессии: %(keys)s"
 
-#: .\hotel\views.py:873
+#: .\hotel\views.py:889
 msgid "No selected rooms for booking"
 msgstr "Нет выбранных номеров для бронирования"
 
-#: .\hotel\views.py:888
+#: .\hotel\views.py:904
 #, python-format
 msgid "Missing user data: %(fields)s"
 msgstr "Отсутствуют данные пользователя: %(fields)s"
 
-#: .\hotel\views.py:903
+#: .\hotel\views.py:919
 #, python-format
 msgid "Missing booking data: %(fields)s"
 msgstr "Отсутствуют данные бронирования: %(fields)s"
 
-#: .\hotel\views.py:915
+#: .\hotel\views.py:931
 msgid "Check-in date must be earlier than check-out date"
 msgstr "Дата заезда должна быть раньше даты выезда"
 
-#: .\hotel\views.py:924
+#: .\hotel\views.py:940
 msgid "Check-in date cannot be in the past"
 msgstr "Дата заезда не может быть в прошлом"
 
-#: .\hotel\views.py:930
+#: .\hotel\views.py:946
 #, python-format
 msgid "Invalid date format: %(error)s"
 msgstr "Некорректный формат дат: %(error)s"
 
-#: .\hotel\views.py:940
+#: .\hotel\views.py:956
 #, python-format
 msgid "Invalid room data: %(room_id)s"
 msgstr "Некорректные данные номера: %(room_id)s"
 
-#: .\hotel\views.py:948
+#: .\hotel\views.py:964
 #, python-format
 msgid "Hotel with ID %(hotel_id)s not found or not active"
 msgstr "Отель с ID %(hotel_id)s не найден или не активен"
 
-#: .\hotel\views.py:956
+#: .\hotel\views.py:972
 #, python-format
 msgid "Room with ID %(room_id)s not found"
 msgstr "Номер с ID %(room_id)s не найден"
 
-#: .\hotel\views.py:964
+#: .\hotel\views.py:980
 #, python-format
 msgid "Room type with ID %(room_type_id)s not found"
 msgstr "Тип номера с ID %(room_type_id)s не найден"
 
-#: .\hotel\views.py:970
+#: .\hotel\views.py:986
 #, python-format
 msgid "Error in room data: %(error)s"
 msgstr "Ошибка в данных номеров: %(error)s"
 
-#: .\hotel\views.py:976
+#: .\hotel\views.py:992
 msgid "Session data is valid"
 msgstr "Данные сессии корректны"
 
-#: .\hotel\views.py:983
+#: .\hotel\views.py:999
 #, python-format
 msgid "Internal validation error: %(error)s"
 msgstr "Внутренняя ошибка проверки: %(error)s"
 
-#: .\hotel\views.py:992
+#: .\hotel\views.py:1008
 msgid "Missing booking information!"
 msgstr "Отсутствует информация о бронировании!"
 
-#: .\hotel\views.py:1241
+#: .\hotel\views.py:1257
 #, python-format
 msgid ""
 "Room %(room_number)s is not available for booking and has been removed from "
@@ -202,7 +202,7 @@ msgid ""
 msgstr ""
 "Номер %(room_number)s недоступен для бронирования и был удален из списка."
 
-#: .\hotel\views.py:1243
+#: .\hotel\views.py:1259
 #, python-format
 msgid ""
 "Room %(room_number)s is marked as unavailable for selected dates and has "
@@ -211,7 +211,7 @@ msgstr ""
 "Номер %(room_number)s помечен как недоступный для выбранных дат и удален из "
 "списка."
 
-#: .\hotel\views.py:1245
+#: .\hotel\views.py:1261
 #, python-format
 msgid ""
 "Room %(room_number)s is already booked for selected dates and has been "
@@ -219,11 +219,11 @@ msgid ""
 msgstr ""
 "Номер %(room_number)s уже забронирован на выбранные даты и удален из списка."
 
-#: .\hotel\views.py:1250
+#: .\hotel\views.py:1266
 msgid "All selected rooms are not available for booking."
 msgstr "Все выбранные номера недоступны для бронирования."
 
-#: .\hotel\views.py:1254
+#: .\hotel\views.py:1270
 msgid ""
 "Some selected rooms are not available. Please check the list and continue "
 "booking."
@@ -231,21 +231,21 @@ msgstr ""
 "Некоторые выбранные номера недоступны. Пожалуйста, проверьте список и "
 "продолжите бронирование."
 
-#: .\hotel\views.py:1263
+#: .\hotel\views.py:1279
 msgid "Failed to create booking!"
 msgstr "Не удалось создать бронирование!"
 
-#: .\hotel\views.py:1346
+#: .\hotel\views.py:1362
 #, python-format
 msgid "Error creating payment: %(error)s"
 msgstr "Ошибка при создании платежа: %(error)s"
 
-#: .\hotel\views.py:1353
+#: .\hotel\views.py:1369
 #, python-format
 msgid "Error: %(error)s"
 msgstr "Ошибка: %(error)s"
 
-#: .\hotel\views.py:1498
+#: .\hotel\views.py:1514
 msgid ""
 "Error: Payment not confirmed by the system. If you have made a payment, "
 "please contact support."
@@ -253,47 +253,39 @@ msgstr ""
 "Ошибка: Платеж не подтвержден системой. Если вы произвели платеж, "
 "пожалуйста, свяжитесь с поддержкой."
 
-#: .\hotel\views.py:1506
+#: .\hotel\views.py:1522
 msgid "Your booking was successfully paid!"
 msgstr "Ваше бронирование успешно оплачено!"
 
-#: .\hotel\views.py:1526
+#: .\hotel\views.py:1542
 msgid "Error: Payment not confirmed by the system."
 msgstr "Ошибка: Платеж не подтвержден системой."
 
-#: .\hotel\views.py:1531
+#: .\hotel\views.py:1547
 #, python-format
 msgid "An error occurred: %(error)s"
 msgstr "Произошла ошибка: %(error)s"
 
-#: .\hotel\views.py:1584
+#: .\hotel\views.py:1600
 msgid "Error: Insufficient data to verify payment"
 msgstr "Ошибка: Недостаточно данных для проверки платежа"
 
-#: .\hotel\views.py:1592
+#: .\hotel\views.py:1608
 msgid "Error: Payment verification failed"
 msgstr "Ошибка: Проверка платежа не удалась"
 
-#: .\hotel\views.py:1623
+#: .\hotel\views.py:1639
 msgid "Error processing payment"
 msgstr "Ошибка обработки платежа"
 
-#: .\hotel\views.py:1685
+#: .\hotel\views.py:1701
 msgid "Access to receipt is only available for paid bookings."
 msgstr "Доступ к квитанции предоставляется только для оплаченных бронирований."
 
-#: .\hotel\views.py:1713
+#: .\hotel\views.py:1729
 #, python-format
 msgid "An error occurred while retrieving the receipt: %(error)s"
 msgstr "Произошла ошибка при получении квитанции: %(error)s"
-
-#: .\hotel\views.py:2000
-msgid "You don't have any room selections or booking data!"
-msgstr "У вас нет выбранных номеров или данных бронирования!"
-
-#: .\hotel\views.py:2135
-msgid "No available rooms of this type for selected dates."
-msgstr "Нет доступных номеров этого типа на выбранные даты."
 
 #: .\templates\admin\input_filter.html:21
 #: .\templates\admin\input_filter.html:41
@@ -312,7 +304,7 @@ msgstr "Заполните данные для бронирования"
 
 #: .\templates\booking\booking_data.html:22
 #: .\templates\hotel\hotel_detail.html:227
-#: .\templates\hotel\hotel_detail.html:509
+#: .\templates\hotel\hotel_detail.html:514
 #: .\templates\hotel\room_type_detail.html:196
 #: .\templates\partials\dashboard_base.html:102
 #: .\templates\partials\dashboard_base.html:148
@@ -321,7 +313,7 @@ msgid "Booking"
 msgstr "Бронирование"
 
 #: .\templates\booking\booking_data.html:27
-#: .\templates\hotel\hotel_detail.html:514
+#: .\templates\hotel\hotel_detail.html:519
 #: .\templates\hotel\payment_method_selection.html:150
 #: .\templates\hotel\room_type_detail.html:201
 #: .\templates\search\search_results.html:40
@@ -334,16 +326,14 @@ msgid "Select Date"
 msgstr "Выбрать дату"
 
 #: .\templates\booking\booking_data.html:31
-#: .\templates\hotel\hotel_detail.html:518
+#: .\templates\hotel\hotel_detail.html:523
 #: .\templates\hotel\payment_method_selection.html:151
 #: .\templates\hotel\room_type_detail.html:205
 #: .\templates\search\search_results.html:44
 msgid "Check-out Date"
 msgstr "Дата выезда"
 
-#: .\templates\booking\booking_data.html:36
-#: .\templates\hotel\hotel_accommodations.html:273
-#: .\templates\hotel\index.html:32 .\templates\hotel\payment.html:77
+#: .\templates\booking\booking_data.html:36 .\templates\hotel\index.html:31
 #: .\templates\hotel\room_type_detail.html:210
 msgid "Guests"
 msgstr "Гости"
@@ -351,7 +341,7 @@ msgstr "Гости"
 #: .\templates\booking\booking_data.html:39
 #: .\templates\email\booking_completed.html:519
 #: .\templates\hotel\async\selected_rooms.html:184
-#: .\templates\hotel\checkout.html:93 .\templates\hotel\hotel_detail.html:526
+#: .\templates\hotel\checkout.html:93 .\templates\hotel\hotel_detail.html:531
 #: .\templates\hotel\payment_method_selection.html:153
 #: .\templates\hotel\room_type_detail.html:213
 #: .\templates\hotel\selected_rooms.html:162
@@ -365,24 +355,24 @@ msgid "Adults"
 msgstr "Взрослые"
 
 #: .\templates\booking\booking_data.html:43
-#: .\templates\hotel\hotel_detail.html:530
+#: .\templates\hotel\hotel_detail.html:535
 #: .\templates\hotel\room_type_detail.html:217
 msgid "Childrens"
 msgstr "Дети"
 
 #: .\templates\booking\booking_data.html:52
-#: .\templates\hotel\hotel_detail.html:538
+#: .\templates\hotel\hotel_detail.html:543
 #: .\templates\hotel\room_type_detail.html:226
 msgid "Select Room Type"
 msgstr "Выберите тип номера"
 
 #: .\templates\booking\booking_data.html:54
-#: .\templates\hotel\hotel_detail.html:540
+#: .\templates\hotel\hotel_detail.html:545
 msgid "Select Room"
 msgstr "Выберите номер"
 
 #: .\templates\booking\booking_data.html:62
-#: .\templates\hotel\hotel_detail.html:547
+#: .\templates\hotel\hotel_detail.html:552
 #: .\templates\hotel\room_type_detail.html:238
 msgid "Check Availability"
 msgstr "Проверить свободные номера"
@@ -471,7 +461,7 @@ msgstr "Адрес"
 
 #: .\templates\email\booking_completed.html:672
 #: .\templates\hotel\payment_method_selection.html:129
-#: .\templates\partials\base.html:265
+#: .\templates\partials\base.html:268
 #: .\templates\user_dashboard\profile.html:39
 msgid "Email"
 msgstr "Электронная почта"
@@ -516,8 +506,7 @@ msgid "All Room Selections"
 msgstr "Все выбранные номера"
 
 #: .\templates\hotel\async\selected_rooms.html:42
-#: .\templates\hotel\checkout.html:16 .\templates\hotel\payment.html:17
-#: .\templates\hotel\payment_failed.html:16
+#: .\templates\hotel\checkout.html:16 .\templates\hotel\payment_failed.html:16
 #: .\templates\hotel\payment_method_selection.html:18
 #: .\templates\hotel\room_type_detail.html:28
 #: .\templates\hotel\selected_rooms.html:26
@@ -527,7 +516,6 @@ msgstr "Отель"
 
 #: .\templates\hotel\async\selected_rooms.html:43
 #: .\templates\hotel\checkout.html:17 .\templates\hotel\hotel_detail.html:354
-#: .\templates\hotel\payment.html:18
 #: .\templates\hotel\payment_method_selection.html:19
 #: .\templates\hotel\room_type_detail.html:29
 #: .\templates\hotel\selected_rooms.html:27
@@ -557,9 +545,7 @@ msgid "Selected Rooms"
 msgstr "Выбранные Номера"
 
 #: .\templates\hotel\async\selected_rooms.html:81
-#: .\templates\hotel\checkout.html:41
-#: .\templates\hotel\hotel_accommodations.html:255
-#: .\templates\hotel\hotel_detail.html:354 .\templates\hotel\payment.html:90
+#: .\templates\hotel\checkout.html:41 .\templates\hotel\hotel_detail.html:354
 #: .\templates\hotel\room_type_detail.html:86
 #: .\templates\hotel\selected_rooms.html:59
 msgid "Beds"
@@ -610,32 +596,29 @@ msgstr ""
 "данных."
 
 #: .\templates\hotel\async\selected_rooms.html:132
-#: .\templates\hotel\checkout.html:51 .\templates\hotel\payment.html:98
-#: .\templates\hotel\selected_rooms.html:111
+#: .\templates\hotel\checkout.html:51 .\templates\hotel\selected_rooms.html:111
 msgid "Billing Information"
 msgstr "Платежная Информация"
 
 #: .\templates\hotel\async\selected_rooms.html:137
-#: .\templates\hotel\checkout.html:54 .\templates\hotel\payment.html:103
-#: .\templates\hotel\payment.html:104 .\templates\hotel\selected_rooms.html:116
+#: .\templates\hotel\checkout.html:54 .\templates\hotel\selected_rooms.html:116
 msgid "First Name"
 msgstr "Имя"
 
 #: .\templates\hotel\async\selected_rooms.html:143
-#: .\templates\hotel\checkout.html:59 .\templates\hotel\payment.html:109
-#: .\templates\hotel\selected_rooms.html:122
+#: .\templates\hotel\checkout.html:59 .\templates\hotel\selected_rooms.html:122
 msgid "E-Mail"
 msgstr "Электронная почта"
 
 #: .\templates\hotel\async\selected_rooms.html:150
-#: .\templates\hotel\checkout.html:65 .\templates\hotel\payment.html:116
+#: .\templates\hotel\checkout.html:65
 #: .\templates\hotel\payment_method_selection.html:137
 #: .\templates\hotel\selected_rooms.html:129
 msgid "Phone"
 msgstr "Телефон"
 
 #: .\templates\hotel\async\selected_rooms.html:151
-#: .\templates\hotel\payment.html:117 .\templates\hotel\selected_rooms.html:130
+#: .\templates\hotel\selected_rooms.html:130
 msgid "Enter phone number"
 msgstr "Введите номер телефона"
 
@@ -647,22 +630,18 @@ msgstr "Оформить бронирование"
 #: .\templates\hotel\async\selected_rooms.html:172
 #: .\templates\hotel\hotel_detail.html:217
 #: .\templates\hotel\hotel_detail.html:286
-#: .\templates\hotel\hotel_detail.html:460
+#: .\templates\hotel\hotel_detail.html:467
 #: .\templates\hotel\selected_rooms.html:151
 msgid "Reviews"
 msgstr "Отзывы"
 
 #: .\templates\hotel\async\selected_rooms.html:181
-#: .\templates\hotel\checkout.html:91
-#: .\templates\hotel\hotel_accommodations.html:268
-#: .\templates\hotel\payment.html:51 .\templates\hotel\selected_rooms.html:159
+#: .\templates\hotel\checkout.html:91 .\templates\hotel\selected_rooms.html:159
 msgid "Check-in"
 msgstr "Заселение"
 
 #: .\templates\hotel\async\selected_rooms.html:182
-#: .\templates\hotel\checkout.html:92
-#: .\templates\hotel\hotel_accommodations.html:269
-#: .\templates\hotel\payment.html:59 .\templates\hotel\selected_rooms.html:160
+#: .\templates\hotel\checkout.html:92 .\templates\hotel\selected_rooms.html:160
 msgid "Check-out"
 msgstr "Выезд"
 
@@ -706,7 +685,7 @@ msgstr "Оставшиеся 90%% будут оплачены при засел�
 #: .\templates\hotel\async\selected_rooms.html:251
 #: .\templates\hotel\async\selected_rooms.html:252
 #: .\templates\hotel\async\selected_rooms.html:432
-#: .\templates\hotel\payment.html:412 .\templates\hotel\selected_rooms.html:243
+#: .\templates\hotel\selected_rooms.html:243
 #: .\templates\hotel\selected_rooms.html:244
 #: .\templates\hotel\selected_rooms.html:362
 msgid "Please enter a valid phone number"
@@ -718,18 +697,17 @@ msgid "Phone number is required"
 msgstr "Требуется номер телефона"
 
 #: .\templates\hotel\async\selected_rooms.html:412
-#: .\templates\hotel\payment.html:403 .\templates\hotel\selected_rooms.html:343
+#: .\templates\hotel\selected_rooms.html:343
 msgid "Please enter your full name"
 msgstr "Пожалуйста, введите ваше полное ФИО"
 
 #: .\templates\hotel\async\selected_rooms.html:422
-#: .\templates\hotel\payment.html:407 .\templates\hotel\selected_rooms.html:353
+#: .\templates\hotel\selected_rooms.html:353
 msgid "Please enter a valid email address"
 msgstr "Пожалуйста, введите действительный адрес электронной почты"
 
 #: .\templates\hotel\checkout.html:15 .\templates\hotel\hotel_detail.html:148
 #: .\templates\hotel\payment_failed.html:15
-#: .\templates\news\news_detail.html:16
 msgid "Home"
 msgstr "На главную"
 
@@ -750,38 +728,6 @@ msgstr "Номер"
 #: .\templates\hotel\checkout.html:111
 msgid "Continue to Payment"
 msgstr "К оплате"
-
-#: .\templates\hotel\hotel_accommodations.html:6
-msgid "Rooms and cottages"
-msgstr "Комнаты и домики"
-
-#: .\templates\hotel\hotel_accommodations.html:254
-#: .\templates\hotel\payment.html:86
-msgid "Area"
-msgstr "Площадь"
-
-#: .\templates\hotel\hotel_accommodations.html:262
-#: .\templates\search\search_results.html:168
-msgid "No amenities listed"
-msgstr "Удобства не указаны"
-
-#: .\templates\hotel\hotel_accommodations.html:270
-msgid "Nights"
-msgstr "Ночь(ей)"
-
-#: .\templates\hotel\hotel_accommodations.html:281
-#: .\templates\hotel\hotel_detail.html:425
-msgid "tenge"
-msgstr "Тенге"
-
-#: .\templates\hotel\hotel_accommodations.html:283
-#: .\templates\hotel\index.html:156 .\templates\search\search_results.html:186
-msgid "From"
-msgstr "От"
-
-#: .\templates\hotel\hotel_accommodations.html:283
-msgid "tenge per night"
-msgstr "тенге за ночь(ей)"
 
 #: .\templates\hotel\hotel_detail.html:4
 msgid "Hotel and recreation base booking at Alakol"
@@ -855,7 +801,7 @@ msgstr "Пляжный отдых"
 
 #: .\templates\hotel\hotel_detail.html:215
 #: .\templates\hotel\hotel_detail.html:284
-#: .\templates\hotel\hotel_detail.html:495
+#: .\templates\hotel\hotel_detail.html:502
 msgid "No Reviews Yet"
 msgstr "Отзывов пока нет"
 
@@ -978,314 +924,212 @@ msgstr "до"
 msgid "any"
 msgstr "любой"
 
-#: .\templates\hotel\hotel_detail.html:426
+#: .\templates\hotel\hotel_detail.html:427
+msgid "Free"
+msgstr "Бесплатно"
+
+#: .\templates\hotel\hotel_detail.html:429
+msgid "tenge"
+msgstr "Тенге"
+
+#: .\templates\hotel\hotel_detail.html:430
 msgid "per day"
 msgstr "за день"
 
-#: .\templates\hotel\hotel_detail.html:437
+#: .\templates\hotel\hotel_detail.html:444
 msgid "Meals are not provided"
 msgstr "Питание не предоставляется"
 
-#: .\templates\hotel\hotel_detail.html:445
+#: .\templates\hotel\hotel_detail.html:452
 msgid "FAQ's"
 msgstr "Часто задаваемые вопросы"
 
-#: .\templates\hotel\hotel_detail.html:467
+#: .\templates\hotel\hotel_detail.html:474
 msgid "Not Rated Yet"
 msgstr "Еще не оценен"
 
-#: .\templates\hotel\hotel_detail.html:583
+#: .\templates\hotel\hotel_detail.html:588
 msgid "No description available"
 msgstr "Описание недоступно."
 
-#: .\templates\hotel\hotel_detail.html:587
+#: .\templates\hotel\hotel_detail.html:592
 msgid "Room size"
 msgstr "Площадь номера"
 
-#: .\templates\hotel\hotel_detail.html:605
+#: .\templates\hotel\hotel_detail.html:610
 msgid "Private Bathroom"
 msgstr "В частном санузле"
 
 # Оставил специально
-#: .\templates\hotel\hotel_detail.html:607
+#: .\templates\hotel\hotel_detail.html:612
 msgctxt "room type features"
 msgid "View"
 msgstr "Вид"
 
-#: .\templates\hotel\hotel_detail.html:609
+#: .\templates\hotel\hotel_detail.html:614
 msgid "Services and Amenities"
 msgstr "Услуги и удобства"
 
-#: .\templates\hotel\hotel_detail.html:626
+#: .\templates\hotel\hotel_detail.html:631
 msgid "Close"
 msgstr "Закрыть"
 
-#: .\templates\hotel\index.html:18
+#: .\templates\hotel\index.html:17
 msgid "Alakol vacation bases"
 msgstr "Базы отдыха Алаколь"
 
-#: .\templates\hotel\index.html:19
+#: .\templates\hotel\index.html:18
 msgid "Discover top rated hotels of Alakol"
 msgstr "Откройте для себя лучшие отели Алаколя"
 
-#: .\templates\hotel\index.html:23
+#: .\templates\hotel\index.html:22
 msgid "Hotel..."
 msgstr "Отель..."
 
-#: .\templates\hotel\index.html:26
+#: .\templates\hotel\index.html:25
 msgid "Select Booking Date"
 msgstr "Выберите даты бронирования"
 
-#: .\templates\hotel\index.html:32 .\templates\hotel\index.html:42
+#: .\templates\hotel\index.html:31 .\templates\hotel\index.html:41
 #: .\templates\search\search_results.html:60
 msgid "Number of Guests"
 msgstr "Количество гостей"
 
-#: .\templates\hotel\index.html:33
+#: .\templates\hotel\index.html:32
 msgid "1 Guest"
 msgstr "1 гость"
 
-#: .\templates\hotel\index.html:34
+#: .\templates\hotel\index.html:33
 msgid "2 Guests"
 msgstr "2 гостей"
 
-#: .\templates\hotel\index.html:35
+#: .\templates\hotel\index.html:34
 msgid "3 Guests"
 msgstr "3 гостей"
 
-#: .\templates\hotel\index.html:36
+#: .\templates\hotel\index.html:35
 msgid "4 Guests"
 msgstr "4 гостей"
 
-#: .\templates\hotel\index.html:37
+#: .\templates\hotel\index.html:36
 msgid "5+ Guests"
 msgstr "5+ гостей"
 
-#: .\templates\hotel\index.html:50 .\templates\search\search_results.html:114
+#: .\templates\hotel\index.html:49 .\templates\search\search_results.html:114
 msgid "Search"
 msgstr "Поиск"
 
-#: .\templates\hotel\index.html:67
-msgid "Latest News from Alakol"
-msgstr "Последние новости Алаколь"
+#: .\templates\hotel\index.html:62
+msgid "Our Popular Bases"
+msgstr "Наши Популярные базы"
 
-#: .\templates\hotel\index.html:67
-msgid "Stay updated with the latest news and events"
-msgstr "Будьте в курсе последних новостей и событий"
+#: .\templates\hotel\index.html:62
+msgid "Explore the greates places in the Alakol"
+msgstr "Исследуйте самые замечательные места на Алаколе"
 
-#: .\templates\hotel\index.html:105 .\templates\news\news_detail.html:56
-#: .\templates\search\search_results.html:182
-msgid "views"
-msgstr "просмотров"
+#: .\templates\hotel\index.html:73
+msgid "Open Now"
+msgstr "Открыто сейчас"
 
-#: .\templates\hotel\index.html:116 .\templates\news\news_list.html:109
-msgid "View All News"
-msgstr "Просмотреть все новости"
+#: .\templates\hotel\index.html:87
+msgid "No Rating Yet"
+msgstr "Рейтинга пока нет"
 
-#: .\templates\hotel\index.html:154
+#: .\templates\hotel\index.html:89
+msgid "reviews"
+msgstr "отзывов"
+
+#: .\templates\hotel\index.html:138
 msgid "Apply"
 msgstr "Применить"
 
-#: .\templates\hotel\index.html:155
+#: .\templates\hotel\index.html:139
 msgid "Cancel"
 msgstr "Отменить"
 
-#: .\templates\hotel\index.html:157
+#: .\templates\hotel\index.html:140 .\templates\search\search_results.html:186
+msgid "From"
+msgstr "От"
+
+#: .\templates\hotel\index.html:141
 msgid "To"
 msgstr "по"
 
-#: .\templates\hotel\index.html:158 .\templates\hotel\room_type_detail.html:185
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:185
 msgid "Su"
 msgstr "Вс"
 
-#: .\templates\hotel\index.html:158 .\templates\hotel\room_type_detail.html:179
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:179
 msgid "Mo"
 msgstr "Пн"
 
-#: .\templates\hotel\index.html:158 .\templates\hotel\room_type_detail.html:180
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:180
 msgid "Tu"
 msgstr "ВТ"
 
-#: .\templates\hotel\index.html:158 .\templates\hotel\room_type_detail.html:181
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:181
 msgid "We"
 msgstr "Ср"
 
-#: .\templates\hotel\index.html:158 .\templates\hotel\room_type_detail.html:182
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:182
 msgid "Th"
 msgstr "Чт"
 
-#: .\templates\hotel\index.html:158 .\templates\hotel\room_type_detail.html:183
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:183
 msgid "Fr"
 msgstr "Пт"
 
-#: .\templates\hotel\index.html:158 .\templates\hotel\room_type_detail.html:184
+#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:184
 msgid "Sa"
 msgstr "Сб"
 
-#: .\templates\hotel\index.html:159
+#: .\templates\hotel\index.html:143
 msgid "January"
 msgstr "Январь"
 
-#: .\templates\hotel\index.html:159
+#: .\templates\hotel\index.html:143
 msgid "February"
 msgstr "Февраль"
 
-#: .\templates\hotel\index.html:159
+#: .\templates\hotel\index.html:143
 msgid "March"
 msgstr "Март"
 
-#: .\templates\hotel\index.html:159
+#: .\templates\hotel\index.html:143
 msgid "April"
 msgstr "Апрель"
 
-#: .\templates\hotel\index.html:159
+#: .\templates\hotel\index.html:143
 msgid "May"
 msgstr "Май"
 
-#: .\templates\hotel\index.html:159
+#: .\templates\hotel\index.html:143
 msgid "June"
 msgstr "Июнь"
 
-#: .\templates\hotel\index.html:159
+#: .\templates\hotel\index.html:143
 msgid "July"
 msgstr "Июль"
 
-#: .\templates\hotel\index.html:159
+#: .\templates\hotel\index.html:143
 msgid "August"
 msgstr "Август"
 
-#: .\templates\hotel\index.html:159
+#: .\templates\hotel\index.html:143
 msgid "September"
 msgstr "Сентябрь"
 
-#: .\templates\hotel\index.html:159
+#: .\templates\hotel\index.html:143
 msgid "October"
 msgstr "Октябрь"
 
-#: .\templates\hotel\index.html:159
+#: .\templates\hotel\index.html:143
 msgid "November"
 msgstr "Ноябрь"
 
-#: .\templates\hotel\index.html:159
+#: .\templates\hotel\index.html:143
 msgid "December"
 msgstr "Декабрь"
-
-#: .\templates\hotel\payment.html:6 .\templates\hotel\payment.html:14
-#: .\templates\hotel\payment.html:19
-msgid "Payment"
-msgstr "Оплата"
-
-#: .\templates\hotel\payment.html:70
-msgid "Duration"
-msgstr "Продолжительность"
-
-#: .\templates\hotel\payment.html:71
-
-msgid "day"
-msgstr "день"
-
-#: .\templates\hotel\payment.html:78
-msgid "adult"
-msgstr "Взрослых"
-
-#: .\templates\hotel\payment.html:78
-msgid "child"
-msgstr "Ребенок"
-
-#: .\templates\hotel\payment.html:123
-msgid "Save personal data"
-msgstr "Сохранить личные данные"
-
-#: .\templates\hotel\payment.html:131
-#: .\templates\hotel\payment_method_selection.html:64
-#: .\templates\partials\legal_consent_component.html:10
-#: .\templates\partials\legal_consent_component.html:65
-#: .\templates\userauths\sign-up.html:33
-msgid "Legal Agreements"
-msgstr "Пользовательские соглашения"
-
-#: .\templates\hotel\payment.html:138
-#: .\templates\hotel\payment_method_selection.html:70
-#: .\templates\partials\legal_consent_component.html:71
-msgid "I accept the terms of the"
-msgstr "Я принимаю условия"
-
-#: .\templates\hotel\payment.html:139
-#: .\templates\hotel\payment_method_selection.html:72
-#: .\templates\partials\base.html:361
-#: .\templates\partials\legal_consent_component.html:73
-#: .\templates\partials\legal_consent_component.html:161
-msgid "Public Offer"
-msgstr "Публичная Оферта"
-
-#: .\templates\hotel\payment.html:140
-#: .\templates\hotel\payment_method_selection.html:74
-#: .\templates\partials\legal_consent_component.html:75
-msgid "for eKol booking services"
-msgstr "от системы бронирования eKol"
-
-#: .\templates\hotel\payment.html:146
-#: .\templates\hotel\payment_method_selection.html:82
-#: .\templates\partials\legal_consent_component.html:16
-#: .\templates\partials\legal_consent_component.html:28
-#: .\templates\partials\legal_consent_component.html:83
-#: .\templates\userauths\sign-up.html:40 .\templates\userauths\sign-up.html:52
-msgid "I agree to the"
-msgstr "Я соглашаюсь с"
-
-#: .\templates\hotel\payment.html:147
-#: .\templates\hotel\payment_method_selection.html:84
-#: .\templates\partials\legal_consent_component.html:85
-msgid "Booking and Cancellation Rules"
-msgstr "Правила Бронирования и Отмен"
-
-#: .\templates\hotel\payment.html:148
-#: .\templates\hotel\payment_method_selection.html:86
-#: .\templates\partials\legal_consent_component.html:87
-msgid "including cancellation policies"
-msgstr "включая правила отмены"
-
-#: .\templates\hotel\payment.html:154
-#: .\templates\hotel\payment_method_selection.html:94
-#: .\templates\partials\legal_consent_component.html:95
-msgid "I understand and accept the"
-msgstr "Я понимаю и принимаю"
-
-#: .\templates\hotel\payment.html:155
-#: .\templates\hotel\payment_method_selection.html:96
-#: .\templates\partials\legal_consent_component.html:97
-msgid "Payment and Refund Rules"
-msgstr "Правила оплаты и возврата средств"
-
-#: .\templates\hotel\payment.html:156
-#: .\templates\hotel\payment_method_selection.html:98
-#, python-format
-msgid "including the 10%% prepayment policy and refundable terms"
-msgstr "включая политику предоплаты в размере 10%% и условия возврата средств"
-
-#: .\templates\hotel\payment.html:161
-#: .\templates\hotel\payment_method_selection.html:104
-#: .\templates\partials\legal_consent_component.html:105
-msgid "Please accept all required legal documents to proceed with payment."
-msgstr ""
-"Пожалуйста, примите все необходимые юридические документы для продолжения "
-"оплаты."
-
-#: .\templates\hotel\payment.html:171
-#: .\templates\hotel\payment_method_selection.html:38
-#: .\templates\hotel\payment_method_selection.html:110
-msgid "Pay with Robokassa"
-msgstr "Оплатить через Робокассу"
-
-#: .\templates\hotel\payment.html:174
-#: .\templates\hotel\payment_method_selection.html:113
-msgid "Please accept all legal agreements above to enable payment"
-msgstr ""
-"Пожалуйста, примите все юридические соглашения выше, чтобы разрешить оплату"
-
-#: .\templates\hotel\payment.html:428
-msgid "Personal data saved"
-msgstr "Данные сохранены"
 
 #: .\templates\hotel\payment_failed.html:12
 #: .\templates\hotel\payment_failed.html:17
@@ -1342,6 +1186,11 @@ msgstr "Способ оплаты"
 msgid "Choose Payment Method"
 msgstr "Выберите способ оплаты"
 
+#: .\templates\hotel\payment_method_selection.html:38
+#: .\templates\hotel\payment_method_selection.html:110
+msgid "Pay with Robokassa"
+msgstr "Оплатить через Робокассу"
+
 #: .\templates\hotel\payment_method_selection.html:39
 msgid ""
 "Process your payment securely through Robokassa. Multiple payment methods "
@@ -1355,6 +1204,75 @@ msgid ""
 msgstr ""
 "Пожалуйста, завершите оплату в течение 10 минут после нажатия на кнопку "
 "оплаты."
+
+#: .\templates\hotel\payment_method_selection.html:64
+#: .\templates\partials\legal_consent_component.html:10
+#: .\templates\partials\legal_consent_component.html:65
+#: .\templates\userauths\sign-up.html:33
+msgid "Legal Agreements"
+msgstr "Пользовательские соглашения"
+
+#: .\templates\hotel\payment_method_selection.html:70
+#: .\templates\partials\legal_consent_component.html:71
+msgid "I accept the terms of the"
+msgstr "Я принимаю условия"
+
+#: .\templates\hotel\payment_method_selection.html:72
+#: .\templates\partials\base.html:364
+#: .\templates\partials\legal_consent_component.html:73
+#: .\templates\partials\legal_consent_component.html:161
+msgid "Public Offer"
+msgstr "Публичная Оферта"
+
+#: .\templates\hotel\payment_method_selection.html:74
+#: .\templates\partials\legal_consent_component.html:75
+msgid "for eKol booking services"
+msgstr "от системы бронирования eKol"
+
+#: .\templates\hotel\payment_method_selection.html:82
+#: .\templates\partials\legal_consent_component.html:16
+#: .\templates\partials\legal_consent_component.html:28
+#: .\templates\partials\legal_consent_component.html:83
+#: .\templates\userauths\sign-up.html:40 .\templates\userauths\sign-up.html:52
+msgid "I agree to the"
+msgstr "Я соглашаюсь с"
+
+#: .\templates\hotel\payment_method_selection.html:84
+#: .\templates\partials\legal_consent_component.html:85
+msgid "Booking and Cancellation Rules"
+msgstr "Правила Бронирования и Отмен"
+
+#: .\templates\hotel\payment_method_selection.html:86
+#: .\templates\partials\legal_consent_component.html:87
+msgid "including cancellation policies"
+msgstr "включая правила отмены"
+
+#: .\templates\hotel\payment_method_selection.html:94
+#: .\templates\partials\legal_consent_component.html:95
+msgid "I understand and accept the"
+msgstr "Я понимаю и принимаю"
+
+#: .\templates\hotel\payment_method_selection.html:96
+#: .\templates\partials\legal_consent_component.html:97
+msgid "Payment and Refund Rules"
+msgstr "Правила оплаты и возврата средств"
+
+#: .\templates\hotel\payment_method_selection.html:98
+#, python-format
+msgid "including the 10%% prepayment policy and refundable terms"
+msgstr "включая политику предоплаты в размере 10%% и условия возврата средств"
+
+#: .\templates\hotel\payment_method_selection.html:104
+#: .\templates\partials\legal_consent_component.html:105
+msgid "Please accept all required legal documents to proceed with payment."
+msgstr ""
+"Пожалуйста, примите все необходимые юридические документы для продолжения "
+"оплаты."
+
+#: .\templates\hotel\payment_method_selection.html:113
+msgid "Please accept all legal agreements above to enable payment"
+msgstr ""
+"Пожалуйста, примите все юридические соглашения выше, чтобы разрешить оплату"
 
 #: .\templates\hotel\payment_method_selection.html:121
 msgid "Order Information"
@@ -1470,82 +1388,6 @@ msgstr "Округленные цены в тенге"
 msgid "Select checkout"
 msgstr "Выберите оформление брони"
 
-#: .\templates\news\news_detail.html:17
-msgid "News"
-msgstr "Новости"
-
-#: .\templates\news\news_detail.html:76
-msgid "Photo Gallery"
-msgstr "Фото"
-
-#: .\templates\news\news_detail.html:92
-msgid "Share this news"
-msgstr "Поделиться новостью"
-
-#: .\templates\news\news_detail.html:117
-msgid "Latest News"
-msgstr "Последние новости"
-
-#: .\templates\news\news_detail.html:147
-msgid "News Categories"
-msgstr "Новостные категории"
-
-#: .\templates\news\news_detail.html:168
-msgid "Related News"
-msgstr "Похожие новости"
-
-#: .\templates\news\news_detail.html:188
-msgid "Read More"
-msgstr "Подробнее"
-
-#: .\templates\news\news_list.html:16
-msgid "News from Alakol"
-msgstr "Новости из Алакола"
-
-#: .\templates\news\news_list.html:17
-msgid "Stay updated with the latest news and events from Alakol region"
-msgstr "Будьте в курсе последних новостей и событий из Алакольского района"
-
-#: .\templates\news\news_list.html:32
-msgid "Search news..."
-msgstr "Поиск новостей..."
-
-#: .\templates\news\news_list.html:39
-msgid "All Categories"
-msgstr "Все Категории"
-
-#: .\templates\news\news_list.html:50
-msgid "Filter"
-msgstr "Фильтр"
-
-#: .\templates\news\news_list.html:107
-msgid "No news found"
-msgstr "Новости не найдены"
-
-#: .\templates\news\news_list.html:108
-msgid "There are no news articles matching your criteria."
-msgstr "Нет новостей, соответствующих вашим критериям."
-
-#: .\templates\news\news_list.html:122
-#: .\templates\search\search_results.html:205
-msgid "First"
-msgstr "1"
-
-#: .\templates\news\news_list.html:123
-#: .\templates\search\search_results.html:208
-msgid "Previous"
-msgstr "Предыдущая"
-
-#: .\templates\news\news_list.html:135
-#: .\templates\search\search_results.html:224
-msgid "Next"
-msgstr "Следующая"
-
-#: .\templates\news\news_list.html:136
-#: .\templates\search\search_results.html:227
-msgid "Last"
-msgstr "Последняя"
-
 #: .\templates\partials\async_base.html:11
 msgid "Alakol hotel booking"
 msgstr "Бронирование отеля в Алаколе"
@@ -1592,63 +1434,63 @@ msgid ""
 "мгновенное подтверждение бронирования."
 msgstr ""
 
-#: .\templates\partials\base.html:182
+#: .\templates\partials\base.html:184
 msgid "Switch to"
 msgstr "Переключиться на"
 
-#: .\templates\partials\base.html:217
+#: .\templates\partials\base.html:220
 msgid "Log In"
 msgstr "Войдите"
 
-#: .\templates\partials\base.html:218 .\templates\partials\base.html:317
+#: .\templates\partials\base.html:221 .\templates\partials\base.html:320
 #: .\templates\userauths\sign-up.html:86
 msgid "Register"
 msgstr "Зарегистрироваться"
 
-#: .\templates\partials\base.html:225 .\templates\partials\base.html:260
+#: .\templates\partials\base.html:228 .\templates\partials\base.html:263
 msgid "Username"
 msgstr "Имя пользователя"
 
-#: .\templates\partials\base.html:230 .\templates\partials\base.html:270
+#: .\templates\partials\base.html:233 .\templates\partials\base.html:273
 #: .\templates\userauths\sign-in.html:36
 msgid "Password"
 msgstr "Пароль"
 
-#: .\templates\partials\base.html:233
+#: .\templates\partials\base.html:236
 msgid "Forgot Password?"
 msgstr "Забыли пароль?"
 
-#: .\templates\partials\base.html:236
+#: .\templates\partials\base.html:239
 msgid "Remember Me"
 msgstr "Запомни Меня"
 
-#: .\templates\partials\base.html:240
+#: .\templates\partials\base.html:243
 msgid "Login"
 msgstr "Войти"
 
-#: .\templates\partials\base.html:243
+#: .\templates\partials\base.html:246
 msgid "Or Login in With"
 msgstr "Или войдите с помощью"
 
-#: .\templates\partials\base.html:247
+#: .\templates\partials\base.html:250
 msgid "Facebook"
 msgstr "Facebook"
 
-#: .\templates\partials\base.html:250
+#: .\templates\partials\base.html:253
 msgid "Google"
 msgstr "Google"
 
-#: .\templates\partials\base.html:275
+#: .\templates\partials\base.html:278
 msgid "Confirm Password"
 msgstr "Повторите пароль:"
 
-#: .\templates\partials\base.html:286 .\templates\partials\base.html:297
+#: .\templates\partials\base.html:289 .\templates\partials\base.html:300
 #: .\templates\partials\legal_consent_component.html:117
 #: .\templates\partials\legal_consent_component.html:128
 msgid "I agree to"
 msgstr "Я соглашаюсь с"
 
-#: .\templates\partials\base.html:288 .\templates\partials\base.html:355
+#: .\templates\partials\base.html:291 .\templates\partials\base.html:358
 #: .\templates\partials\legal_consent_component.html:18
 #: .\templates\partials\legal_consent_component.html:119
 #: .\templates\partials\legal_consent_component.html:155
@@ -1656,7 +1498,7 @@ msgstr "Я соглашаюсь с"
 msgid "Terms of Use"
 msgstr "Пользовательское соглашение"
 
-#: .\templates\partials\base.html:299 .\templates\partials\base.html:358
+#: .\templates\partials\base.html:302 .\templates\partials\base.html:361
 #: .\templates\partials\legal_consent_component.html:30
 #: .\templates\partials\legal_consent_component.html:130
 #: .\templates\partials\legal_consent_component.html:158
@@ -1664,49 +1506,49 @@ msgstr "Пользовательское соглашение"
 msgid "Privacy Policy"
 msgstr "Политика Конфиденциальности"
 
-#: .\templates\partials\base.html:308
+#: .\templates\partials\base.html:311
 #: .\templates\partials\legal_consent_component.html:139
 msgid "I consent to"
 msgstr "Я согласен (а) на"
 
-#: .\templates\partials\base.html:310
+#: .\templates\partials\base.html:313
 #: .\templates\partials\legal_consent_component.html:141
 msgid "Data Processing"
 msgstr "Обработка данных"
 
-#: .\templates\partials\base.html:339
+#: .\templates\partials\base.html:342
 msgid "Contacts"
 msgstr "Контакты"
 
-#: .\templates\partials\base.html:341
+#: .\templates\partials\base.html:344
 msgid "E-mail:"
 msgstr "Электронная почта"
 
-#: .\templates\partials\base.html:342
+#: .\templates\partials\base.html:345
 msgid "BIN/IIN:"
 msgstr "БИН/ИИН"
 
-#: .\templates\partials\base.html:351
+#: .\templates\partials\base.html:354
 #: .\templates\partials\legal_consent_component.html:151
 msgid "Legal Information"
 msgstr "Информация соглашения"
 
-#: .\templates\partials\base.html:364
+#: .\templates\partials\base.html:367
 #: .\templates\partials\legal_consent_component.html:164
 msgid "Booking Rules"
 msgstr "Правила бронирования"
 
-#: .\templates\partials\base.html:367
+#: .\templates\partials\base.html:370
 #: .\templates\partials\legal_consent_component.html:167
 msgid "Data Processing Consent"
 msgstr "Согласие на обработку данных"
 
-#: .\templates\partials\base.html:370
+#: .\templates\partials\base.html:373
 #: .\templates\partials\legal_consent_component.html:170
 msgid "Payment Rules"
 msgstr "Правила оплаты"
 
-#: .\templates\partials\base.html:601
+#: .\templates\partials\base.html:617
 msgid ""
 "By continuing to use this site, you acknowledge that you consent to the "
 "collection and use of data stored in cookies. This helps us to improve the "
@@ -1716,11 +1558,11 @@ msgstr ""
 "использование данных, хранящихся в файлах cookie. Это помогает нам улучшать "
 "сайт и предоставлять вам более качественные услуги."
 
-#: .\templates\partials\base.html:602
+#: .\templates\partials\base.html:618
 msgid "Read more about our privacy policy"
 msgstr "Узнайте больше о политике конфиденциальности"
 
-#: .\templates\partials\base.html:605
+#: .\templates\partials\base.html:621
 msgid "Continue"
 msgstr "Продолжить"
 
@@ -1965,6 +1807,10 @@ msgstr "Нет отзывов"
 msgid "Amenities:"
 msgstr "Удобства"
 
+#: .\templates\search\search_results.html:168
+msgid "No amenities listed"
+msgstr "Удобства не указаны"
+
 #: .\templates\search\search_results.html:171
 msgid "more"
 msgstr "ещё"
@@ -1972,6 +1818,10 @@ msgstr "ещё"
 #: .\templates\search\search_results.html:177
 msgid "Available Rooms:"
 msgstr "Доступные номера:"
+
+#: .\templates\search\search_results.html:182
+msgid "views"
+msgstr "просмотров"
 
 #: .\templates\search\search_results.html:186
 msgid "per night"
@@ -1984,6 +1834,22 @@ msgstr "Цена недоступна"
 #: .\templates\search\search_results.html:190
 msgid "View Details"
 msgstr "Подробнее"
+
+#: .\templates\search\search_results.html:205
+msgid "First"
+msgstr "1"
+
+#: .\templates\search\search_results.html:208
+msgid "Previous"
+msgstr "Предыдущая"
+
+#: .\templates\search\search_results.html:224
+msgid "Next"
+msgstr "Следующая"
+
+#: .\templates\search\search_results.html:227
+msgid "Last"
+msgstr "Последняя"
 
 #: .\templates\search\search_results.html:236
 msgid ""
@@ -2261,21 +2127,6 @@ msgstr "Произошла ошибка во время входа в систе
 msgid "You have been logged out"
 msgstr "Ты вышел из системы"
 
-#~ msgid "Our Popular Bases"
-#~ msgstr "Наши Популярные базы"
-
-#~ msgid "Explore the greates places in the Alakol"
-#~ msgstr "Исследуйте самые замечательные места на Алаколе"
-
-#~ msgid "Open Now"
-#~ msgstr "Открыто сейчас"
-
-#~ msgid "No Rating Yet"
-#~ msgstr "Рейтинга пока нет"
-
-#~ msgid "reviews"
-#~ msgstr "отзывов"
-
 #~ msgid "Address:"
 #~ msgstr "Адрес"
 
@@ -2299,6 +2150,9 @@ msgstr "Ты вышел из системы"
 
 #~ msgid "Shop & Education"
 #~ msgstr "Магазин и образование"
+
+#~ msgid "Education"
+#~ msgstr "Образование"
 
 #~ msgid "Business"
 #~ msgstr "Бизнес"
@@ -2468,6 +2322,9 @@ msgstr "Ты вышел из системы"
 #, python-format
 #~ msgid "Add %(name)s"
 #~ msgstr "Добавить %(name)s"
+
+#~ msgid "Filter"
+#~ msgstr "Фильтр"
 
 #~ msgid "Save"
 #~ msgstr "Сохранить"
@@ -2686,6 +2543,9 @@ msgstr "Ты вышел из системы"
 #, python-format
 #~ msgid "Add another %(model)s"
 #~ msgstr "Добавить еще %(model)s"
+
+#~ msgid "Save as new"
+#~ msgstr "Сохранить как новое"
 
 #~ msgid "Save and add another"
 #~ msgstr "Сохранить и добавить еще"

@@ -420,8 +420,15 @@
                                 </div>
                             </div>
                             <div class="meal-plan-price">
-                                <span class="price">{{ meal_plan.price_per_day|price_format }} {% trans "tenge" %}</span>
-                                <span class="period">{% trans "per day" %}</span>
+                                <span class="price">
+                                    {% if meal_plan.price_per_day == 0 %}
+                                        {% trans "Free" %}
+                                    {% else %}
+                                        {{ meal_plan.price_per_day|price_format }} {% trans "tenge" %}
+                                        <span class="period">{% trans "per day" %}</span>
+                                    {% endif %}
+                                </span>
+
                             </div>
                         </div>
                         {% endfor %}
