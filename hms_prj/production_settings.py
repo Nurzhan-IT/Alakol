@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'search',
     'robokassa',
     'legal',
+    'news',
 
     # Third Party Apps
     'import_export',

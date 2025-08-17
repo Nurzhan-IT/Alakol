@@ -1846,6 +1846,10 @@ class CustomAdminSite(admin.AdminSite):
         'RoomTypeGallery': 'Галерея типов номеров',
         'RoomTypeFeatures': 'Удобства типов номеров',
         'RoomTypeFeaturesDetailed': 'Текстовые удобства типов номеров',
+        # News models
+        'News': 'Новости',
+        'NewsCategory': 'Категории новостей',
+        'NewsGallery': 'Галерея новостей',
     }
     
     # Словарь переводов для приложений
@@ -1855,6 +1859,7 @@ class CustomAdminSite(admin.AdminSite):
         'booking': 'Бронирования',
         'auth': 'Аутентификация',
         'admin': 'Администрирование',
+        'news': 'Новости',
     }
     
     def each_context(self, request):
@@ -1932,3 +1937,14 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.admin import GroupAdmin, UserAdmin
 custom_admin_site.register(Group, GroupAdmin)
 custom_admin_site.register(Permission)
+
+# Register News models
+try:
+    from news.models import News, NewsCategory, NewsGallery
+    from news.admin import NewsAdmin, NewsCategoryAdmin, NewsGalleryAdmin
+    custom_admin_site.register(News, NewsAdmin)
+    custom_admin_site.register(NewsCategory, NewsCategoryAdmin)
+    custom_admin_site.register(NewsGallery, NewsGalleryAdmin)
+except ImportError:
+    # News app not available
+    pass

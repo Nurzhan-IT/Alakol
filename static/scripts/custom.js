@@ -1,17 +1,4 @@
-function bounceButton() {
-    const buttons = document.querySelectorAll('.selected-rooms-button');
-    // Removed console.log for buttons debugging
-    if (!buttons) {
-        return;
-    }
 
-    buttons.forEach(button => {
-        button.classList.add('bounce');
-        button.addEventListener('animationend', () => {
-            button.classList.remove('bounce');
-        }, { once: true });
-    });
-}
 
 $(document).ready(function(){
     
@@ -98,12 +85,7 @@ $(document).ready(function(){
                                 dataType: 'json',
                                 success: function(res) {
                                     button.html("<i class='fas fa-check-circle'></i> " + gettext("Added to selection") + " ");
-                                    // Обновляем счетчик через API для получения актуальных данных
-                                    if (typeof loadSelectedItemsCount === 'function') {
-                                        loadSelectedItemsCount();
-                                    } else {
-                                        $(".room-count").text(res.total_selected_items);
-                                    }
+
                                     
                                     const Toast = Swal.mixin({
                                         toast: true,
@@ -136,14 +118,7 @@ $(document).ready(function(){
                     button.html("<i class='fas fa-check-circle'></i> " + gettext("Added to selection") + " ")
                 }
 
-                bounceButton();
 
-                // Обновляем счетчик через API для получения актуальных данных
-                if (typeof loadSelectedItemsCount === 'function') {
-                    loadSelectedItemsCount();
-                } else {
-                    $(".room-count").text(response.total_selected_items);
-                }
                 
                 // Загружаем и показываем новые messages после операции
                 if (typeof loadAndDisplayMessages === 'function') {
@@ -185,12 +160,6 @@ $(document).ready(function(){
 				button.text('...');
 			},
 			success:function(res){
-				// Обновляем счетчик через API для получения актуальных данных
-				if (typeof loadSelectedItemsCount === 'function') {
-					loadSelectedItemsCount();
-				} else {
-					$(".room-count").text(res.total_selected_items);
-				}
 				$(".selection-list").html(res.data);
 
                 if (res.total_selected_items < 1) {

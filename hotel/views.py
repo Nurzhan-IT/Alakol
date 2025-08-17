@@ -15,7 +15,7 @@ from django.core.cache import cache
 from django.utils.translation import gettext_lazy as _
 import uuid
 
-from hotel.models import Coupon, CouponUsers, Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType, RoomTypeGallery, Notification, Bookmark, Review, HotelMealPlan
+from hotel.models import Coupon, CouponUsers, Hotel, Room, Booking, RoomServices, HotelGallery, HotelFeatures, RoomType, RoomTypeGallery, Notification, Bookmark, Review, HotelMealPlan, _parse_ddmm_to_month_day
 from booking.models import RoomUnavailability
 from hotel.cache_utils import (
     CacheKeyGenerator, CacheInvalidator, cache_function, 
@@ -73,20 +73,7 @@ def index(request):
     return render(request, "hotel/index.html", context)
 
 
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def get_selected_items_count(request):
-    """
-    API endpoint для получения количества выбранных номеров.
-    Возвращает данные в реальном времени без кэширования.
-    """
-    if 'selection_data_obj' in request.session:
-        total_selected_items = len(request.session['selection_data_obj'])
-    else:
-        total_selected_items = 0
-    
-    return JsonResponse({
-        'total_selected_items': total_selected_items
-    })
+
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -137,14 +124,6 @@ def get_user_auth_status(request):
             'is_authenticated': True,
             'buttons': [
                 {
-                    'type': 'selected_rooms',
-                    'url': reverse('hotel:selected_rooms'),
-                    'icon': 'fas fa-bed',
-                    'class': 'selected-rooms-button',
-                    'span_class': 'room-count',
-                    'span_text': '0'
-                },
-                {
                     'type': 'dashboard',
                     'url': reverse('dashboard:dashboard'),
                     'icon': 'bi bi-grid',
@@ -166,14 +145,6 @@ def get_user_auth_status(request):
         return JsonResponse({
             'is_authenticated': False,
             'buttons': [
-                {
-                    'type': 'selected_rooms',
-                    'url': reverse('hotel:selected_rooms'),
-                    'icon': 'fas fa-bed',
-                    'class': 'selected-rooms-button',
-                    'span_class': 'room-count',
-                    'span_text': '0'
-                },
                 {
                     'type': 'sign_in',
                     'url': reverse('userauths:sign-in'),
@@ -2008,3 +1979,412 @@ class CustomLanguageChangeView(View):
             'available_languages': [lang[0] for lang in settings.LANGUAGES]
         })
 
+
+def payment(request):
+    """Новая страница Оплата: агрегирует данные брони для финального шага оплаты."""
+    # Проверяем наличие необходимых данных в сессии
+    if 'selection_data_obj' not in request.session or 'booking_common_data' not in request.session:
+        messages.warning(request, _("You don't have any room selections or booking data!"))
+        return redirect("/")
+
+    booking_data = request.session['booking_common_data']
+    checkin = booking_data.get('checkin')
+    checkout = booking_data.get('checkout')
+    adult = int(booking_data.get('adult', 1))
+    children = int(booking_data.get('children', 0))
+
+    # Получаем первую комнату чтобы определить отель и тип номера
+    first_item_key = next(iter(request.session['selection_data_obj']))
+    first_item = request.session['selection_data_obj'][first_item_key]
+    hotel_id = int(first_item['hotel_id'])
+    room_type_id = int(first_item['room_type'])
+
+    hotel = get_object_or_404(Hotel, id=hotel_id)
+    room_type = get_object_or_404(RoomType, id=room_type_id)
+
+    # Даты/время и количество ночей
+    date_format = "%Y-%m-%d"
+    total_days = 0
+    checkin_time = getattr(hotel, 'check_in_time', None)
+    checkout_time = getattr(hotel, 'check_out_time', None)
+    try:
+        checkin_date = datetime.strptime(checkin, date_format).date()
+        checkout_date = datetime.strptime(checkout, date_format).date()
+        total_days = (checkout_date - checkin_date).days
+    except Exception:
+        pass
+
+    # Итоговая стоимость по динамическим ценам
+    total = calculate_total_price(room_type, checkin_date, checkout_date) if checkin and checkout else Decimal('0')
+    prepayment = (total / Decimal('10')) if total else Decimal('0')
+
+    # Сохранение персональных данных, если пришел POST
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        country_code = request.POST.get('country_code')
+        if full_name or email or phone:
+            request.session['user_data'] = {
+                'full_name': full_name or '',
+                'email': email or '',
+                'phone': phone or '',
+                'country_code': country_code or '',
+            }
+            request.session.modified = True
+        # Если AJAX-запрос — вернем JSON
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': True})
+
+    # Безопасные дефолты для заполнения полей (чтобы не обращаться к AnonymousUser.profile в шаблоне)
+    user_full_name_default = ''
+    user_email_default = ''
+    if request.user.is_authenticated:
+        try:
+            user_full_name_default = getattr(request.user, 'profile', None).full_name if getattr(request.user, 'profile', None) else ''
+        except Exception:
+            user_full_name_default = ''
+        try:
+            user_email_default = getattr(request.user, 'email', '') or ''
+        except Exception:
+            user_email_default = ''
+
+    context = {
+        'hotel': hotel,
+        'room_type': room_type,
+        'checkin': checkin,
+        'checkout': checkout,
+        'total_days': total_days,
+        'adult': adult,
+        'children': children,
+        'total': total,
+        'prepayment': prepayment,
+        'checkin_time': checkin_time,
+        'checkout_time': checkout_time,
+        'user_data': request.session.get('user_data', {}),
+        'user_full_name_default': user_full_name_default,
+        'user_email_default': user_email_default,
+    }
+    return render(request, 'hotel/payment.html', context)
+
+
+def proceed_to_payment(request, slug, rt_slug):
+    """Сохраняет ключевые данные в сессию и переводит на страницу оплаты."""
+    hotel = get_object_or_404(Hotel, slug=slug, status='Live')
+    room_type = get_object_or_404(RoomType, slug=rt_slug, hotel=hotel)
+
+    # Получаем параметры из GET
+    checkin = request.GET.get('checkin')
+    checkout = request.GET.get('checkout')
+    adult = request.GET.get('adult') or '1'
+    children = request.GET.get('children') or '0'
+
+    # Обновляем booking_common_data
+    if 'booking_common_data' not in request.session:
+        request.session['booking_common_data'] = {}
+    request.session['booking_common_data'].update({
+        'checkin': checkin,
+        'checkout': checkout,
+        'adult': adult,
+        'children': children,
+    })
+
+    # Проверяем доступность комнат для данного типа номера
+    from datetime import datetime
+    from django.db.models import Q
+    
+    user_checkin_date = datetime.strptime(checkin, "%Y-%m-%d").date() if checkin else None
+    user_checkout_date = datetime.strptime(checkout, "%Y-%m-%d").date() if checkout else None
+    
+    # Находим доступную комнату
+    available_room = None
+    if user_checkin_date and user_checkout_date:
+        # Получаем все комнаты данного типа
+        rooms = Room.objects.filter(room_type=room_type, is_available=True)
+        
+        # Получаем ID забронированных номеров на выбранные даты
+        booked_room_ids = set()
+        active_bookings = Booking.objects.filter(
+            Q(check_in_date__lt=user_checkout_date, check_out_date__gt=user_checkin_date),
+            is_active=True,
+            payment_status__in=["paid", "processing", "pending"]
+        ).values_list('room', flat=True)
+        
+        booked_room_ids.update(active_bookings)
+        
+        # Находим первую доступную комнату
+        for room in rooms:
+            if room.id not in booked_room_ids:
+                available_room = room
+                break
+    
+    if not available_room:
+        messages.error(request, _("No available rooms of this type for selected dates."))
+        return redirect('hotel:accommodations', slug=hotel.slug)
+
+    # Готовим selection_data_obj с реальной комнатой
+    # Если уже есть выбранные комнаты, не трогаем их — пользователь может продолжить с ними
+    if 'selection_data_obj' not in request.session or not request.session['selection_data_obj']:
+        # Создаем запись для выбранной комнаты
+        draft_id = str(available_room.id)
+        request.session['selection_data_obj'] = {
+            draft_id: {
+                'hotel_id': str(hotel.id),
+                'hotel_name': hotel.name,
+                'room_name': room_type.type,
+                'room_price': str(room_type.price),
+                'number_of_beds': str(getattr(room_type, 'number_of_beds', '')),
+                'room_number': available_room.room_number,
+                'room_type': str(room_type.id),
+                'room_id': str(available_room.id),
+                'room_type_slug': room_type.slug,
+                'room_capacity': getattr(room_type, 'room_capacity', 0),
+            }
+        }
+
+    # Также синхронизируем компактные данные поиска для других экранов
+    request.session['search_query_data'] = {
+        'checkin': checkin,
+        'checkout': checkout,
+        'guests': int(adult) if (adult and str(adult).isdigit()) else None,
+    }
+
+    request.session.modified = True
+
+    return redirect('hotel:payment')
+
+def generate_hotel_pricing_calendar(hotel, nights_count=None, center_date=None):
+    """
+    Генерирует JSON данные с ценами по датам для отеля
+    
+    Args:
+        hotel: Объект модели Hotel
+        nights_count: Количество ночей для бронирования (по умолчанию из hotel.min_days_for_booking)
+        center_date: Центральная дата для генерации календаря (по умолчанию сегодня)
+    
+    Returns:
+        dict: Словарь в формате {дата: цена} или {дата: "Not available"}
+    """
+    from datetime import date, timedelta
+    from django.db.models import Q
+    from booking.models import RoomUnavailability
+    import json
+    
+    # Определяем количество ночей
+    if nights_count is None:
+        nights_count = hotel.min_days_for_booking
+    
+    # Определяем центральную дату
+    if center_date is None:
+        center_date = date.today()
+    elif isinstance(center_date, str):
+        try:
+            center_date = datetime.strptime(center_date, "%Y-%m-%d").date()
+        except ValueError:
+            center_date = date.today()
+    
+    # Определяем диапазон дат: 7 дней (центральная_дата - 3 дня) по (центральная_дата + 3 дня)
+    start_range_date = center_date - timedelta(days=3)
+    end_range_date = center_date + timedelta(days=3)
+    
+    # Находим самый дешевый тип номера
+    cheapest_room_type = hotel.roomtype_set.order_by('price').first()
+    if not cheapest_room_type:
+        return {}
+    
+    # Получаем все номера самого дешевого типа
+    available_rooms = Room.objects.filter(
+        room_type=cheapest_room_type, 
+        is_available=True
+    )
+    
+    if not available_rooms.exists():
+        return {}
+    
+    pricing_data = {}
+    current_date = start_range_date
+    
+    while current_date <= end_range_date:
+        date_str = current_date.strftime("%Y-%m-%d")
+        checkout_date = current_date + timedelta(days=nights_count)
+        
+        # Проверяем, активен ли отель на эти даты
+        if not hotel.is_active_for_dates(current_date, checkout_date):
+            pricing_data[date_str] = "Not available"
+            current_date += timedelta(days=1)
+            continue
+        
+        # Получаем забронированные номера на период
+        booked_room_ids = set()
+        active_bookings = Booking.objects.filter(
+            Q(check_in_date__lt=checkout_date, check_out_date__gt=current_date),
+            is_active=True,
+            payment_status__in=["paid", "processing", "pending"]
+        )
+        
+        # Извлекаем ID номеров из бронирований
+        for booking in active_bookings:
+            if booking.selection_data and isinstance(booking.selection_data, dict):
+                for item_data in booking.selection_data.values():
+                    try:
+                        room_id = int(item_data.get('room_id', 0))
+                        if room_id > 0:
+                            booked_room_ids.add(room_id)
+                    except (ValueError, TypeError):
+                        continue
+            
+            # Также проверяем по прямому полю room если есть
+            if hasattr(booking, 'room') and booking.room:
+                try:
+                    # Парсим номера из текстового поля
+                    room_lines = [line.strip() for line in booking.room.split('\n') if line.strip()]
+                    for room_line in room_lines:
+                        if '№' in room_line:
+                            room_number = room_line.split('№')[-1].strip()
+                            matching_rooms = Room.objects.filter(
+                                room_number=room_number, 
+                                room_type=cheapest_room_type
+                            )
+                            for room in matching_rooms:
+                                booked_room_ids.add(room.id)
+                except Exception:
+                    continue
+        
+        # Получаем недоступные номера из RoomUnavailability
+        unavailable_room_ids = set(
+            RoomUnavailability.objects.filter(
+                Q(start_date__lt=checkout_date, end_date__gt=current_date),
+                room__room_type=cheapest_room_type
+            ).values_list('room__id', flat=True)
+        )
+        
+        # Проверяем есть ли свободные номера
+        all_unavailable_ids = booked_room_ids.union(unavailable_room_ids)
+        free_rooms = available_rooms.exclude(id__in=all_unavailable_ids)
+        
+        if free_rooms.exists():
+            # Рассчитываем цену за период с учетом динамического ценообразования
+            try:
+                total_price = calculate_total_price(cheapest_room_type, current_date, checkout_date)
+                pricing_data[date_str] = float(total_price)
+            except Exception:
+                # Fallback на базовую цену * количество дней
+                base_price = cheapest_room_type.get_price_for_date(current_date)
+                pricing_data[date_str] = float(base_price) * nights_count
+        else:
+            pricing_data[date_str] = "Not available"
+        
+        current_date += timedelta(days=1)
+    
+    return pricing_data
+
+
+def hotel_accommodations(request, slug):
+    """Страница "%hotel_name% номера и домики" с карточками типов номеров."""
+    hotel = get_object_or_404(
+        Hotel.objects.prefetch_related(
+            Prefetch(
+                'roomtype_set',
+                queryset=RoomType.objects.order_by('price').prefetch_related(
+                    'roomtype_gallery', 'roomtype_features', 'roomtype_features_detailed'
+                )
+            )
+        ),
+        status="Live",
+        slug=slug
+    )
+    
+    # Обработка POST-запроса для обновления дат поиска
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        action = request.POST.get('action')
+        if action == 'update_search_dates':
+            checkin = request.POST.get('checkin')
+            checkout = request.POST.get('checkout') 
+            guests = request.POST.get('guests', '1')
+            
+            if checkin and checkout:
+                # Обновляем данные поиска в сессии
+                request.session['search_query_data'] = {
+                    'checkin': checkin,
+                    'checkout': checkout,
+                    'guests': int(guests) if guests.isdigit() else 1,
+                }
+                request.session.modified = True
+                
+                return JsonResponse({
+                    'success': True,
+                    'redirect_url': request.build_absolute_uri()
+                })
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Missing required dates'
+                }, status=400)
+        
+        return JsonResponse({
+            'success': False,
+            'error': 'Invalid action'
+        }, status=400)
+
+    # Параметры поиска из сессии для расчета цены и отображения
+    search_data = request.session.get('search_query_data', {})
+    checkin = search_data.get('checkin')
+    checkout = search_data.get('checkout')
+    guests = search_data.get('guests')
+    
+    # Определяем центральную дату для календаря цен
+    center_date_for_calendar = None
+    if checkin:
+        try:
+            # Используем дату заезда как центр календаря
+            center_date_for_calendar = checkin
+        except Exception:
+            pass
+
+    checkin_date = None
+    checkout_date = None
+    total_nights = 0
+    if checkin and checkout:
+        try:
+            date_format = "%Y-%m-%d"
+            from datetime import datetime as _dt
+            checkin_date = _dt.strptime(checkin, date_format).date()
+            checkout_date = _dt.strptime(checkout, date_format).date()
+            total_nights = (checkout_date - checkin_date).days
+        except Exception:
+            pass
+
+    room_types = hotel.roomtype_set.all()
+    totals_by_room_type = {}
+    if checkin_date and checkout_date and total_nights > 0:
+        for rt in room_types:
+            try:
+                totals_by_room_type[rt.id] = calculate_total_price(rt, checkin_date, checkout_date)
+            except Exception:
+                totals_by_room_type[rt.id] = Decimal(str(rt.price)) * total_nights
+    
+    # Добавляем рассчитанную сумму в каждый объект типа номера для удобного доступа в шаблоне
+    for rt in room_types:
+        rt.calculated_total = totals_by_room_type.get(rt.id)
+
+    # Генерируем календарь цен
+    nights_for_pricing = total_nights if total_nights > 0 else hotel.min_days_for_booking
+    pricing_calendar = generate_hotel_pricing_calendar(
+        hotel, 
+        nights_for_pricing, 
+        center_date_for_calendar
+    )
+    
+    context = {
+        'hotel': hotel,
+        'room_types': room_types,
+        'checkin': checkin,
+        'checkout': checkout,
+        'guests': guests,
+        'total_nights': total_nights,
+        'totals_by_room_type': totals_by_room_type,
+        'pricing_calendar_json': json.dumps(pricing_calendar),
+    }
+    print(json.dumps(pricing_calendar))
+    print(context['pricing_calendar_json'])
+    return render(request, "hotel/hotel_accommodations.html", context)
