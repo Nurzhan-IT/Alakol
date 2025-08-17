@@ -73,20 +73,7 @@ def index(request):
     return render(request, "hotel/index.html", context)
 
 
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def get_selected_items_count(request):
-    """
-    API endpoint для получения количества выбранных номеров.
-    Возвращает данные в реальном времени без кэширования.
-    """
-    if 'selection_data_obj' in request.session:
-        total_selected_items = len(request.session['selection_data_obj'])
-    else:
-        total_selected_items = 0
-    
-    return JsonResponse({
-        'total_selected_items': total_selected_items
-    })
+
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -137,14 +124,6 @@ def get_user_auth_status(request):
             'is_authenticated': True,
             'buttons': [
                 {
-                    'type': 'selected_rooms',
-                    'url': reverse('hotel:selected_rooms'),
-                    'icon': 'fas fa-bed',
-                    'class': 'selected-rooms-button',
-                    'span_class': 'room-count',
-                    'span_text': '0'
-                },
-                {
                     'type': 'dashboard',
                     'url': reverse('dashboard:dashboard'),
                     'icon': 'bi bi-grid',
@@ -166,14 +145,6 @@ def get_user_auth_status(request):
         return JsonResponse({
             'is_authenticated': False,
             'buttons': [
-                {
-                    'type': 'selected_rooms',
-                    'url': reverse('hotel:selected_rooms'),
-                    'icon': 'fas fa-bed',
-                    'class': 'selected-rooms-button',
-                    'span_class': 'room-count',
-                    'span_text': '0'
-                },
                 {
                     'type': 'sign_in',
                     'url': reverse('userauths:sign-in'),
