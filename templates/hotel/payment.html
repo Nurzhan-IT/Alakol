@@ -25,55 +25,68 @@
   </div>
 
   <div class="container margin-bottom-75">
-    <div class="row">
-      <div class="col-lg-8 col-md-8 utf_listing_payment_section">
-        <!-- 1) Название отеля/адрес -->
-        <div class="utf_booking_listing_section_form margin-bottom-40">
-          <h3><i class="fas fa-hotel"></i> {% trans "Hotel" %}</h3>
-          <div class="utf_listing_section">
-            <div style="display:flex;gap:16px;align-items:center;">
-              <img src="{{ hotel.image.url }}" alt="{{ hotel.name }}" style="width:90px;height:70px;object-fit:cover;border-radius:6px;">
-              <div>
-                <div style="font-weight:600;">{{ hotel.name }}</div>
-                <div style="color:#666;"><i class="fa fa-map-marker"></i> {{ hotel.address }}</div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10 col-sm-12 utf_listing_payment_section">
+        <!-- Современный блок с информацией о бронировании -->
+        <div class="booking-summary-card margin-bottom-40">
+          <div class="booking-header">
+            <div class="hotel-info">
+              <img src="{{ hotel.image.url }}" alt="{{ hotel.name }}" class="hotel-image">
+              <div class="hotel-details">
+                <h3 class="hotel-name">{{ hotel.name }}</h3>
+                <p class="hotel-address"><i class="fa fa-map-marker"></i> {{ hotel.address }}</p>
               </div>
             </div>
+            <div class="room-type-badge">
+              <i class="fas fa-bed"></i>
+              <span>{{ room_type.type }}</span>
+            </div>
           </div>
-        </div>
-
-        <!-- 2) Даты/время -->
-        <div class="utf_booking_listing_section_form margin-bottom-40">
-          <h3><i class="fa fa-calendar-check-o"></i> {% trans "Stay Details" %}</h3>
-          <div class="utf_listing_section">
-            <ul>
-              <li>{% trans "Check-in Date" %} <span>{{ checkin }}</span></li>
-              <li>{% trans "Check-out Date" %} <span>{{ checkout }}</span></li>
-              <li>{% trans "Total Days" %} <span>{{ total_days }}</span></li>
-              <li>{% trans "Check-in Time" %} <span>{% if checkin_time %}{{ checkin_time|time:"H:i" }}{% else %}14:00{% endif %}</span></li>
-              <li>{% trans "Check-out Time" %} <span>{% if checkout_time %}{{ checkout_time|time:"H:i" }}{% else %}12:00{% endif %}</span></li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- 3) Гости -->
-        <div class="utf_booking_listing_section_form margin-bottom-40">
-          <h3><i class="fas fa-user-friends"></i> {% trans "Guests" %}</h3>
-          <div class="utf_listing_section">
-            <ul>
-              <li>{% trans "Adults" %}: <span>{{ adult }}</span></li>
-              <li>{% trans "Children" %}: <span>{{ children }}</span></li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- 4) Краткое описание типа номера -->
-        <div class="utf_booking_listing_section_form margin-bottom-40">
-          <h3><i class="fas fa-bed"></i> {% trans "Room Type" %}</h3>
-          <div class="utf_listing_section">
-            <div class="rt-summary">
-              <div style="font-weight:600;">{{ room_type.type }}</div>
-              <div class="rt-line" style="display:flex;gap:12px;flex-wrap:wrap;color:#555;margin-top:6px;">
+          
+          <div class="booking-details">
+            <div class="detail-row">
+              <div class="detail-item">
+                <i class="fa fa-calendar-check-o"></i>
+                <div class="detail-content">
+                  <span class="detail-label">{% trans "Check-in" %}</span>
+                  <span class="detail-value">{{ checkin }}</span>
+                  <span class="detail-time">{% if checkin_time %}{{ checkin_time|time:"H:i" }}{% else %}14:00{% endif %}</span>
+                </div>
+              </div>
+              <div class="detail-item">
+                <i class="fa fa-calendar-times-o"></i>
+                <div class="detail-content">
+                  <span class="detail-label">{% trans "Check-out" %}</span>
+                  <span class="detail-value">{{ checkout }}</span>
+                  <span class="detail-time">{% if checkout_time %}{{ checkout_time|time:"H:i" }}{% else %}12:00{% endif %}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="detail-row">
+              <div class="detail-item">
+                <i class="fa fa-clock-o"></i>
+                <div class="detail-content">
+                  <span class="detail-label">{% trans "Duration" %}</span>
+                  <span class="detail-value">{{ total_days }} {% trans "day" %}{{ total_days|pluralize }}</span>
+                </div>
+              </div>
+              <div class="detail-item">
+                <i class="fas fa-user-friends"></i>
+                <div class="detail-content">
+                  <span class="detail-label">{% trans "Guests" %}</span>
+                  <span class="detail-value">{{ adult }} {% trans "adult" %}{{ adult|pluralize }}{% if children > 0 %}, {{ children }} {% trans "child" %}{{ children|pluralize }}{% endif %}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="room-specs">
+              <div class="spec-item">
+                <i class="fa fa-arrows-alt"></i>
                 <span>{% trans "Area" %}: {{ room_type.room_size }} m²</span>
+              </div>
+              <div class="spec-item">
+                <i class="fa fa-bed"></i>
                 <span>{% trans "Beds" %}: {{ room_type.number_of_beds }}</span>
               </div>
             </div>
@@ -164,45 +177,195 @@
         </div>
       </div>
 
-      <div class="col-lg-4 col-md-4 margin-top-0 utf_listing_payment_section">
-        <div class="boxed-widget opening-hours summary margin-top-0">
-          <h3><i class="fa fa-calendar-check-o"></i> {% trans "Booking Summary" %}</h3>
-          <ul>
-            <li>{% trans "Check-in Date" %} <span>{{ checkin }}</span></li>
-            <li>{% trans "Check-out Date" %} <span>{{ checkout }}</span></li>
-            <li>{% trans "Total Days" %} <span>{{ total_days }} {% trans "Days" %}</span></li>
-            <li>{% trans "Adults" %} <span>{{ adult }} {% trans "Adult" %}</span></li>
-            <li>{% trans "Children" %} <span>{{ children }} {% trans "Children" %}</span></li>
-            <li class="total-costs" style="border-top: 1px dashed #ddd; padding-top: 10px;">
-              <strong>{% trans "Total Cost" %}</strong> <span>{{ total|price_format }} {% trans "Tenge" %}</span>
-            </li>
-            <li class="prepayment" style="background-color: #f0f9ff; padding: 12px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #007bff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; gap: 10px;">
-              <span style="display: flex; align-items: center; gap: 8px;">
-                <i class="fas fa-credit-card" style="color: #007bff; font-size: 16px;"></i>
-                <strong style="font-weight: bold;">{% trans "Prepayment (10%)" %}</strong>
-              </span>
-              <span style="color: #007bff; font-weight: bold; font-size: 1.1em; white-space: nowrap;">{{ prepayment|price_format }} {% trans "Tenge" %}</span>
-            </li>
-          </ul>
-        </div>
-      </div>
+
     </div>
   </div>
 </div>
+
+<style>
+/* Современный дизайн для блока бронирования */
+.booking-summary-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: 1px solid #e8f0fe;
+}
+
+.booking-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.hotel-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.hotel-image {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.hotel-details {
+  flex: 1;
+}
+
+.hotel-name {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: white;
+}
+
+.hotel-address {
+  font-size: 14px;
+  margin: 0;
+  opacity: 0.9;
+  color: white;
+}
+
+.room-type-badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(10px);
+}
+
+.booking-details {
+  padding: 24px;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.detail-item i {
+  color: #667eea;
+  font-size: 18px;
+  margin-top: 2px;
+  width: 20px;
+  text-align: center;
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detail-label {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.detail-time {
+  font-size: 13px;
+  color: #667eea;
+  font-weight: 500;
+}
+
+.room-specs {
+  display: flex;
+  gap: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 16px;
+}
+
+.spec-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.spec-item i {
+  color: #667eea;
+  font-size: 14px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .booking-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .room-type-badge {
+    align-self: flex-start;
+  }
+  
+  .detail-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .room-specs {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+/* Сохранение существующих стилей */
+.iti { width: 100%; }
+.error-message { color: #e74c3c; font-size: 12px; margin-top: 5px; }
+input.phone-input.error { border-color: #e74c3c; }
+.button.disabled { opacity: .6!important; cursor: not-allowed!important; background: #6c757d!important; pointer-events: none!important; }
+.button:not(.disabled) { opacity: 1!important; cursor: pointer!important; pointer-events: auto!important; }
+
+/* Центрирование контента */
+.utf_listing_payment_section {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .utf_listing_payment_section {
+    max-width: 100%;
+    padding: 0 15px;
+  }
+}
+</style>
 {% endblock %}
 
 {% block script_links %}
 <!-- intl-tel-input -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
-
-<style>
-  .iti { width: 100%; }
-  .error-message { color: #e74c3c; font-size: 12px; margin-top: 5px; }
-  input.phone-input.error { border-color: #e74c3c; }
-  .button.disabled { opacity: .6!important; cursor: not-allowed!important; background: #6c757d!important; pointer-events: none!important; }
-  .button:not(.disabled) { opacity: 1!important; cursor: pointer!important; pointer-events: auto!important; }
-</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
