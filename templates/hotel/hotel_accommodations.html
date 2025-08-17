@@ -229,7 +229,7 @@
 
     <div class="rt-grid">
         {% for rt in room_types %}
-        <div class="rt-card" data-rt-open="{{ rt.id }}">
+        <div class="rt-card" data-rt-open="{{ rt.id }}" data-rt-slug="{{ rt.slug }}">
             <div class="rt-swiper" data-rt-id="{{ rt.id }}">
                 <button class="prev">&lt;</button>
                 <button class="next">&gt;</button>
@@ -340,6 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const title = card.querySelector('h4')?.textContent || '';
     const cardSwiper = card.querySelector('.rt-swiper .slides');
     const imgs = cardSwiper ? cardSwiper.querySelectorAll('img') : [];
+    const rtSlug = card.getAttribute('data-rt-slug');
 
     const modal = document.createElement('div');
     modal.className = 'rt-modal';
@@ -355,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="rt-modal-content"></div>
       <div class="rt-modal-footer">
         <div class="rt-total"></div>
-        <a class="button rt-book-btn" href="#">${document.documentElement.lang === 'ru' ? 'Перейти к бронированию' : 'Proceed to booking'}</a>
+        <a class="button rt-book-btn" href="#" data-rt-slug="${rtSlug}">${document.documentElement.lang === 'ru' ? 'Перейти к бронированию' : 'Proceed to booking'}</a>
       </div>
     `;
 
@@ -383,8 +384,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalBox = modal.querySelector('.rt-total');
     const cardTotal = actions?.querySelector('.rt-total')?.innerHTML || '';
     totalBox.innerHTML = cardTotal;
-    const selectBtn = actions?.querySelector('a.button')?.getAttribute('href') || '#';
-    modal.querySelector('.rt-book-btn').setAttribute('href', selectBtn);
+    
+    // Формируем URL для proceed_to_payment
+    const hotelSlug = '{{ hotel.slug }}';
+    const checkin = '{{ checkin|default:"" }}';
+    const checkout = '{{ checkout|default:"" }}';
+    const adult = '{{ guests|default:"1" }}';
+    const children = '0'; // По умолчанию 0 детей, можно изменить при необходимости
+    
+    const proceedUrl = `/detail/${hotelSlug}/room-type/${rtSlug}/proceed/?checkin=${checkin}&checkout=${checkout}&adult=${adult}&children=${children}`;
+    modal.querySelector('.rt-book-btn').setAttribute('href', proceedUrl);
 
     // Инициализируем слайдер в модалке
     const modalDotEls = dots.querySelectorAll('.dot');

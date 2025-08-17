@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'search',
     'robokassa',
     'legal',
+    'news.apps.NewsConfig',
 
     # Third Party Apps
     'import_export',
@@ -109,6 +110,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'legal.context_processors.legal_documents',
+                'news.context_processors.news_context',  # Контекст для новостей
             ],
         },
     },
@@ -282,6 +284,7 @@ JAZZMIN_SETTINGS = {
     "order_with_respect_to": [
         "hotel",
         "booking",
+        "news",
         "hotel.Hotel",
         "hotel.RoomTypeComplete",
         "hotel.Room",
@@ -291,6 +294,9 @@ JAZZMIN_SETTINGS = {
         "hotel.Coupon",
         "hotel.Review",
         "hotel.Notification",
+        "news.NewsCategory",
+        "news.News",
+        "news.NewsGallery",
         "userauths",
         "addons",
     ],
@@ -314,6 +320,10 @@ JAZZMIN_SETTINGS = {
         "hotel.Coupon":"fas fa-tag",
         "hotel.Review":"fas fa-star",
         "hotel.Notification":"fas fa-bell",
+        
+        "news.NewsCategory": "fas fa-folder",
+        "news.News": "fas fa-newspaper",
+        "news.NewsGallery": "fas fa-images",
     },
 
     "custom_css": "admin/css/custom_admin.css",

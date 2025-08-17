@@ -67,6 +67,7 @@ urlpatterns += i18n_patterns(
     path("dashboard/", include("user_dashboard.urls")),
     path("search/", include("search.urls")),
     path("legal/", include("legal.urls")),
+    path("news/", include("news.urls")),
     path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript_catalog'),
 )
 
