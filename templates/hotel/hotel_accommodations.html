@@ -1,0 +1,723 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% load i18n %}
+{% load price_format %}
+
+{% block title %}{{ hotel.name }} — {% trans "Rooms and cottages" %}{% endblock %}
+
+{% block special_header_links %}
+<link rel="stylesheet" href="{% static 'css/hotel_detail.css' %}">
+<style>
+/* Мобильная сетка карточек */
+.rt-card { border: 1px solid #eee; border-radius: 12px; overflow: hidden; background: #fff; margin-bottom: 20px; }
+.rt-card-body { padding: 12px; }
+.rt-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.rt-badge { background: #f5f7fb; border-radius: 8px; padding: 6px 10px; font-size: 13px; }
+.rt-meta { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.rt-meta .line { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.rt-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+.rt-total { font-weight: 600; }
+.rt-swiper { position: relative; width: 100%; height: 220px; background: #f9f9f9; }
+.rt-swiper .slides { width: 100%; height: 100%; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }
+.rt-swiper .slides img { width: 100%; height: 220px; object-fit: cover; flex: 0 0 100%; scroll-snap-align: start; }
+.rt-swiper .dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; }
+.rt-swiper .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.7); }
+.rt-swiper .dot.active { background: #fff; }
+.rt-swiper .prev, .rt-swiper .next { display: none; position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,.5); color: #fff; border: none; padding: 10px 15px; cursor: pointer; z-index: 10; }
+.rt-swiper .prev { left: 10px; }
+.rt-swiper .next { right: 10px; }
+/* Кликабельность карточки */
+.rt-card { cursor: pointer; }
+.rt-card-body { cursor: pointer; }
+.rt-swiper { cursor: pointer; }
+/* Bottom sheet modal */
+.rt-modal { position: fixed; left: 0; right: 0; bottom: -100%; height: 90vh; background: #fff; border-radius: 16px 16px 0 0; box-shadow: 0 -8px 24px rgba(0,0,0,.15); z-index: 10000; display: flex; flex-direction: column; transition: transform .3s ease, bottom .3s ease; }
+.rt-modal.show { bottom: 0; }
+.rt-modal-header { position: relative; padding: 10px 16px; border-bottom: 1px solid #eee; }
+.rt-modal-drag { width: 40px; height: 4px; border-radius: 4px; background: #ccc; margin: 6px auto; }
+.rt-modal-slider { flex: 0 0 240px; position: sticky; top: 0; background: #000; }
+.rt-modal-slider .slides { width: 100%; height: 240px; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; }
+.rt-modal-slider .slides img { width: 100%; height: 240px; object-fit: cover; flex: 0 0 100%; scroll-snap-align: start; }
+.rt-modal-slider .dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; }
+.rt-modal-slider .prev, .rt-modal-slider .next { display: none; position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,.5); color: #fff; border: none; padding: 10px 15px; cursor: pointer; z-index: 10; }
+.rt-modal-slider .prev { left: 10px; }
+.rt-modal-slider .next { right: 10px; }
+.rt-modal-content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 12px 16px; }
+.rt-modal-footer { position: sticky; bottom: 0; background: #fff; border-top: 1px solid #eee; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+.rt-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.4); opacity: 0; visibility: hidden; transition: opacity .3s ease; z-index: 9999; }
+.rt-modal-backdrop.show { opacity: 1; visibility: visible; }
+@media (min-width: 768px) { 
+  .rt-modal { 
+    height: 95vh; 
+    width: 90%; 
+    left: 5%; 
+    right: 5%; 
+    border-radius: 16px; 
+  }
+  .rt-modal-slider, .rt-modal-slider .slides img { height: 300px; } 
+  .rt-modal-slider .slides { overflow-x: hidden; height: 300px;} 
+  .rt-modal-slider .prev, .rt-modal-slider .next { display: block; } 
+  .rt-modal-content { display: flex; flex-direction: column; justify-content: space-between; }
+  .rt-modal-content .rt-meta { flex: 1; }
+}
+@media (min-width: 768px) {
+  .rt-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .rt-swiper { height: 260px; }
+  .rt-swiper .slides img { height: 260px; }
+  .rt-swiper .slides { overflow-x: hidden; }
+  .rt-swiper .prev, .rt-swiper .next { display: block; }
+  .rt-card { cursor: default; }
+  .rt-swiper { cursor: default; }
+  .rt-card-body { cursor: pointer; }
+  /* Дополнительные стили для модального окна на больших экранах */
+  .rt-modal-content .rt-meta { 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    min-height: 200px; 
+  }
+  .rt-modal-content .rt-meta .line { 
+    margin-bottom: 16px; 
+  }
+  .rt-modal-content .rt-meta .line:last-child { 
+    margin-bottom: 0; 
+  }
+}
+@media (min-width: 1200px) {
+  .rt-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Стили для полосы дат с ценами */
+.date-price-strip-container {
+  margin: 16px 0 24px 0;
+  padding: 0 16px;
+}
+
+.date-price-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+
+.date-price-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.date-chip {
+  flex: 0 0 auto;
+  min-width: 90px;
+  padding: 12px 8px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.3;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  scroll-snap-align: start;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.date-chip:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.date-chip[aria-selected="true"] {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #ffffff;
+  border-color: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+.date-chip[aria-selected="true"]:hover {
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+.date-chip.unavailable {
+  background: #f9fafb;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+}
+
+.date-chip.unavailable:hover {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transform: none;
+}
+
+.date-line {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 2px;
+  opacity: 0.9;
+}
+
+.date-chip[aria-selected="true"] .date-line {
+  opacity: 1;
+  font-weight: 600;
+}
+
+.price-line {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.date-chip[aria-selected="true"] .price-line {
+  color: #ffffff;
+}
+
+.date-chip.unavailable .price-line {
+  color: #9ca3af;
+}
+
+/* Адаптивность для планшетов */
+@media (min-width: 768px) {
+  .date-price-strip-container {
+    padding: 0 24px;
+    margin: 20px 0 28px 0;
+  }
+  
+  .date-chip {
+    min-width: 100px;
+    padding: 14px 10px;
+    font-size: 14px;
+  }
+  
+  .date-line {
+    font-size: 13px;
+  }
+  
+  .price-line {
+    font-size: 15px;
+  }
+}
+
+/* Адаптивность для десктопов */
+@media (min-width: 1024px) {
+  .date-price-strip {
+    justify-content: center;
+    overflow-x: visible;
+    gap: 12px;
+  }
+  
+  .date-chip {
+    min-width: 110px;
+    padding: 16px 12px;
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% csrf_token %}
+    
+    <!-- Полоса дат с ценами -->
+    <div class="date-price-strip-container">
+        <div class="date-price-strip" id="date-price-strip" role="listbox" aria-label="Список дат и цен">
+            <!-- Карточки будут сгенерированы из pricing_calendar_json -->
+        </div>
+    </div>
+
+    <div class="rt-grid">
+        {% for rt in room_types %}
+        <div class="rt-card" data-rt-open="{{ rt.id }}" data-rt-slug="{{ rt.slug }}">
+            <div class="rt-swiper" data-rt-id="{{ rt.id }}">
+                <button class="prev">&lt;</button>
+                <button class="next">&gt;</button>
+                <div class="slides">
+                    {% with first=rt.roomtype_gallery.all|first %}
+                        <img src="{{ first.image.url|default:'/static/images/placeholder.jpg' }}" alt="{{ rt.type }}">
+                    {% endwith %}
+                    {% for g in rt.roomtype_gallery.all %}
+                        {% if not forloop.first %}
+                        <img src="{{ g.image.url }}" alt="{{ rt.type }}">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="dots"></div>
+            </div>
+
+            <div class="rt-card-body">
+                <h4 style="margin-bottom:8px;">{{ rt.type }}</h4>
+                <div class="rt-meta">
+                    <!-- 1 линия: площадь, кровати -->
+                    <div class="line">
+                        <span class="rt-badge">{% trans "Area" %}: {{ rt.room_size }} m²</span>
+                        <span class="rt-badge">{% trans "Beds" %}: {{ rt.number_of_beds }}</span>
+                    </div>
+                    <!-- 2 линия: удобства (иконки/названия) -->
+                    <div class="line">
+                        {% for feat in rt.roomtype_features.all %}
+                            <span class="rt-badge">{{ feat.name }}</span>
+                        {% empty %}
+                            <span class="rt-badge">{% trans "No amenities listed" %}</span>
+                        {% endfor %}
+                    </div>
+                    <!-- 3 линия: даты, ночи, гости, итог -->
+                    <div class="line">
+                        {% if checkin and checkout %}
+                            <span class="rt-badge">{% trans "Check-in" %}: {{ checkin }}</span>
+                            <span class="rt-badge">{% trans "Check-out" %}: {{ checkout }}</span>
+                            <span class="rt-badge">{% trans "Nights" %}: {{ total_nights }}</span>
+                        {% endif %}
+                        {% if guests %}
+                            <span class="rt-badge">{% trans "Guests" %}: {{ guests }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="rt-actions">
+                    <div class="rt-total">
+                        {% if rt.calculated_total %}
+                            {{ rt.calculated_total|price_format }} {% trans "tenge" %}
+                        {% else %}
+                            {% trans "From" %} {{ rt.price|price_format }} {% trans "tenge per night" %}
+                        {% endif %}
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script_links %}
+<script>
+// Простой слайдер и модальное окно (bottom sheet)
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.rt-swiper').forEach(function(swiper) {
+    const slides = swiper.querySelector('.slides');
+    const images = swiper.querySelectorAll('.slides img');
+    const dots = swiper.querySelector('.dots');
+    if (!slides || images.length === 0 || !dots) return;
+
+    images.forEach((_, idx) => {
+      const d = document.createElement('span');
+      d.className = 'dot' + (idx === 0 ? ' active' : '');
+      dots.appendChild(d);
+    });
+
+    const dotEls = dots.querySelectorAll('.dot');
+    function updateDots() {
+      const index = Math.round(slides.scrollLeft / slides.clientWidth);
+      dotEls.forEach((d, i) => d.classList.toggle('active', i === index));
+    }
+    slides.addEventListener('scroll', updateDots);
+    window.addEventListener('resize', updateDots);
+    
+    const prevBtn = swiper.querySelector('.prev');
+    const nextBtn = swiper.querySelector('.next');
+    if (prevBtn && nextBtn) {
+      prevBtn.addEventListener('click', () => {
+        slides.scrollBy({ left: -slides.clientWidth, behavior: 'smooth' });
+      });
+      nextBtn.addEventListener('click', () => {
+        slides.scrollBy({ left: slides.clientWidth, behavior: 'smooth' });
+      });
+    }
+  });
+
+  // Генерация модалок и управление ими
+  const body = document.body;
+  const modalBackdrop = document.createElement('div');
+  modalBackdrop.className = 'rt-modal-backdrop';
+  body.appendChild(modalBackdrop);
+
+  function createModalCard(rtId) {
+    const card = document.querySelector(`.rt-card[data-rt-open="${rtId}"]`);
+    if (!card) return null;
+    const title = card.querySelector('h4')?.textContent || '';
+    const cardSwiper = card.querySelector('.rt-swiper .slides');
+    const imgs = cardSwiper ? cardSwiper.querySelectorAll('img') : [];
+    const rtSlug = card.getAttribute('data-rt-slug');
+
+    const modal = document.createElement('div');
+    modal.className = 'rt-modal';
+    modal.setAttribute('data-rt-modal', rtId);
+    modal.innerHTML = `
+      <div class="rt-modal-header"><div class="rt-modal-drag"></div></div>
+      <div class="rt-modal-slider">
+        <button class="prev">&lt;</button>
+        <button class="next">&gt;</button>
+        <div class="slides"></div>
+        <div class="dots"></div>
+      </div>
+      <div class="rt-modal-content"></div>
+      <div class="rt-modal-footer">
+        <div class="rt-total"></div>
+        <a class="button rt-book-btn" href="#" data-rt-slug="${rtSlug}">${document.documentElement.lang === 'ru' ? 'Перейти к бронированию' : 'Proceed to booking'}</a>
+      </div>
+    `;
+
+    // Копируем слайды
+    const modalSlides = modal.querySelector('.rt-modal-slider .slides');
+    imgs.forEach(img => {
+      const c = img.cloneNode();
+      modalSlides.appendChild(c);
+    });
+    // Точки
+    const dots = modal.querySelector('.rt-modal-slider .dots');
+    imgs.forEach((_, idx) => {
+      const d = document.createElement('span');
+      d.className = 'dot' + (idx === 0 ? ' active' : '');
+      dots.appendChild(d);
+    });
+
+    // Контент: копируем информацию из карточки
+    const content = modal.querySelector('.rt-modal-content');
+    const meta = card.querySelector('.rt-meta');
+    const actions = card.querySelector('.rt-actions');
+    if (meta) content.appendChild(meta.cloneNode(true));
+
+    // Итог и кнопка
+    const totalBox = modal.querySelector('.rt-total');
+    const cardTotal = actions?.querySelector('.rt-total')?.innerHTML || '';
+    totalBox.innerHTML = cardTotal;
+    
+    // Формируем URL для proceed_to_payment
+    const hotelSlug = '{{ hotel.slug }}';
+    const checkin = '{{ checkin|default:"" }}';
+    const checkout = '{{ checkout|default:"" }}';
+    const adult = '{{ guests|default:"1" }}';
+    const children = '0'; // По умолчанию 0 детей, можно изменить при необходимости
+    
+    const proceedUrl = `/detail/${hotelSlug}/room-type/${rtSlug}/proceed/?checkin=${checkin}&checkout=${checkout}&adult=${adult}&children=${children}`;
+    modal.querySelector('.rt-book-btn').setAttribute('href', proceedUrl);
+
+    // Инициализируем слайдер в модалке
+    const modalDotEls = dots.querySelectorAll('.dot');
+    function updateModalDots() {
+      const index = Math.round(modalSlides.scrollLeft / modalSlides.clientWidth);
+      modalDotEls.forEach((d, i) => d.classList.toggle('active', i === index));
+    }
+    modalSlides.addEventListener('scroll', updateModalDots);
+    window.addEventListener('resize', updateModalDots);
+
+    const modalPrevBtn = modal.querySelector('.rt-modal-slider .prev');
+    const modalNextBtn = modal.querySelector('.rt-modal-slider .next');
+    if (modalPrevBtn && modalNextBtn) {
+      modalPrevBtn.addEventListener('click', () => {
+        modalSlides.scrollBy({ left: -modalSlides.clientWidth, behavior: 'smooth' });
+      });
+      modalNextBtn.addEventListener('click', () => {
+        modalSlides.scrollBy({ left: modalSlides.clientWidth, behavior: 'smooth' });
+      });
+    }
+
+    body.appendChild(modal);
+    return modal;
+  }
+
+  function openModal(rtId) {
+    let modal = document.querySelector(`.rt-modal[data-rt-modal="${rtId}"]`);
+    if (!modal) modal = createModalCard(rtId);
+    if (!modal) return;
+    modal.classList.add('show');
+    modalBackdrop.classList.add('show');
+    body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.querySelectorAll('.rt-modal.show').forEach(m => {
+      m.classList.remove('show');
+      m.style.transform = 'translateY(0)'; // Сбрасываем transform
+    });
+    modalBackdrop.classList.remove('show');
+    body.style.overflow = '';
+  }
+
+  // Открытие при клике по карточке
+  document.querySelectorAll('.rt-card[data-rt-open]').forEach(card => {
+    card.addEventListener('click', function(e) {
+      // На мобильных устройствах (до 768px) карточка полностью кликабельна
+      // На больших экранах только rt-card-body кликабелен
+      if (window.innerWidth >= 768) {
+        // Проверяем, что клик был именно по rt-card-body
+        if (!e.target.closest('.rt-card-body')) {
+          return;
+        }
+      }
+      const rtId = this.getAttribute('data-rt-open');
+      openModal(rtId);
+    });
+  });
+
+  // Закрытие по клику на фон
+  modalBackdrop.addEventListener('click', closeModal);
+  // Закрытие по ESC
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeModal(); }});
+
+  // Drag функциональность для закрытия модального окна
+  let isDragging = false;
+  let startY = 0;
+  let currentY = 0;
+  let modal = null;
+
+  function handleDragStart(e) {
+    isDragging = true;
+    startY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
+    modal = e.target.closest('.rt-modal');
+    if (modal) {
+      modal.style.transition = 'none';
+    }
+  }
+
+  function handleDragMove(e) {
+    if (!isDragging || !modal) return;
+    
+    e.preventDefault();
+    currentY = e.type === 'mousemove' ? e.clientY : e.touches[0].clientY;
+    const deltaY = currentY - startY;
+    
+    if (deltaY > 0) {
+      modal.style.transform = `translateY(${deltaY}px)`;
+    }
+  }
+
+  function handleDragEnd(e) {
+    if (!isDragging || !modal) return;
+    
+    isDragging = false;
+    const deltaY = currentY - startY;
+    modal.style.transition = 'transform .3s ease, bottom .3s ease';
+    
+    if (deltaY > 100) {
+      // Закрываем модальное окно если drag был больше 100px
+      closeModal();
+    } else {
+      // Возвращаем на место
+      modal.style.transform = 'translateY(0)';
+    }
+    
+    modal = null;
+  }
+
+  // Добавляем обработчики событий для drag
+  document.addEventListener('mousedown', function(e) {
+    if (e.target.closest('.rt-modal-header')) {
+      handleDragStart(e);
+    }
+  });
+
+  document.addEventListener('mousemove', handleDragMove);
+  document.addEventListener('mouseup', handleDragEnd);
+
+  // Touch события для мобильных устройств
+  document.addEventListener('touchstart', function(e) {
+    if (e.target.closest('.rt-modal-header')) {
+      handleDragStart(e);
+    }
+  });
+
+  document.addEventListener('touchmove', handleDragMove, { passive: false });
+  document.addEventListener('touchend', handleDragEnd);
+
+  // Инициализация полосы дат с ценами
+  initializeDatePriceStrip();
+
+  function initializeDatePriceStrip() {
+    const pricingCalendarJson = '{{ pricing_calendar_json|escapejs }}';
+    if (!pricingCalendarJson || pricingCalendarJson === '{}') {
+      return; // Нет данных для отображения
+    }
+
+    let pricingData;
+    try {
+      pricingData = JSON.parse(pricingCalendarJson);
+    } catch (e) {
+      console.error('Ошибка парсинга pricing_calendar_json:', e);
+      return;
+    }
+
+    const strip = document.getElementById('date-price-strip');
+    if (!strip) return;
+
+    // Создаем форматтеры для русской локали
+    const dateFormatter = new Intl.DateTimeFormat('ru-RU', {
+      day: '2-digit',
+      month: 'short',
+      weekday: 'short'
+    });
+
+    const priceFormatter = new Intl.NumberFormat('ru-RU', {
+      style: 'decimal',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+
+    // Преобразуем объект в массив и сортируем по дате
+    const dateEntries = Object.entries(pricingData)
+      .map(([dateStr, price]) => ({
+        date: dateStr,
+        price: price,
+        dateObj: new Date(dateStr)
+      }))
+      .sort((a, b) => a.dateObj - b.dateObj);
+
+    // Определяем активную дату (из контекста или 4-я по счету)
+    const currentCheckinDate = '{{ checkin|default:"" }}';
+    
+    // Создаем карточки дат
+    dateEntries.forEach((entry, index) => {
+      const chip = document.createElement('button');
+      chip.className = 'date-chip';
+      chip.type = 'button';
+      chip.setAttribute('role', 'option');
+      chip.setAttribute('data-date', entry.date);
+      
+      // Активна дата заезда из контекста или 4-я дата по счету (index 3)
+      let isActive = false;
+      if (currentCheckinDate && currentCheckinDate === entry.date) {
+        isActive = true;
+      } else if (!currentCheckinDate && index === 3) {
+        isActive = true;
+      }
+      chip.setAttribute('aria-selected', isActive ? 'true' : 'false');
+
+      // Проверяем доступность (если цена "Not available" или null)
+      const isUnavailable = entry.price === "Not available" || entry.price === null || entry.price === undefined;
+      
+      if (isUnavailable) {
+        chip.classList.add('unavailable');
+        chip.disabled = true;
+      }
+
+      // Форматируем дату
+      const formattedDate = dateFormatter.format(entry.dateObj)
+        .replace(',', '') // Убираем запятую если есть
+        .replace(/\s+/g, ' '); // Нормализуем пробелы
+
+      // Форматируем цену
+      let formattedPrice;
+      if (isUnavailable) {
+        formattedPrice = '—';
+      } else {
+        formattedPrice = priceFormatter.format(entry.price) + ' ₸';
+      }
+
+      chip.innerHTML = `
+        <div class="date-line">${formattedDate}</div>
+        <div class="price-line">${formattedPrice}</div>
+      `;
+
+      // Обработчик клика
+      if (!isUnavailable) {
+        chip.addEventListener('click', () => {
+          // Убираем активное состояние со всех карточек
+          strip.querySelectorAll('.date-chip[aria-selected="true"]').forEach(el => {
+            el.setAttribute('aria-selected', 'false');
+          });
+          
+          // Устанавливаем активное состояние для текущей карточки
+          chip.setAttribute('aria-selected', 'true');
+          
+          // Обновляем даты в сессии и перезагружаем страницу
+          updateSearchDatesAndReload(entry.date);
+        });
+      }
+
+      strip.appendChild(chip);
+    });
+
+    // Прокручиваем к активной карточке (4-я дата)
+    setTimeout(() => {
+      const activeChip = strip.querySelector('.date-chip[aria-selected="true"]');
+      if (activeChip) {
+        const stripRect = strip.getBoundingClientRect();
+        const chipRect = activeChip.getBoundingClientRect();
+        const scrollLeft = chipRect.left - stripRect.left - (stripRect.width - chipRect.width) / 2;
+        strip.scrollTo({ left: strip.scrollLeft + scrollLeft, behavior: 'smooth' });
+      }
+    }, 100);
+  }
+
+  // Функция для обновления дат в сессии и перезагрузки страницы
+  function updateSearchDatesAndReload(selectedDate) {
+    // Получаем текущие данные из контекста
+    const currentGuests = parseInt('{{ guests|default:"1" }}') || 1;
+    const minNights = parseInt('{{ hotel.min_days_for_booking|default:"1" }}') || 1;
+    
+    // Рассчитываем новые даты
+    const checkinDate = new Date(selectedDate);
+    const checkoutDate = new Date(checkinDate);
+    checkoutDate.setDate(checkoutDate.getDate() + minNights);
+    
+    // Форматируем даты в формат YYYY-MM-DD
+    const formatDate = (date) => {
+      return date.getFullYear() + '-' + 
+             String(date.getMonth() + 1).padStart(2, '0') + '-' + 
+             String(date.getDate()).padStart(2, '0');
+    };
+    
+    const newCheckin = formatDate(checkinDate);
+    const newCheckout = formatDate(checkoutDate);
+    
+    // Показываем индикатор загрузки на активной карточке
+    const activeChip = document.querySelector('.date-chip[aria-selected="true"]');
+    if (activeChip) {
+      activeChip.style.opacity = '0.7';
+      activeChip.style.pointerEvents = 'none';
+    }
+    
+    // Отправляем AJAX запрос для обновления сессии
+    const formData = new FormData();
+    formData.append('checkin', newCheckin);
+    formData.append('checkout', newCheckout);
+    formData.append('guests', currentGuests);
+    formData.append('action', 'update_search_dates');
+    
+    // Добавляем CSRF токен
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                      document.querySelector('meta[name=csrf-token]')?.content ||
+                      '{{ csrf_token }}';
+    formData.append('csrfmiddlewaretoken', csrfToken);
+    
+    fetch(window.location.href, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Перезагружаем страницу для обновления цен и дат
+        window.location.reload();
+      } else {
+        console.error('Ошибка при обновлении дат:', data.error);
+        // Восстанавливаем состояние карточки
+        if (activeChip) {
+          activeChip.style.opacity = '';
+          activeChip.style.pointerEvents = '';
+        }
+        alert('Ошибка при обновлении дат. Попробуйте еще раз.');
+      }
+    })
+    .catch(error => {
+      console.error('Ошибка при отправке запроса:', error);
+      // Восстанавливаем состояние карточки
+      if (activeChip) {
+        activeChip.style.opacity = '';
+        activeChip.style.pointerEvents = '';
+      }
+      // В случае ошибки все равно перезагружаем страницу
+      window.location.reload();
+    });
+  }
+});
+</script>
+{% endblock %}
+
+

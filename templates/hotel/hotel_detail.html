@@ -270,8 +270,8 @@
 </div>
 
 <div class="container">
-    <div class="row utf_sticky_main_wrapper">
-        <div class="col-lg-8 col-md-8">
+    <div class="row utf_sticky_main_wrapper justify-content-center">
+        <div class="col-lg-10 col-md-12">
 <!--            <div id="titlebar" class="utf_listing_titlebar">-->
 <!--                <div class="utf_listing_titlebar_title">-->
 <!--                    <h2>-->
@@ -505,9 +505,11 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <!-- Sidebar -->
-        <div class="col-lg-4 col-md-4 margin-top-75 sidebar-search">
+<!-- Sidebar -->
+<!-- <div class="col-lg-4 col-md-4 margin-top-75 sidebar-search">
             <div class="utf_box_widget booking_widget_box">
                 <h3><i class="fa fa-calendar"></i> {% trans "Booking" %}</h3>
                 <form class="row with-forms margin-top-0" method="POST" action="{% url 'booking:check_room_availability' %}">
@@ -553,7 +555,7 @@
             </div>
 
 
-        </div>
+        </div> -->
     </div>
 </div>
 
@@ -632,6 +634,138 @@
 
 </div>
 {% endfor %}
+
+<!-- Фиксированная кнопка внизу экрана -->
+<div class="fixed-bottom-button-container">
+    <a href="{% url 'hotel:accommodations' hotel.slug %}" class="fixed-bottom-button">
+        <i class="fa fa-bed"></i>
+        <span>Показать номера и домики</span>
+    </a>
+</div>
+
+<style>
+.fixed-bottom-button-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(48, 117, 186, 0.1);
+    padding: 15px 20px;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.fixed-bottom-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #3075ba 0%, #2563a7 100%);
+    color: #fff;
+    text-decoration: none;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(48, 117, 186, 0.3);
+    border: none;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.fixed-bottom-button:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.fixed-bottom-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(48, 117, 186, 0.4);
+    color: #fff;
+    text-decoration: none;
+}
+
+.fixed-bottom-button:hover:before {
+    left: 100%;
+}
+
+.fixed-bottom-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(48, 117, 186, 0.3);
+}
+
+.fixed-bottom-button i {
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.fixed-bottom-button:hover i {
+    transform: scale(1.1);
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .fixed-bottom-button-container {
+        padding: 12px 15px;
+    }
+    
+    .fixed-bottom-button {
+        padding: 14px 20px;
+        font-size: 15px;
+        border-radius: 10px;
+    }
+    
+    .fixed-bottom-button span {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .fixed-bottom-button {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+    
+    .fixed-bottom-button i {
+        font-size: 16px;
+    }
+    
+    .fixed-bottom-button span {
+        font-size: 13px;
+    }
+}
+
+/* Добавляем отступ снизу для контента, чтобы он не перекрывался кнопкой */
+body {
+    padding-bottom: 80px;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-bottom: 70px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding-bottom: 65px;
+    }
+}
+</style>
 
 {% endblock content %}
 
