@@ -86,14 +86,143 @@
 @media (min-width: 1200px) {
   .rt-grid { grid-template-columns: repeat(3, 1fr); }
 }
+
+/* Стили для полосы дат с ценами */
+.date-price-strip-container {
+  margin: 16px 0 24px 0;
+  padding: 0 16px;
+}
+
+.date-price-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+
+.date-price-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.date-chip {
+  flex: 0 0 auto;
+  min-width: 90px;
+  padding: 12px 8px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.3;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  scroll-snap-align: start;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.date-chip:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.date-chip[aria-selected="true"] {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #ffffff;
+  border-color: #1d4ed8;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+.date-chip[aria-selected="true"]:hover {
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+.date-chip.unavailable {
+  background: #f9fafb;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+}
+
+.date-chip.unavailable:hover {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transform: none;
+}
+
+.date-line {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 2px;
+  opacity: 0.9;
+}
+
+.date-chip[aria-selected="true"] .date-line {
+  opacity: 1;
+  font-weight: 600;
+}
+
+.price-line {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.date-chip[aria-selected="true"] .price-line {
+  color: #ffffff;
+}
+
+.date-chip.unavailable .price-line {
+  color: #9ca3af;
+}
+
+/* Адаптивность для планшетов */
+@media (min-width: 768px) {
+  .date-price-strip-container {
+    padding: 0 24px;
+    margin: 20px 0 28px 0;
+  }
+  
+  .date-chip {
+    min-width: 100px;
+    padding: 14px 10px;
+    font-size: 14px;
+  }
+  
+  .date-line {
+    font-size: 13px;
+  }
+  
+  .price-line {
+    font-size: 15px;
+  }
+}
+
+/* Адаптивность для десктопов */
+@media (min-width: 1024px) {
+  .date-price-strip {
+    justify-content: center;
+    overflow-x: visible;
+    gap: 12px;
+  }
+  
+  .date-chip {
+    min-width: 110px;
+    padding: 16px 12px;
+  }
+}
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    <div id="titlebar" class="utf_listing_titlebar">
-        <div class="utf_listing_titlebar_title">
-            <h2>{{ hotel.name }} — {% trans "rooms and cottages" %}</h2>
+
+    <!-- Полоса дат с ценами -->
+    <div class="date-price-strip-container">
+        <div class="date-price-strip" id="date-price-strip" role="listbox" aria-label="Список дат и цен">
+            <!-- Карточки будут сгенерированы из pricing_calendar_json -->
         </div>
     </div>
 
@@ -383,6 +512,117 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.addEventListener('touchmove', handleDragMove, { passive: false });
   document.addEventListener('touchend', handleDragEnd);
+
+  // Инициализация полосы дат с ценами
+  initializeDatePriceStrip();
+
+  function initializeDatePriceStrip() {
+    const pricingCalendarJson = '{{ pricing_calendar_json|escapejs }}';
+    if (!pricingCalendarJson || pricingCalendarJson === '{}') {
+      return; // Нет данных для отображения
+    }
+
+    let pricingData;
+    try {
+      pricingData = JSON.parse(pricingCalendarJson);
+    } catch (e) {
+      console.error('Ошибка парсинга pricing_calendar_json:', e);
+      return;
+    }
+
+    const strip = document.getElementById('date-price-strip');
+    if (!strip) return;
+
+    // Создаем форматтеры для русской локали
+    const dateFormatter = new Intl.DateTimeFormat('ru-RU', {
+      day: '2-digit',
+      month: 'short',
+      weekday: 'short'
+    });
+
+    const priceFormatter = new Intl.NumberFormat('ru-RU', {
+      style: 'decimal',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+
+    // Преобразуем объект в массив и сортируем по дате
+    const dateEntries = Object.entries(pricingData)
+      .map(([dateStr, price]) => ({
+        date: dateStr,
+        price: price,
+        dateObj: new Date(dateStr)
+      }))
+      .sort((a, b) => a.dateObj - b.dateObj);
+
+    // Создаем карточки дат
+    dateEntries.forEach((entry, index) => {
+      const chip = document.createElement('button');
+      chip.className = 'date-chip';
+      chip.type = 'button';
+      chip.setAttribute('role', 'option');
+      chip.setAttribute('data-date', entry.date);
+      
+      // 4-я дата по счету (index 3) активна по умолчанию
+      const isActive = index === 3;
+      chip.setAttribute('aria-selected', isActive ? 'true' : 'false');
+
+      // Проверяем доступность (если цена "Not available" или null)
+      const isUnavailable = entry.price === "Not available" || entry.price === null || entry.price === undefined;
+      
+      if (isUnavailable) {
+        chip.classList.add('unavailable');
+        chip.disabled = true;
+      }
+
+      // Форматируем дату
+      const formattedDate = dateFormatter.format(entry.dateObj)
+        .replace(',', '') // Убираем запятую если есть
+        .replace(/\s+/g, ' '); // Нормализуем пробелы
+
+      // Форматируем цену
+      let formattedPrice;
+      if (isUnavailable) {
+        formattedPrice = '—';
+      } else {
+        formattedPrice = priceFormatter.format(entry.price) + ' ₸';
+      }
+
+      chip.innerHTML = `
+        <div class="date-line">${formattedDate}</div>
+        <div class="price-line">${formattedPrice}</div>
+      `;
+
+      // Обработчик клика
+      if (!isUnavailable) {
+        chip.addEventListener('click', () => {
+          // Убираем активное состояние со всех карточек
+          strip.querySelectorAll('.date-chip[aria-selected="true"]').forEach(el => {
+            el.setAttribute('aria-selected', 'false');
+          });
+          
+          // Устанавливаем активное состояние для текущей карточки
+          chip.setAttribute('aria-selected', 'true');
+          
+          // Здесь можно добавить логику обновления цен номеров или другие действия
+          console.log('Выбрана дата:', entry.date, 'Цена:', entry.price);
+        });
+      }
+
+      strip.appendChild(chip);
+    });
+
+    // Прокручиваем к активной карточке (4-я дата)
+    setTimeout(() => {
+      const activeChip = strip.querySelector('.date-chip[aria-selected="true"]');
+      if (activeChip) {
+        const stripRect = strip.getBoundingClientRect();
+        const chipRect = activeChip.getBoundingClientRect();
+        const scrollLeft = chipRect.left - stripRect.left - (stripRect.width - chipRect.width) / 2;
+        strip.scrollTo({ left: strip.scrollLeft + scrollLeft, behavior: 'smooth' });
+      }
+    }, 100);
+  }
 });
 </script>
 {% endblock %}
