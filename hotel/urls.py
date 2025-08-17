@@ -7,7 +7,10 @@ app_name = "hotel"
 urlpatterns = [
     path("", views.index, name="index"),
     path("detail/<slug:slug>/", views.hotel_detail, name="detail"),
+    path("detail/<slug:slug>/accommodations/", views.hotel_accommodations, name="accommodations"),
     path("detail/<slug:slug>/room-type/<slug:rt_slug>/", views.room_type_detail, name="room_type_detail"),
+    path("detail/<slug:slug>/room-type/<slug:rt_slug>/proceed/", views.proceed_to_payment, name="proceed_to_payment"),
+    path("payment/", views.payment, name="payment"),
     path("selected_rooms/", views.selected_rooms, name="selected_rooms"),
     path("payment_method_selection/", views.payment_method_selection, name="payment_method_selection"),
     path("invoice/<booking_id>/", views.invoice, name="invoice"),
@@ -16,7 +19,6 @@ urlpatterns = [
     path('check-session-data/', views.check_session_data, name='check_session_data'),
     
     # Real-time data API (no cache)
-    path('api/selected-items-count/', views.get_selected_items_count, name='get_selected_items_count'),
     path('api/messages/', views.get_messages, name='get_messages'),
     path('api/user-auth-status/', views.get_user_auth_status, name='get_user_auth_status'),
     

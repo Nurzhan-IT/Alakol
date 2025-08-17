@@ -99,7 +99,6 @@
         }
         
         /* Обеспечиваем правильное отображение кнопок в контейнере */
-        #auth-buttons-container .selected-rooms-button,
         #auth-buttons-container .sign-in-button {
             display: flex;
             align-items: center;
@@ -113,7 +112,6 @@
                 gap: 5px;
             }
             
-            #auth-buttons-container .selected-rooms-button,
             #auth-buttons-container .sign-in-button {
                 width: 50px;
             }
@@ -202,7 +200,6 @@
                             <!-- Контейнер для кнопок аутентификации - будет обновляться динамически -->
                             <div id="auth-buttons-container">
                                 <!-- По умолчанию показываем кнопки для неаутентифицированных пользователей -->
-                                <a href="{% url 'hotel:selected_rooms' %}" class="selected-rooms-button"><i class="fas fa-bed"></i><span class="room-count">0</span></a>
                                 <a href="{% url 'userauths:sign-in' %}" class="sign-in-button"><i class="fa fa-sign-in"></i><span class="sign-in-span">{% trans "Sign In" %}</span></a>
                                 <a href="{% url 'userauths:sign-up' %}" class="sign-in-button"><i class="bi bi-person-add"></i><span class="sign-in-span">{% trans "Sign Up" %}</span></a>
                             </div>
@@ -470,20 +467,7 @@
             });
         }
         
-        // Функция для загрузки количества выбранных номеров в реальном времени
-        function loadSelectedItemsCount() {
-            $.ajax({
-                url: '{% url "hotel:get_selected_items_count" %}',
-                type: 'GET',
-                success: function(data) {
-                    $('.room-count').text(data.total_selected_items);
-                },
-                error: function() {
-                    // В случае ошибки оставляем 0
-                    $('.room-count').text('0');
-                }
-            });
-        }
+
         
         // Функция для загрузки состояния аутентификации и обновления кнопок в топ-баре
         function loadUserAuthStatus() {
@@ -510,16 +494,12 @@
                         container.append(buttonHtml);
                     });
                     
-                    // После обновления кнопок загружаем количество выбранных номеров
-                    loadSelectedItemsCount();
-                    
                     // Убираем класс загрузки
                     $('body').removeClass('auth-loading');
                 },
                 error: function() {
                     // В случае ошибки оставляем кнопки по умолчанию (неаутентифицированного пользователя)
                     console.log('Auth status loading failed, using default buttons');
-                    loadSelectedItemsCount();
                     $('body').removeClass('auth-loading');
                 }
             });

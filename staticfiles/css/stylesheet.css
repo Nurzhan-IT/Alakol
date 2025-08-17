@@ -20061,35 +20061,9 @@ h4 span.headline_part-detail {
     }
 }
 
-.selected-rooms-button{
-    display: flex;
-    background-color: #3075ba;
-    color: white;
-    height: 44px;
-    width: 110px;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    padding: 15px 15px;
-    border-radius: 4px;
-}
 
-.selected-rooms-button:hover {
-    background-color: white;
-    border: 1px solid #3075ba;
-    color: #3075ba;
-}
 
-@keyframes bounce {
-    0%   { transform: translateY(0); }
-    30%  { transform: translateY(10px); }
-    60%  { transform: translateY(-5px); }
-    100% { transform: translateY(0); }
-}
 
-.bounce {
-    animation: bounce 0.5s ease;
-}
 
 .sign-in-button {
     display: flex;
@@ -20133,9 +20107,7 @@ h4 span.headline_part-detail {
         display: none;
     }
 
-    .selected-rooms-button {
-        width: 50px;
-    }
+
 
     .sign-in-button {
         width: 50px;
