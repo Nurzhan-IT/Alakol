@@ -9,6 +9,9 @@ def news_context(request):
         # Рекомендуемые новости для главной страницы
         'featured_news': News.get_featured(limit=3),
         
+        # Новости для главной страницы
+        'homepage_news': News.get_homepage_news(limit=6),
+        
         # Последние новости
         'latest_news': News.get_published()[:5],
         

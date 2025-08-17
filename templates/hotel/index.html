@@ -56,119 +56,66 @@
             </div>
         </div>
 
+
+
+        <!-- Секция новостей -->
+        {% if homepage_news %}
         <section class="fullwidth_block margin-top-65 padding-top-75 padding-bottom-70" data-background-color="#f9f9f9">
             <div class="container">
                 <div class="row slick_carousel_slider">
                     <div class="col-md-12">
-                        <h3 class="headline_part centered margin-bottom-45">{% trans "Our Popular Bases" %} <span>{% trans "Explore the greates places in the Alakol" %}</span> </h3>
+                        <h3 class="headline_part centered margin-bottom-45">{% trans "Latest News from Alakol" %} <span>{% trans "Stay updated with the latest news and events" %}</span></h3>
                     </div>
 
                     <div class="row">
-                       
-                                {% for h in hotel %}
-                                    <div class="col-lg-4">
-                                        <a href="{% url 'hotel:detail' h.slug %}" class="utf_listing_item-container compact">
-                                            <div class="utf_listing_item"> <img src="{{h.image.url}}" alt=""> 
-                                                <!-- <span class="tag"> <i class="im im-icon-Chef-Hat"></i> Restaurant </span>  -->
-                                                <!-- <span class="featured_tag">Featured</span> -->
-                                                <span class="utf_open_now">{% trans "Open Now" %}</span>
-                                                <div class="utf_listing_item_content">
-                                                    <div class="utf_listing_prige_block">
-                                                        <!-- <span class="utf_meta_listing_price"><i class="fa fa-tag"></i> $25 - $55</span> -->
-                                                        <!-- <span class="utp_approve_item"><i class="utf_approve_listing"></i></span> -->
-                                                    </div>
-                                                    <h3>{{h.name|truncatechars:20}}</h3>
-                                                    <span><i class="fa fa-map-marker"></i> {{h.address}}</span>
-                                                    
-                                                </div>
+                        {% for news in homepage_news %}
+                            <div class="col-lg-4">
+                                <a href="{{ news.get_absolute_url }}" class="utf_listing_item-container compact">
+                                    <div class="utf_listing_item"> 
+                                        {% if news.featured_image %}
+                                            <img src="{{ news.featured_image.url }}" alt="{{ news.title }}">
+                                        {% else %}
+                                            <img src="{% static 'images/news-placeholder.svg' %}" alt="{{ news.title }}">
+                                        {% endif %}
+                                        
+                                        <!-- {% if news.category %}
+                                            <span class="tag"> <i class="im im-icon-Newspaper"></i> {{ news.category.name }} </span>
+                                        {% endif %} -->
+                                        
+                                        <!-- <span class="utf_open_now">
+                                            {% if news.published_at %}
+                                                {{ news.published_at|date:"d M Y" }}
+                                            {% else %}
+                                                {{ news.created_at|date:"d M Y" }}
+                                            {% endif %}
+                                        </span> -->
+                                        
+                                        <div class="utf_listing_item_content">
+                                            <div class="utf_listing_prige_block">
+                                                <!-- <span class="utf_meta_listing_price">
+                                                    <i class="fa fa-user"></i> {{ news.author }}
+                                                </span> -->
                                             </div>
-                                            <div class="utf_star_rating_section" data-rating="{{h.average_rating}}">
-                                                
-                                                {% if h.average_rating == None %}
-                                                <div class="utf_counter_star_rating">{% trans "No Rating Yet" %}</div>
-                                                {% else %}
-                                                <div class="utf_counter_star_rating">{{h.average_rating}}/5 ({{h.rating_count}} {% trans "reviews" %}) </div>
-                                                {% endif %}
-                                                    
-                                                {% comment %} <span class="utf_view_count"> {{h.views}}1241241244412123</span> {% endcomment %}
-                                                <span class="like-icon add-to-bookmark-{{h.id}}" data-hotel="{{h.id}}" id="add-to-bookmark"></span>
-                                            </div>
-                                        </a>
+                                            <h3>{{ news.title|truncatechars:45 }}</h3>
+                                            <span><i class="fa fa-newspaper-o"></i> {{ news.excerpt|truncatechars:80 }}</span>
+                                        </div>
                                     </div>
-                                {% endfor %}
-
-                               
-                            
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Секция новостей -->
-        {% if featured_news %}
-        <section class="fullwidth_block margin-top-65 padding-top-75 padding-bottom-70">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3 class="headline_part centered margin-bottom-45">{% trans "Latest News from Alakol" %} <span>{% trans "Stay updated with the latest news and events" %}</span></h3>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    {% for news in featured_news %}
-                    <div class="col-lg-4 col-md-6 col-sm-12">
-                        <div class="utf_listing_item-container news-item-container">
-                            <div class="utf_listing_item news-item">
-                                {% if news.featured_image %}
-                                <img src="{{ news.featured_image.url }}" alt="{{ news.title }}" class="news-image">
-                                {% else %}
-                                <img src="{% static 'images/news-placeholder.jpg' %}" alt="{{ news.title }}" class="news-image">
-                                {% endif %}
-                                
-                                <div class="news-date-badge">
-                                    {% if news.published_at %}
-                                        {{ news.published_at|date:"d M" }}
-                                    {% else %}
-                                        {{ news.created_at|date:"d M" }}
-                                    {% endif %}
-                                </div>
-                                
-                                <div class="utf_listing_item_content news-content">
-                                    {% if news.category %}
-                                    <div class="news-category">
-                                        <span class="news-category-tag">{{ news.category.name }}</span>
-                                    </div>
-                                    {% endif %}
-                                    
-                                    <h4 class="news-title">
-                                        <a href="{{ news.get_absolute_url }}">{{ news.title|truncatechars:60 }}</a>
-                                    </h4>
-                                    
-                                    <p class="news-excerpt">{{ news.excerpt|truncatechars:120 }}</p>
-                                    
-                                    <div class="news-meta">
-                                        <span class="news-author">
-                                            <i class="fa fa-user"></i> {{ news.author }}
-                                        </span>
-                                        <span class="news-views">
-                                            <i class="fa fa-eye"></i> {{ news.views_count }}
-                                        </span>
-                                    </div>
-                                    
-                                    <div class="news-read-more">
-                                        <a href="{{ news.get_absolute_url }}" class="button news-btn">{% trans "Read More" %}</a>
-                                    </div>
-                                </div>
+                                    <!-- <div class="utf_star_rating_section">
+                                        <div class="utf_counter_star_rating">
+                                            <i class="fa fa-eye"></i> {{ news.views_count }} {% trans "views" %}
+                                        </div>
+                                        <span class="like-icon news-bookmark-{{ news.id }}" data-news="{{ news.id }}"></span>
+                                    </div> -->
+                                </a>
                             </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- <div class="row margin-top-30">
+                        <div class="col-md-12 centered-content">
+                            <a href="{% url 'news:news_list' %}" class="button border margin-top-20">{% trans "View All News" %}</a>
                         </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                
-                <div class="row margin-top-30">
-                    <div class="col-md-12 centered-content">
-                        <a href="{% url 'news:news_list' %}" class="button border margin-top-20">{% trans "View All News" %}</a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </section>

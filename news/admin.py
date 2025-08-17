@@ -24,7 +24,6 @@ class NewsGalleryInline(admin.TabularInline):
     readonly_fields = ('thumbnail',)
 
 
-@admin.register(NewsCategory)
 class NewsCategoryAdmin(admin.ModelAdmin):
     """Админка для категорий новостей"""
     list_display = ('name', 'slug', 'is_active', 'created_at')
@@ -39,15 +38,14 @@ class NewsCategoryAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
     """Админка для новостей с поддержкой многоязычности"""
     list_display = (
         'thumbnail', 'title', 'category', 'author', 'status', 
-        'is_featured', 'views_count', 'published_at', 'view_on_site'
+        'is_featured', 'on_homepage', 'views_count', 'published_at', 'view_on_site'
     )
     list_filter = (
-        'status', 'is_featured', 'category', 'created_at', 'published_at'
+        'status', 'is_featured', 'on_homepage', 'category', 'created_at', 'published_at'
     )
     search_fields = ('title', 'excerpt', 'content', 'author')
     prepopulated_fields = {'slug': ('title',)}
@@ -57,7 +55,7 @@ class NewsAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Основная информация', {
             'fields': (
-                'title', 'slug', 'category', 'author', 'status', 'is_featured'
+                'title', 'slug', 'category', 'author', 'status', 'is_featured', 'on_homepage'
             )
         }),
         ('Содержание', {
@@ -84,9 +82,9 @@ class NewsAdmin(admin.ModelAdmin):
     date_hierarchy = 'published_at'
     
     # Настройки фильтрации
-    list_editable = ('status', 'is_featured')
+    list_editable = ('status', 'is_featured', 'on_homepage')
     
-    actions = ['make_published', 'make_draft', 'make_featured', 'remove_featured']
+    actions = ['make_published', 'make_draft', 'make_featured', 'remove_featured', 'add_to_homepage', 'remove_from_homepage']
 
     def make_published(self, request, queryset):
         """Действие для публикации новостей"""
@@ -132,6 +130,24 @@ class NewsAdmin(admin.ModelAdmin):
         )
     remove_featured.short_description = "Удалить из рекомендуемых"
 
+    def add_to_homepage(self, request, queryset):
+        """Действие для добавления на главную страницу"""
+        updated = queryset.update(on_homepage=True)
+        self.message_user(
+            request, 
+            f'Добавлено на главную страницу: {updated} новостей'
+        )
+    add_to_homepage.short_description = "Добавить на главную страницу"
+
+    def remove_from_homepage(self, request, queryset):
+        """Действие для удаления с главной страницы"""
+        updated = queryset.update(on_homepage=False)
+        self.message_user(
+            request, 
+            f'Удалено с главной страницы: {updated} новостей'
+        )
+    remove_from_homepage.short_description = "Удалить с главной страницы"
+
     def view_on_site(self, obj):
         """Ссылка для просмотра новости на сайте"""
         if obj.status == 'published':
@@ -156,7 +172,6 @@ class NewsAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-@admin.register(NewsGallery)
 class NewsGalleryAdmin(admin.ModelAdmin):
     """Админка для дополнительных изображений новостей"""
     list_display = ('thumbnail', 'news', 'caption', 'order')
