@@ -218,7 +218,8 @@
 
 {% block content %}
 <div class="container">
-
+    {% csrf_token %}
+    
     <!-- Полоса дат с ценами -->
     <div class="date-price-strip-container">
         <div class="date-price-strip" id="date-price-strip" role="listbox" aria-label="Список дат и цен">
@@ -555,6 +556,9 @@ document.addEventListener('DOMContentLoaded', function() {
       }))
       .sort((a, b) => a.dateObj - b.dateObj);
 
+    // Определяем активную дату (из контекста или 4-я по счету)
+    const currentCheckinDate = '{{ checkin|default:"" }}';
+    
     // Создаем карточки дат
     dateEntries.forEach((entry, index) => {
       const chip = document.createElement('button');
@@ -563,8 +567,13 @@ document.addEventListener('DOMContentLoaded', function() {
       chip.setAttribute('role', 'option');
       chip.setAttribute('data-date', entry.date);
       
-      // 4-я дата по счету (index 3) активна по умолчанию
-      const isActive = index === 3;
+      // Активна дата заезда из контекста или 4-я дата по счету (index 3)
+      let isActive = false;
+      if (currentCheckinDate && currentCheckinDate === entry.date) {
+        isActive = true;
+      } else if (!currentCheckinDate && index === 3) {
+        isActive = true;
+      }
       chip.setAttribute('aria-selected', isActive ? 'true' : 'false');
 
       // Проверяем доступность (если цена "Not available" или null)
@@ -604,8 +613,8 @@ document.addEventListener('DOMContentLoaded', function() {
           // Устанавливаем активное состояние для текущей карточки
           chip.setAttribute('aria-selected', 'true');
           
-          // Здесь можно добавить логику обновления цен номеров или другие действия
-          console.log('Выбрана дата:', entry.date, 'Цена:', entry.price);
+          // Обновляем даты в сессии и перезагружаем страницу
+          updateSearchDatesAndReload(entry.date);
         });
       }
 
@@ -622,6 +631,81 @@ document.addEventListener('DOMContentLoaded', function() {
         strip.scrollTo({ left: strip.scrollLeft + scrollLeft, behavior: 'smooth' });
       }
     }, 100);
+  }
+
+  // Функция для обновления дат в сессии и перезагрузки страницы
+  function updateSearchDatesAndReload(selectedDate) {
+    // Получаем текущие данные из контекста
+    const currentGuests = parseInt('{{ guests|default:"1" }}') || 1;
+    const minNights = parseInt('{{ hotel.min_days_for_booking|default:"1" }}') || 1;
+    
+    // Рассчитываем новые даты
+    const checkinDate = new Date(selectedDate);
+    const checkoutDate = new Date(checkinDate);
+    checkoutDate.setDate(checkoutDate.getDate() + minNights);
+    
+    // Форматируем даты в формат YYYY-MM-DD
+    const formatDate = (date) => {
+      return date.getFullYear() + '-' + 
+             String(date.getMonth() + 1).padStart(2, '0') + '-' + 
+             String(date.getDate()).padStart(2, '0');
+    };
+    
+    const newCheckin = formatDate(checkinDate);
+    const newCheckout = formatDate(checkoutDate);
+    
+    // Показываем индикатор загрузки на активной карточке
+    const activeChip = document.querySelector('.date-chip[aria-selected="true"]');
+    if (activeChip) {
+      activeChip.style.opacity = '0.7';
+      activeChip.style.pointerEvents = 'none';
+    }
+    
+    // Отправляем AJAX запрос для обновления сессии
+    const formData = new FormData();
+    formData.append('checkin', newCheckin);
+    formData.append('checkout', newCheckout);
+    formData.append('guests', currentGuests);
+    formData.append('action', 'update_search_dates');
+    
+    // Добавляем CSRF токен
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                      document.querySelector('meta[name=csrf-token]')?.content ||
+                      '{{ csrf_token }}';
+    formData.append('csrfmiddlewaretoken', csrfToken);
+    
+    fetch(window.location.href, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Перезагружаем страницу для обновления цен и дат
+        window.location.reload();
+      } else {
+        console.error('Ошибка при обновлении дат:', data.error);
+        // Восстанавливаем состояние карточки
+        if (activeChip) {
+          activeChip.style.opacity = '';
+          activeChip.style.pointerEvents = '';
+        }
+        alert('Ошибка при обновлении дат. Попробуйте еще раз.');
+      }
+    })
+    .catch(error => {
+      console.error('Ошибка при отправке запроса:', error);
+      // Восстанавливаем состояние карточки
+      if (activeChip) {
+        activeChip.style.opacity = '';
+        activeChip.style.pointerEvents = '';
+      }
+      // В случае ошибки все равно перезагружаем страницу
+      window.location.reload();
+    });
   }
 });
 </script>
