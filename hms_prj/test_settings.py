@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'search',
     'robokassa',
     'legal',
+    'news',
 
     # Third Party Apps (только те, что есть в base.txt)
     'import_export',
