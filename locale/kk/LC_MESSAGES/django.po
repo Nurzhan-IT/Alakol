@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-15 23:11+0500\n"
+"POT-Creation-Date: 2025-08-17 15:28+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,12 +31,19 @@ msgstr "Барлық қажетті өрістерді толтырыңыз: %(p
 msgid "Hotel not found."
 msgstr "Қонақ үй табылмады"
 
-#: .\booking\views.py:117 .\booking\views.py:147
+# Минималды түн саны туралы хабарлама
+#: .\booking\views.py:117 .\hotel\views.py:426 .\hotel\views.py:1049
+#: .\hotel\views.py:1174
+#, python-format
+msgid "Minimum stay for this hotel is %(n)d nights"
+msgstr "Бұл қонақүй үшін ең аз тұру мерзімі — %(n)d түн"
+
+#: .\booking\views.py:135 .\booking\views.py:165
 msgid ""
 "The selected room type is not available. Please choose another room type."
 msgstr "Таңдалған бөлме түрі қолжетімді емес. Басқа бөлме түрін таңдаңыз."
 
-#: .\booking\views.py:303
+#: .\booking\views.py:321
 msgid ""
 "You can only book rooms from one hotel. Do you want to clear data about "
 "already selected rooms?"
@@ -44,145 +51,145 @@ msgstr ""
 "Сіз тек бір қонақ үйден бөлме брондай аласыз. Таңдалған бөлмелер туралы "
 "деректерді өшіруді қалайсыз ба?"
 
-#: .\hotel\admin.py:1436
+#: .\hotel\admin.py:1538
 msgid "Check-In Date"
 msgstr "Тіркелу күні"
 
-#: .\hotel\decorators.py:9 .\hotel\views.py:580
+#: .\hotel\decorators.py:9 .\hotel\views.py:573
 msgid "You don't have any room selections yet!"
 msgstr "Сіз әлі ешқандай бөлме таңдамадыңыз!"
 
 # Переводы для типов планов питания
-#: .\hotel\models.py:131
+#: .\hotel\models.py:134
 msgid "Не включено"
 msgstr "Қосылмаған"
 
-#: .\hotel\models.py:132
+#: .\hotel\models.py:135
 msgid "Трехразовое питание"
 msgstr "Үш рет тамақтану"
 
-#: .\hotel\models.py:133
+#: .\hotel\models.py:136
 msgid "Двухразовое (обед + ужин)"
 msgstr "Екі рет тамақтану (түскі + кешкі)"
 
-#: .\hotel\models.py:134
+#: .\hotel\models.py:137
 msgid "Двухразовое (завтрак + обед)"
 msgstr "Екі рет тамақтану (таңғы + түскі)"
 
-#: .\hotel\models.py:135
+#: .\hotel\models.py:138
 msgid "Только завтрак"
 msgstr "Тек таңғы ас"
 
-#: .\hotel\models.py:136
+#: .\hotel\models.py:139
 msgid "Только обед"
 msgstr "Тек түскі ас"
 
-#: .\hotel\models.py:137
+#: .\hotel\models.py:140
 msgid "Только ужин"
 msgstr "Тек кешкі ас"
 
-#: .\hotel\views.py:153
+#: .\hotel\views.py:145
 msgid "Dash"
 msgstr "Аккаунт"
 
-#: .\hotel\views.py:161
+#: .\hotel\views.py:153
 msgid "Sign Out"
 msgstr "Шығу"
 
-#: .\hotel\views.py:183 .\templates\partials\base.html:207
-#: .\templates\partials\base.html:216 .\templates\userauths\sign-in.html:9
+#: .\hotel\views.py:167 .\templates\partials\base.html:204
+#: .\templates\partials\base.html:213 .\templates\userauths\sign-in.html:9
 #: .\templates\userauths\sign-in.html:39
 msgid "Sign In"
 msgstr "Кіру"
 
-#: .\hotel\views.py:191 .\templates\partials\base.html:208
+#: .\hotel\views.py:175 .\templates\partials\base.html:205
 #: .\templates\userauths\sign-up.html:9
 msgid "Sign Up"
 msgstr "Тіркелу"
 
-#: .\hotel\views.py:429
+#: .\hotel\views.py:413
 msgid "Please enter your booking data to check availability."
 msgstr "Қолжетімділікті тексеру үшін брондау деректерін енгізіңіз."
 
-#: .\hotel\views.py:440 .\hotel\views.py:1055 .\hotel\views.py:1171
+#: .\hotel\views.py:433 .\hotel\views.py:1056 .\hotel\views.py:1181
 msgid "Hotel is not available for booking on selected dates."
 msgstr "Қонақ үй таңдалған күндерде брондауға қолжетімді емес."
 
-#: .\hotel\views.py:810
+#: .\hotel\views.py:803
 msgid "You don't have any room selections or missing user information!"
 msgstr "Сізде бөлме таңдаулары жоқ немесе пайдаланушы ақпараты жетіспейді!"
 
-#: .\hotel\views.py:873
+#: .\hotel\views.py:866
 #, python-format
 msgid "Missing session data: %(keys)s"
 msgstr "Сессия деректері жетіспейді: %(keys)s"
 
-#: .\hotel\views.py:880
+#: .\hotel\views.py:873
 msgid "No selected rooms for booking"
 msgstr "Брондауға таңдалған бөлмелер жоқ"
 
-#: .\hotel\views.py:895
+#: .\hotel\views.py:888
 #, python-format
 msgid "Missing user data: %(fields)s"
 msgstr "Пайдаланушы деректері жетіспейді: %(fields)s"
 
-#: .\hotel\views.py:910
+#: .\hotel\views.py:903
 #, python-format
 msgid "Missing booking data: %(fields)s"
 msgstr "Брондау деректері жетіспейді: %(fields)s"
 
-#: .\hotel\views.py:922
+#: .\hotel\views.py:915
 msgid "Check-in date must be earlier than check-out date"
 msgstr "Орналасу күні шығу күнінен ерте болуы керек"
 
-#: .\hotel\views.py:931
+#: .\hotel\views.py:924
 msgid "Check-in date cannot be in the past"
 msgstr "Орналасу күні өткен уақытта болмайды"
 
-#: .\hotel\views.py:937
+#: .\hotel\views.py:930
 #, python-format
 msgid "Invalid date format: %(error)s"
 msgstr "Дұрыс емес күн форматы: %(error)s"
 
-#: .\hotel\views.py:947
+#: .\hotel\views.py:940
 #, python-format
 msgid "Invalid room data: %(room_id)s"
 msgstr "Дұрыс емес бөлме деректері: %(room_id)s"
 
-#: .\hotel\views.py:955
+#: .\hotel\views.py:948
 #, python-format
 msgid "Hotel with ID %(hotel_id)s not found or not active"
 msgstr "%(hotel_id)s ID-мен қонақ үй табылмады немесе белсенді емес"
 
-#: .\hotel\views.py:963
+#: .\hotel\views.py:956
 #, python-format
 msgid "Room with ID %(room_id)s not found"
 msgstr "%(room_id)s ID-мен бөлме табылмады"
 
-#: .\hotel\views.py:971
+#: .\hotel\views.py:964
 #, python-format
 msgid "Room type with ID %(room_type_id)s not found"
 msgstr "%(room_type_id)s ID-мен бөлме түрі табылмады"
 
-#: .\hotel\views.py:977
+#: .\hotel\views.py:970
 #, python-format
 msgid "Error in room data: %(error)s"
 msgstr "Бөлме деректерінде қате: %(error)s"
 
-#: .\hotel\views.py:983
+#: .\hotel\views.py:976
 msgid "Session data is valid"
 msgstr "Сессия деректері дұрыс"
 
-#: .\hotel\views.py:990
+#: .\hotel\views.py:983
 #, python-format
 msgid "Internal validation error: %(error)s"
 msgstr "Ішкі тексеру қатесі: %(error)s"
 
-#: .\hotel\views.py:999
+#: .\hotel\views.py:992
 msgid "Missing booking information!"
 msgstr "Брондау туралы ақпарат жетіспейді!"
 
-#: .\hotel\views.py:1231
+#: .\hotel\views.py:1241
 #, python-format
 msgid ""
 "Room %(room_number)s is not available for booking and has been removed from "
@@ -191,7 +198,7 @@ msgstr ""
 "%(room_number)s бөлмесі брондауға қолжетімді емес және тізімнен алынып "
 "тасталды."
 
-#: .\hotel\views.py:1233
+#: .\hotel\views.py:1243
 #, python-format
 msgid ""
 "Room %(room_number)s is marked as unavailable for selected dates and has "
@@ -200,7 +207,7 @@ msgstr ""
 "%(room_number)s бөлмесі таңдалған күндерде қолжетімсіз деп белгіленді және "
 "тізімнен алынып тасталды."
 
-#: .\hotel\views.py:1235
+#: .\hotel\views.py:1245
 #, python-format
 msgid ""
 "Room %(room_number)s is already booked for selected dates and has been "
@@ -209,11 +216,11 @@ msgstr ""
 "%(room_number)s бөлмесі таңдалған күндерде брондалған және тізімнен алынып "
 "тасталды."
 
-#: .\hotel\views.py:1240
+#: .\hotel\views.py:1250
 msgid "All selected rooms are not available for booking."
 msgstr "Барлық таңдалған бөлмелер брондауға қолжетімді емес."
 
-#: .\hotel\views.py:1244
+#: .\hotel\views.py:1254
 msgid ""
 "Some selected rooms are not available. Please check the list and continue "
 "booking."
@@ -221,21 +228,21 @@ msgstr ""
 "Кейбір таңдалған бөлмелер қолжетімді емес. Тізімді тексеріп, брондауды "
 "жалғастырыңыз."
 
-#: .\hotel\views.py:1253
+#: .\hotel\views.py:1263
 msgid "Failed to create booking!"
 msgstr "Брондау жасау сәтсіз аяқталды!"
 
-#: .\hotel\views.py:1336
+#: .\hotel\views.py:1346
 #, python-format
 msgid "Error creating payment: %(error)s"
 msgstr "Төлем жасау қатесі: %(error)s"
 
-#: .\hotel\views.py:1343
+#: .\hotel\views.py:1353
 #, python-format
 msgid "Error: %(error)s"
 msgstr "Қате: %(error)s"
 
-#: .\hotel\views.py:1488
+#: .\hotel\views.py:1498
 msgid ""
 "Error: Payment not confirmed by the system. If you have made a payment, "
 "please contact support."
@@ -243,45 +250,47 @@ msgstr ""
 "Қате: Төлем жүйе арқылы расталмады. Егер сіз төлем жасаған болсаңыз, қолдау "
 "қызметіне хабарласыңыз."
 
-#: .\hotel\views.py:1496
+#: .\hotel\views.py:1506
 msgid "Your booking was successfully paid!"
 msgstr "Сіздің брондауыңыз сәтті төленді!"
 
-#: .\hotel\views.py:1516
+#: .\hotel\views.py:1526
 msgid "Error: Payment not confirmed by the system."
 msgstr "Қате: Төлем жүйе арқылы расталмады."
 
-#: .\hotel\views.py:1521
+#: .\hotel\views.py:1531
 #, python-format
 msgid "An error occurred: %(error)s"
 msgstr "Қате пайда болды: %(error)s"
 
-#: .\hotel\views.py:1574
+#: .\hotel\views.py:1584
 msgid "Error: Insufficient data to verify payment"
 msgstr "Қате: Төлемді тексеру үшін деректер жеткіліксіз"
 
-#: .\hotel\views.py:1582
+#: .\hotel\views.py:1592
 msgid "Error: Payment verification failed"
 msgstr "Қате: Төлемді тексеру сәтсіз аяқталды"
 
-#: .\hotel\views.py:1613
+#: .\hotel\views.py:1623
 msgid "Error processing payment"
 msgstr "Төлемді өңдеу қатесі"
 
-# Минималды түн саны туралы хабарлама
-#: hotel/views.py
-#, python-format
-msgid "Minimum stay for this hotel is %(n)d nights"
-msgstr "Бұл қонақүй үшін ең аз тұру мерзімі — %(n)d түн"
-
-#: .\hotel\views.py:1675
+#: .\hotel\views.py:1685
 msgid "Access to receipt is only available for paid bookings."
 msgstr "Чекке қол жеткізу тек төленген брондаулар үшін қолжетімді."
 
-#: .\hotel\views.py:1703
+#: .\hotel\views.py:1713
 #, python-format
 msgid "An error occurred while retrieving the receipt: %(error)s"
 msgstr "Чекті алу кезінде қате пайда болды: %(error)s"
+
+#: .\hotel\views.py:2000
+msgid "You don't have any room selections or booking data!"
+msgstr "Сізде бөлмені таңдау немесе брондау деректері жоқ!"
+
+#: .\hotel\views.py:2135
+msgid "No available rooms of this type for selected dates."
+msgstr "Таңдалған күндер үшін осы типтегі бөлмелер жоқ."
 
 #: .\templates\admin\input_filter.html:21
 #: .\templates\admin\input_filter.html:41
@@ -300,7 +309,7 @@ msgstr "Бронь күнің таңдау"
 
 #: .\templates\booking\booking_data.html:22
 #: .\templates\hotel\hotel_detail.html:227
-#: .\templates\hotel\hotel_detail.html:504
+#: .\templates\hotel\hotel_detail.html:509
 #: .\templates\hotel\room_type_detail.html:196
 #: .\templates\partials\dashboard_base.html:102
 #: .\templates\partials\dashboard_base.html:148
@@ -309,7 +318,7 @@ msgid "Booking"
 msgstr "Бронь"
 
 #: .\templates\booking\booking_data.html:27
-#: .\templates\hotel\hotel_detail.html:509
+#: .\templates\hotel\hotel_detail.html:514
 #: .\templates\hotel\payment_method_selection.html:150
 #: .\templates\hotel\room_type_detail.html:201
 #: .\templates\search\search_results.html:40
@@ -322,14 +331,16 @@ msgid "Select Date"
 msgstr "Күнді таңдаңыз"
 
 #: .\templates\booking\booking_data.html:31
-#: .\templates\hotel\hotel_detail.html:513
+#: .\templates\hotel\hotel_detail.html:518
 #: .\templates\hotel\payment_method_selection.html:151
 #: .\templates\hotel\room_type_detail.html:205
 #: .\templates\search\search_results.html:44
 msgid "Check-out Date"
 msgstr "Қоңақ үйден шығу күні"
 
-#: .\templates\booking\booking_data.html:36 .\templates\hotel\index.html:31
+#: .\templates\booking\booking_data.html:36
+#: .\templates\hotel\hotel_accommodations.html:273
+#: .\templates\hotel\index.html:32 .\templates\hotel\payment.html:77
 #: .\templates\hotel\room_type_detail.html:210
 msgid "Guests"
 msgstr "Қонақтар"
@@ -337,7 +348,7 @@ msgstr "Қонақтар"
 #: .\templates\booking\booking_data.html:39
 #: .\templates\email\booking_completed.html:519
 #: .\templates\hotel\async\selected_rooms.html:184
-#: .\templates\hotel\checkout.html:93 .\templates\hotel\hotel_detail.html:521
+#: .\templates\hotel\checkout.html:93 .\templates\hotel\hotel_detail.html:526
 #: .\templates\hotel\payment_method_selection.html:153
 #: .\templates\hotel\room_type_detail.html:213
 #: .\templates\hotel\selected_rooms.html:162
@@ -351,24 +362,24 @@ msgid "Adults"
 msgstr "Ересектер"
 
 #: .\templates\booking\booking_data.html:43
-#: .\templates\hotel\hotel_detail.html:525
+#: .\templates\hotel\hotel_detail.html:530
 #: .\templates\hotel\room_type_detail.html:217
 msgid "Childrens"
 msgstr "Балалар"
 
 #: .\templates\booking\booking_data.html:52
-#: .\templates\hotel\hotel_detail.html:533
+#: .\templates\hotel\hotel_detail.html:538
 #: .\templates\hotel\room_type_detail.html:226
 msgid "Select Room Type"
 msgstr "Бөлме түрін таңдау"
 
 #: .\templates\booking\booking_data.html:54
-#: .\templates\hotel\hotel_detail.html:535
+#: .\templates\hotel\hotel_detail.html:540
 msgid "Select Room"
 msgstr "Бөлме таңдау"
 
 #: .\templates\booking\booking_data.html:62
-#: .\templates\hotel\hotel_detail.html:542
+#: .\templates\hotel\hotel_detail.html:547
 #: .\templates\hotel\room_type_detail.html:238
 msgid "Check Availability"
 msgstr "Бөлменің қолжетімділігін тексеру"
@@ -457,7 +468,7 @@ msgstr "Мекенжайы"
 
 #: .\templates\email\booking_completed.html:672
 #: .\templates\hotel\payment_method_selection.html:129
-#: .\templates\partials\base.html:268
+#: .\templates\partials\base.html:265
 #: .\templates\user_dashboard\profile.html:39
 msgid "Email"
 msgstr "Электрондық мекенжай"
@@ -501,7 +512,8 @@ msgid "All Room Selections"
 msgstr "Барлық бөлмелерден таңдау"
 
 #: .\templates\hotel\async\selected_rooms.html:42
-#: .\templates\hotel\checkout.html:16 .\templates\hotel\payment_failed.html:16
+#: .\templates\hotel\checkout.html:16 .\templates\hotel\payment.html:17
+#: .\templates\hotel\payment_failed.html:16
 #: .\templates\hotel\payment_method_selection.html:18
 #: .\templates\hotel\room_type_detail.html:28
 #: .\templates\hotel\selected_rooms.html:26
@@ -511,6 +523,7 @@ msgstr "Қонақ үй"
 
 #: .\templates\hotel\async\selected_rooms.html:43
 #: .\templates\hotel\checkout.html:17 .\templates\hotel\hotel_detail.html:354
+#: .\templates\hotel\payment.html:18
 #: .\templates\hotel\payment_method_selection.html:19
 #: .\templates\hotel\room_type_detail.html:29
 #: .\templates\hotel\selected_rooms.html:27
@@ -531,8 +544,6 @@ msgid "Back to Hotel"
 msgstr "Қонақ үй парақшасына оралу"
 
 #: .\templates\hotel\async\selected_rooms.html:56
-#, fuzzy
-#| msgid "Back to Hotel"
 msgid "Back to Hotels"
 msgstr "Қонақ үй парақшасына оралу"
 
@@ -542,7 +553,9 @@ msgid "Selected Rooms"
 msgstr "Таңдалған бөлмелер"
 
 #: .\templates\hotel\async\selected_rooms.html:81
-#: .\templates\hotel\checkout.html:41 .\templates\hotel\hotel_detail.html:354
+#: .\templates\hotel\checkout.html:41
+#: .\templates\hotel\hotel_accommodations.html:255
+#: .\templates\hotel\hotel_detail.html:354 .\templates\hotel\payment.html:90
 #: .\templates\hotel\room_type_detail.html:86
 #: .\templates\hotel\selected_rooms.html:59
 msgid "Beds"
@@ -591,29 +604,32 @@ msgid "No rooms selected. Please select a room to update."
 msgstr "Бөлмелер таңдалмаған. Өтініш, бөлме таңдаңыз"
 
 #: .\templates\hotel\async\selected_rooms.html:132
-#: .\templates\hotel\checkout.html:51 .\templates\hotel\selected_rooms.html:111
+#: .\templates\hotel\checkout.html:51 .\templates\hotel\payment.html:98
+#: .\templates\hotel\selected_rooms.html:111
 msgid "Billing Information"
 msgstr "Төлем ақпараттары"
 
 #: .\templates\hotel\async\selected_rooms.html:137
-#: .\templates\hotel\checkout.html:54 .\templates\hotel\selected_rooms.html:116
+#: .\templates\hotel\checkout.html:54 .\templates\hotel\payment.html:103
+#: .\templates\hotel\payment.html:104 .\templates\hotel\selected_rooms.html:116
 msgid "First Name"
 msgstr "Атыңыз"
 
 #: .\templates\hotel\async\selected_rooms.html:143
-#: .\templates\hotel\checkout.html:59 .\templates\hotel\selected_rooms.html:122
+#: .\templates\hotel\checkout.html:59 .\templates\hotel\payment.html:109
+#: .\templates\hotel\selected_rooms.html:122
 msgid "E-Mail"
 msgstr "Электрондық мекенжайыңыз"
 
 #: .\templates\hotel\async\selected_rooms.html:150
-#: .\templates\hotel\checkout.html:65
+#: .\templates\hotel\checkout.html:65 .\templates\hotel\payment.html:116
 #: .\templates\hotel\payment_method_selection.html:137
 #: .\templates\hotel\selected_rooms.html:129
 msgid "Phone"
 msgstr "Ұялы телефон"
 
 #: .\templates\hotel\async\selected_rooms.html:151
-#: .\templates\hotel\selected_rooms.html:130
+#: .\templates\hotel\payment.html:117 .\templates\hotel\selected_rooms.html:130
 msgid "Enter phone number"
 msgstr "Телефон нөмірін енгізіңіз"
 
@@ -625,18 +641,22 @@ msgstr "Шығуды"
 #: .\templates\hotel\async\selected_rooms.html:172
 #: .\templates\hotel\hotel_detail.html:217
 #: .\templates\hotel\hotel_detail.html:286
-#: .\templates\hotel\hotel_detail.html:457
+#: .\templates\hotel\hotel_detail.html:460
 #: .\templates\hotel\selected_rooms.html:151
 msgid "Reviews"
 msgstr "Пікірлер"
 
 #: .\templates\hotel\async\selected_rooms.html:181
-#: .\templates\hotel\checkout.html:91 .\templates\hotel\selected_rooms.html:159
+#: .\templates\hotel\checkout.html:91
+#: .\templates\hotel\hotel_accommodations.html:268
+#: .\templates\hotel\payment.html:51 .\templates\hotel\selected_rooms.html:159
 msgid "Check-in"
 msgstr "Кіру"
 
 #: .\templates\hotel\async\selected_rooms.html:182
-#: .\templates\hotel\checkout.html:92 .\templates\hotel\selected_rooms.html:160
+#: .\templates\hotel\checkout.html:92
+#: .\templates\hotel\hotel_accommodations.html:269
+#: .\templates\hotel\payment.html:59 .\templates\hotel\selected_rooms.html:160
 msgid "Check-out"
 msgstr "ШЫғу"
 
@@ -680,7 +700,7 @@ msgstr "Қалған 90%% қонақүйге кіргеннен кейін тө�
 #: .\templates\hotel\async\selected_rooms.html:251
 #: .\templates\hotel\async\selected_rooms.html:252
 #: .\templates\hotel\async\selected_rooms.html:432
-#: .\templates\hotel\selected_rooms.html:243
+#: .\templates\hotel\payment.html:412 .\templates\hotel\selected_rooms.html:243
 #: .\templates\hotel\selected_rooms.html:244
 #: .\templates\hotel\selected_rooms.html:362
 msgid "Please enter a valid phone number"
@@ -692,17 +712,18 @@ msgid "Phone number is required"
 msgstr "Телефон нөмірі міндетті түрде қажет"
 
 #: .\templates\hotel\async\selected_rooms.html:412
-#: .\templates\hotel\selected_rooms.html:343
+#: .\templates\hotel\payment.html:403 .\templates\hotel\selected_rooms.html:343
 msgid "Please enter your full name"
 msgstr "Аты-жөніңізді еңгізіңіз"
 
 #: .\templates\hotel\async\selected_rooms.html:422
-#: .\templates\hotel\selected_rooms.html:353
+#: .\templates\hotel\payment.html:407 .\templates\hotel\selected_rooms.html:353
 msgid "Please enter a valid email address"
 msgstr "Қолданыстағы электрондық поштаңызды еңгізіңіз"
 
 #: .\templates\hotel\checkout.html:15 .\templates\hotel\hotel_detail.html:148
 #: .\templates\hotel\payment_failed.html:15
+#: .\templates\news\news_detail.html:16
 msgid "Home"
 msgstr "Үй"
 
@@ -723,6 +744,38 @@ msgstr "Бөлме"
 #: .\templates\hotel\checkout.html:111
 msgid "Continue to Payment"
 msgstr "Төлемге өту"
+
+#: .\templates\hotel\hotel_accommodations.html:6
+msgid "Rooms and cottages"
+msgstr "Бөлмелер мен коттедждер"
+
+#: .\templates\hotel\hotel_accommodations.html:254
+#: .\templates\hotel\payment.html:86
+msgid "Area"
+msgstr "Ауданы"
+
+#: .\templates\hotel\hotel_accommodations.html:262
+#: .\templates\search\search_results.html:168
+msgid "No amenities listed"
+msgstr "Қолайлылықтар көрсетілмеген"
+
+#: .\templates\hotel\hotel_accommodations.html:270
+msgid "Nights"
+msgstr "Түндер саны"
+
+#: .\templates\hotel\hotel_accommodations.html:281
+#: .\templates\hotel\hotel_detail.html:425
+msgid "tenge"
+msgstr "Теңге"
+
+#: .\templates\hotel\hotel_accommodations.html:283
+#: .\templates\hotel\index.html:156 .\templates\search\search_results.html:186
+msgid "From"
+msgstr "Басталады"
+
+#: .\templates\hotel\hotel_accommodations.html:283
+msgid "tenge per night"
+msgstr "бір түнге теңге"
 
 #: .\templates\hotel\hotel_detail.html:4
 msgid "Hotel and recreation base booking at Alakol"
@@ -796,7 +849,7 @@ msgstr "Жағажай демалысы"
 
 #: .\templates\hotel\hotel_detail.html:215
 #: .\templates\hotel\hotel_detail.html:284
-#: .\templates\hotel\hotel_detail.html:492
+#: .\templates\hotel\hotel_detail.html:495
 msgid "No Reviews Yet"
 msgstr "Пікір қалдырмады"
 
@@ -884,239 +937,349 @@ msgstr "Тіркелу кезінде қосымша төленеді"
 msgid "Meal costs"
 msgstr "Тамақтану шығындары"
 
-#: .\templates\hotel\hotel_detail.html:410
-#: .\templates\hotel\hotel_detail.html:412
-#: .\templates\hotel\hotel_detail.html:414
+#: .\templates\hotel\hotel_detail.html:411
+#: .\templates\hotel\hotel_detail.html:413
 #: .\templates\hotel\hotel_detail.html:416
+#: .\templates\hotel\hotel_detail.html:418
+#: .\templates\hotel\hotel_detail.html:420
 msgid "Age"
 msgstr "Жас"
 
-#: .\templates\hotel\hotel_detail.html:410
-msgid "from"
-msgstr " "
-
-#: .\templates\hotel\hotel_detail.html:410
-msgid "to"
-msgstr "жастан"
-
-#: .\templates\hotel\hotel_detail.html:410
-#: .\templates\hotel\hotel_detail.html:414
-msgid "years"
-msgstr "жасқа дейін"
-
-#: .\templates\hotel\hotel_detail.html:412
+#: .\templates\hotel\hotel_detail.html:411
 msgid "years old."
 msgstr "жас"
 
-#: .\templates\hotel\hotel_detail.html:414
+#: .\templates\hotel\hotel_detail.html:413
+#: .\templates\hotel\hotel_detail.html:416
+msgid "from"
+msgstr " "
+
+#: .\templates\hotel\hotel_detail.html:413
+msgid "to"
+msgstr "жастан"
+
+#: .\templates\hotel\hotel_detail.html:413
+#: .\templates\hotel\hotel_detail.html:416
+#: .\templates\hotel\hotel_detail.html:418
+msgid "years"
+msgstr "жасқа дейін"
+
+#: .\templates\hotel\hotel_detail.html:418
 msgid "up to"
 msgstr " "
 
-#: .\templates\hotel\hotel_detail.html:416
+#: .\templates\hotel\hotel_detail.html:420
 msgid "any"
 msgstr "кез келген жас"
 
-#: .\templates\hotel\hotel_detail.html:422
-msgid "tenge"
-msgstr "Теңге"
-
-#: .\templates\hotel\hotel_detail.html:423
+#: .\templates\hotel\hotel_detail.html:426
 msgid "per day"
 msgstr "күніне"
 
-#: .\templates\hotel\hotel_detail.html:434
+#: .\templates\hotel\hotel_detail.html:437
 msgid "Meals are not provided"
 msgstr "Кешенді тамақтану жоқ"
 
-#: .\templates\hotel\hotel_detail.html:442
+#: .\templates\hotel\hotel_detail.html:445
 msgid "FAQ's"
 msgstr "Жиі қойылатын сұрақтар"
 
-#: .\templates\hotel\hotel_detail.html:464
+#: .\templates\hotel\hotel_detail.html:467
 msgid "Not Rated Yet"
 msgstr "Әлі бағаланған жоқ"
 
-#: .\templates\hotel\hotel_detail.html:578
+#: .\templates\hotel\hotel_detail.html:583
 msgid "No description available"
 msgstr "Сипаттама жоқ"
 
-#: .\templates\hotel\hotel_detail.html:582
+#: .\templates\hotel\hotel_detail.html:587
 msgid "Room size"
 msgstr "Бөлме өлшемі"
 
-#: .\templates\hotel\hotel_detail.html:600
+#: .\templates\hotel\hotel_detail.html:605
 msgid "Private Bathroom"
 msgstr "Жеке ванна бөлмесінде"
 
-#: .\templates\hotel\hotel_detail.html:602
+#: .\templates\hotel\hotel_detail.html:607
 msgctxt "room type features"
 msgid "View"
 msgstr "Терезеден көрініс"
 
-#: .\templates\hotel\hotel_detail.html:604
+#: .\templates\hotel\hotel_detail.html:609
 msgid "Services and Amenities"
 msgstr "Қызметтер Мен Ыңғайлылықтар"
 
-#: .\templates\hotel\hotel_detail.html:621
+#: .\templates\hotel\hotel_detail.html:626
 msgid "Close"
 msgstr "Жабық"
 
-#: .\templates\hotel\index.html:17
+#: .\templates\hotel\index.html:18
 msgid "Alakol vacation bases"
 msgstr "Алакөлдің демалыс үйлері"
 
-#: .\templates\hotel\index.html:18
+#: .\templates\hotel\index.html:19
 msgid "Discover top rated hotels of Alakol"
 msgstr "Алакөлдің ең жоғары бағаланған қонақүйлерін тауып біліңіз"
 
-#: .\templates\hotel\index.html:22
+#: .\templates\hotel\index.html:23
 msgid "Hotel..."
 msgstr "Қонақ үй..."
 
-#: .\templates\hotel\index.html:25
+#: .\templates\hotel\index.html:26
 msgid "Select Booking Date"
 msgstr "Бронь күнің таңдау"
 
-#: .\templates\hotel\index.html:31 .\templates\hotel\index.html:41
+#: .\templates\hotel\index.html:32 .\templates\hotel\index.html:42
 #: .\templates\search\search_results.html:60
 msgid "Number of Guests"
 msgstr "Қонақтар саны"
 
-#: .\templates\hotel\index.html:32
+#: .\templates\hotel\index.html:33
 msgid "1 Guest"
 msgstr "1 қонақ"
 
-#: .\templates\hotel\index.html:33
+#: .\templates\hotel\index.html:34
 msgid "2 Guests"
 msgstr "2 Қонақ"
 
-#: .\templates\hotel\index.html:34
+#: .\templates\hotel\index.html:35
 msgid "3 Guests"
 msgstr "3 Қонақ"
 
-#: .\templates\hotel\index.html:35
+#: .\templates\hotel\index.html:36
 msgid "4 Guests"
 msgstr "4 қонақ"
 
-#: .\templates\hotel\index.html:36
+#: .\templates\hotel\index.html:37
 msgid "5+ Guests"
 msgstr "5+ қонақ"
 
-#: .\templates\hotel\index.html:49 .\templates\search\search_results.html:114
+#: .\templates\hotel\index.html:50 .\templates\search\search_results.html:114
 msgid "Search"
 msgstr "Іздеу"
 
-#: .\templates\hotel\index.html:62
-msgid "Our Popular Bases"
-msgstr "Біздің аты шыққан демалыс үйлеріміз"
+#: .\templates\hotel\index.html:67
+msgid "Latest News from Alakol"
+msgstr "Алакөлдің соңғы Жаңалықтары"
 
-#: .\templates\hotel\index.html:62
-msgid "Explore the greates places in the Alakol"
-msgstr "Алакөлдегі ең керемет орындарды зерттеңіз"
+#: .\templates\hotel\index.html:67
+msgid "Stay updated with the latest news and events"
+msgstr "Соңғы жаңалықтар мен оқиғалардан хабардар болыңыз"
 
-#: .\templates\hotel\index.html:73
-msgid "Open Now"
-msgstr "Қазір ашу"
+#: .\templates\hotel\index.html:105 .\templates\news\news_detail.html:56
+#: .\templates\search\search_results.html:182
+msgid "views"
+msgstr "Қаралымдар"
 
-#: .\templates\hotel\index.html:87
-msgid "No Rating Yet"
-msgstr "Әлі баға жоқ"
+#: .\templates\hotel\index.html:116 .\templates\news\news_list.html:109
+msgid "View All News"
+msgstr "Барлық Жаңалықтарды Көру"
 
-#: .\templates\hotel\index.html:89
-msgid "reviews"
-msgstr "Пікірлер"
-
-#: .\templates\hotel\index.html:138
+#: .\templates\hotel\index.html:154
 msgid "Apply"
 msgstr "Қолдану"
 
-#: .\templates\hotel\index.html:139
+#: .\templates\hotel\index.html:155
 msgid "Cancel"
 msgstr "Жою"
 
-#: .\templates\hotel\index.html:140 .\templates\search\search_results.html:186
-msgid "From"
-msgstr "Басталады"
-
-#: .\templates\hotel\index.html:141
+#: .\templates\hotel\index.html:157
 msgid "To"
 msgstr "Бітеді"
 
-#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:185
+#: .\templates\hotel\index.html:158 .\templates\hotel\room_type_detail.html:185
 msgid "Su"
 msgstr "Жексенбі"
 
-#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:179
+#: .\templates\hotel\index.html:158 .\templates\hotel\room_type_detail.html:179
 msgid "Mo"
 msgstr "Дүйсенбі"
 
-#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:180
+#: .\templates\hotel\index.html:158 .\templates\hotel\room_type_detail.html:180
 msgid "Tu"
 msgstr "Сейсенбі"
 
-#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:181
+#: .\templates\hotel\index.html:158 .\templates\hotel\room_type_detail.html:181
 msgid "We"
 msgstr "Сәрсенбі"
 
-#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:182
+#: .\templates\hotel\index.html:158 .\templates\hotel\room_type_detail.html:182
 msgid "Th"
 msgstr "Бейсенбі"
 
-#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:183
+#: .\templates\hotel\index.html:158 .\templates\hotel\room_type_detail.html:183
 msgid "Fr"
 msgstr "Жұма"
 
-#: .\templates\hotel\index.html:142 .\templates\hotel\room_type_detail.html:184
+#: .\templates\hotel\index.html:158 .\templates\hotel\room_type_detail.html:184
 msgid "Sa"
 msgstr "Сенбі"
 
-#: .\templates\hotel\index.html:143
+#: .\templates\hotel\index.html:159
 msgid "January"
 msgstr "Қаңтар"
 
-#: .\templates\hotel\index.html:143
+#: .\templates\hotel\index.html:159
 msgid "February"
 msgstr "Ақпан"
 
-#: .\templates\hotel\index.html:143
+#: .\templates\hotel\index.html:159
 msgid "March"
 msgstr "Наурыз"
 
-#: .\templates\hotel\index.html:143
+#: .\templates\hotel\index.html:159
 msgid "April"
 msgstr "Сәуір"
 
-#: .\templates\hotel\index.html:143
+#: .\templates\hotel\index.html:159
 msgid "May"
 msgstr "Мамыр"
 
-#: .\templates\hotel\index.html:143
+#: .\templates\hotel\index.html:159
 msgid "June"
 msgstr "Маусым"
 
-#: .\templates\hotel\index.html:143
+#: .\templates\hotel\index.html:159
 msgid "July"
 msgstr "Шілде"
 
-#: .\templates\hotel\index.html:143
+#: .\templates\hotel\index.html:159
 msgid "August"
 msgstr "Тамыз"
 
-#: .\templates\hotel\index.html:143
+#: .\templates\hotel\index.html:159
 msgid "September"
 msgstr "Қыркүйек"
 
-#: .\templates\hotel\index.html:143
+#: .\templates\hotel\index.html:159
 msgid "October"
 msgstr "Қазан"
 
-#: .\templates\hotel\index.html:143
+#: .\templates\hotel\index.html:159
 msgid "November"
 msgstr "Қараша"
 
-#: .\templates\hotel\index.html:143
+#: .\templates\hotel\index.html:159
 msgid "December"
 msgstr "Желтоқсан"
+
+#: .\templates\hotel\payment.html:6 .\templates\hotel\payment.html:14
+#: .\templates\hotel\payment.html:19
+msgid "Payment"
+msgstr "Төлем"
+
+#: .\templates\hotel\payment.html:70
+msgid "Duration"
+msgstr "Ұзақтығы"
+
+#: .\templates\hotel\payment.html:71
+msgid "day"
+msgstr "күн"
+
+#: .\templates\hotel\payment.html:78
+msgid "adult"
+msgstr "Ересек"
+
+#: .\templates\hotel\payment.html:78
+msgid "child"
+msgstr "Балалар"
+
+#: .\templates\hotel\payment.html:123
+msgid "Save personal data"
+msgstr "Деректерді сақтау"
+
+#: .\templates\hotel\payment.html:131
+#: .\templates\hotel\payment_method_selection.html:64
+#: .\templates\partials\legal_consent_component.html:10
+#: .\templates\partials\legal_consent_component.html:65
+#: .\templates\userauths\sign-up.html:33
+msgid "Legal Agreements"
+msgstr "Заңды келісімдер"
+
+#: .\templates\hotel\payment.html:138
+#: .\templates\hotel\payment_method_selection.html:70
+#: .\templates\partials\legal_consent_component.html:71
+msgid "I accept the terms of the"
+msgstr "Мен шарттармен келісемін"
+
+#: .\templates\hotel\payment.html:139
+#: .\templates\hotel\payment_method_selection.html:72
+#: .\templates\partials\base.html:361
+#: .\templates\partials\legal_consent_component.html:73
+#: .\templates\partials\legal_consent_component.html:161
+msgid "Public Offer"
+msgstr "Қоғамдық оферта"
+
+#: .\templates\hotel\payment.html:140
+#: .\templates\hotel\payment_method_selection.html:74
+#: .\templates\partials\legal_consent_component.html:75
+msgid "for eKol booking services"
+msgstr "eKol брондау қызметтері бойынша қоғамдық оферта"
+
+#: .\templates\hotel\payment.html:146
+#: .\templates\hotel\payment_method_selection.html:82
+#: .\templates\partials\legal_consent_component.html:16
+#: .\templates\partials\legal_consent_component.html:28
+#: .\templates\partials\legal_consent_component.html:83
+#: .\templates\userauths\sign-up.html:40 .\templates\userauths\sign-up.html:52
+msgid "I agree to the"
+msgstr "Мен келесілермен келісемін"
+
+#: .\templates\hotel\payment.html:147
+#: .\templates\hotel\payment_method_selection.html:84
+#: .\templates\partials\legal_consent_component.html:85
+msgid "Booking and Cancellation Rules"
+msgstr "Брондау және күшін жою ережелерімен"
+
+#: .\templates\hotel\payment.html:148
+#: .\templates\hotel\payment_method_selection.html:86
+#: .\templates\partials\legal_consent_component.html:87
+msgid "including cancellation policies"
+msgstr "соның ішінде күшін жою саясаттарын"
+
+#: .\templates\hotel\payment.html:154
+#: .\templates\hotel\payment_method_selection.html:94
+#: .\templates\partials\legal_consent_component.html:95
+msgid "I understand and accept the"
+msgstr "Мен түсінемін және келесілерді қабылдаймын"
+
+#: .\templates\hotel\payment.html:155
+#: .\templates\hotel\payment_method_selection.html:96
+#: .\templates\partials\legal_consent_component.html:97
+msgid "Payment and Refund Rules"
+msgstr "Төлем және қайтару ережелерін"
+
+#: .\templates\hotel\payment.html:156
+#: .\templates\hotel\payment_method_selection.html:98
+#, python-format
+msgid "including the 10%% prepayment policy and refundable terms"
+msgstr ""
+"соның ішінде 10%% алдын ала төлем саясатын және қайтаруға болатын шарттарды"
+
+#: .\templates\hotel\payment.html:161
+#: .\templates\hotel\payment_method_selection.html:104
+#: .\templates\partials\legal_consent_component.html:105
+msgid "Please accept all required legal documents to proceed with payment."
+msgstr ""
+"Төлемді жалғастыру үшін барлық қажетті заңды құжаттармен келісуіңізді "
+"сұраймыз."
+
+#: .\templates\hotel\payment.html:171
+#: .\templates\hotel\payment_method_selection.html:38
+#: .\templates\hotel\payment_method_selection.html:110
+msgid "Pay with Robokassa"
+msgstr "Robokassa арқылы төлеу"
+
+#: .\templates\hotel\payment.html:174
+#: .\templates\hotel\payment_method_selection.html:113
+msgid "Please accept all legal agreements above to enable payment"
+msgstr ""
+"Төлемді іске қосу үшін жоғарыда көрсетілген барлық заңды келісімдермен "
+"келісуіңізді сұраймыз."
+
+#: .\templates\hotel\payment.html:428
+msgid "Personal data saved"
+msgstr "Деректер сақталды"
 
 #: .\templates\hotel\payment_failed.html:12
 #: .\templates\hotel\payment_failed.html:17
@@ -1172,11 +1335,6 @@ msgstr "Төлем әдісі"
 msgid "Choose Payment Method"
 msgstr "Төлем әдісін таңдаңыз"
 
-#: .\templates\hotel\payment_method_selection.html:38
-#: .\templates\hotel\payment_method_selection.html:110
-msgid "Pay with Robokassa"
-msgstr "Robokassa арқылы төлеу"
-
 #: .\templates\hotel\payment_method_selection.html:39
 msgid ""
 "Process your payment securely through Robokassa. Multiple payment methods "
@@ -1191,77 +1349,6 @@ msgid ""
 "button."
 msgstr ""
 "Төлем түймесін басқаннан кейін 10 минут ішінде төлемді аяқтауыңызды сұраймыз."
-
-#: .\templates\hotel\payment_method_selection.html:64
-#: .\templates\partials\legal_consent_component.html:10
-#: .\templates\partials\legal_consent_component.html:65
-#: .\templates\userauths\sign-up.html:33
-msgid "Legal Agreements"
-msgstr "Заңды келісімдер"
-
-#: .\templates\hotel\payment_method_selection.html:70
-#: .\templates\partials\legal_consent_component.html:71
-msgid "I accept the terms of the"
-msgstr "Мен шарттармен келісемін"
-
-#: .\templates\hotel\payment_method_selection.html:72
-#: .\templates\partials\base.html:365
-#: .\templates\partials\legal_consent_component.html:73
-#: .\templates\partials\legal_consent_component.html:161
-msgid "Public Offer"
-msgstr "Қоғамдық оферта"
-
-#: .\templates\hotel\payment_method_selection.html:74
-#: .\templates\partials\legal_consent_component.html:75
-msgid "for eKol booking services"
-msgstr "eKol брондау қызметтері бойынша қоғамдық оферта"
-
-#: .\templates\hotel\payment_method_selection.html:82
-#: .\templates\partials\legal_consent_component.html:16
-#: .\templates\partials\legal_consent_component.html:28
-#: .\templates\partials\legal_consent_component.html:83
-#: .\templates\userauths\sign-up.html:40 .\templates\userauths\sign-up.html:52
-msgid "I agree to the"
-msgstr "Мен келесілермен келісемін"
-
-#: .\templates\hotel\payment_method_selection.html:84
-#: .\templates\partials\legal_consent_component.html:85
-msgid "Booking and Cancellation Rules"
-msgstr "Брондау және күшін жою ережелерімен"
-
-#: .\templates\hotel\payment_method_selection.html:86
-#: .\templates\partials\legal_consent_component.html:87
-msgid "including cancellation policies"
-msgstr "соның ішінде күшін жою саясаттарын"
-
-#: .\templates\hotel\payment_method_selection.html:94
-#: .\templates\partials\legal_consent_component.html:95
-msgid "I understand and accept the"
-msgstr "Мен түсінемін және келесілерді қабылдаймын"
-
-#: .\templates\hotel\payment_method_selection.html:96
-#: .\templates\partials\legal_consent_component.html:97
-msgid "Payment and Refund Rules"
-msgstr "Төлем және қайтару ережелерін"
-
-#: .\templates\hotel\payment_method_selection.html:98
-#, python-format
-msgid "including the 10%% prepayment policy and refundable terms"
-msgstr ""
-"соның ішінде 10%% алдын ала төлем саясатын және қайтаруға болатын шарттарды"
-
-#: .\templates\hotel\payment_method_selection.html:104
-#: .\templates\partials\legal_consent_component.html:105
-msgid "Please accept all required legal documents to proceed with payment."
-msgstr ""
-"Төлемді жалғастыру үшін барлық қажетті заңды құжаттармен келісуіңізді "
-"сұраймыз."
-
-#: .\templates\hotel\payment_method_selection.html:113
-msgid "Please accept all legal agreements above to enable payment"
-msgstr ""
-"Төлемді іске қосу үшін жоғарыда көрсетілген барлық заңды келісімдермен "
-"келісуіңізді сұраймыз."
 
 #: .\templates\hotel\payment_method_selection.html:121
 msgid "Order Information"
@@ -1377,6 +1464,82 @@ msgstr "Жуықталған бағалар теңгемен көрсетілг�
 msgid "Select checkout"
 msgstr "Шығу күнін таңдаңыз"
 
+#: .\templates\news\news_detail.html:17
+msgid "News"
+msgstr "Жаңалықтар"
+
+#: .\templates\news\news_detail.html:76
+msgid "Photo Gallery"
+msgstr "Фотогалерея"
+
+#: .\templates\news\news_detail.html:92
+msgid "Share this news"
+msgstr "Осы жаңалықпен бөлісіңіз"
+
+#: .\templates\news\news_detail.html:117
+msgid "Latest News"
+msgstr "Соңғы Жаңалықтар"
+
+#: .\templates\news\news_detail.html:147
+msgid "News Categories"
+msgstr "Жаңалықтар Санаттары"
+
+#: .\templates\news\news_detail.html:168
+msgid "Related News"
+msgstr "Қатысты Жаңалықтар"
+
+#: .\templates\news\news_detail.html:188
+msgid "Read More"
+msgstr "Толығырақ"
+
+#: .\templates\news\news_list.html:16
+msgid "News from Alakol"
+msgstr "Алакөл жаңалықтары"
+
+#: .\templates\news\news_list.html:17
+msgid "Stay updated with the latest news and events from Alakol region"
+msgstr "Алакөл облысының соңғы жаңалықтары мен оқиғаларынан хабардар болыңыз"
+
+#: .\templates\news\news_list.html:32
+msgid "Search news..."
+msgstr "Жаңалықтарды іздеу..."
+
+#: .\templates\news\news_list.html:39
+msgid "All Categories"
+msgstr "Барлық Санаттар"
+
+#: .\templates\news\news_list.html:50
+msgid "Filter"
+msgstr "Фильтр"
+
+#: .\templates\news\news_list.html:107
+msgid "No news found"
+msgstr "Жаңалықтар табылмады"
+
+#: .\templates\news\news_list.html:108
+msgid "There are no news articles matching your criteria."
+msgstr "Сіздің критерийлеріңізге сәйкес келетін жаңалықтар мақалалары жоқ."
+
+#: .\templates\news\news_list.html:122
+#: .\templates\search\search_results.html:205
+msgid "First"
+msgstr "Бірінші"
+
+#: .\templates\news\news_list.html:123
+#: .\templates\search\search_results.html:208
+msgid "Previous"
+msgstr "Алдыңғы"
+
+#: .\templates\news\news_list.html:135
+#: .\templates\search\search_results.html:224
+msgid "Next"
+msgstr "Келесі"
+
+#: .\templates\news\news_list.html:136
+#: .\templates\search\search_results.html:227
+msgid "Last"
+msgstr "Соңғы"
+
 #: .\templates\partials\async_base.html:11
 msgid "Alakol hotel booking"
 msgstr "Алакөл қонақ үйлеріне бронь жасау"
@@ -1423,63 +1586,63 @@ msgid ""
 "мгновенное подтверждение бронирования."
 msgstr ""
 
-#: .\templates\partials\base.html:184
+#: .\templates\partials\base.html:182
 msgid "Switch to"
 msgstr " "
 
-#: .\templates\partials\base.html:220
+#: .\templates\partials\base.html:217
 msgid "Log In"
 msgstr "Кіру"
 
-#: .\templates\partials\base.html:221 .\templates\partials\base.html:320
+#: .\templates\partials\base.html:218 .\templates\partials\base.html:317
 #: .\templates\userauths\sign-up.html:86
 msgid "Register"
 msgstr "Тіркелу"
 
-#: .\templates\partials\base.html:228 .\templates\partials\base.html:263
+#: .\templates\partials\base.html:225 .\templates\partials\base.html:260
 msgid "Username"
 msgstr "Пайдаланушының аты"
 
-#: .\templates\partials\base.html:233 .\templates\partials\base.html:273
+#: .\templates\partials\base.html:230 .\templates\partials\base.html:270
 #: .\templates\userauths\sign-in.html:36
 msgid "Password"
 msgstr "Құпиясөз"
 
-#: .\templates\partials\base.html:236
+#: .\templates\partials\base.html:233
 msgid "Forgot Password?"
 msgstr "Құпия сөзді ұмыттыңыз ба?"
 
-#: .\templates\partials\base.html:239
+#: .\templates\partials\base.html:236
 msgid "Remember Me"
 msgstr "Мені есіне сақта"
 
-#: .\templates\partials\base.html:243
+#: .\templates\partials\base.html:240
 msgid "Login"
 msgstr "Кіру"
 
-#: .\templates\partials\base.html:246
+#: .\templates\partials\base.html:243
 msgid "Or Login in With"
 msgstr "Немесе өзге жолмен кіру"
 
-#: .\templates\partials\base.html:250
+#: .\templates\partials\base.html:247
 msgid "Facebook"
 msgstr "Facebook"
 
-#: .\templates\partials\base.html:253
+#: .\templates\partials\base.html:250
 msgid "Google"
 msgstr "Гугл"
 
-#: .\templates\partials\base.html:278
+#: .\templates\partials\base.html:275
 msgid "Confirm Password"
 msgstr "Құпия сөзді растаңыз"
 
-#: .\templates\partials\base.html:289 .\templates\partials\base.html:300
+#: .\templates\partials\base.html:286 .\templates\partials\base.html:297
 #: .\templates\partials\legal_consent_component.html:117
 #: .\templates\partials\legal_consent_component.html:128
 msgid "I agree to"
 msgstr "Мен келесілерге келісемін"
 
-#: .\templates\partials\base.html:291 .\templates\partials\base.html:359
+#: .\templates\partials\base.html:288 .\templates\partials\base.html:355
 #: .\templates\partials\legal_consent_component.html:18
 #: .\templates\partials\legal_consent_component.html:119
 #: .\templates\partials\legal_consent_component.html:155
@@ -1487,7 +1650,7 @@ msgstr "Мен келесілерге келісемін"
 msgid "Terms of Use"
 msgstr "Пайдалану шарттары"
 
-#: .\templates\partials\base.html:302 .\templates\partials\base.html:362
+#: .\templates\partials\base.html:299 .\templates\partials\base.html:358
 #: .\templates\partials\legal_consent_component.html:30
 #: .\templates\partials\legal_consent_component.html:130
 #: .\templates\partials\legal_consent_component.html:158
@@ -1495,53 +1658,49 @@ msgstr "Пайдалану шарттары"
 msgid "Privacy Policy"
 msgstr "Жеке ақпарат саясаты"
 
-#: .\templates\partials\base.html:311
+#: .\templates\partials\base.html:308
 #: .\templates\partials\legal_consent_component.html:139
 msgid "I consent to"
 msgstr "Мен келісім беремін"
 
-#: .\templates\partials\base.html:313
+#: .\templates\partials\base.html:310
 #: .\templates\partials\legal_consent_component.html:141
 msgid "Data Processing"
 msgstr "Деректерді өңдеуге"
 
-#: .\templates\partials\base.html:342
+#: .\templates\partials\base.html:339
 msgid "Contacts"
 msgstr "Байланыс ақпараттары"
 
-#: .\templates\partials\base.html:344
+#: .\templates\partials\base.html:341
 msgid "E-mail:"
 msgstr "Электронды пошта"
 
-#: .\templates\partials\base.html:345
-msgid "Address:"
-msgstr "Мекенжайы"
-
-#: .\templates\partials\base.html:346
+#: .\templates\partials\base.html:342
 msgid "BIN/IIN:"
 msgstr "БСН/ЖСН:"
 
-#: .\templates\partials\base.html:355
+#: .\templates\partials\base.html:351
 #: .\templates\partials\legal_consent_component.html:151
 msgid "Legal Information"
 msgstr "Заңды ақпарат"
 
-#: .\templates\partials\base.html:368
+#: .\templates\partials\base.html:364
 #: .\templates\partials\legal_consent_component.html:164
 msgid "Booking Rules"
 msgstr "Бронь ережелері"
 
-#: .\templates\partials\base.html:371
+#: .\templates\partials\base.html:367
 #: .\templates\partials\legal_consent_component.html:167
 msgid "Data Processing Consent"
 msgstr "Деректерді өңдеуге келісім"
 
-#: .\templates\partials\base.html:374
+#: .\templates\partials\base.html:370
 #: .\templates\partials\legal_consent_component.html:170
 msgid "Payment Rules"
 msgstr "Төлем ережелері"
 
-#: .\templates\partials\base.html:618
+#: .\templates\partials\base.html:601
 msgid ""
 "By continuing to use this site, you acknowledge that you consent to the "
 "collection and use of data stored in cookies. This helps us to improve the "
@@ -1551,11 +1710,11 @@ msgstr ""
 "деректерді жинауға және пайдалануға келісім бересіз. Бұл бізге сайтты "
 "жақсартуға және сізге сапалы қызмет көрсетуге көмектеседі."
 
-#: .\templates\partials\base.html:619
+#: .\templates\partials\base.html:602
 msgid "Read more about our privacy policy"
 msgstr "Біздің құпиялық саясатымыз туралы толығырақ оқыңыз"
 
-#: .\templates\partials\base.html:622
+#: .\templates\partials\base.html:605
 msgid "Continue"
 msgstr "Жалғастыру"
 
@@ -1802,10 +1961,6 @@ msgstr "Рейтингсіз"
 msgid "Amenities:"
 msgstr "Қолайлылықтар:"
 
-#: .\templates\search\search_results.html:168
-msgid "No amenities listed"
-msgstr "Қолайлылықтар көрсетілмеген"
-
 #: .\templates\search\search_results.html:171
 msgid "more"
 msgstr "Толығырақ"
@@ -1813,10 +1968,6 @@ msgstr "Толығырақ"
 #: .\templates\search\search_results.html:177
 msgid "Available Rooms:"
 msgstr "Бос бөлмелер"
-
-#: .\templates\search\search_results.html:182
-msgid "views"
-msgstr "Қаралымдар"
 
 #: .\templates\search\search_results.html:186
 msgid "per night"
@@ -1829,22 +1980,6 @@ msgstr "Бағасы көрсетілмеген"
 #: .\templates\search\search_results.html:190
 msgid "View Details"
 msgstr "Толығырақ қарау"
-
-#: .\templates\search\search_results.html:205
-msgid "First"
-msgstr "Бірінші"
-
-#: .\templates\search\search_results.html:208
-msgid "Previous"
-msgstr "Алдыңғы"
-
-#: .\templates\search\search_results.html:224
-msgid "Next"
-msgstr "Келесі"
-
-#: .\templates\search\search_results.html:227
-msgid "Last"
-msgstr "Соңғы"
 
 #: .\templates\search\search_results.html:236
 msgid ""
@@ -2120,6 +2255,24 @@ msgstr "Жүйеге кіру кезінде қате орын алды"
 msgid "You have been logged out"
 msgstr "Сіз жүйеден шықтыңыз"
 
+#~ msgid "Our Popular Bases"
+#~ msgstr "Біздің аты шыққан демалыс үйлеріміз"
+
+#~ msgid "Explore the greates places in the Alakol"
+#~ msgstr "Алакөлдегі ең керемет орындарды зерттеңіз"
+
+#~ msgid "Open Now"
+#~ msgstr "Қазір ашу"
+
+#~ msgid "No Rating Yet"
+#~ msgstr "Әлі баға жоқ"
+
+#~ msgid "reviews"
+#~ msgstr "Пікірлер"
+
+#~ msgid "Address:"
+#~ msgstr "Мекенжайы"
+
 #~ msgid "Reject"
 #~ msgstr "Бас тарту"
 
@@ -2161,9 +2314,6 @@ msgstr "Сіз жүйеден шықтыңыз"
 
 #~ msgid "Shop & Education"
 #~ msgstr "Дүкендер және білім алу"
-
-#~ msgid "Education"
-#~ msgstr "Білім алу"
 
 #~ msgid "Business"
 #~ msgstr "Бизнес"
@@ -2363,9 +2513,6 @@ msgstr "Сіз жүйеден шықтыңыз"
 #, python-format
 #~ msgid "Add %(name)s"
 #~ msgstr "%(name)s қосу"
-
-#~ msgid "Filter"
-#~ msgstr "Фильтр"
 
 #~ msgid "Save"
 #~ msgstr "Сақтау"
@@ -2575,9 +2722,6 @@ msgstr "Сіз жүйеден шықтыңыз"
 #, python-format
 #~ msgid "Add another %(model)s"
 #~ msgstr "Тағы бір %(model)s қосу"
-
-#~ msgid "Save as new"
-#~ msgstr "Жаңа ретінде сақтау"
 
 #~ msgid "Save and add another"
 #~ msgstr "Сақтау және жаңасын қосу"
