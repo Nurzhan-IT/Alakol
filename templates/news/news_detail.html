@@ -10,7 +10,7 @@
 <div class="news-detail-container">
     <div class="container">
         <!-- Навигация -->
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-12">
                 <div class="utf_breadcrumbs">
                     <a href="/">{% trans "Home" %}</a>
@@ -21,7 +21,7 @@
                     <span>{{ news.title|truncatechars:50 }}</span>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Основной контент новости -->
         <div class="row">
@@ -52,9 +52,9 @@
                                 {% endif %}
                             </span>
                             
-                            <span>
+                            <!-- <span>
                                 <i class="fa fa-eye"></i> {{ news.views_count }} {% trans "views" %}
-                            </span>
+                            </span> -->
                         </div>
                     </div>
 
@@ -88,7 +88,7 @@
                     {% endif %}
 
                     <!-- Кнопки социальных сетей -->
-                    <div class="news-social-share">
+                    <!-- <div class="news-social-share">
                         <h4>{% trans "Share this news" %}</h4>
                         <div class="social-buttons">
                             <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" 
@@ -104,14 +104,14 @@
                                 <i class="fa fa-whatsapp"></i> WhatsApp
                             </a>
                         </div>
-                    </div>
+                    </div> -->
                 </article>
             </div>
 
             <!-- Боковая панель -->
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <div class="news-sidebar">
-                    <!-- Последние новости -->
+
                     {% if latest_news %}
                     <div class="sidebar-widget">
                         <h4>{% trans "Latest News" %}</h4>
@@ -141,7 +141,7 @@
                     </div>
                     {% endif %}
 
-                    <!-- Категории новостей -->
+
                     {% if news_categories %}
                     <div class="sidebar-widget">
                         <h4>{% trans "News Categories" %}</h4>
@@ -156,12 +156,12 @@
                     </div>
                     {% endif %}
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <!-- Связанные новости -->
         {% if related_news %}
-        <div class="related-news">
+        <!-- <div class="related-news">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
@@ -194,7 +194,7 @@
                     {% endfor %}
                 </div>
             </div>
-        </div>
+        </div> -->
         {% endif %}
     </div>
 </div>

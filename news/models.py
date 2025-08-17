@@ -118,6 +118,12 @@ class News(models.Model):
         help_text='Отображать в блоке рекомендуемых новостей'
     )
     
+    on_homepage = models.BooleanField(
+        default=False,
+        verbose_name='На главной',
+        help_text='Отображать новость на главной странице'
+    )
+    
     views_count = models.PositiveIntegerField(default=0, verbose_name='Количество просмотров')
     
     # Технические поля
@@ -140,6 +146,7 @@ class News(models.Model):
         indexes = [
             models.Index(fields=['status', 'published_at']),
             models.Index(fields=['is_featured', 'published_at']),
+            models.Index(fields=['on_homepage', 'published_at']),
         ]
 
     def __str__(self):
@@ -208,6 +215,14 @@ class News(models.Model):
         return cls.objects.filter(
             status='published', 
             is_featured=True
+        ).order_by('-published_at')[:limit]
+    
+    @classmethod
+    def get_homepage_news(cls, limit=6):
+        """Получить новости для отображения на главной странице"""
+        return cls.objects.filter(
+            status='published',
+            on_homepage=True
         ).order_by('-published_at')[:limit]
 
 
