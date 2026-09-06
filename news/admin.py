@@ -86,6 +86,9 @@ class NewsAdmin(admin.ModelAdmin):
     
     actions = ['make_published', 'make_draft', 'make_featured', 'remove_featured', 'add_to_homepage', 'remove_from_homepage']
 
+    @admin.action(
+        description="Опубликовать выбранные новости"
+    )
     def make_published(self, request, queryset):
         """Действие для публикации новостей"""
         updated = 0
@@ -101,8 +104,10 @@ class NewsAdmin(admin.ModelAdmin):
             request, 
             f'Опубликовано новостей: {updated}'
         )
-    make_published.short_description = "Опубликовать выбранные новости"
 
+    @admin.action(
+        description="Перевести в черновик"
+    )
     def make_draft(self, request, queryset):
         """Действие для перевода новостей в черновик"""
         updated = queryset.update(status='draft')
@@ -110,8 +115,10 @@ class NewsAdmin(admin.ModelAdmin):
             request, 
             f'Переведено в черновик: {updated} новостей'
         )
-    make_draft.short_description = "Перевести в черновик"
 
+    @admin.action(
+        description="Добавить в рекомендуемые"
+    )
     def make_featured(self, request, queryset):
         """Действие для добавления в рекомендуемые"""
         updated = queryset.update(is_featured=True)
@@ -119,8 +126,10 @@ class NewsAdmin(admin.ModelAdmin):
             request, 
             f'Добавлено в рекомендуемые: {updated} новостей'
         )
-    make_featured.short_description = "Добавить в рекомендуемые"
 
+    @admin.action(
+        description="Удалить из рекомендуемых"
+    )
     def remove_featured(self, request, queryset):
         """Действие для удаления из рекомендуемых"""
         updated = queryset.update(is_featured=False)
@@ -128,8 +137,10 @@ class NewsAdmin(admin.ModelAdmin):
             request, 
             f'Удалено из рекомендуемых: {updated} новостей'
         )
-    remove_featured.short_description = "Удалить из рекомендуемых"
 
+    @admin.action(
+        description="Добавить на главную страницу"
+    )
     def add_to_homepage(self, request, queryset):
         """Действие для добавления на главную страницу"""
         updated = queryset.update(on_homepage=True)
@@ -137,8 +148,10 @@ class NewsAdmin(admin.ModelAdmin):
             request, 
             f'Добавлено на главную страницу: {updated} новостей'
         )
-    add_to_homepage.short_description = "Добавить на главную страницу"
 
+    @admin.action(
+        description="Удалить с главной страницы"
+    )
     def remove_from_homepage(self, request, queryset):
         """Действие для удаления с главной страницы"""
         updated = queryset.update(on_homepage=False)
@@ -146,8 +159,10 @@ class NewsAdmin(admin.ModelAdmin):
             request, 
             f'Удалено с главной страницы: {updated} новостей'
         )
-    remove_from_homepage.short_description = "Удалить с главной страницы"
 
+    @admin.display(
+        description="Просмотр"
+    )
     def view_on_site(self, obj):
         """Ссылка для просмотра новости на сайте"""
         if obj.status == 'published':
@@ -157,7 +172,6 @@ class NewsAdmin(admin.ModelAdmin):
                 url
             )
         return "Не опубликовано"
-    view_on_site.short_description = "Просмотр"
 
     def get_queryset(self, request):
         """Оптимизация запросов"""

@@ -33,19 +33,14 @@ INSTALLED_APPS = [
 
     # Third Party Apps (только те, что есть в base.txt)
     'import_export',
-    'crispy_forms',
     'mathfilters',
     'taggit',
     # 'anymail',  # Убираем для тестов - нет в base.txt
     'geoip2',   # Оставляем - есть в base.txt
-    'django_user_agents',
-    # 'storages', # Убираем для тестов - нет в base.txt
     'channels',
-    'multiupload',
     # 'modeltranslation',  # Убираем для тестов - вызывает ошибки admin
     'django.contrib.humanize',
     'django_crontab',
-    'clearcache',
 ]
 
 # Используем in-memory базу данных для скорости
@@ -102,7 +97,12 @@ STATIC_ROOT = '/tmp/staticfiles'
 MEDIA_ROOT = '/tmp/media'
 
 # Отключаем сжатие статических файлов для тестов
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+STORAGES = {
+    **STORAGES,
+    "staticfiles": {
+        "BACKEND": 'django.contrib.staticfiles.storage.StaticFilesStorage',
+    },
+}
 
 # Простое хранилище статических файлов без манифеста
 STATICFILES_FINDERS = [
@@ -117,7 +117,6 @@ WHITENOISE_MANIFEST_STRICT = False
 # Английская локализация для тестов
 LANGUAGE_CODE = 'en-us'  # Принудительно английский для тестов
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 # Единственный язык для тестов - английский
@@ -156,4 +155,4 @@ ROBOKASSA_MERCHANT_PASSWORD_1 = 'test_password1'
 ROBOKASSA_MERCHANT_PASSWORD_2 = 'test_password2'
 ROBOKASSA_USE_TEST_MODE = True  # Правильное название переменной
 ROBOKASSA_TEST_PASSWORD_1 = 'test_password1'
-ROBOKASSA_TEST_PASSWORD_2 = 'test_password2' 
+ROBOKASSA_TEST_PASSWORD_2 = 'test_password2'

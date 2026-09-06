@@ -15,7 +15,6 @@ import shortuuid
 from taggit.managers import TaggableManager
 
 from django import forms
-from multiupload.fields import MultiFileField
 
 from django.utils import timezone
 from datetime import timedelta
@@ -925,4 +924,3 @@ class Review(models.Model):
             return f"Отзыв на отель {self.hotel.name} - {self.rating}"
         else:
             return f"Отзыв #{self.id} - {self.rating}"
-        

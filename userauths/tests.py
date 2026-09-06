@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, RequestFactory
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
@@ -110,7 +110,7 @@ class RegisterViewTest(UserAuthsViewsTest):
         # Должен остаться на странице регистрации
         self.assertEqual(response.status_code, 200)
         # В тестах USE_I18N=False, поэтому переводы не работают
-        self.assertFormError(response, 'form', 'email', ['Enter a valid email address.'])
+        self.assertFormError(response.context['form'], 'email', ['Enter a valid email address.'])
     
     def test_register_duplicate_email(self):
         """Тест регистрации с уже существующим email"""
@@ -234,10 +234,8 @@ class UserConsentUtilsTest(UserAuthsViewsTest):
     
     def test_save_user_consent(self):
         """Тест сохранения согласия пользователя"""
-        # Создаем mock request
-        request = MagicMock()
-        request.META = {'HTTP_USER_AGENT': 'Test User Agent'}
-        
+        request = RequestFactory().get('/', HTTP_USER_AGENT='Test User Agent')
+
         consent = save_user_consent(
             user=self.user,
             consent_type='terms_of_use',
@@ -253,9 +251,8 @@ class UserConsentUtilsTest(UserAuthsViewsTest):
     
     def test_save_registration_consents(self):
         """Тест сохранения согласий при регистрации"""
-        request = MagicMock()
-        request.META = {'HTTP_USER_AGENT': 'Test User Agent'}
-        
+        request = RequestFactory().get('/', HTTP_USER_AGENT='Test User Agent')
+
         consent_data = {
             'terms_consent': 'on',
             'privacy_consent': 'on',

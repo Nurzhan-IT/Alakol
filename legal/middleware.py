@@ -62,7 +62,7 @@ class AdminLegalConsentMiddleware(MiddlewareMixin):
                             user=request.user,
                             consent_type='hotel_owner_agreement',
                             document_version=document_version,
-                            user_agent=request.META.get('HTTP_USER_AGENT', '')
+                            user_agent=request.headers.get('user-agent', '')
                         )
                         # После сохранения согласия перенаправляем обратно
                         return redirect(request.get_full_path())
@@ -91,4 +91,4 @@ class AdminLegalConsentMiddleware(MiddlewareMixin):
             # Логируем ошибку, но не блокируем доступ к админке
             print(f"Error in AdminLegalConsentMiddleware: {e}")
             
-        return None 
+        return None

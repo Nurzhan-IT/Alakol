@@ -3,6 +3,7 @@ from userauths.models import User, Profile, UserConsent
 from django.utils.html import mark_safe
 from hotel.admin import custom_admin_site, RussianModelAdminMixin
 
+@admin.register(User, site=custom_admin_site)
 class UserAdmin(RussianModelAdminMixin, admin.ModelAdmin):
     search_fields  = ['full_name', 'username', 'email',  'phone', 'gender']
     list_display  = ['full_name', 'username', 'email',  'phone', 'gender']
@@ -18,6 +19,7 @@ class UserAdmin(RussianModelAdminMixin, admin.ModelAdmin):
             queryset = queryset.filter(id=getattr(request.user, "id", None))
         return queryset
 
+@admin.register(Profile, site=custom_admin_site)
 class ProfileAdmin(RussianModelAdminMixin, admin.ModelAdmin):
     search_fields = ['user__username', 'full_name']
     
@@ -63,10 +65,13 @@ class ProfileAdmin(RussianModelAdminMixin, admin.ModelAdmin):
             return ['thumbnail', 'full_name']  # Ограничиваем список до минимума
         return self.list_display
 
+    @admin.display(
+        description='Миниатюра'
+    )
     def thumbnail(self, obj):
         return mark_safe('<img src="/media/%s" width="50" height="50" style="object-fit: cover; border-radius: 6px;" />' % (obj.image))
-    thumbnail.short_description = 'Миниатюра'
 
+@admin.register(UserConsent, site=custom_admin_site)
 class UserConsentAdmin(RussianModelAdminMixin, admin.ModelAdmin):
     """Админка для согласий пользователей"""
     list_display = ['user', 'consent_type', 'document_version', 'given_at', 'is_active', 'withdrawn_at']
@@ -88,6 +93,3 @@ class UserConsentAdmin(RussianModelAdminMixin, admin.ModelAdmin):
         return queryset
 
 # Регистрируем модели в админке
-custom_admin_site.register(User, UserAdmin)
-custom_admin_site.register(Profile, ProfileAdmin)
-custom_admin_site.register(UserConsent, UserConsentAdmin)

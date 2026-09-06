@@ -82,10 +82,6 @@ ROBOKASSA_USE_TEST_MODE=True
 # ДОПОЛНИТЕЛЬНЫЕ НАСТРОЙКИ
 # ==============================================
 
-# Настройки для Celery (если используется)
-# CELERY_BROKER_URL=redis://127.0.0.1:6379/0
-# CELERY_RESULT_BACKEND=redis://127.0.0.1:6379/0
-
 # Настройки для S3 хранилища (если используется)
 # AWS_STORAGE_BUCKET_NAME=your-bucket-name
 # AWS_S3_REGION_NAME=us-east-1
@@ -106,7 +102,4 @@ ROBOKASSA_USE_TEST_MODE=True
 
 # Настройки для логирования
 # LOG_LEVEL=DEBUG
-# LOG_FILE_PATH=logs/debug.log
-
-# Настройки для мониторинга (Sentry)
-# SENTRY_DSN=your_sentry_dsn_url 
+# LOG_FILE_PATH=logs/debug.log 

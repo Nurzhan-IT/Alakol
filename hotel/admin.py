@@ -202,6 +202,9 @@ def is_manager(user):
     return user.groups.filter(name='Manager').exists() and not user.is_superuser
 
 # Действия для массового удаления с проверкой связанных бронирований
+@admin.action(
+    description='Удалить выбранные типы номеров'
+)
 def delete_roomtypes_with_check(modeladmin, request, queryset):
     """
     Кастомное действие для массового удаления типов номеров с проверкой связанных записей бронирования
@@ -229,8 +232,10 @@ def delete_roomtypes_with_check(modeladmin, request, queryset):
             roomtype.delete()
         messages.success(request, f'Успешно удалено {deleted_count} типов номеров')
 
-delete_roomtypes_with_check.short_description = 'Удалить выбранные типы номеров'
 
+@admin.action(
+    description='Удалить выбранные отели'
+)
 def delete_hotels_with_check(modeladmin, request, queryset):
     """
     Кастомное действие для массового удаления отелей с проверкой связанных записей бронирования
@@ -258,7 +263,6 @@ def delete_hotels_with_check(modeladmin, request, queryset):
             hotel.delete()
         messages.success(request, f'Успешно удалено {deleted_count} отелей')
 
-delete_hotels_with_check.short_description = 'Удалить выбранные отели'
 
 class BaseExportAdmin(ExportMixin, admin.ModelAdmin):
     pass
@@ -1439,40 +1443,48 @@ class RoomAdmin(RussianModelAdminMixin, BaseExportAdmin):
                 kwargs["queryset"] = RoomType.objects.filter(hotel__user=request.user)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+    @admin.display(
+        description='Тип номера',
+        ordering='room_type__type',
+    )
     def get_room_type(self, obj):
         """Отображает только название типа номера"""
         if obj.room_type:
             return obj.room_type.type
         return None
     
-    get_room_type.short_description = 'Тип номера'
-    get_room_type.admin_order_field = 'room_type__type'
 
+    @admin.display(
+        description='Цена',
+        ordering='room_type__price',
+    )
     def get_price(self, obj):
         if obj.room_type:
             return obj.room_type.price
         return None
     
-    get_price.short_description = 'Цена'
-    get_price.admin_order_field = 'room_type__price'
 
+    @admin.display(
+        description='Количество кроватей',
+        ordering='room_type__number_of_beds',
+    )
     def get_number_of_beds(self, obj):
         """Отображает количество кроватей с русским названием"""
         if obj.room_type:
             return obj.room_type.number_of_beds
         return None
     
-    get_number_of_beds.short_description = 'Количество кроватей'
-    get_number_of_beds.admin_order_field = 'room_type__number_of_beds'
 
+    @admin.display(
+        description='Вместимость',
+        ordering='room_type__room_capacity',
+    )
     def get_room_capacity(self, obj):
         """Отображает вместимость с русским названием"""
         if obj.room_type:
             return obj.room_type.room_capacity
         return None
     
-    get_room_capacity.short_description = 'Вместимость'
-    get_room_capacity.admin_order_field = 'room_type__room_capacity'
 
     def get_list_filter(self, request):
         if is_manager(request.user):
@@ -1571,14 +1583,16 @@ class BookingAdmin(RussianModelAdminMixin, BaseExportAdmin):
     search_help_text = 'Поиск по ID бронирования, ID инвойса Robokassa, Сумме'
     list_per_page = 100
 
+    @admin.display(
+        description='Тип номера',
+        ordering='room_type__type',
+    )
     def get_room_type(self, obj):
         """Отображает только название типа номера"""
         if obj.room_type:
             return obj.room_type.type
         return None
     
-    get_room_type.short_description = 'Тип номера'
-    get_room_type.admin_order_field = 'room_type__type'
 
     def get_search_fields(self, request):
         if is_manager(request.user):

@@ -90,19 +90,14 @@ INSTALLED_APPS = [
 
     # Third Party Apps
     'import_export',
-    'crispy_forms',
     'mathfilters',
     'taggit',
     "anymail",
     'geoip2',
-    'django_user_agents',
-    'storages',
     'channels',
-    'multiupload',
     'modeltranslation',
     'django.contrib.humanize',
     'django_crontab',
-    'clearcache',
 ]
 
 MIDDLEWARE = [
@@ -153,7 +148,7 @@ WSGI_APPLICATION = 'hms_prj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
@@ -191,7 +186,6 @@ LANGUAGE_CODE = 'ru'  # Default to Russian for production
 TIME_ZONE = 'Asia/Yekaterinburg'  # UTC+5, Алматы не обновленый там +6 до сих пор
 
 USE_I18N = True
-USE_L10N = True
 USE_THOUSAND_SEPARATOR = False
 USE_TZ = True
 
@@ -239,7 +233,14 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # Static files optimization for production
 # Используем CompressedStaticFilesStorage вместо ManifestStaticFilesStorage
 # чтобы избежать проблем с отсутствующими source map файлами
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": 'whitenoise.storage.CompressedStaticFilesStorage',
+    },
+}
 
 # WhiteNoise settings for better performance
 WHITENOISE_USE_FINDERS = True
@@ -561,13 +562,6 @@ LOGGING = {
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Disable browsable API in production
-REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-    ]
-} if 'rest_framework' in INSTALLED_APPS else {}
-
 # Performance settings
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
 
@@ -607,8 +601,10 @@ WHITENOISE_AUTOREFRESH = False
 if os.getenv('AWS_SES_REGION_NAME'):
     EMAIL_BACKEND = 'anymail.backends.amazon_ses.EmailBackend'
     ANYMAIL = {
-        'AMAZON_SES_REGION': os.getenv('AWS_SES_REGION_NAME', 'us-east-1'),
+        # region_name должен быть внутри CLIENT_PARAMS: отдельной настройки
+        # AMAZON_SES_REGION у anymail нет, она молча игнорировалась
         'AMAZON_SES_CLIENT_PARAMS': {
+            'region_name': os.getenv('AWS_SES_REGION_NAME', 'us-east-1'),
             'aws_access_key_id': os.getenv('AWS_ACCESS_KEY_ID'),
             'aws_secret_access_key': os.getenv('AWS_SECRET_ACCESS_KEY'),
         },
@@ -619,4 +615,4 @@ else:
     # Fallback to console email backend
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-print("🚀 Alakol HMS Production settings loaded successfully!") 
+print("🚀 Alakol HMS Production settings loaded successfully!")
