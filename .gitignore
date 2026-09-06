@@ -136,10 +136,16 @@ GitHub.sublime-settings
 !.vscode/extensions.json 
 .history
 
-# Production files
+# Environment / secrets
+.env
 .env.prod
 .env.local
 .env.*.local
+
+# Local database
+db.sqlite3
+*.sqlite3
+*.sql
 
 # Docker volumes and logs
 logs/
