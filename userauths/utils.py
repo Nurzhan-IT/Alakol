@@ -13,7 +13,7 @@ def save_user_consent(user, consent_type, request, document_version='1.0'):
         request: HTTP запрос для получения User-Agent
         document_version: Версия документа
     """
-    user_agent = request.META.get('HTTP_USER_AGENT', '') if request else ''
+    user_agent = request.headers.get('user-agent', '') if request else ''
     
     consent, created = UserConsent.objects.update_or_create(
         user=user,
@@ -73,7 +73,7 @@ def save_booking_consents(booking, request, consent_data):
     legal_agreements = {
         'consents': {},
         'timestamp': timezone.now().isoformat(),
-        'user_agent': request.META.get('HTTP_USER_AGENT', '') if request else ''
+        'user_agent': request.headers.get('user-agent', '') if request else ''
     }
     
     for form_field, consent_type in consent_mapping.items():
@@ -88,4 +88,4 @@ def save_booking_consents(booking, request, consent_data):
     booking.legal_agreements = legal_agreements
     booking.save(update_fields=['legal_agreements'])
     
-    return legal_agreements 
+    return legal_agreements

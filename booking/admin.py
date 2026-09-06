@@ -42,6 +42,7 @@ class RoomTypeFilter(admin.SimpleListFilter):
         return queryset
 
 # @admin.register(RoomUnavailability)
+@admin.register(RoomUnavailability, site=custom_admin_site)
 class RoomUnavailabilityAdmin(RussianModelAdminMixin, admin.ModelAdmin):
     form = RoomUnavailabilityForm
     list_display = ('get_room', 'start_date', 'end_date', 'reason', 'created_at')
@@ -59,14 +60,16 @@ class RoomUnavailabilityAdmin(RussianModelAdminMixin, admin.ModelAdmin):
         self.model._meta.verbose_name = 'Недоступность номера'
         self.model._meta.verbose_name_plural = 'Недоступность номеров'
 
+    @admin.display(
+        description='Номер',
+        ordering='room__room_number',
+    )
     def get_room(self, obj):
         """Отображает только название типа номера"""
         if obj.room:
             return f"{obj.room.room_type.type} - № {obj.room.room_number}"
         return None
     
-    get_room.short_description = 'Номер'
-    get_room.admin_order_field = 'room__room_number'
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -100,4 +103,3 @@ class RoomUnavailabilityAdmin(RussianModelAdminMixin, admin.ModelAdmin):
             for error_msg in error_messages:
                 self.message_user(request, error_msg, level=messages.ERROR)
 
-custom_admin_site.register(RoomUnavailability, RoomUnavailabilityAdmin)

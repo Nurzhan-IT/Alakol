@@ -55,7 +55,7 @@ class LegalDocumentView(TemplateView):
                 DocumentView.objects.create(
                     document_type=self.document_type,
                     user=request.user if request.user.is_authenticated else None,
-                    user_agent=request.META.get('HTTP_USER_AGENT', '')
+                    user_agent=request.headers.get('user-agent', '')
                 )
             except Exception as e:
                 # Log the error but don't break the page

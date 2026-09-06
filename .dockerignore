@@ -1,0 +1,16 @@
+venv/
+venv.bak/
+.git/
+.github/
+.env
+.env.prod
+*.sqlite3
+media/
+staticfiles/
+logs/
+debug.log
+__pycache__/
+*.pyc
+.idea/
+.vscode/
+node_modules/
