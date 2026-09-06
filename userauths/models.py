@@ -5,7 +5,6 @@ from django.utils.html import mark_safe
 from django.dispatch import receiver
 
 
-from PIL import Image
 from shortuuid.django_fields import ShortUUIDField
 import os 
 

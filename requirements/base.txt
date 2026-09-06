@@ -1,12 +1,12 @@
 # Базовые зависимости для Django приложения
-Django==4.2.2
+Django==4.2.30
 psycopg2-binary==2.9.9
 django-redis==5.4.0
 redis==6.2.0
-gunicorn==21.2.0
-Pillow==9.5.0
+gunicorn==23.0.0
+Pillow==12.3.0
 python-decouple==3.8
-python-dotenv==1.1.0
+python-dotenv==1.2.3
 whitenoise==5.2.0
 pytz==2025.2
 
@@ -16,7 +16,6 @@ django-jazzmin==2.6.0
 django-import-export==3.2.0
 django-crispy-forms==2.0
 django-widget-tweaks==1.4.8
-django-allauth==0.54.0
 django-environ==0.9.0
 django-mathfilters==1.0.0
 django-taggit==3.0.0
@@ -29,26 +28,14 @@ maxminddb==2.7.0
 channels==4.2.2
 asgiref==3.7.2
 
-# Celery
-celery==5.5.3
-django-celery-beat==2.8.0
-django_celery_results==2.6.0
-kombu==5.5.4
-
-# API
-djangorestframework==3.13.1
-djangorestframework-simplejwt==5.2.0
-
 # Утилиты
 shortuuid==1.0.11
-requests==2.32.4
+requests==2.34.2
 python-dateutil==2.9.0.post0
 PyYAML==6.0.2
-python3-openid==3.2.0
-oauthlib==3.3.1
-requests-oauthlib==2.0.0
 six==1.17.0
 
 # AWS интеграция (нужно для тестов)
-boto3==1.20.26
-botocore==1.23.54 
+boto3==1.43.89
+botocore==1.43.89
+urllib3==2.7.0  # транзитивная зависимость botocore/requests, пинуем ради безопасности (CVE-фиксы) 

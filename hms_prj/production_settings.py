@@ -561,13 +561,6 @@ LOGGING = {
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Disable browsable API in production
-REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-    ]
-} if 'rest_framework' in INSTALLED_APPS else {}
-
 # Performance settings
 DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
 
