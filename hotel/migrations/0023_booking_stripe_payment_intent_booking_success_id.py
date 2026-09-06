@@ -21,4 +21,4 @@ class Migration(migrations.Migration):
             name='success_id',
             field=shortuuid.django_fields.ShortUUIDField(alphabet='abcdefghijklmnopqrstuvxyz1234567890', blank=True, length=300, max_length=505, null=True),
         ),
-    ] 
+    ]

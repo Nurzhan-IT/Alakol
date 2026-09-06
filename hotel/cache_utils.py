@@ -493,4 +493,4 @@ def register_cache_signals():
                 CacheInvalidator.invalidate_booking_availability_cache(
                     hotel_id=instance.room.hotel.id,
                     room_type_id=instance.room.room_type.id if instance.room.room_type else None
-                ) 
+                )

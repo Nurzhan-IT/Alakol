@@ -92,7 +92,7 @@ def check_room_availability(request):
             else:
                 messages.error(request, _("Please fill in all required fields: %(params)s") % {'params': ', '.join(missing_params)})
             # Безопасный редирект: используем referer или главную страницу как fallback
-            referer = request.META.get("HTTP_REFERER", reverse("hotel:index"))
+            referer = request.headers.get("referer", reverse("hotel:index"))
             return redirect(referer)
 
         try:
@@ -102,7 +102,7 @@ def check_room_availability(request):
             logger.error(f"Hotel with id={id} not found")
             messages.error(request, _("Hotel not found."))
             # Безопасный редирект: используем referer или главную страницу как fallback
-            referer = request.META.get("HTTP_REFERER", reverse("hotel:index"))
+            referer = request.headers.get("referer", reverse("hotel:index"))
             return redirect(referer)
 
         # Проверка минимального количества дней бронирования для отеля
@@ -117,7 +117,7 @@ def check_room_availability(request):
                     _("Minimum stay for this hotel is %(n)d nights") % {"n": hotel.min_days_for_booking}
                 )
                 # Возврат на страницу деталей отеля или referer
-                referer = request.META.get("HTTP_REFERER", reverse("hotel:detail", args=[hotel.slug]))
+                referer = request.headers.get("referer", reverse("hotel:detail", args=[hotel.slug]))
                 return redirect(referer)
         except Exception:
             # Если даты некорректные, передадим управление существующей логике ниже
@@ -199,7 +199,7 @@ def check_room_availability(request):
     else:
         logger.warning("Non-POST request to check_room_availability")
         # Безопасный редирект: используем referer или главную страницу как fallback
-        referer = request.META.get("HTTP_REFERER", reverse("hotel:index"))
+        referer = request.headers.get("referer", reverse("hotel:index"))
         return redirect(referer)
     
 def booking_data(request, slug):
@@ -349,7 +349,7 @@ def delete_session(request):
     request.session.pop('booking_common_data', None)
     request.session.pop('room_types_data', None)
     # Безопасный редирект: используем referer или главную страницу как fallback
-    referer = request.META.get("HTTP_REFERER", "/")
+    referer = request.headers.get("referer", "/")
     return redirect(referer)
 
 

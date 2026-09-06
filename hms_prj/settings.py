@@ -62,19 +62,14 @@ INSTALLED_APPS = [
 
     # Third Party Apps
     'import_export',
-    'crispy_forms',
     'mathfilters',
     'taggit',
     "anymail",
     'geoip2',
-    'django_user_agents',
-    'storages',
     'channels',
-    'multiupload',
     'modeltranslation',
     'django.contrib.humanize',
     'django_crontab',
-    'clearcache',
 
     
 ]
@@ -124,7 +119,7 @@ WSGI_APPLICATION = 'hms_prj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
@@ -169,7 +164,6 @@ TIME_ZONE = 'Asia/Yekaterinburg'  # UTC+5, Алматы не обновлены�
 
 USE_I18N = True
 
-USE_L10N = True
 
 USE_THOUSAND_SEPARATOR = False
 

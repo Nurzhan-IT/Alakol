@@ -1,32 +1,29 @@
 # Базовые зависимости для Django приложения
-Django==4.2.30
+Django==5.2.17
 psycopg2-binary==2.9.9
-django-redis==5.4.0
+django-redis==6.0.0
 redis==6.2.0
 gunicorn==23.0.0
 Pillow==12.3.0
 python-decouple==3.8
 python-dotenv==1.2.3
-whitenoise==5.2.0
+whitenoise==6.12.0
 pytz==2025.2
 
 # Django основные пакеты из INSTALLED_APPS
-django-modeltranslation==0.19.9
-django-jazzmin==2.6.0
-django-import-export==3.2.0
-django-crispy-forms==2.0
-django-widget-tweaks==1.4.8
+django-modeltranslation==0.20.5
+django-jazzmin==3.0.5
+# extras обязательны: в import-export 4.x форматы вынесены из основной зависимости,
+# без них xlsx/xls/ods молча пропадают из списка форматов экспорта в админке
+django-import-export[ods,xls,xlsx]==4.4.1
 django-environ==0.9.0
 django-mathfilters==1.0.0
-django-taggit==3.0.0
-django-user-agents==0.4.0
-django-multiupload==0.6.1
+django-taggit==6.1.0
 django-crontab==0.7.1
-django-clearcache==1.2.1
 geoip2==5.1.0
 maxminddb==2.7.0
-channels==4.2.2
-asgiref==3.7.2
+channels==4.3.2
+asgiref==3.9.2
 
 # Утилиты
 shortuuid==1.0.11

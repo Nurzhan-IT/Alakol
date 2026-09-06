@@ -182,4 +182,4 @@ class SmartCacheSerializer:
             'start_date': hotel.start_date if hotel.start_date else None,
             'end_date': hotel.end_date if hotel.end_date else None,
             'date': hotel.date.isoformat() if hotel.date else None,
-        } 
+        }
